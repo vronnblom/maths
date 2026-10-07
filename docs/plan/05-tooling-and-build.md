@@ -311,7 +311,7 @@ pythonpath = ["verify", "scripts"]       # `import mathcheck`, and the checkers 
 addopts = "-ra --strict-markers --import-mode=importlib"
 
 [tool.codespell]
-skip = "*.lock,*.json,*.css,_build,_generated,node_modules,build.log"   # CSS is code (`color`); _generated/ is rebuilt
+skip = "*.lock,*.json,*.css,_build,_generated,node_modules,build.log"   # CSS is code (property names are US English); _generated/ is rebuilt
 ignore-words = ".codespell-ignore"       # allowlist, seeded with `crossreference` (a MyST node type)
 builtin = "clear,rare"
 # Our US→GB list first, then "-" (codespell's default dictionary). The default dictionaries
