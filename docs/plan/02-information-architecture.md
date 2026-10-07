@@ -87,13 +87,14 @@ maths/
 │   ├── check_verified_edits.py  # PR guard for edits to verified pages (06 §6.6)
 │   ├── extract_answers.py       # exercise answers from MyST AST → JSON for verify/
 │   ├── generate.py              # generated includes: prerequisite maps, status table
-│   ├── write_redirects.py       # redirect pages for old URLs (§2.3), run on deploy
+│   ├── write_redirects.py       # redirect pages for old URLs (§2.3), run by build_site.sh
 │   └── build_site.sh            # the gated site build (05 §5.5)
 ├── templates/                   # copy these to start a page; see 03-content-model
 ├── docs/
 │   └── plan/                    # this plan
 └── .github/
     ├── workflows/ci.yml
+    ├── workflows/guard.yml      # verified-page edit guard, the only workflow that runs on label changes
     ├── workflows/deploy.yml
     ├── workflows/links.yml      # weekly external link check
     ├── ISSUE_TEMPLATE/{erratum,new-topic,widget}.yml
@@ -125,9 +126,12 @@ Only that one file is copied, so the shared `widgets/_lib/` is published separat
 reordering chapters never changes a URL. The page **label** never changes, but moving a page
 to another folder changes its URL. mystmd 1.11 has no redirect feature (an `aliases:`
 front-matter key is ignored with a warning), so a moved page lists its old paths in
-`maths.aliases: [/calculus/limits/limit-laws]`. On deploy, `scripts/write_redirects.py`
-writes a small `index.html` at each old path, with a `<meta http-equiv="refresh">` and a
-canonical link to the new URL; it fails if an old path collides with a live page.
+`maths.aliases: [/calculus/limits/limit-laws]`. After every site build (`scripts/build_site.sh`,
+so locally, in CI and on deploy), `scripts/write_redirects.py` writes a small `index.html` at
+each old path, with a `<meta http-equiv="refresh">` and a canonical link to the new URL. Both
+paths are prefixed with `BASE_URL` (`/maths` on deploy), the same variable mystmd uses. The
+script fails if an old path collides with a live page, so a collision fails the PR, not the
+deploy.
 
 ## 2.4 Stable IDs (labels)
 
@@ -250,10 +254,19 @@ chapters:
 For every cross-reference on page P to a block on page Q, one of these must hold:
 - Q is in P's transitive prerequisite closure;
 - Q is P itself, and the reference is **not** inside a proof or a solution;
-- Q is P itself, the reference is inside a proof or a solution, and the target block comes
-  **earlier** on the page. Otherwise a proof could cite a later result whose own proof uses
-  it;
+- Q is P itself, the reference is inside a **proof**, and the target block comes earlier on
+  the page than the **statement that proof proves**. Comparing with the position of the
+  citation is not enough: policy-R proofs may sit in the `## Rigorous track` section, below
+  several statements, and two such proofs could then cite each other's theorems;
+- Q is P itself, the reference is inside a **solution**, and the target block comes earlier
+  on the page than the reference;
 - the reference sits inside an admonition with class `see-also` / `looking-ahead`.
+
+**Which statement a proof proves.** A proof directly after a statement block proves that
+statement. A proof anywhere else (in practice, in the Rigorous track section) must carry the
+label `prf-<slug>` of the statement `<kind>-<slug>` it proves, e.g. `prf-calc-limit-unique`
+for `thm-calc-limit-unique`. `check_labels.py` fails on a proof that is neither directly
+after a statement nor paired by label.
 
 Anything else is a warning, and an error on pages with `status: verified`. This is how "no
 circular reasoning" is enforced mechanically, across pages and within a page.

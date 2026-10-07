@@ -51,8 +51,8 @@ functions and trigonometry). Anything beyond that is in the *Preliminaries* chap
 4. **Stable addresses.** Labels and URLs are permanent. Content can move, but its address
    does not break.
 5. **Explicit prerequisites.** Every topic page lists what it builds on. A proof may only
-   cite results from its prerequisites or from earlier on the same page; CI warns about
-   forward references.
+   cite results from its prerequisites or stated before its own result on the same page;
+   CI warns about forward references.
 6. **Active learning.** Every topic ends with tiered exercises. Interactive widgets are for
    *exploring* an idea (drag ε, watch δ), not for decoration.
 7. **Boring, durable tooling.** Plain-text Markdown, few dependencies, pinned versions,

@@ -43,7 +43,7 @@ Phases 3 and 4 can overlap: they share only the MVT/FTC boundary, and the graph
   runtime coverage plugin.
 - One widget end-to-end: `widgets/function-plot.mjs` + schema + `_lib/` (published with
   `static_files`, 05 §5.8) + a Node test, rendering on the deployed site.
-- `.github/workflows/{ci,deploy,links}.yml`; branch protection on `main`;
+- `.github/workflows/{ci,guard,deploy,links}.yml`; branch protection on `main`;
   `.github/{pull_request_template.md,CODEOWNERS,ISSUE_TEMPLATE/*}`; Dependabot config.
 - `README.md`, `CONTRIBUTING.md`, `LICENSE` (MIT), `LICENSE-CONTENT.md` (CC BY-SA 4.0),
   `CLAUDE.md` updated from v0 to v1.

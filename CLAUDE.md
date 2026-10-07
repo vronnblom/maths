@@ -118,7 +118,9 @@ docs/plan/                             the plan (architecture decisions)
 - Don't prove a result with a tool that depends on it (e.g. L'Hôpital or $(\sin x)'$ for
   $\lim \frac{\sin x}{x}$; Taylor series for Taylor's theorem).
 - Don't cite results outside the page's prerequisite closure, except in a `looking-ahead`
-  admonition. In a proof or solution, don't cite a result stated later on the same page.
+  admonition. A proof may cite a same-page result only if it is stated before the result being
+  proved; a solution, only results earlier than the solution. A proof that is not directly
+  after its statement carries the matching label (`prf-calc-x` proves `thm-calc-x`).
 - Don't copy from non-compatible sources (anything NC or proprietary; see
   `docs/plan/07-exercises.md` §7.4). List adapted CC BY / CC BY-SA sources in `maths.sources`.
 - Don't embed Desmos/GeoGebra as core content (only as "explore further" links).

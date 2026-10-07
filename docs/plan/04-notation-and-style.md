@@ -77,7 +77,7 @@ returns `\pi` and `e` as plain symbols and drops list items after the first comm
 - `\sin \cos \tan \arcsin \arccos \arctan \ln \log_{b}`, `\abs{}` / `|x|`
 - `+C` for antiderivatives (the checker differentiates instead of comparing)
 - several answers as a comma-separated list (each element is checked); intervals as
-  `(a, b)` / `[a, b]` with the `set` answer type (see 07)
+  `(a, b)` / `[a, b]` with the `set` answer type (see 07); without it, `(a, b)` is a point
 - **not** `\mathrm{e}` and not `\dfrac` (normalised by the checker, but avoid them anyway)
 
 Answers that are not expressions (proofs, sketches, "does not exist") use

@@ -98,8 +98,10 @@ The answer a student sees is the one that gets checked. There is **no copy** of 
    function:
    1. normalises the input: `\dfrac`→`\frac`; `\left`/`\right` and `\,` dropped;
       `\abs{}`→`|…|`; macros expanded;
-   2. splits a top-level comma-separated list itself, and parses intervals `(a, b)`,
-      `[a, b)`, … itself as `sp.Interval`. Each element goes to
+   2. splits a top-level comma-separated list itself. Brackets depend on the answer type
+      (07 §7.3), which `answer(label)` passes on from `_answers.json`: with the `set` type,
+      `(a, b)`, `[a, b)`, … are parsed as `sp.Interval`; with any other type, `(a, b)` is a
+      tuple, i.e. a point such as a critical point `(1, -2)`. Each element goes to
       `sympy.parsing.latex.parse_latex(s, backend="antlr", strict=True)`. With the default
       `strict=False`, the parser silently drops everything after the first comma;
    3. post-processes the result. The antlr parser returns `\pi` and `e` as free symbols, so
@@ -108,9 +110,9 @@ The answer a student sees is the one that gets checked. There is **no copy** of 
       every other free symbol by the `mathcheck` symbol of the same name (`x`, `t`, … are
       real). Otherwise a correct `2x` would not equal the test's `2*x`.
 
-   It returns a SymPy expression, a tuple (for lists) or an `Interval`. Its golden tests in
-   `test_mathcheck.py` include `\frac{\pi}{4}`, `e^{2}`, `-2, 4` (two elements),
-   `[0, 1)` and `2x`.
+   It returns a SymPy expression, a tuple (for lists and points) or an `Interval`. Its
+   golden tests in `test_mathcheck.py` include `\frac{\pi}{4}`, `e^{2}`, `-2, 4` (two
+   elements), `[0, 1)` (`set`), `(1, -2)` (a point, `expr`) and `2x`.
 4. If the parser can't read an answer, the test **fails** with a message telling the author
    to rewrite the answer in the supported subset ([04 §4.3](04-notation-and-style.md)) or
    mark it `manual`.
@@ -175,8 +177,8 @@ template for topic PRs.
 - [ ] Every hypothesis is used (an unused one means either the statement is weaker than it
       could be, or the proof is wrong).
 - [ ] Every cited result is on the same page earlier, or in the page's prerequisite closure
-      (also checked by CI's forward-reference check, including the "earlier on the same
-      page" part for citations inside proofs and solutions).
+      (also checked by CI's forward-reference check). On the same page, a proof may cite
+      only results stated before the result it proves (02 §2.5).
 - [ ] **No circularity**. Known traps in calculus:
       - $\lim_{x\to 0} \frac{\sin x}{x} = 1$ must not use L'Hôpital or $(\sin x)' = \cos x$
         (the derivative of sine is derived *from* this limit). Use the geometric squeeze argument.
@@ -213,7 +215,7 @@ Each check runs in the CI job (and npm script) shown, so local and CI runs match
 |---|---|---|
 | Site builds | `scripts/build_site.sh`: `myst build --html --strict` + filter on ⛔️ and ⚠️ (`build` / `build`) | MyST syntax errors, unknown directives, **broken internal cross-references**, missing files, unresolved labels |
 | Front matter | `check_frontmatter.py` + `schema/page.schema.json` (`checks` / `check`) | missing/invalid fields, unknown tags, bad label format, status preconditions that need no tests, including the **prerequisite-status gate**: a page may be `reviewed` or `verified` only if every prerequisite page exists and is at least `reviewed` |
-| Labels | `check_labels.py` (`checks` / `check`) | duplicate labels (also across pages), label grammar, kind prefix matching the directive (`thm-` on `proof:theorem`), every exercise has exactly one solution, every `{anywidget}` alone in a `{figure}` labelled `wdg-…`, labels removed without a tombstone, and labels in the content that are missing from `labels.lock` (§6.7) |
+| Labels | `check_labels.py` (`checks` / `check`) | duplicate labels (also across pages), label grammar, kind prefix matching the directive (`thm-` on `proof:theorem`), every exercise has exactly one solution, every proof directly after its statement or paired with it by label (`prf-<slug>`), every `{anywidget}` alone in a `{figure}` labelled `wdg-…`, labels removed without a tombstone, and labels in the content that are missing from `labels.lock` (§6.7) |
 | Graph | `graph.py check` (`checks` / `check`) | unknown prerequisites, cycles, cross-subject edges violating `depends_on`, mismatch with `curriculum.yml` |
 | Forward references | `check_labels.py --forward-refs` (`checks` / `check`) | citations outside the prerequisite closure; inside proofs and solutions, also citations of a block that comes *later* on the same page (warning; error on verified pages) |
 | ToC | `check_toc.py` (`checks` / `check`) | `.md` files missing from the toc, toc entries without files |
@@ -221,7 +223,7 @@ Each check runs in the CI job (and npm script) shown, so local and CI runs match
 | Notation lint | `check_all.py` (`checks` / `check`) | bare `\log`, `\sin^{-1}`, raw `dx`, `]a,b[`, `\mathrm{e}`, degrees in calculus pages |
 | Spelling | `codespell` with the en-GB dictionary (`checks` / `check`) | typos and US spellings |
 | Checker tests | `pytest tests` (`checks` / `check`) | a checker that stops detecting its fixture's error |
-| Verified-page edits | `check_verified_edits.py` (`checks`, PRs only) | see §6.6 |
+| Verified-page edits | `check_verified_edits.py` (`guard.yml` / –, PRs only) | see §6.6 |
 | Verification | `pytest verify` (`verify` / `verify`) | wrong computations and answers |
 | Coverage gate | `check_coverage.py` after pytest (`verify` / `verify`) | status vs verification coverage actually achieved (§6.1, §6.6) |
 | LaTeX renders | `scripts/check_katex.mjs` on the AST (`verify` / `verify`) | unsupported commands or macros that the build would only render as red error text |
@@ -264,13 +266,14 @@ so failures are clickable.
 - Pages are published at every status (the banner tells readers), so drafts get eyes early.
 - Any **edit to the mathematics** of a verified page (statement, proof, example, answer) sets
   it back to `reviewed` unless the PR re-establishes the verified preconditions. CI
-  enforces this on pull requests with `check_verified_edits.py`. It diffs the PR against its
-  base commit (the `checks` job checks out the full history), and fails if a block inside a
-  verified page changed while that page's verify file did not. The failure asks for the
-  status to be lowered or the test to be updated. A typo-only PR can add the `typo-only`
-  label, which the script reads from the event. ci.yml re-runs on `labeled`/`unlabeled`, so
-  adding the label turns the check green without a new push. The guard runs only on pull
-  requests; the post-merge run on `main` skips it.
+  enforces this on pull requests with `check_verified_edits.py`, in its own workflow
+  `guard.yml` (05 §5.7). It diffs the PR against its base commit (the job checks out the
+  full history), and fails if a block inside a verified page changed while that page's
+  verify file did not. The failure asks for the status to be lowered or the test to be
+  updated. A typo-only PR can add the `typo-only` label, which the script reads from the
+  event. `guard.yml` re-runs on `labeled`/`unlabeled`, so adding the label turns the check
+  green without a new push; it is the only workflow that runs on label changes, so labelling
+  a PR does not re-run the full CI. The guard runs only on pull requests, never on `main`.
 - `content/about/status.md` shows the dashboard (pages per status per chapter). It includes
   a table that `scripts/generate.py` regenerates before every build
   ([05 §5.7](05-tooling-and-build.md), "Generated content").

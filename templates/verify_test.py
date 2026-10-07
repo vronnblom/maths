@@ -40,12 +40,15 @@ def test_linear_eps_delta_example():
     delta = eps / 2
     assert sp.simplify(2 * delta - eps) <= 0
     # And test the implication itself on random points, independently of the algebra above.
+    # Exact rationals, not floats: near the edge of the window the margin is far smaller than
+    # float rounding, so a float check could fail on a correct delta.
     rng = random.Random(0)
     for _ in range(1000):
-        e = rng.uniform(1e-6, 2)
-        d = float(delta.subs(eps, e))
-        xv = 3 + rng.choice([-1, 1]) * rng.uniform(1e-12, d) * (1 - 1e-12)
-        assert abs((2 * xv - 1) - 5) < e
+        e = sp.Rational(rng.randint(1, 2 * 10**6), 10**6)          # eps in (0, 2]
+        d = delta.subs(eps, e)
+        t = d * sp.Rational(rng.randint(1, 10**6 - 1), 10**6)      # 0 < |x - 3| < delta, up to the edge
+        for xv in (3 + t, 3 - t):
+            assert sp.Abs((2 * xv - 1) - 5) < e
     # Check line: eps = 0.1, x = 3.04
     assert sp.Abs(2 * sp.Rational(304, 100) - 1 - 5) < sp.Rational(1, 10)
 

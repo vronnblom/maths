@@ -176,11 +176,13 @@ an npm package, so neither the mystmd pin, the lockfile nor Dependabot covers it
 `<commit-sha>` above is the pin. It is bumped only in the same dedicated upgrade PRs as
 mystmd (with the visual check of the exemplar pages), and `katex` is pinned to the KaTeX
 version of that theme commit. CI and deploy cache `content/_build/templates` keyed on the
-SHA. Claude Code cloud sessions cannot download from github.com repositories that are not
-attached to the session, so Phase 0 must make the pinned zip reachable there, by allowing it
-in the cloud environment's network settings or, failing that, by vendoring the built theme
-at that commit (e.g. `vendor/book-theme/`, `template: ../vendor/book-theme`). Either way,
-"`npm run all` is green in a cloud session" is part of Phase 0's definition of done.
+SHA alone, which a step greps from `myst.yml` (keying on a hash of the whole `myst.yml`
+would miss on every toc change, i.e. on almost every topic PR). Claude Code cloud sessions
+cannot download from github.com repositories that are not attached to the session, so Phase
+0 must make the pinned zip reachable there, by allowing it in the cloud environment's
+network settings or, failing that, by vendoring the built theme at that commit (e.g.
+`vendor/book-theme/`, `template: ../vendor/book-theme`). Either way, "`npm run all` is green
+in a cloud session" is part of Phase 0's definition of done.
 
 If the toc grows unwieldy (more than about 300 lines), split it per subject with MyST's
 `extends:` mechanism. Check first whether `extends` merges `toc` entries; otherwise
@@ -220,7 +222,7 @@ The npm scripts are the **only** definition of each step: CI calls the same scri
 - `node --test` is given a glob. A bare directory argument is treated as a module on Node 22
   and fails with "Cannot find module".
 
-### `scripts/build_site.sh` (the one site build, used by `npm run build`, CI and deploy)
+### `scripts/build_site.sh` (the one site build, used by `npm run build`, CI and deploy, redirects included)
 
 ```bash
 #!/usr/bin/env bash
@@ -233,6 +235,9 @@ myst build --html --strict --ci 2>&1 | tee build.log
 if grep -E '⛔️|⚠️' build.log | grep -v "extra key ignored: maths"; then
   echo "::error::MyST build produced errors or warnings"; exit 1
 fi
+# Redirect pages for moved pages (02 §2.3). Run here, not only on deploy, so a redirect that
+# collides with a live page fails the PR. Reads BASE_URL (/maths on deploy) like mystmd.
+uv run python ../scripts/write_redirects.py _build/html
 ```
 
 ### `pyproject.toml`
@@ -265,7 +270,8 @@ builtin = "clear,rare"
 # accept US spellings, and the built-in en-GB_to_en-US flags the British ones, so en-GB is
 # enforced by a curated list (normalize->normalise, behavior->behaviour, color->colour, …).
 # Words that are also class names or code identifiers stay out of the list: `rigor`, `center`,
-# and GitHub's `labeled`, `synchronize`, `artifact`.
+# `license` (the LICENSE file, `license:` in myst.yml and package.json), and GitHub's
+# `labeled`, `synchronize`, `artifact`.
 dictionary = ".codespell-en-gb.txt,-"
 ```
 
@@ -293,16 +299,15 @@ pinned theme is reachable from the session (see "The theme is a dependency too" 
 
 ### `.github/workflows/ci.yml` (on every PR and on push to `main`)
 
-Every job calls the npm scripts from §5.5, so CI and `npm run all` cannot drift apart. A
+Every job calls the npm scripts from §5.5, so CI and `npm run all` cannot drift apart (the
+PR-only label guard is a separate workflow, `guard.yml`, below). A
 `run:` step without `shell:` runs as `bash -e {0}`, with no pipefail. That is why pipelines
 live in `scripts/build_site.sh` (`set -euo pipefail`), not inline in the YAML.
 
 ```yaml
 name: CI
 on:
-  pull_request:
-    # `labeled`/`unlabeled` so that adding or removing `typo-only` re-runs the checks (06 §6.6)
-    types: [opened, synchronize, reopened, labeled, unlabeled]
+  pull_request:                                 # default types: label changes don't re-run CI
   push:
     branches: [main]
 concurrency:
@@ -314,7 +319,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@<sha>
-        with: { fetch-depth: 0 }                     # the verified-page guard diffs against the base
       - uses: astral-sh/setup-uv@<sha>
       - run: uv sync --frozen
       - uses: actions/setup-node@<sha>               # the fixture tests in tests/ also run check_katex.mjs
@@ -322,12 +326,6 @@ jobs:
       - run: npm ci
       - name: Front matter, labels, graph, toc, notation lint, spelling, checker fixture tests
         run: npm run check                           # check_all.py emits ::error file=…,line=…:: annotations
-      - name: Verified-page edit guard (PRs only)
-        if: github.event_name == 'pull_request'
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          PR_LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
-        run: uv run python scripts/check_verified_edits.py --base "$BASE_SHA" --labels "$PR_LABELS"
 
   verify:
     runs-on: ubuntu-latest
@@ -338,8 +336,10 @@ jobs:
       - uses: actions/setup-node@<sha>
         with: { node-version-file: .nvmrc, cache: npm }
       - run: npm ci
-      - uses: actions/cache@<sha>                    # the pinned theme (§5.5); --site needs it too
-        with: { path: content/_build/templates, key: 'theme-${{ hashFiles(''content/myst.yml'') }}' }
+      - id: theme                                    # the pinned theme commit from myst.yml (§5.5)
+        run: echo "sha=$(grep -oE 'book-theme/archive/[0-9a-f]{40}' content/myst.yml | cut -d/ -f3)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@<sha>                    # the pinned theme; --site needs it too
+        with: { path: content/_build/templates, key: 'theme-${{ steps.theme.outputs.sha }}' }
       - name: AST, answers, SymPy verification, coverage, KaTeX
         run: npm run verify
       - name: Widget maths
@@ -354,12 +354,44 @@ jobs:
       - uses: actions/setup-node@<sha>
         with: { node-version-file: .nvmrc, cache: npm }
       - run: npm ci
-      - uses: actions/cache@<sha>
-        with: { path: content/_build/templates, key: 'theme-${{ hashFiles(''content/myst.yml'') }}' }
+      - id: theme                                    # the pinned theme commit from myst.yml (§5.5)
+        run: echo "sha=$(grep -oE 'book-theme/archive/[0-9a-f]{40}' content/myst.yml | cut -d/ -f3)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@<sha>                    # keyed on that commit only, so toc edits still hit
+        with: { path: content/_build/templates, key: 'theme-${{ steps.theme.outputs.sha }}' }
       - name: Build site (errors and warnings fail, except the whitelisted one)
         run: npm run build                           # no BASE_URL: the preview is served from its root
       - uses: actions/upload-artifact@<sha>          # downloadable preview of the PR's site
         with: { name: site, path: content/_build/html, retention-days: 7, if-no-files-found: error }
+```
+
+### `.github/workflows/guard.yml` (the verified-page edit guard, PRs only)
+
+The one check that reads PR labels (06 §6.6). It is a workflow of its own so that it alone
+re-runs when a label is added or removed: adding `typo-only` turns it green without a new
+push, while labelling a PR for triage doesn't re-run the full CI.
+
+```yaml
+name: Guard
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+concurrency:
+  group: 'guard-${{ github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+  verified-edits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@<sha>
+        with: { fetch-depth: 0 }                     # diffs against the base commit
+      - uses: astral-sh/setup-uv@<sha>
+      - run: uv sync --frozen
+      - name: Verified-page edit guard
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+        run: uv run python scripts/check_verified_edits.py --base "$BASE_SHA" --labels "$PR_LABELS"
 ```
 
 ### `.github/workflows/deploy.yml` (on push to `main`)
@@ -380,19 +412,20 @@ jobs:
       - uses: actions/setup-node@<sha>
         with: { node-version-file: .nvmrc, cache: npm }
       - run: npm ci
-      - uses: actions/cache@<sha>
-        with: { path: content/_build/templates, key: 'theme-${{ hashFiles(''content/myst.yml'') }}' }
-      - run: npm run build                           # the same gated build as CI
+      - id: theme                                    # the pinned theme commit from myst.yml (§5.5)
+        run: echo "sha=$(grep -oE 'book-theme/archive/[0-9a-f]{40}' content/myst.yml | cut -d/ -f3)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@<sha>                    # keyed on that commit only, so toc edits still hit
+        with: { path: content/_build/templates, key: 'theme-${{ steps.theme.outputs.sha }}' }
+      - run: npm run build                           # the same gated build as CI, redirects included
         env: { BASE_URL: /maths }
-      - run: uv run python scripts/write_redirects.py content/_build/html   # old URLs (02 §2.3)
       - uses: actions/upload-pages-artifact@<sha>
         with: { path: content/_build/html }
       - id: d
         uses: actions/deploy-pages@<sha>
 ```
 
-Branch protection on `main`: require `checks`, `verify` and `build`; require one approving
-review (the owner); linear history (squash merge).
+Branch protection on `main`: require `checks`, `verify`, `build` (ci.yml) and `verified-edits`
+(guard.yml); require one approving review (the owner); linear history (squash merge).
 
 ### `.github/workflows/links.yml`
 

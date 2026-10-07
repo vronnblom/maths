@@ -78,8 +78,9 @@ Rules:
   its own math span. Non-expression answers ("does not exist", a proof) use
   `:class: dropdown answer manual`.
 - **Answer types** (an extra class on the answer admonition, so the checker knows how to
-  compare): `expr` (default), `antiderivative` (compare up to a constant), `set` (solution
-  sets/intervals), `bool` (true/false questions), `numeric` (with tolerance, e.g.
+  compare): `expr` (default; a bracketed pair `(a, b)` is a point), `antiderivative`
+  (compare up to a constant), `set` (solution sets/intervals: only here are brackets read as
+  intervals), `bool` (true/false questions), `numeric` (with tolerance, e.g.
   `numeric-1e-4`), `manual`. An answer asked "to $n$ decimal places" uses the tolerance
   $\tfrac12 \cdot 10^{-n}$ (`numeric-5e-3` for two places), and its test compares the
   printed value with the correctly rounded one, so a wrongly rounded answer fails.

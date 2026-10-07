@@ -122,7 +122,7 @@ Every block is a MyST directive. Snippets are in [`templates/blocks.md`](../../t
 | Theorem | `:::{proof:theorem} <Name>` | `thm-…` required | conventional name ("Squeeze theorem") or a short descriptive one | hypotheses first ("Let… Suppose…"), then the conclusion; each hypothesis needed |
 | Lemma / Corollary / Proposition | `proof:lemma` / `proof:corollary` / `proof:proposition` | `lem-` / `cor-` / `prop-` | | corollaries reference their parent theorem in the first line |
 | Proof (core) | `:::{proof:proof}` + `:enumerated: false`, directly after the statement | `prf-…` optional | none | renders "Proof". First line names the strategy ("We use the squeeze theorem with…"); ends at the end of the directive. The theme draws no ∎; `custom.css` adds one |
-| Proof (rigorous) | `:::{proof:proof} Rigorous track` + `:enumerated: false` + `:class: dropdown` | `prf-…` | "Rigorous track" | renders "Proof (Rigorous track)" |
+| Proof (rigorous) | `:::{proof:proof} Rigorous track` + `:enumerated: false` + `:class: dropdown` | `prf-<slug>` of the statement it proves (required unless directly after it, 02 §2.5) | "Rigorous track" | renders "Proof (Rigorous track)" |
 | Proof sketch | `:::{proof:proof} Sketch` + `:enumerated: false` | | "Sketch" | says what is missing; under policy D, also where it is proved |
 | Worked example | `:::{proof:example} <Goal>` | `eg-…` required | goal in imperative form ("Find …") | numbered steps; final result in `\boxed{}`; ends with **Check:** |
 | Remark | `:::{proof:remark} <Topic>` | `rem-…` if referenced | | |
