@@ -161,8 +161,23 @@ not $1.5$.
 
 ## Main results
 
-The proof below uses one fact about whole numbers: every integer is either **even**, of the
-form $2m$ with $m \in \Z$, or **odd**, of the form $2m + 1$ with $m \in \Z$, and not both.
+We use square roots throughout calculus, and the next pages cite this fact about them.
+
+:::{proof:remark} Square roots
+:label: rem-calc-square-roots
+
+For every real number $y \ge 0$ there is exactly one real number $s \ge 0$ with $s^2 = y$. It is
+called the **square root** of $y$ and written $\sqrt{y}$. For example $\sqrt{9} = 3$ (and not
+${-3}$, although $(-3)^2 = 9$ too), $\sqrt{0} = 0$ and $\sqrt{2} = 1.41421\ldots$. A negative
+number has no real square root, because $s^2 \ge 0$ for every real number $s$.
+:::
+
+The proof below uses two facts about whole numbers:
+
+- every integer is either **even**, of the form $2m$ with $m \in \Z$, or **odd**, of the form
+  $2m + 1$ with $m \in \Z$, and not both;
+- every non-empty set of positive integers has a smallest element (the **well-ordering
+  principle**).
 
 :::{proof:theorem} The square root of 2 is irrational
 :label: thm-calc-sqrt2-irrational
@@ -178,8 +193,7 @@ something impossible.
 Suppose that $r$ is rational and $r^2 = 2$. Then $r \ne 0$, and $(-r)^2 = r^2 = 2$ as well, so
 we may assume that $r > 0$ (otherwise we replace $r$ by $-r$). Then $r = \frac{p}{q}$ with
 positive integers $p$ and $q$. Among all such ways of writing $r$, we choose one with the
-smallest possible denominator $q$; there is one, because every non-empty set of positive
-integers has a smallest element.
+smallest possible denominator $q$; there is one, by the well-ordering principle.
 
 1. From $\frac{p^2}{q^2} = 2$ we get $p^2 = 2q^2$, so $p^2$ is even.
 2. Then $p$ is even. Otherwise $p$ is odd, $p = 2m + 1$ with $m \in \Z$, and
@@ -204,9 +218,10 @@ step 3 ($q^2 = 2k^2$) and makes $q$ even; for $4$ it cancels completely. The sam
 that $\sqrt{3}$ is irrational ([](#exr-calc-real-numbers-sqrt3-irrational)).
 :::
 
-Here we have taken from school that $\sqrt{2}$ exists: that there is a positive real number
-whose square is $2$. The rigorous track shows that this is exactly what the **completeness** of
-$\R$ guarantees, and what $\Q$ lacks.
+Here, as in [](#rem-calc-square-roots), we have taken from school that $\sqrt{2}$ exists: that
+there is a positive real number whose square is $2$. The rigorous track shows that this is
+exactly what the **completeness** of $\R$ guarantees, and what $\Q$ lacks, and proves
+[](#rem-calc-square-roots) for every $y \ge 0$.
 
 ## Worked examples
 
@@ -363,6 +378,11 @@ upper bound, and some element $x \in S$ satisfies $x > s - \eps$.
 Every non-empty subset of $\R$ that is bounded above has a supremum in $\R$.
 :::
 
+**Why "non-empty".** Every real number is an upper bound of the empty set, since $\emptyset$ has
+no element to check. So $\emptyset$ is bounded above, but its upper bounds are all of $\R$, which
+has no smallest element: $\emptyset$ has no supremum. A set that is not bounded above, such as
+$\R$ itself, has no upper bound at all, so no supremum either.
+
 :::{proof:remark} Why an axiom, and where it comes from
 :label: rem-calc-completeness-origin
 
@@ -373,15 +393,16 @@ with no least upper bound among the rationals.
 
 *Sketch of where it comes from.* The real numbers can be constructed from the rationals. In one
 construction (Dedekind cuts) a real number is a way of cutting $\Q$ into a lower and an upper
-part, and the supremum of a bounded set of cuts is the cut whose lower part is the union of
-theirs, so completeness becomes a theorem. This sketch leaves out the definitions of the
-arithmetic operations on cuts and the proofs of their rules; they belong to Real Analysis
-(`ana`), which does not exist yet.
+part, and the supremum of a non-empty set of cuts that is bounded above is the cut whose lower
+part is the union of theirs, so completeness becomes a theorem. This sketch leaves out the
+definitions of the arithmetic operations on cuts and the proofs of their rules; they belong to
+Real Analysis (`ana`), which does not exist yet.
 :::
 
-Two first consequences of completeness:
+Two first consequences of completeness. The first, that $\N$ is not bounded above, is the
+**Archimedean property** of $\R$; later pages cite it by that name.
 
-:::{proof:remark} $\N$ is not bounded above
+:::{proof:remark} The Archimedean property: $\N$ is not bounded above
 :label: rem-calc-naturals-unbounded
 
 For every real number $u$ there is an integer $n \ge 1$ with $n > u$.
@@ -400,9 +421,10 @@ Let $S = \{x \in \R : x \ge 0 \text{ and } x^2 < 2\}$. It is non-empty ($1 \in S
 above by $2$ (if $x \ge 2$ then $x^2 \ge 4$). By [](#ax-calc-completeness) it has a supremum
 $s$, and $1 \le s \le 2$. We show that $s^2 = 2$ by ruling out the other two cases.
 
-- **If $s^2 < 2$:** let $h = \frac{2 - s^2}{2s + 2}$. Then $0 < h < 1$, so $h^2 < h$ and
-  $(s + h)^2 = s^2 + 2sh + h^2 < s^2 + h(2s + 2) = 2$. So $s + h \in S$, although $s + h > s$:
-  this contradicts $s$ being an upper bound.
+- **If $s^2 < 2$:** let $h = \frac{2 - s^2}{2s + 2}$. Then $0 < h < 1$, because
+  $0 < 2 - s^2 < 2 < 2s + 2$ (the first by the case we are in, the others because $s \ge 1$).
+  So $h^2 < h$ and $(s + h)^2 = s^2 + 2sh + h^2 < s^2 + h(2s + 2) = 2$. So $s + h \in S$,
+  although $s + h > s$: this contradicts $s$ being an upper bound.
 - **If $s^2 > 2$:** let $h = \frac{s^2 - 2}{2s}$. Then $h > 0$, $s - h = \frac{s^2 + 2}{2s} > 0$
   and $(s - h)^2 = s^2 - 2sh + h^2 = 2 + h^2 > 2$. Every $x \in S$ has $x^2 < 2 < (s - h)^2$,
   so $x < s - h$ (both are non-negative). So $s - h$ is an upper bound of $S$ smaller than $s$:
@@ -418,6 +440,33 @@ $h$ and an element $u + h$ of $S_\Q$ larger than $u$. If $u^2 > 2$, the second c
 rational upper bound $u - h = \frac{u^2 + 2}{2u}$ of $S_\Q$, smaller than $u$. Both contradict
 the choice of $u$. So the argument that produced $\sqrt{2}$ in $\R$ fails in $\Q$ at its very
 first step: there, the supremum need not exist.
+:::
+
+:::{admonition} Completeness gives every square root
+:class: dropdown rigor
+
+We prove [](#rem-calc-square-roots): every $y \ge 0$ has exactly one non-negative square root.
+
+*Uniqueness.* If $0 \le s < t$, then $s^2 < t^2$: multiplying $s < t$ by $s \ge 0$ gives
+$s^2 \le st$, and multiplying it by $t > 0$ gives $st < t^2$. So two different non-negative
+numbers have different squares, and $y$ has at most one non-negative square root. In the same
+way, if $0 \le s \le t$ then $s^2 \le t^2$.
+
+*Existence (sketch).* For $y = 0$, take $s = 0$. For $y > 0$, we repeat the argument for
+$\sqrt{2}$ with $y$ in place of $2$. The set $S_y = \{x \in \R : x \ge 0 \text{ and } x^2 < y\}$
+is non-empty ($0 \in S_y$) and bounded above by $1 + y$ (if $x \ge 1 + y$, then $x \ge 1$, so
+$x^2 \ge x > y$). By [](#ax-calc-completeness) it has a supremum $s \ge 0$.
+
+- **If $s^2 < y$:** let $h$ be the smaller of $\frac{1}{2}$ and $\frac{y - s^2}{2s + 1}$. Then
+  $0 < h < 1$, so $h^2 < h$ and $(s + h)^2 < s^2 + h(2s + 1) \le y$. So $s + h \in S_y$, although
+  $s + h > s$.
+- **If $s^2 > y$:** then $s > 0$ (as $s \ge 0$ and $s^2 > 0$); let $h = \frac{s^2 - y}{2s}$.
+  As for $\sqrt{2}$, $h > 0$, $s - h = \frac{s^2 + y}{2s} > 0$ and $(s - h)^2 = y + h^2 > y$.
+  Every $x \in S_y$ has $x^2 < y < (s - h)^2$, so $x < s - h$ (if $x \ge s - h \ge 0$, the
+  uniqueness step would give $x^2 \ge (s - h)^2$). So $s - h$ is an upper bound of $S_y$ smaller
+  than $s$.
+
+Both cases contradict $s = \sup S_y$, so $s^2 = y$.
 :::
 
 ## Summary
@@ -671,12 +720,15 @@ divides $p$ and then $q$, so a smaller denominator exists: a contradiction.
 
 We argue by contradiction, as in the proof of [](#thm-calc-sqrt2-irrational).
 
+We use division with remainder by $3$: every integer is of exactly one of the forms $3m$,
+$3m + 1$ and $3m + 2$ with $m \in \Z$, and $3$ divides it exactly when it is of the form $3m$.
+
 First, if $3$ does not divide an integer $p$, then it does not divide $p^2$. Indeed, then
 $p = 3m + 1$ or $p = 3m + 2$ with $m \in \Z$, and
 $$
 (3m + 1)^2 = 3(3m^2 + 2m) + 1, \qquad (3m + 2)^2 = 3(3m^2 + 4m + 1) + 1,
 $$
-which both leave remainder $1$ on division by $3$.
+which are both of the form $3j + 1$ with $j \in \Z$, so neither is of the form $3m$.
 
 Suppose now that $\sqrt{3} = \frac{p}{q}$ with positive integers $p$ and $q$, and choose $q$ as
 small as possible. Then $p^2 = 3q^2$, so $3$ divides $p^2$, and by the first paragraph $3$
@@ -703,7 +755,7 @@ is one.
 :::{admonition} Hint 2
 :class: dropdown hint
 In (a), a number $u < 1$ is exceeded by $1 - \frac{1}{n}$ once $\frac{1}{n} < 1 - u$. Use
-[](#rem-calc-naturals-unbounded).
+[the Archimedean property](#rem-calc-naturals-unbounded).
 :::
 
 :::{admonition} Answer
@@ -718,18 +770,19 @@ In (a), a number $u < 1$ is exceeded by $1 - \frac{1}{n}$ once $\frac{1}{n} < 1 
 
 (a) Let $S = \{1 - \frac{1}{n} : n \text{ an integer}, n \ge 1\}$. Every element satisfies
 $1 - \frac{1}{n} < 1$, so $1$ is an upper bound. Now let $u < 1$. By
-[](#rem-calc-naturals-unbounded) there is an integer $n \ge 1$ with $n > \frac{1}{1 - u}$, and
-since $1 - u > 0$ this gives $\frac{1}{n} < 1 - u$, that is $1 - \frac{1}{n} > u$. So $u$ is not
-an upper bound, and every upper bound is at least $1$: $\sup S = 1$. Note that $1 \notin S$, so
-$S$ has no largest element.
+[the Archimedean property](#rem-calc-naturals-unbounded) there is an integer $n \ge 1$ with
+$n > \frac{1}{1 - u}$, and since $1 - u > 0$ this gives $\frac{1}{n} < 1 - u$, that is
+$1 - \frac{1}{n} > u$. So $u$ is not an upper bound, and every upper bound is at least $1$:
+$\sup S = 1$. Note that $1 \notin S$, so $S$ has no largest element.
 
-(b) Let $T = \{x \in \R : x^2 < 2\}$. If $x \ge \sqrt{2}$, then $x^2 \ge \sqrt{2}\, x \ge
-\sqrt{2} \cdot \sqrt{2} = 2$, so $x \notin T$; hence every element of $T$ is less than
-$\sqrt{2}$, and $\sqrt{2}$ is an upper bound. Now let $u < \sqrt{2}$ be any upper bound of $T$.
-Since $0 \in T$, we have $u \ge 0$. The number $x = \frac{u + \sqrt{2}}{2}$ satisfies
-$0 \le u < x < \sqrt{2}$, so $x^2 \le \sqrt{2}\, x < 2$ and $x \in T$; but $x > u$, which
-contradicts $u$ being an upper bound. So no number below $\sqrt{2}$ is an upper bound:
-$\sup T = \sqrt{2}$.
+(b) Let $T = \{x \in \R : x^2 < 2\}$. If $x \ge \sqrt{2}$, then $x > 0$, and multiplying
+$x \ge \sqrt{2}$ by $x$ and by $\sqrt{2}$, both positive, gives
+$x^2 \ge \sqrt{2}\, x \ge \sqrt{2} \cdot \sqrt{2} = 2$, so $x \notin T$; hence every element of
+$T$ is less than $\sqrt{2}$, and $\sqrt{2}$ is an upper bound. Now let $u < \sqrt{2}$ be any
+upper bound of $T$. Since $0 \in T$, we have $u \ge 0$. The number $x = \frac{u + \sqrt{2}}{2}$
+satisfies $0 \le u < x < \sqrt{2}$. Multiplying $x < \sqrt{2}$ by $x > 0$ and by $\sqrt{2} > 0$
+gives $x^2 < \sqrt{2}\, x < 2$, so $x \in T$; but $x > u$, which contradicts $u$ being an upper
+bound. So no number below $\sqrt{2}$ is an upper bound: $\sup T = \sqrt{2}$.
 ::::
 
 ::::{exercise} A rational number between any two reals
@@ -740,7 +793,8 @@ Let $a < b$ be real numbers. Prove that there is a rational number $r$ with $a <
 
 :::{admonition} Hint 1
 :class: dropdown hint
-Use [](#rem-calc-naturals-unbounded) to find an integer $n \ge 1$ with $\frac{1}{n} < b - a$.
+Use [the Archimedean property](#rem-calc-naturals-unbounded) to find an integer $n \ge 1$ with
+$\frac{1}{n} < b - a$.
 :::
 
 :::{admonition} Hint 2
@@ -760,13 +814,17 @@ $r = \frac{m}{n}$ works.
 :label: sol-calc-real-numbers-rational-between
 :class: dropdown
 
-Since $b - a > 0$, [](#rem-calc-naturals-unbounded) gives an integer $n \ge 1$ with
-$n > \frac{1}{b - a}$, that is $nb - na > 1$.
+Since $b - a > 0$, [the Archimedean property](#rem-calc-naturals-unbounded) gives an integer
+$n \ge 1$ with $n > \frac{1}{b - a}$, that is $nb - na > 1$.
 
-Next, the set of integers greater than $na$ is non-empty (by [](#rem-calc-naturals-unbounded)
-again, some integer exceeds $na$) and bounded below by $na$, so it has a smallest element $m$
-(a non-empty set of integers that is bounded below has a smallest element). Since $m$ is the
-smallest, $m - 1$ is not greater than $na$, so
+Next, let $A$ be the set of integers greater than $na$. It is non-empty: by the Archimedean
+property again, some integer exceeds $na$. It has a smallest element, which we find with the
+well-ordering principle (stated before [](#thm-calc-sqrt2-irrational)). The elements of $A$ need
+not be positive, so we first shift $A$ into the positive integers: the Archimedean property gives
+an integer $k \ge 1$ with $k > -na$, and then every $j \in A$ has $j + k > na + k > 0$. So the
+numbers $j + k$ with $j \in A$ form a non-empty set of positive integers, which by the
+well-ordering principle has a smallest element $m + k$ with $m \in A$; then $m$ is the smallest
+element of $A$. Since $m$ is the smallest, $m - 1$ is not greater than $na$, so
 $$
 na < m \le na + 1 < na + (nb - na) = nb .
 $$
