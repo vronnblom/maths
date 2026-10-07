@@ -38,14 +38,16 @@ often `content/calculus/curriculum.yml`, a `labels.lock`, and sometimes a `verif
 | `widget-schema-violation` | a typo in the widget JSON (`tabel`) | `check_widgets.py` (schema) |
 | `widget-missing-file` | `{anywidget}` names `widgets/no-such-widget.mjs` | `check_widgets.py` |
 | `widget-figure-without-caption` | a widget figure with no caption (its text description) | `check_widgets.py` |
-| `widget-unknown-id` | `maths.widgets` lists `epsilon-delta`, which is not built yet | `check_widgets.py` |
+| `widget-unknown-id` | `maths.widgets` lists `no-such-widget` | `check_widgets.py` |
+| `widget-epsilon-delta-out-of-range` | an `epsilon-delta` figure whose `eps` lies outside its `epsRange` | `check_widgets.py` (a rule the schema cannot express) |
 
 `test_widget_checks.py` covers the rest of the widget rules on edited copies of `clean` (a widget
 outside a figure, a non-`wdg-` label, wrong paths, invalid JSON, typos in nested keys, the rules
-that JSON Schema cannot express), runs `widgets/_tests/fixtures/function-plot-invalid.json`
-through the Python rules (the widget tests run the same table through `widgets/_lib/`), and fails
-if `widgets/_tests/fixtures/function-plot.json` is not what `widgets/_tests/make_fixtures.py`
-writes now.
+that JSON Schema cannot express, for `function-plot` and for `epsilon-delta`), runs
+`widgets/_tests/fixtures/function-plot-invalid.json` and `epsilon-delta-invalid.json` through the
+Python rules (the widget tests run the same tables through `widgets/_lib/`), and fails if
+`widgets/_tests/fixtures/function-plot.json` or `epsilon-delta.json` is not what
+`widgets/_tests/make_fixtures.py` writes now.
 
 `test_plugin_build.py` assembles a project from `templates/topic.md` and
 `templates/chapter-index.md` with the real `curriculum.yml`, builds it with

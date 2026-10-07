@@ -19,6 +19,7 @@ from project import REPO, Project, Reporter
 CLEAN = REPO / "tests" / "fixtures" / "clean"
 PAGE = "content/calculus/limits/limit-of-a-function.md"
 SCHEMA = check_widgets.load_schema("function-plot")
+EPS_SCHEMA = check_widgets.load_schema("epsilon-delta")
 FIGURE_START = "::::{figure}\n:label: wdg-calc-limit-average-speed\n"
 
 
@@ -55,6 +56,14 @@ def test_clean_template_passes(tmp_path):
     # a rule JSON Schema cannot express
     ('"xRange": [-1, 1]', '"xRange": [1, -1]', 54, "widget function-plot: xRange: the first number must be smaller than the second"),
     ('"f": "(5*(1+h)^2 - 5)/h"', '"f": "(5(1+h)^2 - 5)/h"', 52, "widget function-plot: f: missing * after 5: write 5*( (at position 2)"),
+    # epsilon-delta: its schema, and the rules it cannot express
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "a": 2, "L": 4, "limit": 4,', 102, "widget epsilon-delta: config: Additional properties are not allowed ('limit' was unexpected)"),
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "L": 4,', 101, "widget epsilon-delta: config: 'a' is a required property"),
+    ('"eps": 0.5, "epsRange": [0.05, 1.5]', '"eps": 0.5, "epsRange": [0, 1.5]', 103, "widget epsilon-delta: epsRange.0: 0 is less than or equal to the minimum of 0"),
+    ('"eps": 0.5, "epsRange": [0.05, 1.5]', '"eps": 0.01, "epsRange": [0.05, 1.5]', 103, "widget epsilon-delta: eps: must lie inside epsRange"),
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "a": 3.5, "L": 4,', 102, "widget epsilon-delta: a: must lie strictly inside xRange"),
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "a": 2, "L": 12,', 102, "widget epsilon-delta: L: must lie inside yRange"),
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x*x(1)", "a": 2, "L": 4,', 102, "widget epsilon-delta: f: x is not a function"),
 ])
 def test_figure_and_config_rules(tmp_path, old, new, line, message):
     errors = check(tmp_path, old, new)
@@ -93,13 +102,39 @@ def test_schema_rejects_typos_and_bad_shapes(config, where):
     assert any(where in m for m in messages), messages
 
 
+@pytest.mark.parametrize("case", json.loads((REPO / "widgets/_tests/fixtures/epsilon-delta-invalid.json").read_text(encoding="utf-8"))["cases"])
+def test_epsilon_delta_rules_shared_with_widgets_lib(case):
+    """The same table as widgets/_tests/epsdelta.test.mjs: both implementations report each problem."""
+    config = case["config"]
+    assert not list(jsonschema.Draft202012Validator(EPS_SCHEMA).iter_errors(config)), "the cases must be schema-valid"
+    problems = check_widgets.epsilon_delta_problems(config, EPS_SCHEMA)
+    if case["problem"] is None:
+        assert problems == []
+    else:
+        assert any(case["problem"] in p for p in problems), problems
+
+
+@pytest.mark.parametrize("config, where", [
+    ({"f": "x", "a": 0, "L": 0, "eps": 0.5, "epsRange": [0.1, 1], "xRange": [-1, 1]}, "'yRange' is a required property"),
+    ({"f": "x", "a": 0, "L": 0, "eps": 0, "epsRange": [0.1, 1], "xRange": [-1, 1], "yRange": [-1, 1]}, "0 is less than or equal to the minimum of 0"),
+    ({"f": "x", "a": 0, "L": 0, "eps": 0.5, "epsRange": [0.1, 1], "delta": -1, "xRange": [-1, 1], "yRange": [-1, 1]}, "-1 is less than or equal to the minimum of 0"),
+    ({"f": "x", "a": 0, "L": 0, "eps": 0.5, "epsRange": [0.1, 1, 2], "xRange": [-1, 1], "yRange": [-1, 1]}, "is too long"),
+    ({"f": "x", "a": 0, "L": 0, "eps": 0.5, "epsRange": [0.1, 1], "xRange": [-1, 1], "yRange": [-1, 1], "variable": "t"}, "'variable' was unexpected"),
+])
+def test_epsilon_delta_schema_rejects_typos_and_bad_shapes(config, where):
+    messages = [e.message for e in jsonschema.Draft202012Validator(EPS_SCHEMA).iter_errors(config)]
+    assert any(where in m for m in messages), messages
+
+
 def test_widget_fixtures_are_fresh():
-    """widgets/_tests/fixtures/function-plot.json is exactly what make_fixtures.py writes now."""
+    """widgets/_tests/fixtures/function-plot.json and epsilon-delta.json are exactly what
+    make_fixtures.py writes now."""
     spec = importlib.util.spec_from_file_location("make_fixtures", REPO / "widgets" / "_tests" / "make_fixtures.py")
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    committed = mod.OUT.read_text(encoding="utf-8")
-    assert committed == mod.render(mod.build()), "run uv run python widgets/_tests/make_fixtures.py and commit the result"
+    for path, data in mod.outputs().items():
+        committed = path.read_text(encoding="utf-8")
+        assert committed == mod.render(data), f"{path.name}: run uv run python widgets/_tests/make_fixtures.py and commit the result"
 
 
 def test_every_site_widget_table_is_in_the_fixtures():

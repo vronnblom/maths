@@ -17,7 +17,7 @@ export const STYLES = `
 .mp-slider label { font-style: italic; min-width: 1.5em; }
 .mp-slider input { width: 9rem; accent-color: currentColor; }
 .mp-slider output { font-variant-numeric: tabular-nums; min-width: 4.5em; }
-.mp-buttons { display: flex; gap: 0.5rem; }
+.mp-buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .mp-widget button {
   font: inherit; font-size: 0.875em; color: inherit; background: transparent;
   border: 1px solid currentColor; border-radius: 4px; padding: 0.15em 0.6em; cursor: pointer;

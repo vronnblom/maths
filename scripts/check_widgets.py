@@ -6,7 +6,9 @@
   (widgets/*.mjs of this repository) with a schema, schema/widgets/<name>.schema.json;
 - the JSON body is valid JSON and valid against that schema, and passes the rules a schema
   cannot express (function-plot: ranges increasing, values inside ranges, and the names and
-  functions in `f`, mirroring widgets/_lib/plot.mjs and expression.mjs);
+  functions in `f`, mirroring widgets/_lib/plot.mjs and expression.mjs; epsilon-delta: ranges
+  increasing, a strictly inside xRange, L inside yRange, eps inside epsRange, delta and epsStep
+  small enough, and `f`, mirroring widgets/_lib/epsdelta.mjs);
 - every id in `maths.widgets` is a widget of the catalogue.
 
 The catalogue and the schemas are always this repository's, also for a fixture project under
@@ -141,12 +143,46 @@ def function_plot_problems(config: dict, schema: dict) -> list[str]:
     return problems
 
 
+def epsilon_delta_problems(config: dict, schema: dict) -> list[str]:
+    """The rules of configProblems() in widgets/_lib/epsdelta.mjs, plus the expression rules."""
+    problems = []
+
+    def increasing(key):
+        r = config.get(key)
+        ok = not (isinstance(r, list) and len(r) == 2) or r[0] < r[1]
+        if not ok:
+            problems.append(f"{key}: the first number must be smaller than the second")
+        return ok and isinstance(r, list)
+
+    x_ok, y_ok, eps_ok = increasing("xRange"), increasing("yRange"), increasing("epsRange")
+    a = config["a"]
+    if x_ok:
+        x0, x1 = config["xRange"]
+        if not x0 < a < x1:
+            problems.append("a: must lie strictly inside xRange, so that both sides of a show")
+        if "delta" in config and not config["delta"] <= min(a - x0, x1 - a):
+            problems.append("delta: must be at most the distance from a to the nearer end of xRange")
+    if y_ok and not config["yRange"][0] <= config["L"] <= config["yRange"][1]:
+        problems.append("L: must lie inside yRange")
+    if eps_ok:
+        e0, e1 = config["epsRange"]
+        if not e0 <= config["eps"] <= e1:
+            problems.append("eps: must lie inside epsRange")
+        if "epsStep" in config and not config["epsStep"] <= e1 - e0:
+            problems.append("epsStep: must be at most the width of epsRange")
+    try:
+        check_expression(config["f"], ["x"], schema["$defs"]["functions"]["enum"], schema["$defs"]["constants"]["enum"])
+    except ExpressionError as e:
+        problems.append(f"f: {e}")
+    return problems
+
+
 def _js_number(x) -> str:
     """A number as JavaScript prints it (so that both implementations give the same message)."""
     return str(int(x)) if float(x).is_integer() else repr(float(x))
 
 
-SEMANTIC = {"function-plot": function_plot_problems}
+SEMANTIC = {"function-plot": function_plot_problems, "epsilon-delta": epsilon_delta_problems}
 
 
 # ── The checks ───────────────────────────────────────────────────────────────

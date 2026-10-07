@@ -58,7 +58,8 @@ DEFECTS = {
     "widget-schema-violation": ("check_widgets", "limit-of-a-function.md", 56, "widget function-plot: config: Additional properties are not allowed ('tabel' was unexpected)"),
     "widget-missing-file": ("check_widgets", "limit-of-a-function.md", 50, "{anywidget}: widget no-such-widget does not exist"),
     "widget-figure-without-caption": ("check_widgets", "limit-of-a-function.md", 47, "widget figure wdg-calc-limit-average-speed: the caption (the widget's text description) is missing"),
-    "widget-unknown-id": ("check_widgets", "limit-of-a-function.md", 31, "maths.widgets: epsilon-delta is not a widget"),
+    "widget-unknown-id": ("check_widgets", "limit-of-a-function.md", 31, "maths.widgets: no-such-widget is not a widget"),
+    "widget-epsilon-delta-out-of-range": ("check_widgets", "limit-of-a-function.md", 103, "widget epsilon-delta: eps: must lie inside epsRange"),
 }
 
 

@@ -591,14 +591,14 @@ git-ignored, so stale copies can't be committed.
   ```{anywidget} ../../../widgets/epsilon-delta.mjs
   {
     "f": "x^2", "a": 2, "L": 4,
-    "eps": 0.5, "epsRange": [0.05, 1.5],
-    "xRange": [0, 3.5], "yRange": [0, 9]
+    "eps": 0.5, "epsRange": [0.05, 1.5], "epsStep": 0.05,
+    "xRange": [-0.5, 3.5], "yRange": [-1, 9]
   }
   ```
 
   Graph of $y = x^2$ near $x = 2$ with a horizontal band of half-width $\eps$ around $y = 4$
-  and a vertical band of half-width $\delta$ around $x = 2$. Dragging $\eps$ shrinks the band;
-  the widget shows the largest $\delta$ that keeps the graph inside the band.
+  and a vertical window $0 < \abs{x - 2} < \delta$. A slider sets $\eps$; the widget states the
+  largest $\delta$ on each side of $2$, and checks a $\delta$ that you choose with a second slider.
   ::::
   `````
 - **The caption is the text fallback.** The theme renders an anywidget as an empty `<div>`
@@ -634,7 +634,7 @@ git-ignored, so stale copies can't be committed.
   the page hydrates (§5.3), so `render()` replaces its element's content and returns a cleanup.
 - **Catalogue** (built as the curriculum needs them, see 08; `widgets/README.md` documents
   each built widget's keys): `function-plot` (built in stage 3: a graph, parameter sliders, a
-  table of values, a hole, a traced point, zoom; its other modes come with their pages), `epsilon-delta`, `secant-tangent`, `zoom-to-linear`, `riemann-sum`,
+  table of values, a hole, a traced point, zoom; its other modes come with their pages), `epsilon-delta` (built in Phase 1a for `calc-limit`: the ε-band, the δ-window, the largest δ on each side, the reader's δ checked), `secant-tangent`, `zoom-to-linear`, `riemann-sum`,
   `area-accumulation` (FTC), `taylor`, `partial-sums`, `slope-field`, `newton-method`,
   `solid-of-revolution` (JSXGraph 3D), `prereq-graph` (Phase 7).
 - Desmos/GeoGebra are allowed **only** as optional "explore further" links, never as core
@@ -645,4 +645,8 @@ git-ignored, so stale copies can't be committed.
   SymPy precomputed (`widgets/_tests/make_fixtures.py` writes them; a pytest fails if they are
   stale). For `function-plot`: JessieCode's values, the table of every `function-plot` figure
   on the site, the value at a hole (the limit, from both sides), and where the sampled graph
-  breaks (poles and jumps, against SymPy's singularities).
+  breaks (poles and jumps, against SymPy's singularities). For `epsilon-delta`: the largest δ
+  on each side against SymPy's exact value (it solves |f(x) − L| < ε), for a linear f, x² at 2,
+  √x near 0, 1/x, a jump, sin(1/x), an unbounded f, a wrong L and every figure on the site. The
+  reported δ is rounded **down**, so the test asserts reported ≤ exact and within 2 × 10⁻⁵ of
+  it, not equality; "no δ" must agree exactly (widgets/README.md has the method).

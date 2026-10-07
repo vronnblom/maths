@@ -28,7 +28,7 @@ maths:
     - Prove limits of linear functions directly from the definition.
     - Recognise when a limit does not exist (jump, oscillation, unboundedness).
   verify: verify/calculus/limits/test_limit_of_a_function.py
-  widgets: [function-plot, no-such-widget]        # Phase 1a adds epsilon-delta (see the comment in "What a limit is")
+  widgets: [function-plot, epsilon-delta]
   reviewed_by: []
   sources: []
 ---
@@ -92,28 +92,31 @@ $$
 window of half-width $\delta$ around $a$ such that every $x$ in that window (other than $a$)
 has $f(x)$ within the tolerance.
 
-% Phase 1a adds the epsilon-delta widget (widgets/epsilon-delta.mjs does not exist yet, so
-% check_widgets.py would reject it). Its figure will go here, uncommented, with `epsilon-delta`
-% added to maths.widgets:
-%
-% ::::{figure}
-% :label: wdg-calc-limit-eps-delta
-%
-% ```{anywidget} ../../../widgets/epsilon-delta.mjs
-% {
-%   "f": "x^2", "a": 2, "L": 4,
-%   "eps": 0.5, "epsRange": [0.05, 1.5],
-%   "xRange": [0, 3.5], "yRange": [0, 9]
-% }
-% ```
-%
-% Graph of $y = x^2$ near $x = 2$ with a horizontal band of half-width $\eps$ around $y = 4$ and a
-% vertical band of half-width $\delta$ around $x = 2$. Shrinking $\eps$ shrinks the largest
-% admissible $\delta$.
-% ::::
-%
-% **Try this:** set $\eps = 0.1$. What is the largest $\delta$ that works? Is it the same on
-% both sides of $a = 2$?
+% The ε–δ game (widgets/README.md, `epsilon-delta`): the reader sets ε and sees the largest δ on
+% each side; then picks their own δ and sees where it fails. The caption is the text description.
+::::{figure}
+:label: wdg-calc-limit-eps-delta
+
+```{anywidget} ../../../widgets/epsilon-delta.mjs
+{
+  "f": "x^2", "a": 2, "L": 4,
+  "eps": 2, "epsRange": [0.05, 1.5], "epsStep": 0.05,
+  "xRange": [-0.5, 3.5], "yRange": [-1, 9]
+}
+```
+
+Graph of $y = x^2$ near $x = 2$, with a horizontal band of half-width $\eps$ around $y = 4$
+(dashed edges) and a vertical window $0 < \abs{x - 2} < \delta$ (solid edges; the dotted line
+$x = 2$ itself is left out). A slider sets $\eps$ from $0.05$ to $1.5$, and the widget states the
+largest $\delta$ on each side of $2$: for $\eps = 0.5$ it is $2 - \sqrt{3.5} \approx 0.129$ on the
+left and $\sqrt{4.5} - 2 \approx 0.121$ on the right. A second slider sets your own $\delta$;
+points of the graph inside the window but outside the band are marked with crosses, and a
+sentence says whether your $\delta$ works.
+::::
+
+**Try this:** set $\eps = 0.1$. What is the largest $\delta$ that works? Is it the same on both
+sides of $a = 2$, and which one must you take? Then make $\delta$ a little larger and find
+where it fails.
 
 :::{proof:remark} The value at $a$ does not matter
 :label: rem-calc-limit-value-irrelevant

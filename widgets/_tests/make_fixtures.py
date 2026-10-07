@@ -1,12 +1,13 @@
-"""Write widgets/_tests/fixtures/function-plot.json: the values that widgets/_tests/*.test.mjs
-expect from widgets/_lib/, computed by SymPy (docs/plan/06 §6.2). Never edit the JSON by hand;
-change the cases here and run
+"""Write widgets/_tests/fixtures/function-plot.json and epsilon-delta.json: the values that
+widgets/_tests/*.test.mjs expect from widgets/_lib/, computed by SymPy (docs/plan/06 §6.2).
+Never edit the JSON by hand; change the cases here and run
 
     uv run python widgets/_tests/make_fixtures.py
 
 tests/test_widget_checks.py fails if the committed JSON differs from what this writes, so the
 fixtures cannot go stale. The table cases are read from every function-plot figure on the pages
-in the toc and in templates/topic.md, so a new figure gets its table checked automatically.
+in the toc and in templates/topic.md, so a new figure gets its table checked automatically; so
+are the δ of every epsilon-delta figure, at its starting ε and at both ends of its ε slider.
 
 Expressions are translated token by token (scripts/check_widgets.py tokenizes them exactly as
 widgets/_lib/expression.mjs does) into SymPy: decimals become exact rationals, `^` becomes
@@ -29,6 +30,7 @@ import myst_source as ms  # noqa: E402
 from project import Project  # noqa: E402
 
 OUT = REPO / "widgets" / "_tests" / "fixtures" / "function-plot.json"
+OUT_EPSILON_DELTA = REPO / "widgets" / "_tests" / "fixtures" / "epsilon-delta.json"
 SCHEMA = check_widgets.load_schema("function-plot")
 FUNCTIONS = SCHEMA["$defs"]["functions"]["enum"]
 CONSTANTS = SCHEMA["$defs"]["constants"]["enum"]
@@ -162,14 +164,14 @@ def sample_case(f, a, b, n, jump):
     }
 
 
-def site_configs():
-    """(where, config) of every function-plot figure in the toc pages and templates/topic.md."""
+def site_configs(widget: str = "function-plot"):
+    """(where, config) of every `widget` figure in the toc pages and templates/topic.md."""
     project = Project(REPO / "content")
     sources = [(p.rel, p.text) for p in project.pages]
     sources.append(("templates/topic.md", (REPO / "templates" / "topic.md").read_text(encoding="utf-8")))
     for where, text in sources:
         for d in ms.parse(text).directives():
-            if d.name == "anywidget" and d.arg.endswith("/function-plot.mjs"):
+            if d.name == "anywidget" and d.arg.endswith(f"/{widget}.mjs"):
                 yield f"{where}:{d.line}", json.loads("\n".join(t for _, t in d.raw))
 
 
@@ -214,11 +216,107 @@ def build() -> dict:
     }
 
 
+# ── epsilon-delta: the exact largest δ on each side ──────────────────────────
+
+# The relative tolerance of the reported δ (widgets/_lib/epsdelta.mjs rounds down to 6
+# significant digits): exact·(1 − TOLERANCE) ≤ reported ≤ exact.
+EPSILON_DELTA_TOLERANCE = 2e-5
+
+EPSILON_DELTA = [
+    # (what the case shows, f, a, L, xRange, [ε, …])
+    ("a linear f: δ = ε/2 on both sides", "2*x - 1", 3, 5, [0, 6], [0.1, 0.5]),
+    ("x² at a = 2: the two sides differ", "x^2", 2, 4, [0, 3.5], [0.05, 0.1, 0.5, 1.5]),
+    ("√x at a small a: on the left, f is undefined below 0", "sqrt(x)", 0.04, 0.2, [-0.1, 0.5], [0.1, 0.3]),
+    ("1/x away from 0", "1/x", 1, 1, [0.2, 3], [0.1, 0.5]),
+    ("a jump: no δ on the left while ε is below the gap", "x + sign(x)", 0, 1, [-2, 2], [0.5, 1.9, 2.5]),
+    ("sin(1/x) at 0: no δ for ε < 1, any δ for ε > 1", "sin(1/x)", 0, 0, [-1, 1], [0.5, 0.9, 1.2]),
+    ("an unbounded f: no δ", "1/x^2", 0, 1, [-1, 1], [0.5, 5]),
+    ("a wrong L (4.5 for x² at 2): no δ while ε < 0.5", "x^2", 2, 4.5, [0, 3.5], [0.1, 0.4, 0.7]),
+]
+
+
+def _intervals(s: sp.Set) -> list[sp.Interval] | None:
+    """The intervals of a union of intervals, or None if SymPy left it unsolved."""
+    if s is sp.S.EmptySet:
+        return []
+    if isinstance(s, sp.Interval):
+        return [s]
+    if isinstance(s, sp.Union) and all(isinstance(t, sp.Interval) for t in s.args):
+        return list(s.args)
+    return None
+
+
+def exact_side(expr, var, a, L, eps, side: int, reach) -> dict:
+    """The largest δ on one side (side −1 left, +1 right), exactly:
+    sup{t ≤ reach : |f(x) − L| < ε for all x with 0 < ±(x − a) < t}. SymPy solves
+    |f(x) − L| < ε on (a, a + reach) (or (a − reach, a)), and δ is the length of the solution
+    interval that starts at a; there is none when no interval starts there. Where SymPy cannot
+    solve the inequality (sin(1/x)), the one-sided limit decides that no δ exists: its
+    distance from L, or the largest distance of its accumulation bounds, exceeds ε."""
+    a, L, eps, reach = (exact(v) for v in (a, L, eps, reach))
+    lim = sp.limit(expr, var, a, "+" if side > 0 else "-")
+    if isinstance(lim, sp.AccumBounds):
+        gap = sp.Max(sp.Abs(lim.min - L), sp.Abs(lim.max - L))
+    elif lim.is_finite and lim.is_real:
+        gap = sp.Abs(lim - L)
+    else:
+        gap = sp.oo
+    if gap == eps:
+        raise ValueError(f"{expr} at {a}: ε = {eps} is exactly the gap {gap}; choose another ε")
+    window = sp.Interval.open(a, a + reach) if side > 0 else sp.Interval.open(a - reach, a)
+    good = _intervals(sp.solveset(sp.Abs(expr - L) < eps, var, window))
+    if good is None:
+        if gap > eps:
+            return {"none": True, "delta": 0, "capped": False, "sympy": f"limit {lim}, |limit − L| > ε"}
+        raise ValueError(f"SymPy cannot solve |{expr} − {L}| < {eps} on {window}")
+    touching = [i for i in good if (i.inf if side > 0 else i.sup) == a]
+    if not touching:
+        assert gap > eps, f"{expr}: no solution interval at a, but the limit {lim} is within ε"
+        return {"none": True, "delta": 0, "capped": False, "sympy": f"no solution interval starts at a; limit {lim}"}
+    assert gap < eps, f"{expr}: a solution interval at a, but the limit {lim} is not within ε"
+    delta = sp.nsimplify(touching[0].sup - a if side > 0 else a - touching[0].inf)
+    return {"none": False, "delta": float(sp.N(delta, 30)), "capped": bool(delta == reach), "sympy": str(delta)}
+
+
+def epsilon_delta_case(source, what, f, a, L, x_range, eps) -> dict:
+    expr, var, _ = to_sympy(f, "x", [])
+    reach = (exact(a) - exact(x_range[0]), exact(x_range[1]) - exact(a))
+    return {
+        "source": source, "case": what, "f": f, "a": a, "L": L, "xRange": x_range, "eps": eps,
+        "left": exact_side(expr, var, a, L, eps, -1, reach[0]),
+        "right": exact_side(expr, var, a, L, eps, 1, reach[1]),
+    }
+
+
+def epsilon_delta_cases() -> list[dict]:
+    cases = [epsilon_delta_case("make_fixtures.py", what, f, a, L, xr, eps)
+             for what, f, a, L, xr, epss in EPSILON_DELTA for eps in epss]
+    for where, c in site_configs("epsilon-delta"):
+        for eps in dict.fromkeys([c["eps"], *c["epsRange"]]):
+            cases.append(epsilon_delta_case(where, "a figure on the site", c["f"], c["a"], c["L"], c["xRange"], eps))
+    return cases
+
+
+def build_epsilon_delta() -> dict:
+    return {
+        "_comment": "Written by widgets/_tests/make_fixtures.py from SymPy; do not edit by hand.",
+        "sympy": sp.__version__,
+        "tolerance": EPSILON_DELTA_TOLERANCE,
+        "cases": epsilon_delta_cases(),
+    }
+
+
+def outputs() -> dict[Path, dict]:
+    """Every fixture file and its contents."""
+    return {OUT: build(), OUT_EPSILON_DELTA: build_epsilon_delta()}
+
+
 def render(data: dict) -> str:
     return json.dumps(data, indent=1, ensure_ascii=False) + "\n"
 
 
 if __name__ == "__main__":
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(render(build()), encoding="utf-8")
-    print(f"wrote {OUT.relative_to(REPO)}")
+    for path, data in outputs().items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(render(data), encoding="utf-8")
+        print(f"wrote {path.relative_to(REPO)}")
