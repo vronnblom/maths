@@ -1,0 +1,12 @@
+{
+  "name": "maths",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "dev": "bash scripts/fetch_theme.sh && cd content && myst start",
+    "build": "bash scripts/build_site.sh",
+    "all": "npm run build"
+  },
+  "dependencies": { "mystmd": "1.11.0", "yaml": "^2.8.0" }
+}

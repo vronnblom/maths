@@ -1,0 +1,57 @@
+# See docs/plan/05-tooling-and-build.md §5.5. The toc lists only pages that exist.
+version: 1
+project:
+  id: d365ced0-5606-4882-ba8a-24b16e4d24a3   # generated once by `myst init`, never changed
+  title: 'Maths: an open, verified university mathematics reference'   # quoted: contains ": "
+  description: Definitions, theorems, proofs, worked examples and exercises — interactive and verified.
+  github: https://github.com/vronnblom/maths
+  license:
+    content: CC-BY-SA-4.0
+    code: MIT
+  # KaTeX macros: the full list from docs/plan/04-notation-and-style.md §4.1.
+  # content/about/notation.md uses every one of them (it is the render test).
+  math:
+    '\R': '\mathbb{R}'
+    '\N': '\mathbb{N}'
+    '\Z': '\mathbb{Z}'
+    '\Q': '\mathbb{Q}'
+    '\C': '\mathbb{C}'
+    '\dd': '\,\mathrm{d}'
+    '\dv': '\frac{\mathrm{d} #1}{\mathrm{d} #2}'
+    '\dvn': '\frac{\mathrm{d}^{#1} #2}{\mathrm{d} #3^{#1}}'
+    '\pdv': '\frac{\partial #1}{\partial #2}'
+    '\abs': '\left\lvert #1 \right\rvert'
+    '\norm': '\left\lVert #1 \right\rVert'
+    '\vb': '\mathbf{#1}'
+    '\eps': '\varepsilon'
+    '\sgn': '\operatorname{sgn}'
+    '\arsinh': '\operatorname{arsinh}'
+    '\dom': '\operatorname{dom}'
+    '\ran': '\operatorname{ran}'
+  numbering:
+    title: false
+    headings: false                   # numbering is per kind, per page (default)
+  toc:
+    - file: index.md
+    - title: About
+      children:
+        - file: about/how-to-read.md
+        - file: about/notation.md
+        - file: about/status.md
+        - file: about/errata.md
+    - title: Calculus
+      file: calculus/index.md
+site:
+  # Pinned to a commit (the theme repo has no tags): book-theme v1.4.1, built for mystmd 1.11.0.
+  # Bump it only together with mystmd. scripts/fetch_theme.sh reads this line (05 §5.5).
+  template: https://github.com/myst-templates/book-theme/archive/23f2df5493e23dfb1d9433c8aa64c87beb4232a3.zip
+  options:
+    folders: true                      # URLs mirror folders
+    logo_text: Maths
+    favicon: _static/favicon.svg
+    style: _static/custom.css          # tier/status badges, `rigor` dropdowns, a ∎ after proofs
+  nav: []
+  actions:
+    # Stage 5 adds `?template=erratum.yml` together with .github/ISSUE_TEMPLATE/erratum.yml.
+    - title: Report an error
+      url: https://github.com/vronnblom/maths/issues/new

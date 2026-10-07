@@ -1,0 +1,8 @@
+_build/
+_generated/
+build.log
+node_modules/
+.venv/
+__pycache__/
+verify/_answers.json
+verify/_coverage.json

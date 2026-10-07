@@ -1,0 +1,78 @@
+/* Site styles on top of the stock book-theme (docs/plan/05-tooling-and-build.md §5.5).
+   Keep this small: no theme fork, only hooks for our own classes. Selectors that rely on the
+   theme's markup were checked against book-theme v1.4.1 (the commit pinned in myst.yml);
+   re-check them when the theme is bumped. */
+
+:root {
+  --maths-tier-a: #1a7f37;
+  --maths-tier-b: #0b5cad;
+  --maths-tier-c: #8250df;
+  --maths-rigor: #9a3412;
+  --maths-applied: #57606a;
+  --maths-draft: #9a6700;
+  --maths-reviewed: #0b5cad;
+  --maths-verified: #1a7f37;
+}
+
+html.dark {
+  --maths-tier-a: #4ac26b;
+  --maths-tier-b: #54aeff;
+  --maths-tier-c: #c297ff;
+  --maths-rigor: #fb8f44;
+  --maths-applied: #8c959f;
+  --maths-draft: #d4a72c;
+  --maths-reviewed: #54aeff;
+  --maths-verified: #4ac26b;
+}
+
+/* ── Exercise tiers (docs/plan/07-exercises.md §7.2) ───────────────────────────
+   `:class: tier-a|tier-b|tier-c` (+ `rigor`, `applied`) on {exercise} lands on the
+   exercise's <aside class="myst-exercise …">. The tags follow the title. */
+.myst-exercise:is(.tier-a, .tier-b, .tier-c, .rigor, .applied) .myst-exercise-title::after {
+  display: inline-block;
+  margin-left: 0.5em;
+  font-size: 0.75em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  vertical-align: 0.1em;
+}
+.myst-exercise.tier-a .myst-exercise-title::after { content: "Check"; color: var(--maths-tier-a); }
+.myst-exercise.tier-b .myst-exercise-title::after { content: "Practice"; color: var(--maths-tier-b); }
+.myst-exercise.tier-c .myst-exercise-title::after { content: "Challenge"; color: var(--maths-tier-c); }
+.myst-exercise.tier-a.rigor .myst-exercise-title::after { content: "Check · Rigorous"; }
+.myst-exercise.tier-b.rigor .myst-exercise-title::after { content: "Practice · Rigorous"; }
+.myst-exercise.tier-c.rigor .myst-exercise-title::after { content: "Challenge · Rigorous"; }
+.myst-exercise.tier-a.applied .myst-exercise-title::after { content: "Check · Applied"; }
+.myst-exercise.tier-b.applied .myst-exercise-title::after { content: "Practice · Applied"; }
+.myst-exercise.tier-c.applied .myst-exercise-title::after { content: "Challenge · Applied"; }
+
+/* ── Rigorous asides: `:class: dropdown rigor` on an admonition ──────────────── */
+.myst-admonition.rigor { border-left: 4px solid var(--maths-rigor); }
+
+/* ── Status badges ─────────────────────────────────────────────────────────────
+   Hooks for the {topic-header} plugin (a later stage of Phase 0), which
+   renders a page's maths.status as <span class="maths-badge maths-status-…">. */
+.maths-badge {
+  display: inline-block;
+  padding: 0.05em 0.5em;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.8em;
+  font-weight: 600;
+}
+.maths-status-draft { color: var(--maths-draft); }
+.maths-status-reviewed { color: var(--maths-reviewed); }
+.maths-status-verified { color: var(--maths-verified); }
+
+/* ── End-of-proof mark ─────────────────────────────────────────────────────────
+   The theme draws no ∎. A {proof:proof} renders as .myst-proof with the theme's
+   `border-myst-proof` colour class (statements get `border-myst-theorem` etc.), which is
+   the only thing that tells a proof apart from the statement it proves. */
+.myst-proof.border-myst-proof > .myst-proof-body::after {
+  content: "∎";
+  display: block;
+  margin: -0.75rem 0 0.75rem;
+  font-size: 1.25em;
+  line-height: 1;
+  text-align: right;
+}
