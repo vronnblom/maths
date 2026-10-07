@@ -36,7 +36,7 @@ this is the same as $19.95 \le x \le 20.05$.
 Calculus is full of statements of this kind: "$x$ is close to $a$", "$f(x)$ is within a
 tolerance of $L$". The absolute value turns "close" into an inequality, and the rules of this
 page turn that inequality into an interval that you can draw on the number line. The precise
-definition of a limit, two pages from here, is written entirely in this language.
+definition of a limit, in the Limits chapter, is written entirely in this language.
 
 ## Absolute value as distance
 
@@ -79,25 +79,51 @@ For all real numbers $x$ and $y$:
 3. $\abs{x}$ is the larger of $x$ and $-x$, that is, $\abs{x} = \max\{x, -x\}$; in particular
    $-\abs{x} \le x \le \abs{x}$;
 4. $\abs{xy} = \abs{x}\,\abs{y}$, and $\abs{x / y} = \abs{x} / \abs{y}$ when $y \ne 0$;
-5. $\abs{x}^2 = x^2$ and $\sqrt{x^2} = \abs{x}$.
+5. $\abs{x}^2 = x^2$ and $\sqrt{x^2} = \abs{x}$;
+6. if $x \ge 0$ and $y \ge 0$, then $x < y$ if and only if $x^2 < y^2$, and $x = y$ if and
+   only if $x^2 = y^2$.
 
-Each follows from the definition by checking the cases $x \ge 0$ and $x < 0$ (for 4, the four
-combinations of signs of $x$ and $y$). For 3: if $x \ge 0$ then $\abs{x} = x \ge -x$, and if
-$x < 0$ then $\abs{x} = -x > x$. In both cases $\abs{x}$ is the larger of the two numbers.
-For 5: $\sqrt{x^2}$ is the non-negative number whose square is $x^2$, and $\abs{x}$ is such a
-number.
+Properties 1–4 and the first half of 5 follow from the definition by checking the cases
+$x \ge 0$ and $x < 0$ (for 4, the four combinations of signs of $x$ and $y$). For 3: if
+$x \ge 0$ then $\abs{x} = x \ge -x$, and if $x < 0$ then $\abs{x} = -x > x$. In both cases
+$\abs{x}$ is the larger of the two numbers.
+
+% TODO link: rem-calc-square-roots once vronnblom/maths#8 is merged
+Properties 5 and 6 rest on the remark on square roots in Real Numbers and Intervals: every
+$y \ge 0$ has exactly one square root $\sqrt{y} \ge 0$, and the proof of that uniqueness shows
+that for $0 \le s < t$ we have $s^2 < t^2$. For 5: $\abs{x} \ge 0$ and $\abs{x}^2 = x^2$, so
+$\abs{x}$ is the one non-negative square root of $x^2$. For 6: if $x < y$ then $x^2 < y^2$ by
+that fact. If instead $x \ge y$, then $x^2 \ge y^2$ (by the same fact when $x > y$), so
+$x^2 < y^2$ fails. The second half of 6 is the uniqueness itself: $x$ and $y$ are both
+non-negative square roots of $x^2 = y^2$.
 :::
 
 ### Working with inequalities
 
 % TODO link: calc-real-numbers once calc-real-numbers is merged
-We use the order properties of the real numbers from Real Numbers and Intervals, in this form:
+We use the order properties of the real numbers from Real Numbers and Intervals, in this form.
+For all real numbers $u$, $v$, $w$, $s$, $t$ and $c$:
 
-- adding the same number to both sides keeps an inequality: $u < v$ implies $u + c < v + c$;
-- multiplying both sides by a positive number keeps it, and multiplying by a negative number
-  reverses it: if $u < v$ and $c > 0$ then $cu < cv$, but if $c < 0$ then $cu > cv$;
-- a product or a quotient of two non-zero numbers is positive when they have the same sign,
-  and negative when their signs differ.
+- **trichotomy:** exactly one of $u < v$, $u = v$ and $u > v$ holds; so "$u \le v$" fails
+  exactly when $u > v$, and "$u < v$" fails exactly when $u \ge v$;
+- **transitivity:** $u < v$ and $v < w$ imply $u < w$; the same holds when one of the two
+  inequalities is $\le$ (for example $u \le v < w$ implies $u < w$), and $u \le v \le w$
+  implies $u \le w$;
+- **adding the same number** to both sides keeps an inequality: $u < v$ implies
+  $u + c < v + c$;
+- **adding two inequalities:** $u \le v$ and $s \le t$ imply $u + s \le v + t$, and the sum is
+  strict, $u + s < v + t$, if at least one of the two is strict;
+- **multiplying** both sides by a positive number keeps an inequality, and multiplying by a
+  negative number reverses it: if $u < v$ and $c > 0$ then $cu < cv$, but if $c < 0$ then
+  $cu > cv$;
+- **multiplying by a number that may be zero:** if $u \le v$ and $c \ge 0$ then $cu \le cv$.
+  This holds in particular when $u < v$, but the result is then only $\le$: for $c = 0$ both
+  sides are $0$;
+- **signs:** a product or a quotient of two non-zero numbers is positive when they have the
+  same sign, and negative when their signs differ.
+
+Every rule stated with $<$ also holds with $\le$ in place of $<$ (and $\ge$ in place of $>$);
+for example, $u \le v$ and $c < 0$ give $cu \ge cv$.
 
 To solve a quadratic or rational inequality, we factor it and make a **sign table**. A factor
 $x - r$ is negative for $x < r$ and positive for $x > r$, so it changes sign only at $r$. The
@@ -118,13 +144,19 @@ $$
 &\text{(a)} && \abs{x - a} < \delta && \iff\quad a - \delta < x < a + \delta,\\
 &\text{(b)} && \abs{x - a} \le \delta && \iff\quad a - \delta \le x \le a + \delta,\\
 &\text{(c)} && \abs{x - a} > \delta && \iff\quad x < a - \delta \ \text{ or } \ x > a + \delta,\\
-&\text{(d)} && \abs{x - a} \ge \delta && \iff\quad x \le a - \delta \ \text{ or } \ x \ge a + \delta.
+&\text{(d)} && \abs{x - a} \ge \delta && \iff\quad x \le a - \delta \ \text{ or } \ x \ge a + \delta,\\
+&\text{(e)} && 0 < \abs{x - a} < \delta && \iff\quad a - \delta < x < a \ \text{ or } \ a < x < a + \delta.
 \end{aligned}
 $$
 % TODO link: def-calc-interval once calc-real-numbers is merged
 In particular, when $\delta > 0$, (a) says that $x$ lies in the open interval
-$(a - \delta, a + \delta)$, and (b) that $x$ lies in the closed interval
-$[a - \delta, a + \delta]$.
+$(a - \delta, a + \delta)$, (b) that $x$ lies in the closed interval
+$[a - \delta, a + \delta]$, and (e) that $x$ lies in the set
+$$
+(a - \delta, a) \cup (a, a + \delta),
+$$
+the open interval $(a - \delta, a + \delta)$ with its centre $a$ removed. This set is called
+the **punctured neighbourhood** of $a$ of radius $\delta$.
 :::
 
 :::{proof:proof}
@@ -140,16 +172,35 @@ $$
 \iff y < \delta \text{ and } y > -\delta
 \iff -\delta < y < \delta .
 $$
-The same argument with $\le$ in place of $<$ gives
-$\abs{y} \le \delta \iff -\delta \le y \le \delta$.
+The middle step multiplies $-y < \delta$ by $-1$, which reverses the inequality, and
+multiplying $y > -\delta$ by $-1$ takes us back. The same argument, with the $\le$ forms of the
+same rules, gives $\abs{y} \le \delta \iff -\delta \le y \le \delta$.
 
-Now put $y = x - a$. Adding $a$ to all three parts of $-\delta < x - a < \delta$ gives
-$a - \delta < x < a + \delta$, and subtracting $a$ undoes this, so the two are equivalent.
-This proves (a), and (b) follows in the same way.
+Now put $y = x - a$. Adding the same number $a$ to all three parts of
+$-\delta < x - a < \delta$ gives $a - \delta < x < a + \delta$, and adding $-a$ undoes this, so
+the two are equivalent. This proves (a), and (b) follows in the same way with $\le$.
 
-Part (c) is the negation of (b): $\abs{x - a} > \delta$ says exactly that
+Part (c) is the negation of (b): by trichotomy, $\abs{x - a} > \delta$ says exactly that
 $\abs{x - a} \le \delta$ fails, and "$a - \delta \le x \le a + \delta$" fails exactly when
 $x < a - \delta$ or $x > a + \delta$. In the same way, (d) is the negation of (a).
+
+For (e), the condition $0 < \abs{x - a}$ says that $x \ne a$: by property 1 of
+[](#rem-calc-absolute-value-properties), $\abs{x - a}$ is never negative and is $0$ only when
+$x - a = 0$. So by (a), $0 < \abs{x - a} < \delta$ holds if and only if
+$a - \delta < x < a + \delta$ and $x \ne a$. By trichotomy, $x \ne a$ means $x < a$ or $x > a$,
+which splits the double inequality into $a - \delta < x < a$ or $a < x < a + \delta$.
+:::
+
+[](#fig-calc-absolute-value-inequalities-neighbourhood) shows parts (a) and (e).
+
+:::{figure} ./img/distance-interval.svg
+:label: fig-calc-absolute-value-inequalities-neighbourhood
+:alt: Two number lines, each with the points a minus delta, a and a plus delta marked. On the top line, a thick segment runs from a minus delta to a plus delta, with hollow dots at both ends. A point x inside the segment is marked, and a bracket above the line from a to x is labelled with the distance, the absolute value of x minus a. On the bottom line, the same segment has a third hollow dot at its centre a.
+
+Top: the $x$ with $\abs{x - a} < \delta$ form the open interval $(a - \delta, a + \delta)$;
+the bracket marks the distance $\abs{x - a}$ from $a$ to one such $x$. Bottom: the $x$ with
+$0 < \abs{x - a} < \delta$ form the punctured neighbourhood
+$(a - \delta, a) \cup (a, a + \delta)$; the hollow dot at $a$ shows that $a$ is left out.
 :::
 
 The case $a = 0$ is used so often that it is worth stating on its own:
@@ -178,18 +229,20 @@ For (a) we bound $x + y$ and $-(x + y)$ separately, then use that $\abs{x + y}$ 
 of the two.
 
 (a) By property 3 of [](#rem-calc-absolute-value-properties), $x \le \abs{x}$ and $-x \le \abs{x}$, and likewise
-$y \le \abs{y}$ and $-y \le \abs{y}$. Adding,
+$y \le \abs{y}$ and $-y \le \abs{y}$. Adding two inequalities (the $\le$ form),
 $$
 x + y \le \abs{x} + \abs{y}
 \qquad\text{and}\qquad
 -(x + y) = (-x) + (-y) \le \abs{x} + \abs{y}.
 $$
-Since $\abs{x + y} = \max\{x + y, -(x + y)\}$, again by property 3 of [](#rem-calc-absolute-value-properties), it follows that
+Since $\abs{x + y} = \max\{x + y, -(x + y)\}$, again by property 3 of [](#rem-calc-absolute-value-properties), and the larger of two
+numbers is at most $\abs{x} + \abs{y}$ when both of them are, it follows that
 $\abs{x + y} \le \abs{x} + \abs{y}$.
 
 (b) Write $x - y = (x - z) + (z - y)$ and apply (a) to the numbers $x - z$ and $z - y$.
 
-(c) By (a) applied to $x - y$ and $y$,
+(c) By (a) applied to $x - y$ and $y$, and then adding the same number $-\abs{y}$ to both
+sides,
 $$
 \abs{x} = \abs{(x - y) + y} \le \abs{x - y} + \abs{y},
 \qquad\text{so}\qquad
@@ -197,8 +250,9 @@ $$
 $$
 Exchanging the roles of $x$ and $y$ gives $\abs{y} - \abs{x} \le \abs{y - x}$, and
 $\abs{y - x} = \abs{x - y}$ by property 2 of [](#rem-calc-absolute-value-properties). So both
-$\abs{x} - \abs{y}$ and its negative are at most $\abs{x - y}$. Their maximum is
-$\abs{\abs{x} - \abs{y}}$ by property 3 of [](#rem-calc-absolute-value-properties), which proves (c).
+$\abs{x} - \abs{y}$ and its negative are at most $\abs{x - y}$, and so is the larger of the two.
+That larger number is $\abs{\abs{x} - \abs{y}}$ by property 3 of
+[](#rem-calc-absolute-value-properties), which proves (c).
 :::
 
 ## Worked examples
@@ -282,23 +336,14 @@ $x = 1$: $\abs{2} = 2 \ge 2$. ✓ $x = -4$: $\abs{-3} = 3 \ge 2$. ✓
 
 Describe the set of all $x$ with $0 < \abs{x - 2} < 0.1$.
 
-1. The condition $\abs{x - 2} < 0.1$ means $1.9 < x < 2.1$, by [](#prop-calc-abs-interval) (a).
-2. The condition $0 < \abs{x - 2}$ means $x \ne 2$: an absolute value is never negative, and
-   it is $0$ only at $x = 2$ (property 1 of [](#rem-calc-absolute-value-properties)).
-3. So the set is the interval $(1.9, 2.1)$ with its centre $2$ removed.
+1. This is [](#prop-calc-abs-interval) (e) with $a = 2$ and $\delta = 0.1$:
+   $1.9 < x < 2$ or $2 < x < 2.1$.
+2. So the set is the punctured neighbourhood of $2$ of radius $0.1$: the interval $(1.9, 2.1)$
+   with its centre $2$ removed.
 
 $$
 \boxed{(1.9, 2) \cup (2, 2.1)}
 $$
-
-In general, for $\delta > 0$,
-$$
-0 < \abs{x - a} < \delta
-\iff
-x \in (a - \delta, a) \cup (a, a + \delta),
-$$
-the interval of half-width $\delta$ around $a$, without $a$ itself. Such a set is called a
-**punctured neighbourhood** of $a$.
 
 **Check.** $x = 2$ gives $\abs{0} = 0$, which is not greater than $0$. ✓ $x = 2.05$ gives
 $0 < 0.05 < 0.1$. ✓ $x = 2.1$ gives $\abs{0.1} = 0.1$, not less than $0.1$. ✓
@@ -306,7 +351,7 @@ $0 < 0.05 < 0.1$. ✓ $x = 2.1$ gives $\abs{0.1} = 0.1$, not less than $0.1$. �
 
 :::{admonition} Looking ahead
 :class: looking-ahead
-The definition of a limit, two pages from here, only looks at $x$ in a punctured
+The definition of a limit, in the Limits chapter, only looks at $x$ in a punctured
 neighbourhood of $a$: what happens at $a$ itself does not matter.
 :::
 
@@ -316,14 +361,21 @@ neighbourhood of $a$: what happens at $a$ itself does not matter.
 Show that if $\abs{x - 2} < 1$, then $\abs{x + 2} < 5$ and $\abs{x^2 - 4} \le 5\abs{x - 2}$.
 
 1. Write $x + 2$ in terms of the distance to $2$: $x + 2 = (x - 2) + 4$.
-2. By [](#thm-calc-triangle-inequality) (a),
+2. By [](#thm-calc-triangle-inequality) (a), and adding $4$ to both sides of
+   $\abs{x - 2} < 1$,
    $$
    \abs{x + 2} \le \abs{x - 2} + \abs{4} = \abs{x - 2} + 4 < 1 + 4 = 5 .
    $$
+   A $\le$ followed by a $<$ gives $<$ (transitivity), so $\abs{x + 2} < 5$.
 3. Factor and use property 4 of [](#rem-calc-absolute-value-properties):
+   $\abs{x^2 - 4} = \abs{(x - 2)(x + 2)} = \abs{x - 2}\,\abs{x + 2}$.
+4. Multiply $\abs{x + 2} < 5$ by $\abs{x - 2}$. This number is $\ge 0$ (property 1 of
+   [](#rem-calc-absolute-value-properties)), but it may be $0$: it is $0$ at $x = 2$. So
+   multiplying keeps the inequality only in the form $\le$:
    $$
-   \abs{x^2 - 4} = \abs{(x - 2)(x + 2)} = \abs{x - 2}\,\abs{x + 2} \le 5\abs{x - 2} .
+   \abs{x^2 - 4} = \abs{x - 2}\,\abs{x + 2} \le 5\abs{x - 2} ,
    $$
+   with equality at $x = 2$, where both sides are $0$.
 
 $$
 \boxed{\abs{x + 2} < 5 \quad\text{and}\quad \abs{x^2 - 4} \le 5\abs{x - 2}}
@@ -378,9 +430,8 @@ which we do not know. The value $x = -1$ satisfies $1 > -3$ but not $x > 3$.
 :class: dropdown rigor
 We show that $\abs{x + y} = \abs{x} + \abs{y}$ if and only if $xy \ge 0$.
 
-Both sides are non-negative, and two non-negative numbers $u$ and $v$ are equal if and only if
-$u^2 = v^2$: from $u^2 = v^2$ we get $(u - v)(u + v) = 0$, so $u = v$, or $u + v = 0$, which
-for non-negative numbers forces $u = v = 0$. By property 5 and property 4 of
+Both sides are non-negative, so by property 6 of [](#rem-calc-absolute-value-properties) they
+are equal if and only if their squares are. By property 5 and property 4 of
 [](#rem-calc-absolute-value-properties),
 $$
 \abs{x + y}^2 = x^2 + 2xy + y^2,
@@ -393,10 +444,10 @@ These are equal if and only if $xy = \abs{xy}$, that is, if and only if $xy \ge 
 :::{admonition} No condition on $\delta$ is needed
 :class: dropdown rigor
 The proof of [](#prop-calc-abs-interval) never used the sign of $\delta$, so the proposition
-holds for every real $\delta$. For $\delta < 0$ both sides of (a) and (b) are false for every
-$x$. For $\delta = 0$, (a) has no solutions, and (b) says that $\abs{x - a} \le 0$ if and
-only if $x = a$. Later pages use the proposition with $\delta > 0$, where both sides describe
-a genuine interval.
+holds for every real $\delta$. For $\delta < 0$ both sides of (a), (b) and (e) are false for
+every $x$. For $\delta = 0$, (a) and (e) have no solutions, and (b) says that
+$\abs{x - a} \le 0$ if and only if $x = a$. Later pages use the proposition with $\delta > 0$,
+where both sides describe a genuine interval or punctured neighbourhood.
 :::
 
 ## Summary
@@ -407,8 +458,9 @@ a genuine interval.
   ([](#prop-calc-abs-interval)).
 - "Outside" conditions, $\abs{x - a} > \delta$, become an *or*: $x < a - \delta$ or
   $x > a + \delta$.
-- $0 < \abs{x - a} < \delta$ describes the interval $(a - \delta, a + \delta)$ without its
-  centre $a$.
+- $0 < \abs{x - a} < \delta$ describes the punctured neighbourhood
+  $(a - \delta, a) \cup (a, a + \delta)$: the interval $(a - \delta, a + \delta)$ without its
+  centre $a$ ([](#prop-calc-abs-interval) (e)).
 - Triangle inequality: $\abs{x + y} \le \abs{x} + \abs{y}$, and
   $\abs{x - y} \le \abs{x - z} + \abs{z - y}$ ([](#thm-calc-triangle-inequality)).
 - To solve a quadratic or rational inequality, factor, make a sign table, and check the
@@ -665,9 +717,9 @@ $(-\frac{3}{2}, -1), (-1, -\frac{1}{2})$ (the union of these two intervals)
 :label: sol-calc-absolute-value-inequalities-punctured
 :class: dropdown
 Here $x + 1 = x - (-1)$, so $a = -1$ and $\delta = \frac{1}{2}$. By
-[](#prop-calc-abs-interval) (a), $\abs{x + 1} < \frac{1}{2}$ means
-$-\frac{3}{2} < x < -\frac{1}{2}$. The condition $0 < \abs{x + 1}$ means $x \ne -1$, as in
-[](#eg-calc-absolute-value-inequalities-punctured). The set is
+[](#prop-calc-abs-interval) (e), $0 < \abs{x + 1} < \frac{1}{2}$ means
+$-\frac{3}{2} < x < -1$ or $-1 < x < -\frac{1}{2}$: the interval
+$(-\frac{3}{2}, -\frac{1}{2})$ with its centre $-1$ removed. The set is
 $(-\frac{3}{2}, -1) \cup (-1, -\frac{1}{2})$.
 ::::
 
@@ -721,13 +773,9 @@ $(-1, \infty)$
 ::::{solution} exr-calc-absolute-value-inequalities-compare-distances
 :label: sol-calc-absolute-value-inequalities-compare-distances
 :class: dropdown
-Both sides are non-negative. For non-negative $u$ and $v$ we have $u < v$ if and only if
-$u^2 < v^2$: if $u < v$ then $v > 0$, so $v + u > 0$ and $v^2 - u^2 = (v - u)(v + u) > 0$;
-conversely, if $v^2 - u^2 = (v - u)(v + u) > 0$, then $v + u \ne 0$, so $v + u > 0$, and hence
-$v - u > 0$.
-
-By property 5 of [](#rem-calc-absolute-value-properties), the inequality is therefore
-equivalent to $(x - 1)^2 < (x + 3)^2$, that is, $x^2 - 2x + 1 < x^2 + 6x + 9$. This
+Both sides are non-negative, so by property 6 of [](#rem-calc-absolute-value-properties) the
+inequality holds if and only if $\abs{x - 1}^2 < \abs{x + 3}^2$. By property 5, this is
+$(x - 1)^2 < (x + 3)^2$, that is, $x^2 - 2x + 1 < x^2 + 6x + 9$. This
 simplifies to $-8 < 8x$, so $x > -1$. The solution set is $(-1, \infty)$.
 
 This matches the picture: the point halfway between $-3$ and $1$ is $-1$, and the points
@@ -738,8 +786,9 @@ closer to $1$ are those to the right of it.
 :label: exr-calc-absolute-value-inequalities-close-points
 :class: tier-c rigor
 
-Let $a$ be a real number and $\delta > 0$. Prove that if $\abs{x - a} < \frac{\delta}{2}$ and
-$\abs{y - a} < \frac{\delta}{2}$, then $\abs{x - y} < \delta$.
+Let $a$ and $\delta$ be real numbers. Prove that, for all real numbers $x$ and $y$, if
+$\abs{x - a} < \frac{\delta}{2}$ and $\abs{y - a} < \frac{\delta}{2}$, then
+$\abs{x - y} < \delta$.
 
 :::{admonition} Hint 1
 :class: dropdown hint
@@ -755,12 +804,18 @@ Use the triangle inequality with the intermediate point $a$.
 ::::{solution} exr-calc-absolute-value-inequalities-close-points
 :label: sol-calc-absolute-value-inequalities-close-points
 :class: dropdown
-By [](#thm-calc-triangle-inequality) (b) with $z = a$, and since $\abs{a - y} = \abs{y - a}$
-(property 2 of [](#rem-calc-absolute-value-properties)),
+Let $x$ and $y$ be real numbers with $\abs{x - a} < \frac{\delta}{2}$ and
+$\abs{y - a} < \frac{\delta}{2}$. By [](#thm-calc-triangle-inequality) (b) with $z = a$, and
+since $\abs{a - y} = \abs{y - a}$ (property 2 of [](#rem-calc-absolute-value-properties)),
 $$
 \abs{x - y} \le \abs{x - a} + \abs{a - y} = \abs{x - a} + \abs{y - a}
 < \frac{\delta}{2} + \frac{\delta}{2} = \delta .
 $$
+The $<$ comes from adding the two strict inequalities, and a $\le$ followed by a $<$ gives $<$.
+
+The proof never uses the sign of $\delta$. If $\delta \le 0$, no $x$ satisfies
+$\abs{x - a} < \frac{\delta}{2}$, so there is nothing to prove; the statement has content only
+for $\delta > 0$, which is how it is used in the Limits chapter.
 ::::
 
 ::::{exercise} How close is close enough?
@@ -790,8 +845,9 @@ $\sqrt{5} - 2$
 :label: sol-calc-absolute-value-inequalities-largest-delta
 :class: dropdown
 By [](#prop-calc-abs-interval) (a) with $a = 0$, $\abs{x^2 - 4} < 1$ means $-1 < x^2 - 4 < 1$,
-that is, $3 < x^2 < 5$. For $x > 0$ this says $\sqrt{3} < x < \sqrt{5}$, so near $2$ the
-solutions form the interval $(\sqrt{3}, \sqrt{5})$.
+that is, $3 < x^2 < 5$. For $x > 0$ this says $\sqrt{3} < x < \sqrt{5}$, by property 6 of
+[](#rem-calc-absolute-value-properties) (as $3 = (\sqrt{3})^2$ and $5 = (\sqrt{5})^2$), so near
+$2$ the solutions form the interval $(\sqrt{3}, \sqrt{5})$.
 
 By [](#prop-calc-abs-interval) (a) again, the $x$ with $\abs{x - 2} < \delta$ form
 $(2 - \delta, 2 + \delta)$. This interval lies inside $(\sqrt{3}, \sqrt{5})$ exactly when
@@ -799,10 +855,12 @@ $2 - \delta \ge \sqrt{3}$ and $2 + \delta \le \sqrt{5}$, that is, when
 $\delta \le 2 - \sqrt{3}$ and $\delta \le \sqrt{5} - 2$.
 
 The second bound is the smaller one: $\sqrt{5} - 2 < 2 - \sqrt{3}$ is equivalent to
-$\sqrt{5} + \sqrt{3} < 4$, which holds because
-$(\sqrt{5} + \sqrt{3})^2 = 8 + 2\sqrt{15} < 8 + 2 \cdot 4 = 16$ (as $15 < 16$). So every
+$\sqrt{5} + \sqrt{3} < 4$. By property 6 of [](#rem-calc-absolute-value-properties), applied to
+non-negative numbers, it is enough to compare squares: $\sqrt{15} < 4$ because $15 < 16 = 4^2$,
+so $(\sqrt{5} + \sqrt{3})^2 = 8 + 2\sqrt{15} < 8 + 2 \cdot 4 = 16 = 4^2$. So every
 $\delta \le \sqrt{5} - 2$ works. If $\delta > \sqrt{5} - 2$, then $2 + \delta > \sqrt{5}$, and
-any $x$ with $\sqrt{5} \le x < 2 + \delta$ satisfies $\abs{x - 2} < \delta$ but $x^2 \ge 5$,
+any $x$ with $\sqrt{5} \le x < 2 + \delta$ satisfies $\abs{x - 2} < \delta$ but $x^2 \ge 5$
+(property 6 again),
 so $\abs{x^2 - 4} \ge 1$. The largest $\delta$ is therefore $\sqrt{5} - 2$, which is $0.236$
 to three decimal places.
 ::::
