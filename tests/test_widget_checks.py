@@ -19,6 +19,7 @@ from project import REPO, Project, Reporter
 CLEAN = REPO / "tests" / "fixtures" / "clean"
 PAGE = "content/calculus/limits/limit-of-a-function.md"
 SCHEMA = check_widgets.load_schema("function-plot")
+EPS_SCHEMA = check_widgets.load_schema("epsilon-delta")
 FIGURE_START = "::::{figure}\n:label: wdg-calc-limit-average-speed\n"
 
 
@@ -55,6 +56,17 @@ def test_clean_template_passes(tmp_path):
     # a rule JSON Schema cannot express
     ('"xRange": [-1, 1]', '"xRange": [1, -1]', 54, "widget function-plot: xRange: the first number must be smaller than the second"),
     ('"f": "(5*(1+h)^2 - 5)/h"', '"f": "(5(1+h)^2 - 5)/h"', 52, "widget function-plot: f: missing * after 5: write 5*( (at position 2)"),
+    # epsilon-delta: its schema, and the rules it cannot express
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "a": 2, "L": 4, "limit": 4,', 102, "widget epsilon-delta: config: Additional properties are not allowed ('limit' was unexpected)"),
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "L": 4,', 101, "widget epsilon-delta: config: 'a' is a required property"),
+    ('"eps": 0.5, "epsRange": [0.05, 1.5]', '"eps": 0.5, "epsRange": [0, 1.5]', 103, "widget epsilon-delta: epsRange.0: 0 is less than or equal to the minimum of 0"),
+    ('"eps": 0.5, "epsRange": [0.05, 1.5]', '"eps": 0.01, "epsRange": [0.05, 1.5]', 103, "widget epsilon-delta: eps: must lie inside epsRange"),
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "a": 3.5, "L": 4,', 102, "widget epsilon-delta: a: must lie strictly inside xRange"),
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "a": 2, "L": 12,', 102, "widget epsilon-delta: L: must lie inside yRange"),
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x*x(1)", "a": 2, "L": 4,', 102, "widget epsilon-delta: f: x is not a function"),
+    # the allowlist passes these, the browser's compiler does not (review F7)
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "sin()", "a": 2, "L": 4,', 102, 'widget epsilon-delta: f: JessieCode cannot parse "sin()"'),
+    ('"f": "(5*(1+h)^2 - 5)/h"', '"f": "(5*(1+h)^2 - 5)/h +"', 52, 'widget function-plot: f: JessieCode cannot parse "(5*(1+h)^2 - 5)/h +"'),
 ])
 def test_figure_and_config_rules(tmp_path, old, new, line, message):
     errors = check(tmp_path, old, new)
@@ -93,13 +105,44 @@ def test_schema_rejects_typos_and_bad_shapes(config, where):
     assert any(where in m for m in messages), messages
 
 
-def test_widget_fixtures_are_fresh():
-    """widgets/_tests/fixtures/function-plot.json is exactly what make_fixtures.py writes now."""
+@pytest.mark.parametrize("case", json.loads((REPO / "widgets/_tests/fixtures/epsilon-delta-invalid.json").read_text(encoding="utf-8"))["cases"])
+def test_epsilon_delta_rules_shared_with_widgets_lib(case):
+    """The same table as widgets/_tests/epsdelta.test.mjs: both implementations report each problem."""
+    config = case["config"]
+    assert not list(jsonschema.Draft202012Validator(EPS_SCHEMA).iter_errors(config)), "the cases must be schema-valid"
+    problems = check_widgets.epsilon_delta_problems(config, EPS_SCHEMA)
+    if case["problem"] is None:
+        assert problems == []
+    else:
+        assert any(case["problem"] in p for p in problems), problems
+
+
+@pytest.mark.parametrize("config, where", [
+    ({"f": "x", "a": 0, "L": 0, "eps": 0.5, "epsRange": [0.1, 1], "xRange": [-1, 1]}, "'yRange' is a required property"),
+    ({"f": "x", "a": 0, "L": 0, "eps": 0, "epsRange": [0.1, 1], "xRange": [-1, 1], "yRange": [-1, 1]}, "0 is less than or equal to the minimum of 0"),
+    ({"f": "x", "a": 0, "L": 0, "eps": 0.5, "epsRange": [0.1, 1], "delta": -1, "xRange": [-1, 1], "yRange": [-1, 1]}, "-1 is less than or equal to the minimum of 0"),
+    ({"f": "x", "a": 0, "L": 0, "eps": 0.5, "epsRange": [0.1, 1, 2], "xRange": [-1, 1], "yRange": [-1, 1]}, "is too long"),
+    ({"f": "x", "a": 0, "L": 0, "eps": 0.5, "epsRange": [0.1, 1], "xRange": [-1, 1], "yRange": [-1, 1], "variable": "t"}, "'variable' was unexpected"),
+])
+def test_epsilon_delta_schema_rejects_typos_and_bad_shapes(config, where):
+    messages = [e.message for e in jsonschema.Draft202012Validator(EPS_SCHEMA).iter_errors(config)]
+    assert any(where in m for m in messages), messages
+
+
+def load_make_fixtures():
     spec = importlib.util.spec_from_file_location("make_fixtures", REPO / "widgets" / "_tests" / "make_fixtures.py")
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    committed = mod.OUT.read_text(encoding="utf-8")
-    assert committed == mod.render(mod.build()), "run uv run python widgets/_tests/make_fixtures.py and commit the result"
+    return mod
+
+
+def test_widget_fixtures_are_fresh():
+    """widgets/_tests/fixtures/function-plot.json and epsilon-delta.json are exactly what
+    make_fixtures.py writes now."""
+    mod = load_make_fixtures()
+    for path, data in mod.outputs().items():
+        committed = path.read_text(encoding="utf-8")
+        assert committed == mod.render(data), f"{path.name}: run uv run python widgets/_tests/make_fixtures.py and commit the result"
 
 
 def test_every_site_widget_table_is_in_the_fixtures():
@@ -107,3 +150,47 @@ def test_every_site_widget_table_is_in_the_fixtures():
     data = json.loads((REPO / "widgets" / "_tests" / "fixtures" / "function-plot.json").read_text(encoding="utf-8"))
     sources = {t["source"].split(":")[0] for t in data["tables"]}
     assert {"about/how-to-read.md", "templates/topic.md"} <= sources
+
+
+def test_epsilon_delta_fixtures_refuse_a_wrong_solveset(monkeypatch):
+    """SymPy 1.14 solves |abs(x) − 1/2| < 13/10 on (1/2, 3) as the whole interval (it is
+    (1/2, 1.8)), and |abs(x) − 1/2| < 249/100 too (it is (1/2, 2.99); review F5). make_fixtures.py
+    no longer asks SymPy that question: it cuts the window where abs changes formula and solves
+    1/2 − ε < f < 1/2 + ε, so it gets both right. And it still refuses a wrong solveset instead
+    of writing it: below, SymPy's old answer (the whole window) is put back into one route, then
+    into both. Its correct answers still pass: δ₊ = 1/10 for ε = 1/10."""
+    mod = load_make_fixtures()
+    for eps, exact in ((1.3, "13/10"), (2.49, "249/100")):
+        right = mod.epsilon_delta_case("test", "abs", "abs(x)", 0.5, 0.5, [-1.5, 3], eps)["right"]
+        assert right == {"none": False, "delta": eps, "capped": False, "sympy": exact}, right
+
+    real = mod.sp.solveset
+    sp = mod.sp
+
+    def wrong(routes):
+        def solveset(rel, var, domain):
+            if isinstance(domain, sp.Interval) and domain.sup == 3 and isinstance(rel, routes):
+                return domain if isinstance(rel, (sp.StrictLessThan, sp.StrictGreaterThan)) else sp.S.EmptySet
+            return real(rel, var, domain)
+        return solveset
+
+    # One route wrong: the complement says 13/10, the inequality says the whole window.
+    monkeypatch.setattr(sp, "solveset", wrong((sp.StrictLessThan, sp.StrictGreaterThan)))
+    with pytest.raises(ValueError, match="the two routes disagree.*does not check out"):
+        mod.epsilon_delta_case("test", "abs", "abs(x)", 0.5, 0.5, [-1.5, 3], 1.3)
+    # Both routes wrong in the same way: the probe near the cap finds the failing tail.
+    monkeypatch.setattr(sp, "solveset", wrong((sp.StrictLessThan, sp.StrictGreaterThan, sp.GreaterThan, sp.LessThan)))
+    with pytest.raises(ValueError, match="does not check out: the band condition fails at x = "):
+        mod.epsilon_delta_case("test", "abs", "abs(x)", 0.5, 0.5, [-1.5, 3], 2.49)
+    monkeypatch.setattr(sp, "solveset", real)
+    case = mod.epsilon_delta_case("test", "abs", "abs(x)", 0.5, 0.5, [-1.5, 3], 0.1)
+    assert case["right"]["sympy"] == "1/10" and case["left"]["sympy"] == "1/10"
+
+
+def test_epsilon_delta_oracle_refuses_what_it_cannot_certify():
+    """make_fixtures.py writes no case that SymPy cannot certify (review F5): here solveset
+    cannot solve |x + sin(x) − 1.84…| < 1/10, and the one-sided limit (within ε of L) does not
+    decide "none" either."""
+    mod = load_make_fixtures()
+    with pytest.raises(mod.OracleRefused, match="cannot solve"):
+        mod.epsilon_delta_case("test", "x + sin(x)", "x + sin(x)", 1, 1.8414709848078965, [0, 2], 0.1)

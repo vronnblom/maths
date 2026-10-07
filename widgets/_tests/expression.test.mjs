@@ -55,6 +55,26 @@ test("what JessieCode alone would accept silently is rejected before it", () => 
   }
 });
 
+test("no statement, property access, string or call outside the allowlist reaches JessieCode", () => {
+  // JessieCode builds its function with eval, so these must stop at the allowlist (review F7).
+  const attempts = [
+    "x; 1", "x, 1", "x.constructor", "x['constructor']", "constructor", "__proto__", "x == 1", "x ? 1 : 0", "x = 1",
+    "x => x", "[1]", "{}", '"a"', "'a'", "`a`", "this", "$board", "eval(x)", "Function", "alert(1)", "x\n1", "use", "map(x)", "function(x)", "!x", "x < 1", "x & 1", "x % 2", "#x", "@x",
+  ];
+  for (const src of attempts) {
+    assert.throws(() => checkExpression(src, ["x"]), ExpressionError, src);
+    assert.throws(() => compileExpression(JXG, src, "x"), ExpressionError, src);
+  }
+});
+
+test("what the allowlist passes but JessieCode cannot parse is an error, not a function (review F7)", () => {
+  // ("//" and "/*" are no comments here: two operators in a row, which JessieCode rejects.)
+  for (const src of ["sin()", "x+", "x*/2", "(x)^", "x // 1", "x /* 1 */"]) {
+    assert.doesNotThrow(() => checkExpression(src, ["x"]), src);
+    assert.throws(() => compileExpression(JXG, src, "x"), (e) => e instanceof ExpressionError && /JessieCode cannot parse/.test(e.message), src);
+  }
+});
+
 test("values that are not finite numbers become NaN", () => {
   const f = compileExpression(JXG, "1/x + sqrt(x)", "x");
   assert.ok(Number.isNaN(f(0)));

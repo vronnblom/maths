@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/vronnblom/maths/schema/widgets/epsilon-delta.schema.json",
+  "title": "epsilon-delta widget config",
+  "description": "The JSON body of ```{anywidget} …/widgets/epsilon-delta.mjs (docs/plan/05 §5.8, widgets/README.md): the graph of f near a, the band |y − L| < ε, the window 0 < |x − a| < δ, an ε slider with the largest δ the widget finds on each side, and a δ slider with a verdict. Rules JSON Schema cannot express (ranges increasing, a strictly inside xRange, L inside yRange, eps inside epsRange, delta and epsStep small enough, eps and delta on their sliders' grids, the names in f, and f compiling with JessieCode) are checked by scripts/check_widgets.py and widgets/_lib/epsdelta.mjs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["f", "a", "L", "eps", "epsRange", "xRange", "yRange"],
+  "properties": {
+    "f": {
+      "description": "The function of x, in the expression language of widgets/README.md (the same as function-plot's).",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "a": {
+      "description": "The point x approaches. It must lie strictly inside xRange.",
+      "type": "number"
+    },
+    "L": {
+      "description": "The claimed limit: the centre of the ε-band. It must lie inside yRange. A wrong L is allowed (the widget then observes no δ for small ε).",
+      "type": "number"
+    },
+    "eps": {
+      "description": "The starting ε (> 0), inside epsRange.",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "epsRange": {
+      "description": "[min, max] of the ε slider, both > 0.",
+      "type": "array",
+      "items": { "type": "number", "exclusiveMinimum": 0 },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "epsStep": {
+      "description": "The step of the ε slider (default: the epsRange width / 100). Choose it so that the values a Try this asks for are on the grid.",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "delta": {
+      "description": "The starting value of the reader's δ (> 0; default: half the distance from a to the nearer end of xRange, which is also the δ slider's maximum).",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "xRange": {
+      "description": "[min, max] of the x-axis shown at first. The widget searches for the largest δ up to its ends.",
+      "$ref": "#/$defs/range"
+    },
+    "yRange": {
+      "description": "[min, max] of the y-axis shown at first.",
+      "$ref": "#/$defs/range"
+    }
+  },
+  "$defs": {
+    "range": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "functions": {
+      "description": "The functions an expression may call: the same list as function-plot.schema.json (a test keeps the two equal).",
+      "enum": ["sin", "cos", "tan", "asin", "acos", "atan", "sinh", "cosh", "tanh", "exp", "ln", "sqrt", "cbrt", "abs", "floor", "ceil", "sign"]
+    },
+    "constants": {
+      "description": "The constants an expression may use (expression.mjs CONSTANTS).",
+      "enum": ["pi", "e"]
+    }
+  }
+}

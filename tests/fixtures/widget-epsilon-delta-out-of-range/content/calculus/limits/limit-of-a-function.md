@@ -100,7 +100,7 @@ has $f(x)$ within the tolerance.
 ```{anywidget} ../../../widgets/epsilon-delta.mjs
 {
   "f": "x^2", "a": 2, "L": 4,
-  "eps": 0.5, "epsRange": [0.05, 1.5], "epsStep": 0.05,
+  "eps": 2, "epsRange": [0.05, 1.5], "epsStep": 0.05,
   "xRange": [-0.5, 3.5], "yRange": [-1, 9]
 }
 ```
@@ -108,16 +108,15 @@ has $f(x)$ within the tolerance.
 Graph of $y = x^2$ near $x = 2$, with a horizontal band of half-width $\eps$ around $y = 4$
 (dashed edges) and a vertical window $0 < \abs{x - 2} < \delta$ (solid edges; the dotted line
 $x = 2$ itself is left out). A slider sets $\eps$ from $0.05$ to $1.5$, and the widget states the
-largest $\delta$ it finds on each side of $2$ by checking points of the graph; for $\eps = 0.5$
-the exact values are $2 - \sqrt{3.5} \approx 0.129$ on the left and $\sqrt{4.5} - 2 \approx
-0.121$ on the right. A second slider sets your own $\delta$; points of the graph inside the
-window but outside the band are marked with crosses, and a sentence says whether your
-$\delta$ passes the widget's check.
+largest $\delta$ on each side of $2$: for $\eps = 0.5$ it is $2 - \sqrt{3.5} \approx 0.129$ on the
+left and $\sqrt{4.5} - 2 \approx 0.121$ on the right. A second slider sets your own $\delta$;
+points of the graph inside the window but outside the band are marked with crosses, and a
+sentence says whether your $\delta$ works.
 ::::
 
-**Try this:** set $\eps = 0.1$. What is the largest $\delta$ the widget finds on each side of
-$a = 2$? Which one must you take so that $\delta$ works on both sides, and why? Then make
-$\delta$ a little larger and find where it fails.
+**Try this:** set $\eps = 0.1$. What is the largest $\delta$ that works? Is it the same on both
+sides of $a = 2$, and which one must you take? Then make $\delta$ a little larger and find
+where it fails.
 
 :::{proof:remark} The value at $a$ does not matter
 :label: rem-calc-limit-value-irrelevant
