@@ -149,12 +149,45 @@ def test_every_site_widget_table_is_in_the_fixtures():
     assert {"about/how-to-read.md", "templates/topic.md"} <= sources
 
 
-def test_epsilon_delta_fixtures_refuse_a_wrong_solveset():
+def test_epsilon_delta_fixtures_refuse_a_wrong_solveset(monkeypatch):
     """SymPy 1.14 solves |abs(x) − 1/2| < 13/10 on (1/2, 3) as the whole interval (it is
-    (1/2, 1.8)); make_fixtures.py checks SymPy's interval and refuses it instead of writing
-    δ₊ = 5/2. Its correct answers still pass: δ₊ = 1/10 for ε = 1/10."""
+    (1/2, 1.8)), and |abs(x) − 1/2| < 249/100 too (it is (1/2, 2.99); review F5). make_fixtures.py
+    no longer asks SymPy that question: it cuts the window where abs changes formula and solves
+    1/2 − ε < f < 1/2 + ε, so it gets both right. And it still refuses a wrong solveset instead
+    of writing it: below, SymPy's old answer (the whole window) is put back into one route, then
+    into both. Its correct answers still pass: δ₊ = 1/10 for ε = 1/10."""
     mod = load_make_fixtures()
-    with pytest.raises(ValueError, match="does not check out"):
+    for eps, exact in ((1.3, "13/10"), (2.49, "249/100")):
+        right = mod.epsilon_delta_case("test", "abs", "abs(x)", 0.5, 0.5, [-1.5, 3], eps)["right"]
+        assert right == {"none": False, "delta": eps, "capped": False, "sympy": exact}, right
+
+    real = mod.sp.solveset
+    sp = mod.sp
+
+    def wrong(routes):
+        def solveset(rel, var, domain):
+            if isinstance(domain, sp.Interval) and domain.sup == 3 and isinstance(rel, routes):
+                return domain if isinstance(rel, (sp.StrictLessThan, sp.StrictGreaterThan)) else sp.S.EmptySet
+            return real(rel, var, domain)
+        return solveset
+
+    # One route wrong: the complement says 13/10, the inequality says the whole window.
+    monkeypatch.setattr(sp, "solveset", wrong((sp.StrictLessThan, sp.StrictGreaterThan)))
+    with pytest.raises(ValueError, match="the two routes disagree.*does not check out"):
         mod.epsilon_delta_case("test", "abs", "abs(x)", 0.5, 0.5, [-1.5, 3], 1.3)
+    # Both routes wrong in the same way: the probe near the cap finds the failing tail.
+    monkeypatch.setattr(sp, "solveset", wrong((sp.StrictLessThan, sp.StrictGreaterThan, sp.GreaterThan, sp.LessThan)))
+    with pytest.raises(ValueError, match="does not check out: the band condition fails at x = "):
+        mod.epsilon_delta_case("test", "abs", "abs(x)", 0.5, 0.5, [-1.5, 3], 2.49)
+    monkeypatch.setattr(sp, "solveset", real)
     case = mod.epsilon_delta_case("test", "abs", "abs(x)", 0.5, 0.5, [-1.5, 3], 0.1)
     assert case["right"]["sympy"] == "1/10" and case["left"]["sympy"] == "1/10"
+
+
+def test_epsilon_delta_oracle_refuses_what_it_cannot_certify():
+    """make_fixtures.py writes no case that SymPy cannot certify (review F5): here solveset
+    cannot solve |x + sin(x) − 1.84…| < 1/10, and the one-sided limit (within ε of L) does not
+    decide "none" either."""
+    mod = load_make_fixtures()
+    with pytest.raises(mod.OracleRefused, match="cannot solve"):
+        mod.epsilon_delta_case("test", "x + sin(x)", "x + sin(x)", 1, 1.8414709848078965, [0, 2], 0.1)

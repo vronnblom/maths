@@ -195,7 +195,11 @@ as JSON fixtures: `uv run python widgets/_tests/make_fixtures.py` writes them, a
 `tests/test_widget_checks.py` fails if the committed JSON differs from what the script writes
 now, so nobody types an expected value. The
 fixtures include the table of values of every `function-plot` figure on the site, so a new
-figure's table is checked automatically. `npm run test:widgets` runs them locally and in CI
+figure's table is checked automatically. **The oracle must certify its own answers**: SymPy is
+sometimes wrong (1.14 solves $\big||x| - \tfrac12\big| < 2.49$ on $(\tfrac12, 3)$ as the whole
+interval), so `make_fixtures.py` computes each `epsilon-delta` δ by two routes (the complement of
+the band, and the band inequality without `abs`), checks the boundary symbolically and probes a
+capped δ near its end, and refuses to write a case it cannot certify. `npm run test:widgets` runs them locally and in CI
 (in the `verify` job).
 
 ## 6.3 Proof review checklist
