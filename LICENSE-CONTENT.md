@@ -1,6 +1,6 @@
 # Content licence
 
-Copyright (c) 2026 the maths contributors.
+Copyright (c) 2026 vronnblom.
 
 Everything under `content/` (the text, the mathematics, figures, exercises and the JSON
 configuration of widgets) is licensed under the **Creative Commons
