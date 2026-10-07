@@ -93,6 +93,15 @@ async function render({ model, el: host }) {
       : `${variable} = ${formatNumber(trace)}: ${fx} is undefined`;
   };
 
+  // The visible range, in words: the axes leave the view when a reader zooms in away from
+  // them, and the text also tells a screen reader what the zoom did.
+  const viewText = config.zoom !== false ? el(doc, "p", { class: "mp-view", "aria-live": "polite" }) : null;
+  const showView = () => {
+    if (!viewText || !board) return;
+    const [a, b, c, d] = visibleRange(board).map((v) => formatNumber(v, 3));
+    viewText.textContent = `Showing ${variable} from ${a} to ${b} and y from ${c} to ${d}.`;
+  };
+
   const table = config.table
     ? valueTable(doc, { caption: `Values of ${fx}`, xName: variable, yName: fx })
     : null;
@@ -117,6 +126,7 @@ async function render({ model, el: host }) {
       label: `Graph of y = ${fx}, where ${fx} = ${config.f}. The caption below describes it.`,
     });
     if (view) board.setBoundingBox(view, false);
+    board.on("boundingbox", showView); // panning (the zoom buttons call showView themselves)
     const curve = board.create("curve", [[], []], { strokeColor: palette.curve, strokeWidth: 2.5, highlight: false });
     curve.updateDataArray = function () {
       const [a, b, c, d] = visibleRange(board);
@@ -180,16 +190,18 @@ async function render({ model, el: host }) {
     };
     controls.append(
       el(doc, "div", { class: "mp-buttons", role: "group", "aria-label": "Zoom" }, [
-        button(doc, "Zoom in", () => zoomAbout(board, 2, ...centre())),
-        button(doc, "Zoom out", () => zoomAbout(board, 0.5, ...centre())),
-        button(doc, "Reset view", () => board.setBoundingBox([x0, y1, x1, y0], false)),
+        button(doc, "Zoom in", () => (zoomAbout(board, 2, ...centre()), showView())),
+        button(doc, "Zoom out", () => (zoomAbout(board, 0.5, ...centre()), showView())),
+        button(doc, "Reset view", () => (board.setBoundingBox([x0, y1, x1, y0], false), showView())),
       ]),
     );
   }
+  if (viewText) root.append(viewText);
   if (readout) root.append(readout);
   if (table) root.append(table.element);
 
   draw();
+  showView();
   showReadout();
   showTable();
 

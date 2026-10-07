@@ -88,7 +88,7 @@ traced along the graph, and zoom. Schema: `schema/widgets/function-plot.schema.j
 | `table` | | `{"points": [...]}`: a table of values of f at these points (1–12, inside `xRange`) |
 | `hole` | | `{"x": 0}`: an open circle at x where f is undefined; its height is the limit of f there, estimated from both sides, or `"y"` if given. The hole's x is left out of the curve, the table and the trace |
 | `trace` | | `{"x": 0.5}`: a slider for the variable that moves a point along the graph, with a readout of x and f(x) (`step` defaults to the `xRange` width / 200) |
-| `zoom` | | `false` hides the Zoom in / Zoom out / Reset view buttons (default `true`). Zooming centres on the hole, else the traced point |
+| `zoom` | | `false` hides the Zoom in / Zoom out / Reset view buttons and the line that states the visible range (default `true`). Zooming centres on the hole, else the traced point; the range line keeps the scale readable when the axes leave the view |
 
 **Expressions.** Numbers (`2`, `0.5`, `1e-3`), the variable, the parameters, `+ - * / ^`
 (power, right-associative: `2^3^2` is $2^9$) and parentheses, the constants `pi` and `e`,

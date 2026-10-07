@@ -22,7 +22,8 @@ export const STYLES = `
   font: inherit; font-size: 0.875em; color: inherit; background: transparent;
   border: 1px solid currentColor; border-radius: 4px; padding: 0.15em 0.6em; cursor: pointer;
 }
-.mp-readout { margin: 0.25rem 0; font-variant-numeric: tabular-nums; }
+.mp-readout, .mp-view { margin: 0.25rem 0; font-variant-numeric: tabular-nums; }
+.mp-view { font-size: 0.875em; }
 .mp-table { border-collapse: collapse; margin: 0.5rem 0; font-variant-numeric: tabular-nums; }
 .mp-table caption { text-align: left; font-size: 0.875em; padding-bottom: 0.25rem; }
 .mp-table th, .mp-table td { border: 1px solid currentColor; padding: 0.15em 0.75em; text-align: right; }
