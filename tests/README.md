@@ -33,6 +33,25 @@ often `content/calculus/curriculum.yml`, a `labels.lock`, and sometimes a `verif
 | `redirect-collision` | an alias that is a live page | `write_redirects.py` |
 | `redirects` | none: two aliases, to show that redirects are written | – |
 | `gate-*` | a broken reference, an unknown directive (and a clean page) | `scripts/myst_gate.sh` |
+| `widget-schema-violation` | a typo in the widget JSON (`tabel`) | `check_widgets.py` (schema) |
+| `widget-missing-file` | `{anywidget}` names `widgets/no-such-widget.mjs` | `check_widgets.py` |
+| `widget-figure-without-caption` | a widget figure with no caption (its text description) | `check_widgets.py` |
+| `widget-unknown-id` | `maths.widgets` lists `epsilon-delta`, which is not built yet | `check_widgets.py` |
+
+`test_widget_checks.py` covers the rest of the widget rules on edited copies of `clean` (a widget
+outside a figure, a non-`wdg-` label, wrong paths, invalid JSON, typos in nested keys, the rules
+that JSON Schema cannot express), runs `widgets/_tests/fixtures/function-plot-invalid.json`
+through the Python rules (the widget tests run the same table through `widgets/_lib/`), and fails
+if `widgets/_tests/fixtures/function-plot.json` is not what `widgets/_tests/make_fixtures.py`
+writes now.
+
+`test_plugin_build.py` assembles a project from `templates/topic.md` and
+`templates/chapter-index.md` with the real `curriculum.yml`, builds it with
+`plugins/topic-header.mjs` through the gate (`myst build --site` with a stub site template, so
+no theme or network), and checks the resolved AST: prerequisite links, "coming soon" for
+planned topics, the reverse links, the chapter table, and a build error for malformed front
+matter. `uv run python tests/test_plugin_build.py <dir> [<theme URL>]` writes the project out to
+look at it.
 
 `fixtures/ast/topic.json` is mystmd's AST of `templates/topic.md`; `test_parser.py` compares it
 with what `scripts/myst_source.py` reads. Regenerate it with `tests/make_ast_fixture.py` after

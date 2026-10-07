@@ -15,6 +15,7 @@ import check_all
 import check_frontmatter
 import check_labels
 import check_toc
+import check_widgets
 import graph
 import notation_lint
 from project import REPO, Project, Reporter
@@ -27,6 +28,7 @@ CHECKERS = {
     "check_labels": lambda p, r: check_labels.check(p, r, forward_refs=True),
     "graph": graph.check,
     "notation_lint": notation_lint.check,
+    "check_widgets": check_widgets.check,
 }
 
 # fixture → (checker, file the error is in, line, a substring of the message)
@@ -53,6 +55,10 @@ DEFECTS = {
     "lint-mathrm-e": ("notation_lint", "index.md", 13, "[mathrm-e] `\\mathrm{e}`"),
     "lint-degrees": ("notation_lint", "index.md", 13, "[degrees] `^\\circ`: degrees in a calculus page"),
     "lint-filler": ("notation_lint", "index.md", 13, "[filler] `clearly`"),
+    "widget-schema-violation": ("check_widgets", "limit-of-a-function.md", 56, "widget function-plot: config: Additional properties are not allowed ('tabel' was unexpected)"),
+    "widget-missing-file": ("check_widgets", "limit-of-a-function.md", 50, "{anywidget}: widget no-such-widget does not exist"),
+    "widget-figure-without-caption": ("check_widgets", "limit-of-a-function.md", 47, "widget figure wdg-calc-limit-average-speed: the caption (the widget's text description) is missing"),
+    "widget-unknown-id": ("check_widgets", "limit-of-a-function.md", 31, "maths.widgets: epsilon-delta is not a widget"),
 }
 
 

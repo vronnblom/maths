@@ -93,8 +93,25 @@ dark colour schemes):
 | Build time | about 10 s for 6 pages, including the one-off `npm ci` of the theme (3 s). |
 
 A `BASE_URL=/maths` build prefixes every link and asset in the HTML, the favicon included.
-**Still to validate**: that the deployed site actually serves them under `/maths/`; anywidget rendering (stage 3, with the first widget); search
-quality on math-heavy topic pages; and the build time with about 100 pages.
+
+**Validated in Phase 0 stage 3** (2026-10-07, the `function-plot` widget on
+`about/how-to-read.md` and a fixture project built from the templates; Playwright, Chromium):
+
+| Question | Result |
+|---|---|
+| anywidget rendering | ✔ The theme's AnyRenderer `import()`s the hashed module (`/build/function-plot-<hash>.mjs`), attaches an **open shadow root** to the figure's `<div class="myst-anywidget">`, and calls `render({ model, el })` with `el` inside it; `model.get(key)` returns the keys of the JSON body. Page CSS does not reach into the shadow root (inherited properties such as the text colour and the font do), so a widget brings its own `<style>`. |
+| `render()` lifecycle | The theme calls `render()` **more than once** while the page hydrates, and awaits it; it calls the returned cleanup on unmount, but a render still awaiting JSXGraph at that moment never gets its cleanup. So `render()` replaces `el`'s content, returns early if `el` is no longer connected after the `await`, and returns a cleanup. |
+| `_lib/` next to the hashed module | ✔ `project.static_files: [../widgets/_lib]` publishes it at `/_lib/` **and** `/build/_lib/`, so `./_lib/x.mjs` from `/build/function-plot-<hash>.mjs` resolves (all 200). |
+| JSXGraph from jsDelivr | ✔ `await import("https://cdn.jsdelivr.net/npm/jsxgraph@1.14.0/distrib/jsxgraphcore.mjs")` inside `render()`; the board draws inside the shadow root. |
+| Text fallback | ✔ With the JSXGraph URL blocked, the module and `_lib/` still load, the widget says "The interactive figure could not be loaded. The caption describes it.", and the caption reads normally. With **all** of jsDelivr blocked the caption is still there, but its formulas show twice (as MathML and as HTML), because the theme loads KaTeX's CSS from jsDelivr too (§5.3 stage 1, 12 R8). |
+| Keyboard | ✔ Tab reaches each slider and button; ArrowRight moves a slider by its step, and `aria-valuetext` announces "a = 1.5". |
+| Colour schemes | ✔ Light and dark (the theme's `html.dark`/`html.light` class, else `prefers-color-scheme`), also when switched while the page is open; phone width (375 px) works. |
+| Under `/maths/` | ✔ A `BASE_URL=/maths` build served under `/maths/` loads `/maths/build/function-plot-<hash>.mjs`, `/maths/build/_lib/*.mjs` and JSXGraph, and the widget works as above. |
+| Plugin | ✔ `vfile.message(…)` with `fatal = true` logs `⛔️ <file>:<line> …` (a thrown error also logs ⛔️, without the line). `ctx.parseMyst()` parses inline Markdown and math. A `span` or `div` node with a `class`, and `admonition` with `class`, reach the HTML. |
+
+**Still to validate**: that the deployed site actually serves the site and the widget under
+`/maths/` (Pages had not deployed when stage 3 was written); search quality on math-heavy
+topic pages; and the build time with about 100 pages.
 
 ## 5.4 Dependencies (each justified)
 
@@ -105,7 +122,8 @@ quality on math-heavy topic pages; and the build time with about 100 pages.
 | **yaml** (npm) | caret, lockfile | the plugin parses front matter properly | a hand-rolled regex (fragile) |
 | **book-theme** (site theme, downloaded by mystmd) | commit SHA in `site.template` (§5.5) | the stock MyST web theme | an unpinned `template: book-theme` (follows the theme's `main`) |
 | **katex** (npm, dev) | exact, matching the KaTeX of mystmd and the pinned theme commit: **0.15.6** (§5.3) | `scripts/check_katex.mjs` fails CI on math that would render as red error text (mystmd is a single bundled package, so KaTeX isn't otherwise importable). Found in stage 1: mystmd already renders every formula with KaTeX at build time and logs errors as `⛔️`, so `build_site.sh` catches them; stage 4 decides whether this check still adds anything (it would run in the `verify` job, whose `--site` build is not log-gated) | relying on visual inspection |
-| **JSXGraph** | exact version in the URL that widgets `import()` at render time; vendored copy as a manual fallback | interactive geometry/plots: sliders, gliders, function graphs, keyboard support, small (≈ 300 kB), MIT/LGPL dual licence, maintained since 2008 by a university group | Plotly (heavy, data-viz oriented), D3 (too low-level), Desmos API (licence/API key for production, not version-controlled), GeoGebra (heavy, external) |
+| **JSXGraph** | exact version (**1.14.0**) in the URL that widgets `import()` at render time (`widgets/_lib/jsxgraph.mjs`); vendored copy as a manual fallback | interactive geometry/plots: sliders, gliders, function graphs, keyboard support, small (≈ 300 kB), MIT/LGPL dual licence, maintained since 2008 by a university group | Plotly (heavy, data-viz oriented), D3 (too low-level), Desmos API (licence/API key for production, not version-controlled), GeoGebra (heavy, external) |
+| **jsxgraph** (npm, dev) | exact, the **same** version as the URL above (a test checks it) | the widget tests run expressions through JSXGraph's JessieCode, the evaluator the browser uses (§5.8). Checked in stage 3: the package's `distrib/jsxgraphcore.mjs` (the file jsDelivr serves) imports in Node 22 and compiles JessieCode on a board with JSXGraph's `NoRenderer`, no DOM needed. It is never published or imported by the site | a second, hand-written evaluator for the tests (the tests would then not check what readers see) |
 | **Python ≥ 3.12 + uv** | `uv.lock` | reproducible env for verification and checks; uv is fast and handles the lockfile | pip + requirements.txt (no lock), poetry (slower, heavier) |
 | **sympy** | lock | symbolic verification of every computation | – |
 | **antlr4-python3-runtime 4.11.x** | pinned (SymPy requires this exact minor) | SymPy's LaTeX parser backend (lark fails on `\pi`) | lark backend |
@@ -231,20 +249,22 @@ until it's needed.
     "check": "uv run python scripts/check_all.py && uv run codespell content docs templates && uv run pytest tests -q",
     "ast": "npm run generate && cd content && myst build --site --ci",
     "verify": "npm run ast && uv run python scripts/extract_answers.py content/_build/site/content -o verify/_answers.json && uv run pytest verify -q && uv run python scripts/check_coverage.py && node scripts/check_katex.mjs content/_build/site/content",
-    "test:widgets": "node --test \"widgets/_tests/*.test.mjs\"",
+    "test:widgets": "node --test \"widgets/_tests/*.test.mjs\" \"plugins/_tests/*.test.mjs\"",
     "build": "npm run generate && bash scripts/build_site.sh",
     "all": "npm run check && npm run verify && npm run test:widgets && npm run build"
   },
   "dependencies": { "mystmd": "1.11.0", "yaml": "^2.8.0" },
-  "devDependencies": { "katex": "<pinned to the KaTeX version of the pinned theme commit>" }
+  "devDependencies": { "jsxgraph": "1.14.0", "katex": "<pinned to the KaTeX version of the pinned theme commit>" }
 }
 ```
 
 The npm scripts are the **only** definition of each step: CI calls the same scripts, so
 `npm run all` really is "everything CI runs".
-This is the end state of Phase 0. After stage 2, `package.json` has `generate`, `dev`, `check`,
-`build` and `all` = `check` + `build`; `ast`, `verify`, `test:widgets` and the `katex` dev
-dependency arrive with stages 3–4.
+This is the end state of Phase 0. After stage 3, `package.json` has `generate`, `dev`, `check`,
+`test:widgets`, `build`, `all` = `check` + `test:widgets` + `build`, and the `jsxgraph` dev
+dependency; `ast`, `verify` and `katex` arrive with stage 4.
+- `test:widgets` also runs the plugin's tests (`plugins/_tests/`), whose logic is the same kind
+  of pure module (03 §3.6); stage 3 added that second glob.
 - `generate` writes the generated includes (§5.7, "Generated content") before any build.
 - `verify` always rebuilds the AST and re-extracts the answers, so tests never read a stale
   `verify/_answers.json`.
@@ -375,8 +395,9 @@ jobs:
       - uses: actions/setup-node@<sha>               # tests/test_build_gate.py runs myst on fixtures
         with: { node-version-file: .nvmrc, cache: npm }
       - run: npm ci
-      - name: Front matter, labels, graph, toc, notation lint, spelling, checker fixture tests
+      - name: Front matter, labels, graph, toc, notation lint, widgets, spelling, checker fixture tests
         run: npm run check                           # check_all.py emits ::error file=…,line=…:: annotations
+      # Until stage 4, `npm run test:widgets` runs here; the verify job below takes it over.
 
   verify:
     runs-on: ubuntu-latest
@@ -512,11 +533,13 @@ git-ignored, so stale copies can't be committed.
   imports. So:
   - shared helpers live in `widgets/_lib/` and are published with `project.static_files`
     (§5.5). A widget imports them with a relative path (`./_lib/board.mjs`), which then
-    resolves next to the hashed module;
+    resolves next to the hashed module (confirmed in stage 3: mystmd publishes the folder at
+    `/build/_lib/`, beside `/build/<widget>-<hash>.mjs`, §5.3);
   - JSXGraph is loaded **inside** `render()` with a dynamic import of a pinned URL:
     `const { default: JXG } = await import("https://cdn.jsdelivr.net/npm/jsxgraph@<exact>/distrib/jsxgraphcore.mjs")`.
     No module has a static `https:` import, because Node refuses those
-    (`ERR_UNSUPPORTED_ESM_URL_SCHEME`) and the widget tests could not import the module;
+    (`ERR_UNSUPPORTED_ESM_URL_SCHEME`) and the widget tests could not import the module. The
+    URL and its version live in one place, `widgets/_lib/jsxgraph.mjs`;
   - the mathematics a widget computes (the δ in `epsilon-delta`, Riemann sums, …) lives in
     pure modules in `widgets/_lib/` with no JSXGraph or DOM, so `node --test` can import it.
 - **Configuration is JSON only**, so authors never write JS. Every widget sits alone inside a
@@ -548,19 +571,41 @@ git-ignored, so stale copies can't be committed.
   so it always shows. Widgets are numbered as figures ("Figure 2"); cross-page links name
   them as usual.
 - Expressions (`"f": "x^2"`) are compiled with JSXGraph's built-in JessieCode parser, so
-  there is no `eval` and no extra dependency.
-- Each widget has a JSON Schema (`schema/widgets/<name>.schema.json`); `check_all.py`
-  validates every widget block in the content. It also checks that every `{anywidget}` is
-  the only content of a `{figure}` with a `wdg-` label and a non-empty caption.
-- Shared helpers in `widgets/_lib/` handle board creation, theme-aware colours (light/dark)
-  and keyboard-operable sliders.
-- **Catalogue** (built as the curriculum needs them, see 08): `function-plot` (graphs plus
-  parameter sliders), `epsilon-delta`, `secant-tangent`, `zoom-to-linear`, `riemann-sum`,
+  there is no `eval` of config strings and no extra runtime dependency. Found in stage 3:
+  JessieCode alone is too forgiving for author input (an unknown function returns its
+  argument, so `sec(x)` is x; an unknown name is `undefined`; `2x` compiles to a function that
+  does nothing; it accepts `;`, `==`, `?:` and property access). So `widgets/_lib/expression.mjs`
+  first tokenizes the expression against an allowlist (numbers, the variable, the parameters,
+  `+ - * / ^ ( )`, `pi`, `e`, and 17 functions; `ln`, never `log`; multiplication always
+  written), with clear messages, and only then hands it to JessieCode. The allowlist is in the
+  widget's schema (`$defs`), so `check_widgets.py` applies the same rules in CI.
+  JessieCode needs a board, not a DOM: `new JXG.Board(…, new JXG.NoRenderer(), …)` compiles
+  in Node too, so the widget tests evaluate through the browser's evaluator, from the pinned
+  `jsxgraph` dev dependency (§5.4). That board must have its events switched off, or in a
+  browser it listens for window resizes it cannot handle.
+- Each widget has a JSON Schema (`schema/widgets/<name>.schema.json`, `additionalProperties:
+  false` at every level, so a typo is an error); `check_all.py` (`scripts/check_widgets.py`)
+  validates every widget block in the content, plus the rules a schema cannot express (ranges
+  increasing, values inside them, the names in an expression; the widget's `_lib/` has the
+  same rules, and one shared table of cases tests both). It also checks that every
+  `{anywidget}` is the only content of a `{figure}` with a `wdg-` label and a non-empty
+  caption, that the widget exists, and that every `maths.widgets` id is a widget.
+- Shared helpers in `widgets/_lib/` handle board creation, theme-aware colours (light/dark,
+  with a contrast test: ≥ 3:1 for lines and points, ≥ 4.5:1 for text) and keyboard-operable
+  sliders (native `<input type="range">`), buttons and value tables (real `<table>`s).
+- The theme renders a widget inside a shadow root and may call `render()` several times while
+  the page hydrates (§5.3), so `render()` replaces its element's content and returns a cleanup.
+- **Catalogue** (built as the curriculum needs them, see 08; `widgets/README.md` documents
+  each built widget's keys): `function-plot` (built in stage 3: a graph, parameter sliders, a
+  table of values, a hole, a traced point, zoom; its other modes come with their pages), `epsilon-delta`, `secant-tangent`, `zoom-to-linear`, `riemann-sum`,
   `area-accumulation` (FTC), `taylor`, `partial-sums`, `slope-field`, `newton-method`,
   `solid-of-revolution` (JSXGraph 3D), `prereq-graph` (Phase 7).
 - Desmos/GeoGebra are allowed **only** as optional "explore further" links, never as core
   content: they are not version-controlled, may change or vanish, and have their own terms.
 - A widget's *mathematics* is verified too: the δ that `epsilon-delta` reports is computed in
   JS (in a pure `_lib/` module), and a small Node test (`widgets/_tests/*.test.mjs`, run by
-  `npm run test:widgets` locally and in CI, no extra dependency) checks it against known
-  values.
+  `npm run test:widgets` locally and in CI, no test framework) checks it against values that
+  SymPy precomputed (`widgets/_tests/make_fixtures.py` writes them; a pytest fails if they are
+  stale). For `function-plot`: JessieCode's values, the table of every `function-plot` figure
+  on the site, the value at a hole (the limit, from both sides), and where the sampled graph
+  breaks (poles and jumps, against SymPy's singularities).

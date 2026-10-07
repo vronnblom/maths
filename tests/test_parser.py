@@ -57,7 +57,7 @@ def test_kinds_of_the_template_blocks():
     kinds = {s.label: s.kinds for s in ms.label_sites(doc)}
     assert kinds["thm-calc-limit-unique"] == ("thm",)
     assert kinds["prf-calc-limit-unique"] == ("prf",)
-    assert kinds["wdg-calc-limit-eps-delta"] == ("fig", "wdg")
+    assert kinds["wdg-calc-limit-average-speed"] == ("fig", "wdg")
     assert kinds["sol-calc-limit-table-estimate"] == ("sol",)
 
 

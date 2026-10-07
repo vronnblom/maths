@@ -32,7 +32,7 @@ ADMONITIONS = {
     "admonition", "note", "warning", "tip", "important", "hint", "caution", "attention",
     "danger", "error", "seealso",
 }
-PLUGIN_DIRECTIVES = {"topic-header", "where-this-leads"}  # plugins/topic-header.mjs (stage 3)
+PLUGIN_DIRECTIVES = {"topic-header", "where-this-leads", "chapter-topics"}  # plugins/topic-header.mjs
 MARKDOWN_BODY = set(PROOF_KINDS) | ADMONITIONS | PLUGIN_DIRECTIVES | {
     "exercise", "solution", "figure", "table", "list-table",
 }

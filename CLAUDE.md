@@ -1,12 +1,14 @@
 # CLAUDE.md
 
-> **Status: Phase 0, stages 1–2 done.** What exists now: `content/` (home, about pages, the
+> **Status: Phase 0, stages 1–3 done.** What exists now: `content/` (home, about pages, the
 > Calculus subject page with its generated prerequisite map), `content/calculus/curriculum.yml`
-> (the plan of all 82 topics), `schema/`, the checks in `scripts/` (`check_all.py`,
-> `graph.py`, `generate.py`, `write_redirects.py`, …), `labels.lock`, codespell, `tests/`
-> (fixtures proving each check fails), `ci.yml` (`checks` and `build` jobs) and `deploy.yml`.
-> The rest is specified in `docs/plan/` and arrives in the later stages of Phase 0
-> (`docs/plan/09-roadmap.md`): **stage 3** the plugin and the first widget; **stage 4**
+> (the plan of all 82 topics), `schema/` (pages, curriculum, widget configs), the checks in
+> `scripts/` (`check_all.py`, `graph.py`, `generate.py`, `write_redirects.py`,
+> `check_widgets.py`, …), `labels.lock`, codespell, `tests/` (fixtures proving each check
+> fails), the plugin `plugins/topic-header.mjs`, the `function-plot` widget (`widgets/`, shown
+> on `about/how-to-read.md`) with its Node tests, `ci.yml` (`checks` and `build` jobs) and
+> `deploy.yml`. The rest is specified in `docs/plan/` and arrives in the later stages of
+> Phase 0 (`docs/plan/09-roadmap.md`): **stage 4**
 > `verify/`, the coverage gate and the verified-page edit guard (`check_verified_edits.py`,
 > `guard.yml`); **stage 5** the SessionStart hook, `CONTRIBUTING.md`, templates for PRs and
 > issues. Items marked *(stage N)* don't exist yet. Update this file in the PR that lands each
@@ -25,17 +27,19 @@ the details.
 ```bash
 npm ci && uv sync                 # install (Node 22 + mystmd 1.11.0; Python 3.12+ via uv)
 npm run dev                       # live site at http://localhost:3000 (myst start in content/)
-npm run check                     # front matter, labels, graph, toc, notation lint, spelling, checker tests
+npm run check                     # front matter, labels, graph, toc, notation lint, widgets, spelling, checker tests
+npm run test:widgets              # widget maths against SymPy fixtures, and the plugin's logic (node --test)
 npm run build                     # generate, then scripts/build_site.sh: myst build (fails on any error or warning), redirects
-npm run all                       # check + build: everything CI runs (CI calls these same scripts). Run before every push.
+npm run all                       # check + test:widgets + build: everything CI runs (CI calls these same scripts). Run before every push.
 uv run python scripts/graph.py ready calc        # planned topics whose prerequisites are all ≥ reviewed
 uv run python scripts/graph.py closure calc-mean-value-theorem   # every transitive prerequisite
 uv run python scripts/check_labels.py --update-lock               # add your new labels to labels.lock
+uv run python widgets/_tests/make_fixtures.py                     # after adding a function-plot table: SymPy's expected values
 ```
 
 `npm run check` = `scripts/check_all.py` (`check_toc`, `check_frontmatter`, `check_labels
---forward-refs`, `graph.py check`, the notation lint; errors fail, warnings don't) + codespell +
-`pytest tests`. Every check prints `file:line: error: message`. Each script also runs alone
+--forward-refs`, `graph.py check`, the notation lint, `check_widgets`; errors fail, warnings
+don't) + codespell + `pytest tests`. Every check prints `file:line: error: message`. Each script also runs alone
 (`uv run python scripts/check_labels.py`) and takes `--root` (default `content/`).
 
 `dev` and `build` first run `npm run generate` (`scripts/generate.py`), which writes the
@@ -51,7 +55,6 @@ Coming later (and then part of `npm run all`):
 
 ```bash
 npm run verify                    # (stage 4) AST → answers → SymPy tests (pytest verify/) → coverage
-npm run test:widgets              # (stage 3) widget maths (node --test)
 ```
 
 ## Layout
@@ -64,12 +67,14 @@ content/tags.yml                       the controlled vocabulary for `tags`
 content/<subject>/index.md             subject landing page (calc-subject)
 content/<subject>/curriculum.yml       the plan: chapters, topics, prerequisites, objectives, results and proof policies
 content/<subject>/<chapter>/<topic>.md one topic page (the unit of work)
-widgets/*.mjs                          (stage 3) interactive widgets (anywidget ES modules, JSON-configured)
-plugins/topic-header.mjs               (stage 3) renders front matter (prerequisites, objectives, status)
+widgets/*.mjs, widgets/README.md       interactive widgets (anywidget ES modules, JSON-configured) and their catalogue
+widgets/_lib/, widgets/_tests/         shared helpers and pure maths modules; node tests against SymPy fixtures
+plugins/topic-header.mjs               {topic-header}, {where-this-leads}, {chapter-topics}: rendered from front matter
+                                       and curriculum.yml (logic in plugins/_lib/, tests in plugins/_tests/)
 verify/<subject>/<chapter>/test_*.py   (stage 4) SymPy tests, @covers("<label>")
 scripts/                               the checks (check_all.py and the scripts it runs), graph.py, generate.py,
                                        write_redirects.py, build_site.sh, myst_gate.sh, fetch_theme.sh
-schema/                                JSON Schemas: page front matter, curriculum.yml; (stage 3) widget configs
+schema/                                JSON Schemas: page front matter, curriculum.yml, widgets/<name>.schema.json
 labels.lock                            every label ever merged (06 §6.7)
 tests/                                 the checkers' tests; tests/fixtures/ has one broken project per check
 templates/                             copy these to start a page or test
@@ -112,19 +117,25 @@ docs/plan/                             the plan (architecture decisions)
   machine-checkable LaTeX subset (`\frac`, `\sqrt`, `\pi`, `e`, `\ln`, `\infty`, …), or
   `answer manual` for proofs. A `{solution}` follows each exercise, collapsed.
 - **Writing**: en-GB spelling, "we" for reasoning, "you" for instructions. No "clearly" or
-  "obviously". Alt text on every figure. Every widget sits alone in a `{figure}` labelled
-  `wdg-…`, whose caption is its text description (`templates/blocks.md`).
+  "obviously". Alt text on every figure.
+- **Widgets**: every widget sits alone in a `{figure}` labelled `wdg-…`, whose caption is its
+  text description (shown when the widget can't load), followed by **Try this:**. Its JSON
+  must validate against `schema/widgets/<name>.schema.json`, and its id goes in
+  `maths.widgets`; `check_widgets.py` checks all of it. Keys and the expression language
+  (`2*x`, `ln`, `pi`, `e`) are in `widgets/README.md`. Only built widgets may be used: today
+  `function-plot`. After adding or changing a `function-plot` with a `table`, run
+  `widgets/_tests/make_fixtures.py` (a test fails otherwise).
 
 ## How to add a topic
 
-Not possible yet: `{topic-header}` needs the stage 3 plugin (the build fails on an unknown
-directive), and step 5 needs stage 4. The procedure, once they exist:
+Steps 1–4 and 6–9 work now; step 5 needs `verify/` (stage 4), and the first topics also wait
+for stage 5 (Phase 1a starts after it). The procedure:
 
 1. Pick a topic from `uv run python scripts/graph.py ready <subject>` (or as assigned).
    Branch: `topic/<label>`.
 2. Copy `templates/topic.md` to the path in `content/<subject>/curriculum.yml` (`file` is
    relative to the subject folder). Fill in the front matter from the curriculum entry
-   (title, level, prerequisites, objectives, widgets); the entry's `results` list the labels
+   (title, level, prerequisites, objectives, and those of its widgets that are built); the entry's `results` list the labels
    and proof policies to write. Keep `status: draft`. To change the plan (a prerequisite, a
    title), change `curriculum.yml` first, in its own PR.
 3. Read the direct prerequisite pages, reuse their labels, and don't redefine anything.
