@@ -56,6 +56,7 @@ site:
     style: _static/custom.css          # tier/status badges, `rigor` dropdowns, a ∎ after proofs
   nav: []
   actions:
-    # Stage 5 adds `?template=erratum.yml` together with .github/ISSUE_TEMPLATE/erratum.yml.
+    # The erratum form, .github/ISSUE_TEMPLATE/erratum.yml (11 §11.4). Topic and chapter pages
+    # also link to it at their foot, with the page filled in ({where-this-leads}).
     - title: Report an error
-      url: https://github.com/vronnblom/maths/issues/new
+      url: https://github.com/vronnblom/maths/issues/new?template=erratum.yml

@@ -56,10 +56,17 @@ them takes responsibility for their review.
 
 ## 11.4 Errata process
 
-**Report**: the site header has a "Report an error" action (configured in `myst.yml`), and
-every page footer links to a pre-filled issue. The issue form `.github/ISSUE_TEMPLATE/erratum.yml`
-asks for:
-- page URL (pre-filled) and **label** of the block (definition/theorem/exercise) if known;
+**Report**: the site header has a "Report an error" action (configured in `myst.yml`) that
+opens the erratum form, and every topic and chapter page ends with a pre-filled link to it:
+the last line of `{where-this-leads}` (the plugin, 03 §3.6), "Found an error on this page?
+Report it", built from `project.github`. It fills in the form's `page` field with the page's
+label and source file (e.g. `calc-limit (content/calculus/limits/limit-of-a-function.md)`)
+and the issue title. That pair identifies the page exactly, and unlike the page URL it does
+not depend on the site's base URL (`/maths` on Pages, `/` in the CI preview), which the
+plugin does not know. Meta pages and the subject page have only the header action (they have
+no `{where-this-leads}`). The issue form `.github/ISSUE_TEMPLATE/erratum.yml` (stage 5) asks for:
+- the page (pre-filled from the page's link) and the **label** of the block
+  (definition/theorem/exercise) if known;
 - type: *mathematical error* · *unclear/misleading* · *typo/formatting* · *broken widget/link*;
 - what is wrong, and the suggested correction (optional);
 - how they found it (optional; helps write a regression test).
@@ -81,16 +88,20 @@ assign; confirm or close with an explanation.
 a visible "Known issue: see #123" admonition (a one-line PR) until fixed. The status is not
 downgraded unless the error shows systematic review failure on that page.
 
-## 11.5 Issue and PR templates (Phase 0)
+## 11.5 Issue and PR templates (Phase 0, built in stage 5)
 
 - `ISSUE_TEMPLATE/erratum.yml` (above)
 - `ISSUE_TEMPLATE/new-topic.yml`: label, subject, chapter, proposed prerequisites, objectives,
   and why the topic is needed
 - `ISSUE_TEMPLATE/widget.yml`: purpose, the topic(s) it serves, interaction sketch, the
   mathematics it computes
+- `ISSUE_TEMPLATE/config.yml`: the issue chooser, with links to `CONTRIBUTING.md` and the site
+  (blank issues stay allowed)
 - `pull_request_template.md`: type of PR; summary of the mathematics; theorems added with
   F/R/S/D; verification coverage (pasted from `check_coverage.py`); proof checklist (06 §6.3)
-  for topic PRs; screenshots of new widgets; "I have not copied from incompatible sources" ✔
+  for topic PRs; screenshots of new widgets; "I have not copied from incompatible sources" ✔.
+  The proof checklist is a copy of 06 §6.3; `tests/test_github_templates.py` fails if the two
+  drift apart (it also checks the erratum form's field ids, which the page links fill in).
 
 ## 11.6 Versioning and releases
 

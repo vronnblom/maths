@@ -1,0 +1,24 @@
+# Weekly dependency updates (docs/plan/05-tooling-and-build.md §5.4). Not covered, on purpose:
+# - mystmd and the book-theme pin in content/myst.yml move together, by hand, in one upgrade PR
+#   (with the visual check of the pages), so Dependabot never bumps mystmd alone;
+# - jsxgraph must equal the version in the URL in widgets/_lib/jsxgraph.mjs (a widget test
+#   checks it), so it too moves by hand, both at once.
+version: 2
+updates:
+  - package-ecosystem: github-actions        # the actions are pinned by SHA; the comment keeps the tag
+    directory: /
+    schedule: { interval: weekly }
+    groups:
+      actions: { patterns: ["*"] }           # one PR for all of them
+  - package-ecosystem: npm
+    directory: /
+    schedule: { interval: weekly }
+    ignore:
+      - dependency-name: mystmd
+      - dependency-name: jsxgraph
+  - package-ecosystem: uv                    # uv.lock; Dependabot supports uv since 2025
+    directory: /
+    schedule: { interval: weekly }
+    versioning-strategy: lockfile-only       # update uv.lock within pyproject.toml's ranges, never the ranges
+    groups:
+      python: { patterns: ["*"] }

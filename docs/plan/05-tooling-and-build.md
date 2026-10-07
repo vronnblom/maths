@@ -141,8 +141,24 @@ about 100 pages.
 | **pyyaml** | lock | front matter parsing in scripts | ruamel (round-trip not needed) |
 | **jsonschema** | lock | front matter and widget config validation | hand-written validation |
 | **codespell** | lock | spelling: few false positives on math-heavy text because it only flags *known* misspellings | cspell (needs a large allowlist for math tokens) |
-| **lychee** (GitHub Action) | pinned action SHA | weekly external-link check | `myst build --check-links` (also usable; lychee gives a nicer report and runs on a schedule) |
+| **lychee** (GitHub Action) | pinned action SHA (`lycheeverse/lychee-action` v2.9.0, which pins lychee 0.24.2) | weekly external-link check (`links.yml`, §5.7) | `myst build --check-links` (also usable; lychee gives a nicer report and runs on a schedule) |
 | GitHub Actions: `actions/checkout`, `setup-node`, `astral-sh/setup-uv`, `upload-pages-artifact`, `deploy-pages` | pinned by SHA, Dependabot | CI and deploy | – |
+
+**Dependabot** (`.github/dependabot.yml`, stage 5) opens weekly PRs for three ecosystems:
+- `github-actions`: every action is pinned by SHA with the tag in a comment; Dependabot updates
+  both, grouped into one PR;
+- `npm`: everything except **mystmd** and **jsxgraph**, which it ignores. mystmd is pinned
+  exactly and moves only together with the theme pin, in one hand-made upgrade PR with the
+  visual check (§5.5); Dependabot doesn't know the theme pin, so a mystmd bump alone would
+  pair a new engine with an old theme. jsxgraph must equal the version in the widgets' import
+  URL (a widget test checks it), so it also moves by hand, both at once;
+- `uv`: Dependabot supports `uv.lock` (since March 2025).
+  `versioning-strategy: lockfile-only` keeps it to lockfile updates within `pyproject.toml`'s
+  ranges. The default strategy would raise the lower bounds in `pyproject.toml`, and a range
+  such as `antlr4-python3-runtime==4.11.*` (which SymPy requires) must only change by hand.
+  The updates are grouped into one PR.
+
+The theme pin itself is outside every ecosystem Dependabot knows (§5.5).
 
 Not used, on purpose: a CSS framework, a bundler (unless the JSXGraph CDN import proves
 unreliable, then **esbuild** bundles widgets), a Markdown linter (the MyST build plus our
@@ -373,8 +389,9 @@ npm run all
 
 `myst start` rebuilds on save and shows warnings (broken refs, unknown directives) in the
 terminal. Agents in Claude Code cloud sessions get the same environment through a
-SessionStart hook (Phase 0) that runs `npm ci && uv sync`; the first build then fetches the
-pinned theme with git (see "How the theme reaches cloud sessions" in §5.5).
+SessionStart hook (`.claude/hooks/session-start.sh`, 10 §10.6) that runs `npm ci` (only
+when `node_modules/` doesn't match the lockfile), `uv sync --frozen` and `fetch_theme.sh`, so
+the theme is there before the first build (see "How the theme reaches cloud sessions" in §5.5).
 
 ## 5.7 CI and deployment
 
@@ -510,9 +527,21 @@ Branch protection on `main`: require `checks`, `verify`, `build` (ci.yml) and `v
 
 ### `.github/workflows/links.yml`
 
-This runs weekly (cron) plus manual dispatch. It runs lychee over the built HTML and opens or
-updates an issue "External links report" if anything is broken. It never blocks PRs, because
-external sites flake.
+This runs weekly (cron, Monday morning UTC) plus manual dispatch, never on pull requests, so it
+never blocks one: external sites flake. It builds the site with `npm run build` and runs lychee
+over the HTML. `--root-dir` turns root-relative links into `file://` links, which
+`--scheme https --scheme http` leaves out, so only external links are checked (internal ones
+are the build gate's job); a 429 counts as fine. Then `scripts/links_report.sh` keeps one issue,
+"External links report", in step: opened or updated with lychee's report when links are
+broken, closed when they all pass again. Only runs on `main` touch the issue (a dispatch on a
+branch writes just the job summary). The workflow has `permissions: {}` and its one job
+`contents: read` and `issues: write`. A lychee error that isn't a broken link (bad arguments,
+no input) fails the run.
+
+Stage 5 ran lychee 0.24.2 locally on the build with the same arguments: 43 external links
+fine and 12 redirected; the only errors were the 19 links to github.com (the repository,
+`issues/new`, the theme's `edit/main/…` links), because cloud sessions get 403/404 for
+github.com web pages. Those are checked for real on the runner.
 
 ### PR previews
 

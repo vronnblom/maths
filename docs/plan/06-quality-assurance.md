@@ -200,8 +200,10 @@ figure's table is checked automatically. `npm run test:widgets` runs them locall
 
 ## 6.3 Proof review checklist
 
-This is used by the human reviewer and by the AI reviewer agent. It is copied into the PR
-template for topic PRs.
+This is used by the human reviewer and by the AI reviewer agent (`/review-math`, which reads
+it from here). It is copied into `.github/pull_request_template.md` for topic PRs; change both
+together (`tests/test_github_templates.py` fails if they differ). In the copy, `\eps` is written
+`\varepsilon` (GitHub doesn't know our macros) and the links to 04 and 07 are paths.
 
 **Statements**
 - [ ] Every hypothesis is stated, and the statement is false without each one (a remark or the

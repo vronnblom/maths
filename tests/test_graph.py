@@ -16,8 +16,19 @@ def test_curriculum_counts_match_08():
     assert sum(t.level == "extension" for t in cur.topics.values()) == 5
 
 
-def test_ready_lists_topics_without_unmet_prerequisites():
-    rows = graph.ready(Project(ROOT), "calc")
+def _plan_only(tmp_path) -> Project:
+    """The real curriculum with no pages written: what these tests assert must not change when
+    Phase 1a writes the first topics."""
+    import shutil
+
+    (tmp_path / "content" / "calculus").mkdir(parents=True)
+    shutil.copy(ROOT / "calculus" / "curriculum.yml", tmp_path / "content" / "calculus")
+    (tmp_path / "content" / "myst.yml").write_text("version: 1\nproject:\n  toc:\n    - file: index.md\n")
+    return Project(tmp_path / "content")
+
+
+def test_ready_lists_topics_without_unmet_prerequisites(tmp_path):
+    rows = graph.ready(_plan_only(tmp_path), "calc")
     labels = [r[0] for r in rows]
     assert "calc-real-numbers" in labels
     assert "calc-limit" not in labels  # its prerequisites are not written yet
@@ -38,8 +49,8 @@ def test_closure_cli(capsys):
     assert graph.main(["closure", "calc-no-such-topic"]) == 2
 
 
-def test_mermaid_lists_every_topic():
-    text = graph.mermaid(Project(ROOT), "calc", base_url="/maths")
+def test_mermaid_lists_every_topic(tmp_path):
+    text = graph.mermaid(_plan_only(tmp_path), "calc", base_url="/maths")
     assert text.count("```{mermaid}") == 12  # the chapter overview, then one per chapter
     for label in Project(ROOT).curriculum_for_subject("calc").topics:
         assert f'  {label.replace("-", "_")}["' in text

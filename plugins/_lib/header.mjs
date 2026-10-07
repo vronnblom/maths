@@ -169,8 +169,27 @@ export function topicHeader(fm, rel, index, { parseInline = (s) => [text(s)], gi
 
 // ── {where-this-leads} ───────────────────────────────────────────────────────
 
-export function whereThisLeads(fm, rel, index) {
+/**
+ * The erratum form with the page filled in (docs/plan/11 §11.4): its label and source file, which
+ * identify it exactly whatever the site's base URL (the field ids are those of
+ * .github/ISSUE_TEMPLATE/erratum.yml). `github` is project.github.
+ */
+export function erratumUrl(fm, rel, github) {
+  const q = { template: "erratum.yml", title: `Erratum: ${fm.title}`, page: `${fm.label} (content/${rel})` };
+  return `${github}/issues/new?${Object.entries(q).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join("&")}`;
+}
+
+/** The last line of {where-this-leads}: a link that reports an error on this page. */
+function erratumLine(fm, rel, github) {
+  if (!github) return [];
+  const link = { type: "link", url: erratumUrl(fm, rel, github), children: [text("Report it")] };
+  return [paragraph(text(`Found an error on this ${fm.maths.kind === "topic" ? "page" : "chapter page"}? `), link,
+    text(" (the form opens with this page filled in)."))];
+}
+
+export function whereThisLeads(fm, rel, index, { github = null } = {}) {
   const m = readMaths(fm, rel);
+  const footer = erratumLine(fm, rel, github);
   let labels;
   if (m.kind === "topic") {
     labels = [...(index.dependants.get(m.label) ?? [])];
@@ -180,13 +199,14 @@ export function whereThisLeads(fm, rel, index) {
     const own = new Set(ch.topics);
     labels = [...new Set(ch.topics.flatMap((t) => [...(index.dependants.get(t) ?? [])]))].filter((l) => !own.has(l));
   }
-  if (!labels.length) return [paragraph(text(`Nothing builds on this ${m.kind} yet.`))];
+  if (!labels.length) return [paragraph(text(`Nothing builds on this ${m.kind} yet.`)), ...footer];
   return [
     paragraph(text(m.kind === "topic" ? "These topics build on this one:" : "These topics build on this chapter:")),
     {
       type: "list", ordered: false, spread: false,
       children: sortTopics(labels, index).map((l) => ({ type: "listItem", spread: false, children: [paragraph(...topicRef(l, index, rel))] })),
     },
+    ...footer,
   ];
 }
 

@@ -1,0 +1,41 @@
+# Propose an interactive widget (docs/plan/11 §11.5). Built widgets and the planned ones are in
+# widgets/README.md; a new widget lands in its own `widget` pull request (docs/plan/10 §10.2).
+name: Widget
+description: Propose an interactive widget, or a new mode for an existing one.
+title: "Widget: "
+labels: [widget]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Check the [widget catalogue](https://github.com/vronnblom/maths/blob/main/widgets/README.md)
+        first: the widget may already be planned, or an existing one may do it with a new option.
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Purpose
+      description: What the reader should see or understand by playing with it.
+    validations:
+      required: true
+  - type: input
+    id: topics
+    attributes:
+      label: Topics it serves
+      description: The labels of the topic pages that would use it.
+      placeholder: calc-limit, calc-squeeze-theorem
+    validations:
+      required: true
+  - type: textarea
+    id: interaction
+    attributes:
+      label: Interaction sketch
+      description: What is drawn, what the reader can drag or set, and what changes in response. A sketch or screenshot helps. It must work with the keyboard alone.
+    validations:
+      required: true
+  - type: textarea
+    id: mathematics
+    attributes:
+      label: The mathematics it computes
+      description: Every number the widget shows (a δ, a Riemann sum, a root, …) and how it is computed. These are tested against SymPy.
+    validations:
+      required: true

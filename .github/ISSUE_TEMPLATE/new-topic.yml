@@ -1,0 +1,70 @@
+# Propose a topic that is not in the curriculum yet (docs/plan/11 §11.5). Topics that are
+# already planned are in content/<subject>/curriculum.yml; to write one, use /new-topic.
+name: New topic
+description: Propose a topic page that is not in the curriculum yet.
+title: "New topic: "
+labels: [curriculum]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Check [`content/calculus/curriculum.yml`](https://github.com/vronnblom/maths/blob/main/content/calculus/curriculum.yml)
+        and the open issues first: the topic may already be planned. A new topic changes the
+        curriculum, so it lands in a `curriculum` pull request that the maintainer approves
+        ([10 §10.2](https://github.com/vronnblom/maths/blob/main/docs/plan/10-ai-agents.md#102-unit-of-work-and-pr-types)).
+  - type: input
+    id: label
+    attributes:
+      label: Proposed label
+      description: "`<subject>-<slug>`, lowercase letters, digits and hyphens only."
+      placeholder: calc-hyperbolic-functions
+    validations:
+      required: true
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      placeholder: Hyperbolic Functions
+    validations:
+      required: true
+  - type: dropdown
+    id: subject
+    attributes:
+      label: Subject
+      options:
+        - calc (Calculus)
+        - another subject (say which below)
+    validations:
+      required: true
+  - type: input
+    id: chapter
+    attributes:
+      label: Chapter
+      description: The chapter folder it belongs in, e.g. `preliminaries` or `integration-techniques`.
+    validations:
+      required: true
+  - type: textarea
+    id: prerequisites
+    attributes:
+      label: Proposed prerequisites
+      description: The labels of the topics a reader needs first (direct prerequisites only).
+      placeholder: "calc-exponential-functions, calc-derivatives-exp-log"
+    validations:
+      required: true
+  - type: textarea
+    id: objectives
+    attributes:
+      label: Objectives
+      description: 2–6 things a reader can do afterwards, each starting with an observable verb (state, compute, prove, …).
+      placeholder: |
+        - Define sinh, cosh and tanh and sketch their graphs.
+        - Prove the identity cosh²x − sinh²x = 1.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why the topic is needed
+      description: Which pages or readers need it, and why the existing pages don't cover it.
+    validations:
+      required: true
