@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/vronnblom/maths/schema/widgets/epsilon-delta.schema.json",
   "title": "epsilon-delta widget config",
-  "description": "The JSON body of ```{anywidget} …/widgets/epsilon-delta.mjs (docs/plan/05 §5.8, widgets/README.md): the graph of f near a, the band |y − L| < ε, the window 0 < |x − a| < δ, an ε slider with the largest δ on each side, and a δ slider with a verdict. Rules JSON Schema cannot express (ranges increasing, a strictly inside xRange, L inside yRange, eps inside epsRange, delta and epsStep small enough, the names in f) are checked by scripts/check_widgets.py and widgets/_lib/epsdelta.mjs.",
+  "description": "The JSON body of ```{anywidget} …/widgets/epsilon-delta.mjs (docs/plan/05 §5.8, widgets/README.md): the graph of f near a, the band |y − L| < ε, the window 0 < |x − a| < δ, an ε slider with the largest δ the widget finds on each side, and a δ slider with a verdict. Rules JSON Schema cannot express (ranges increasing, a strictly inside xRange, L inside yRange, eps inside epsRange, delta and epsStep small enough, eps and delta on their sliders' grids, the names in f, and f compiling with JessieCode) are checked by scripts/check_widgets.py and widgets/_lib/epsdelta.mjs.",
   "type": "object",
   "additionalProperties": false,
   "required": ["f", "a", "L", "eps", "epsRange", "xRange", "yRange"],
@@ -18,7 +18,7 @@
       "type": "number"
     },
     "L": {
-      "description": "The claimed limit: the centre of the ε-band. It must lie inside yRange. A wrong L is allowed (the widget then finds no δ for small ε).",
+      "description": "The claimed limit: the centre of the ε-band. It must lie inside yRange. A wrong L is allowed (the widget then observes no δ for small ε).",
       "type": "number"
     },
     "eps": {
@@ -44,7 +44,7 @@
       "exclusiveMinimum": 0
     },
     "xRange": {
-      "description": "[min, max] of the x-axis shown at first. The largest δ is searched up to its ends.",
+      "description": "[min, max] of the x-axis shown at first. The widget searches for the largest δ up to its ends.",
       "$ref": "#/$defs/range"
     },
     "yRange": {

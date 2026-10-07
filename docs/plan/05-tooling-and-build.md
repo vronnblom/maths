@@ -643,7 +643,7 @@ git-ignored, so stale copies can't be committed.
   the page hydrates (§5.3), so `render()` replaces its element's content and returns a cleanup.
 - **Catalogue** (built as the curriculum needs them, see 08; `widgets/README.md` documents
   each built widget's keys): `function-plot` (built in stage 3: a graph, parameter sliders, a
-  table of values, a hole, a traced point, zoom; its other modes come with their pages), `epsilon-delta` (built in Phase 1a for `calc-limit`: the ε-band, the δ-window, the largest δ on each side, the reader's δ checked), `secant-tangent`, `zoom-to-linear`, `riemann-sum`,
+  table of values, a hole, a traced point, zoom; its other modes come with their pages), `epsilon-delta` (built in Phase 1a for `calc-limit`: the ε-band, the δ-window, the largest δ the widget finds on each side, the reader's δ checked), `secant-tangent`, `zoom-to-linear`, `riemann-sum`,
   `area-accumulation` (FTC), `taylor`, `partial-sums`, `slope-field`, `newton-method`,
   `solid-of-revolution` (JSXGraph 3D), `prereq-graph` (Phase 7).
 - Desmos/GeoGebra are allowed **only** as optional "explore further" links, never as core
@@ -655,7 +655,13 @@ git-ignored, so stale copies can't be committed.
   stale). For `function-plot`: JessieCode's values, the table of every `function-plot` figure
   on the site, the value at a hole (the limit, from both sides), and where the sampled graph
   breaks (poles and jumps, against SymPy's singularities). For `epsilon-delta`: the largest δ
-  on each side against SymPy's exact value (it solves |f(x) − L| < ε), for a linear f, x² at 2,
-  √x near 0, 1/x, a jump, sin(1/x), an unbounded f, a wrong L and every figure on the site. The
-  reported δ is rounded **down**, so the test asserts reported ≤ exact and within 2 × 10⁻⁵ of
-  it, not equality; "no δ" must agree exactly (widgets/README.md has the method).
+  the widget finds on each side against SymPy's exact value, for a linear f, x² at 2, √x near
+  0, 1/x, a jump, sin(1/x), an unbounded f, a wrong L, a steep f (δ = 5 × 10⁻⁸), |x| (where
+  SymPy 1.14's own `solveset` is wrong), every one of these again translated to a = 10⁵ (where
+  neighbouring doubles are 1.5 × 10⁻¹¹ apart), and every figure on the site. The reported δ is
+  rounded **down**, so the test asserts reported ≤ exact and within 2 × 10⁻⁵ of it (plus the
+  gap between the doubles near a), not equality; "no δ observed" must agree exactly with
+  SymPy's "no δ". SymPy is not trusted blindly: `make_fixtures.py` certifies each δ by two
+  routes and a symbolic check of the boundary, and refuses what it cannot certify (06 §6.2).
+  The widget itself only reports what it checked: a δ it found, no δ observed, or that it
+  could not settle the question (widgets/README.md has the method and the wording).
