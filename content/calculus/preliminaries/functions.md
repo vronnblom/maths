@@ -75,7 +75,16 @@ $-2$, and $x = -1$ gets none.
 Because each $x$ has only one value, a vertical line $x = c$ meets the graph of a function at
 most once: at the point $(c, f(c))$ if $c$ is an allowed input, and nowhere otherwise. This is
 the **vertical line test**: a curve in the plane is the graph of a function of $x$ exactly when
-no vertical line meets it twice.
+no vertical line meets it twice ([](#fig-calc-functions-vertical-line-test)).
+
+:::{figure} ./img/vertical-line-test.svg
+:label: fig-calc-functions-vertical-line-test
+:alt: Two coordinate planes side by side. On the left, the parabola y = x squared, with a dashed vertical line at x = 1.5 that meets it at exactly one point. On the right, the sideways parabola y squared = x, opening to the right, with a dashed vertical line at x = 2.5 that meets it at two points, one above and one below the x-axis.
+
+The vertical line test. Left: the graph of $y = x^2$; every vertical line meets it exactly
+once. Right: the curve $y^2 = x$ of the non-example; the vertical line $x = 2.5$ meets it twice,
+so it is not the graph of a function of $x$.
+:::
 
 :::{proof:definition} Domain and range
 :label: def-calc-domain-range
@@ -101,45 +110,73 @@ codomain is only a set that is promised to contain every value, and it may be la
 the range. To find the range you must show two things: every value $f(x)$ lies in the set
 you claim, and every element of that set is a value $f(x)$ for some $x$.
 
+:::{admonition} Range, image and codomain
+:class: note
+The range is also called the **image** of $f$. Some books use the word "range" for what we
+call the codomain. On this site the range is always the set of values $\ran f$ of
+[](#def-calc-domain-range).
+:::
+
 **Example.** For $f(x) = \sqrt{x - 1}$, the square root needs $x - 1 \ge 0$, so
 $\dom f = [1, \infty)$. Every square root is $\ge 0$, and each $y \ge 0$ is the value at
-$x = y^2 + 1$, so $\ran f = [0, \infty)$.
+$x = y^2 + 1$, because $\sqrt{y^2} = y$ for $y \ge 0$. So $\ran f = [0, \infty)$.
+
+% TODO link: rem-calc-square-roots once vronnblom/maths#8 is merged
 
 **Non-example.** For $g\colon \R \to \R$, $g(x) = x^2$, the codomain is $\R$, but the range is
 not: $-1$ is not in $\ran g$, because no real $x$ has $x^2 = -1$. Here $\ran g = [0, \infty)$.
 
 **Reading a graph.** The domain is the shadow of the graph on the $x$-axis: the set of $x$
 that have a point of the graph directly above or below them. The range is the shadow on the
-$y$-axis: the set of heights that the graph reaches. A sketch suggests the domain and range;
-the algebra above confirms them.
+$y$-axis: the set of heights that the graph reaches
+([](#fig-calc-functions-domain-range-shadows)). A sketch suggests the domain and range; the
+algebra above confirms them.
+
+:::{figure} ./img/domain-range-shadows.svg
+:label: fig-calc-functions-domain-range-shadows
+:alt: The graph of y = square root of (x minus 1): a curve that starts at the point (1, 0) and rises ever more slowly to the right. A shaded band on the x-axis runs from 1 to the right, and a shaded band on the y-axis runs from 0 upwards. Dashed lines join the point (5, 2) of the graph to 5 on the x-axis and to 2 on the y-axis.
+
+Domain and range as shadows, for $f(x) = \sqrt{x - 1}$. The shadow of the graph on the
+$x$-axis is $\dom f = [1, \infty)$, and its shadow on the $y$-axis is $\ran f = [0, \infty)$.
+The point $(5, 2)$ of the graph casts $5$ into the domain and $2 = f(5)$ into the range.
+:::
 
 **Sketching a graph.** For a first sketch, find the domain, compute a few values (including
 any points where the formula changes, and where the graph crosses an axis), plot them, and
-join them in order of increasing $x$, leaving gaps where $x$ is not in the domain.
+join them in order of increasing $x$, leaving gaps where $x$ is not in the domain. Where the
+formula changes, compare the heights that the two pieces give there before you join across
+that point: if they differ, the graph jumps, and no segment is drawn across the jump. For
+example, the function that is $0$ for $x < 0$ and $1$ for $x \ge 0$ has domain $\R$, but its
+graph is two horizontal pieces, with no segment from $(-1, 0)$ to $(0, 1)$.
 
 ## Symmetry and monotonicity
 
 Two kinds of shape recur throughout calculus. Some graphs look the same after a reflection:
 the graph of $y = x^2$ is unchanged by reflection in the $y$-axis. Some functions only ever go
 up (or only ever go down) as $x$ moves to the right. Both properties save work: a symmetric
-graph needs to be sketched only for $x \ge 0$, and a function that only goes up takes each
-value at most once.
+graph needs to be sketched only for $x \ge 0$, and a function that always goes up (one that
+is *strictly* increasing, in the words of the definition below) takes each value at most
+once.
 
 :::{proof:definition} Even and odd functions
 :label: def-calc-even-odd
 
-Let $f$ be a function whose domain is symmetric about $0$: whenever $x \in \dom f$, also
-$-x \in \dom f$.
+Let $f$ be a function. Its domain is **symmetric about $0$** if $-x \in \dom f$ whenever
+$x \in \dom f$.
 
-- $f$ is **even** if $f(-x) = f(x)$ for every $x \in \dom f$.
-- $f$ is **odd** if $f(-x) = -f(x)$ for every $x \in \dom f$.
+- $f$ is **even** if $\dom f$ is symmetric about $0$ and $f(-x) = f(x)$ for every
+  $x \in \dom f$.
+- $f$ is **odd** if $\dom f$ is symmetric about $0$ and $f(-x) = -f(x)$ for every
+  $x \in \dom f$.
 :::
 
 **In words.** An even function takes the same value at $x$ and at $-x$, so its graph is
 symmetric under reflection in the $y$-axis. An odd function takes opposite values at $x$ and
 $-x$, so its graph is symmetric under a half-turn about the origin: if $(x, y)$ is on the
-graph, so is $(-x, -y)$. The condition must hold for *every* $x$ in the domain; one $x$ where
-it fails is enough to show that a function is not even (or not odd).
+graph, so is $(-x, -y)$. Both need a domain that is symmetric about $0$, so a function whose
+domain is not symmetric is neither even nor odd. The condition on the values must hold for
+*every* $x$ in the domain; one $x$ where it fails is enough to show that a function is not
+even (or not odd).
 
 **Example.** $x \mapsto x^4 - 3x^2$ is even and $x \mapsto x^3$ is odd. The names come from
 these examples: a polynomial with only even powers of $x$ is even, and one with only odd
@@ -173,8 +210,10 @@ the other way round: a function that is increasing may stay level for a while. T
 definition compares *any two* points of $S$, not just neighbouring ones.
 
 **Example.** $f(x) = 2x + 1$ is strictly increasing on $\R$: if $x_1 < x_2$, then
-$2x_1 + 1 < 2x_2 + 1$. A constant function is both increasing and decreasing, but neither
-strictly increasing nor strictly decreasing. The function
+$2x_1 + 1 < 2x_2 + 1$. A constant function on a set $S$ with at least two points is both
+increasing and decreasing on $S$, but neither strictly increasing nor strictly decreasing on
+$S$. (On a set with only one point there are no $x_1 < x_2$ to compare, so every function is
+strictly increasing and strictly decreasing there.) The function
 $$
 g(x) =
 \begin{cases}
@@ -182,7 +221,18 @@ g(x) =
 x, & x \ge 0,
 \end{cases}
 $$
-is increasing on $\R$ but not strictly increasing, because $g(-2) = g(-1) = 0$.
+is increasing on $\R$ but not strictly increasing, because $g(-2) = g(-1) = 0$
+([](#fig-calc-functions-increasing-vs-strictly)).
+
+:::{figure} ./img/increasing-vs-strictly.svg
+:label: fig-calc-functions-increasing-vs-strictly
+:alt: Two graphs side by side. On the left, a graph that runs along the x-axis at height 0 from x = -3 to x = 0 and then rises in a straight line to the point (3, 3). On the right, the cubic curve y = x cubed from x = -1.5 to x = 1.5, which rises everywhere and flattens out briefly near the origin without becoming level.
+
+Left: the function $g$ above is increasing on $\R$ but not strictly increasing: it stays level
+for $x < 0$. Right: $x \mapsto x^3$ is strictly increasing on $\R$
+([](#exr-calc-functions-cube-increasing) proves it). Its graph is very flat near $0$, but no two
+points of it are at the same height.
+:::
 
 **Non-example.** $h(x) = x^2$ is not monotone on $\R$: $-1 < 0$ with $h(-1) > h(0)$, but
 $0 < 1$ with $h(0) < h(1)$. It is strictly decreasing on $(-\infty, 0]$ and strictly
@@ -233,6 +283,8 @@ $$
 \boxed{\ran f = [1, \infty)}
 $$
 
+% TODO link: rem-calc-square-roots once vronnblom/maths#8 is merged
+
 **Check.** For $y = 10$, step 3 gives $x = 2 + 3 = 5$, and indeed $f(5) = 25 - 20 + 5 = 10$.
 The smallest value is $f(2) = 4 - 8 + 5 = 1$. ✓
 :::
@@ -250,8 +302,9 @@ Decide whether each function is even, odd or neither.
 3. $h(x) = x^2 + x$. As in the non-example above, $h(1) = 2$ and $h(-1) = 0$, so $h$ is
    neither.
 4. $k\colon [-1, 2] \to \R$, $k(x) = x^2$. The formula is the same as for an even function,
-   but $2 \in \dom k$ while $-2 \notin \dom k$. The domain is not symmetric about $0$, so $k$
-   is neither even nor odd: the definition does not apply to it.
+   but $2 \in \dom k$ while $-2 \notin \dom k$. The domain is not symmetric about $0$, and
+   [](#def-calc-even-odd) asks for a symmetric domain both for even and for odd. So $k$ is
+   neither even nor odd.
 
 **Check.** $f(2) = 8 - 2 = 6$ and $f(-2) = -8 + 2 = -6 = -f(2)$; $g(3) = \frac{1}{8} = g(-3)$. ✓
 :::
@@ -307,6 +360,8 @@ $$
 \boxed{A(x) = x(40 - 2x) \text{ m}^2, \quad \dom A = (0, 20), \quad \ran A = (0, 200]}
 $$
 
+% TODO link: rem-calc-square-roots once vronnblom/maths#8 is merged
+
 So the largest possible pen has area $200$ m², when $x = 10$ m. Notice that the domain came
 from the situation, not from the formula: the natural domain of $x(40 - 2x)$ is all of $\R$.
 
@@ -326,7 +381,7 @@ $x \ne 1$.
 The graph is the line $y = x + 1$ with the point $(1, 2)$ missing.
 :::
 
-:::{warning} Decreasing on each piece is not decreasing
+:::{warning} Decreasing on each piece need not mean decreasing
 ✗ **Wrong:** "$f(x) = \dfrac{1}{x}$ is decreasing."
 
 **Why:** [](#def-calc-monotone) compares *any* two points of the domain. Here $-1 < 1$, but
@@ -344,8 +399,9 @@ or odd."
 $f(-1) = 0$ but $-f(1) = -2$, so $f$ is not odd; and $f(-1) \ne f(1) = 2$, so it is not even
 either. Most functions are neither.
 
-✓ **Right:** check $f(-x) = f(x)$ or $f(-x) = -f(x)$ for *every* $x$ in the (symmetric)
-domain; to rule one out, a single $x$ where it fails is enough.
+✓ **Right:** check that the domain is symmetric about $0$, then check $f(-x) = f(x)$ or
+$f(-x) = -f(x)$ for *every* $x$ in it; to rule one out, a single $x$ where it fails is
+enough.
 :::
 
 ## Rigorous track
@@ -386,8 +442,10 @@ that distinction.
 - $\dom f$ is the set of inputs; $\ran f = \{f(x) : x \in \dom f\}$ is the set of values. A
   formula with no stated domain has its natural domain. To find a range, show both inclusions.
 - In a model, the domain comes from the situation, not only from the formula.
-- On a domain symmetric about $0$: *even* means $f(-x) = f(x)$ (mirror symmetry in the
-  $y$-axis), *odd* means $f(-x) = -f(x)$ (half-turn symmetry about the origin).
+- *Even* means that $\dom f$ is symmetric about $0$ and $f(-x) = f(x)$ (mirror symmetry in
+  the $y$-axis); *odd* means that $\dom f$ is symmetric about $0$ and $f(-x) = -f(x)$
+  (half-turn symmetry about the origin). A function whose domain is not symmetric is
+  neither.
 - *Increasing* on $S$: $x_1 < x_2$ implies $f(x_1) \le f(x_2)$. *Strictly increasing*:
   $x_1 < x_2$ implies $f(x_1) < f(x_2)$. Always say on which set.
 
@@ -586,6 +644,8 @@ positive reciprocal, and a number $\ge 1$ has a reciprocal $\le 1$, so $0 < f(x)
 $x = \sqrt{\frac{1}{y} - 1}$ is a real number, and
 $f(x) = \frac{1}{\left(\frac{1}{y} - 1\right) + 1} = \frac{1}{1/y} = y$.
 
+% TODO link: rem-calc-square-roots once vronnblom/maths#8 is merged
+
 So $\ran f = (0, 1]$. The value $1$ is taken at $x = 0$; the value $0$ is never taken.
 ::::
 
@@ -650,68 +710,6 @@ $f(x) = (x - 1)^2 - 1$, shows the full picture: $f$ is strictly decreasing on $[
 strictly increasing on $[1, \infty)$.
 ::::
 
-::::{exercise} The square root is strictly increasing
-:label: exr-calc-functions-sqrt-increasing
-:class: tier-b
-
-Show from [](#def-calc-monotone) that $x \mapsto \sqrt{x}$ is strictly increasing on
-$[0, \infty)$.
-
-:::{admonition} Hint 1
-:class: dropdown hint
-For $0 \le x_1 < x_2$, multiply $\sqrt{x_2} - \sqrt{x_1}$ by
-$\frac{\sqrt{x_2} + \sqrt{x_1}}{\sqrt{x_2} + \sqrt{x_1}}$. Why is that denominator not zero?
-:::
-
-:::{admonition} Answer
-:class: dropdown answer manual
-For $0 \le x_1 < x_2$, $\sqrt{x_2} - \sqrt{x_1} = \dfrac{x_2 - x_1}{\sqrt{x_2} + \sqrt{x_1}} > 0$.
-:::
-::::
-
-::::{solution} exr-calc-functions-sqrt-increasing
-:label: sol-calc-functions-sqrt-increasing
-:class: dropdown
-Let $0 \le x_1 < x_2$. Then $x_2 > 0$, so $\sqrt{x_2} > 0$, and $\sqrt{x_1} \ge 0$; hence
-$\sqrt{x_2} + \sqrt{x_1} > 0$. Using $(a - b)(a + b) = a^2 - b^2$,
-$$
-\sqrt{x_2} - \sqrt{x_1}
-= \frac{\bigl(\sqrt{x_2} - \sqrt{x_1}\bigr)\bigl(\sqrt{x_2} + \sqrt{x_1}\bigr)}{\sqrt{x_2} + \sqrt{x_1}}
-= \frac{x_2 - x_1}{\sqrt{x_2} + \sqrt{x_1}} .
-$$
-The numerator and the denominator are both positive, so $\sqrt{x_1} < \sqrt{x_2}$. As
-$x_1 < x_2$ in $[0, \infty)$ were arbitrary, the square root is strictly increasing on
-$[0, \infty)$.
-::::
-
-::::{exercise} Odd functions vanish at zero
-:label: exr-calc-functions-odd-at-zero
-:class: tier-b
-
-Let $f$ be an odd function with $0 \in \dom f$. Show that $f(0) = 0$. Use this to give a
-second reason why $x \mapsto x^3 + 1$ is not odd.
-
-:::{admonition} Hint 1
-:class: dropdown hint
-Put $x = 0$ in the condition $f(-x) = -f(x)$.
-:::
-
-:::{admonition} Answer
-:class: dropdown answer manual
-$f(0) = f(-0) = -f(0)$, so $2f(0) = 0$; and $0^3 + 1 = 1 \ne 0$.
-:::
-::::
-
-::::{solution} exr-calc-functions-odd-at-zero
-:label: sol-calc-functions-odd-at-zero
-:class: dropdown
-Since $f$ is odd and $0 \in \dom f$, the condition $f(-x) = -f(x)$ holds for $x = 0$. As
-$-0 = 0$, it says $f(0) = -f(0)$, so $2 f(0) = 0$ and $f(0) = 0$.
-
-The function $x \mapsto x^3 + 1$ has domain $\R$, which contains $0$, and its value there is
-$0^3 + 1 = 1 \ne 0$. If it were odd, its value at $0$ would be $0$; so it is not odd.
-::::
-
 ::::{exercise} Reading the range from a sketch
 :label: exr-calc-functions-piecewise-range
 :class: tier-b
@@ -753,12 +751,95 @@ two pieces meet at the origin.
 **Left piece.** For $x < 0$ the values $-x$ are positive, and every $y > 0$ is taken (at
 $x = -y$). So this piece contributes $(0, \infty)$.
 
-**Right piece.** For $0 \le x \le 3$ we have $-1 \le x - 1 \le 2$, so
-$0 \le (x - 1)^2 \le 4$ and $-1 \le f(x) \le 3$. Every $y \in [-1, 3]$ is taken, at
-$x = 1 + \sqrt{y + 1}$, which lies in $[1, 3]$. So this piece contributes $[-1, 3]$.
+**Right piece.** Let $0 \le x \le 3$, so that $-1 \le x - 1 \le 2$. A square is never
+negative, so $(x - 1)^2 \ge 0$. For the upper bound we cannot square the two inequalities
+term by term, because $x - 1$ may be negative; we split into two cases.
+
+- If $x - 1 \ge 0$: multiplying $x - 1 \le 2$ by $x - 1 \ge 0$ gives
+  $(x - 1)^2 \le 2(x - 1)$, and multiplying $x - 1 \le 2$ by $2 > 0$ gives
+  $2(x - 1) \le 4$, so $(x - 1)^2 \le 4$.
+- If $x - 1 < 0$: multiplying $-1 \le x - 1$ by the negative number $x - 1$ reverses the
+  inequality and gives $(x - 1)^2 \le -(x - 1)$, and multiplying $-1 \le x - 1$ by $-1$
+  gives $-(x - 1) \le 1$, so $(x - 1)^2 \le 1 \le 4$.
+
+In both cases $0 \le (x - 1)^2 \le 4$, so $-1 \le f(x) \le 3$. Conversely, let
+$y \in [-1, 3]$. Then $y + 1 \ge 0$ has a square root $s = \sqrt{y + 1} \ge 0$, and
+$s \le 2$: if $s > 2$, then $s^2 > 2s > 4$, but $s^2 = y + 1 \le 4$. So $x = 1 + s$ lies in
+$[1, 3]$, and $f(x) = s^2 - 1 = y$. So this piece contributes $[-1, 3]$.
+
+% TODO link: rem-calc-square-roots once vronnblom/maths#8 is merged
 
 **Together.** $\ran f = [-1, 3] \cup (0, \infty) = [-1, \infty)$, with the smallest value
 $f(1) = -1$.
+::::
+
+::::{exercise} The square root is strictly increasing
+:label: exr-calc-functions-sqrt-increasing
+:class: tier-c
+
+Show from [](#def-calc-monotone) that $x \mapsto \sqrt{x}$ is strictly increasing on
+$[0, \infty)$.
+
+:::{admonition} Hint 1
+:class: dropdown hint
+For $0 \le x_1 < x_2$, multiply $\sqrt{x_2} - \sqrt{x_1}$ by
+$\frac{\sqrt{x_2} + \sqrt{x_1}}{\sqrt{x_2} + \sqrt{x_1}}$. Why is that denominator not zero?
+:::
+
+:::{admonition} Answer
+:class: dropdown answer manual
+For $0 \le x_1 < x_2$, $\sqrt{x_2} - \sqrt{x_1} = \dfrac{x_2 - x_1}{\sqrt{x_2} + \sqrt{x_1}} > 0$.
+:::
+::::
+
+::::{solution} exr-calc-functions-sqrt-increasing
+:label: sol-calc-functions-sqrt-increasing
+:class: dropdown
+We show that $\sqrt{x_2} - \sqrt{x_1} > 0$ by rationalising: multiplying and dividing by
+$\sqrt{x_2} + \sqrt{x_1}$ turns the difference of the roots into $x_2 - x_1$. Recall that each
+$x \ge 0$ has exactly one square root $\sqrt{x} \ge 0$, and $\bigl(\sqrt{x}\bigr)^2 = x$.
+
+% TODO link: rem-calc-square-roots once vronnblom/maths#8 is merged
+
+Let $0 \le x_1 < x_2$. Then $x_2 > 0$, so $\sqrt{x_2} > 0$ (since $\sqrt{x_2} = 0$ would give
+$x_2 = 0^2 = 0$), and $\sqrt{x_1} \ge 0$; hence $\sqrt{x_2} + \sqrt{x_1} > 0$. Using $(a - b)(a + b) = a^2 - b^2$,
+$$
+\sqrt{x_2} - \sqrt{x_1}
+= \frac{\bigl(\sqrt{x_2} - \sqrt{x_1}\bigr)\bigl(\sqrt{x_2} + \sqrt{x_1}\bigr)}{\sqrt{x_2} + \sqrt{x_1}}
+= \frac{x_2 - x_1}{\sqrt{x_2} + \sqrt{x_1}} .
+$$
+The numerator and the denominator are both positive, so $\sqrt{x_1} < \sqrt{x_2}$. As
+$x_1 < x_2$ in $[0, \infty)$ were arbitrary, the square root is strictly increasing on
+$[0, \infty)$.
+::::
+
+::::{exercise} Odd functions vanish at zero
+:label: exr-calc-functions-odd-at-zero
+:class: tier-c
+
+Let $f$ be an odd function with $0 \in \dom f$. Show that $f(0) = 0$. Use this to give a
+second reason why $x \mapsto x^3 + 1$ is not odd.
+
+:::{admonition} Hint 1
+:class: dropdown hint
+Put $x = 0$ in the condition $f(-x) = -f(x)$.
+:::
+
+:::{admonition} Answer
+:class: dropdown answer manual
+$f(0) = f(-0) = -f(0)$, so $2f(0) = 0$; and $0^3 + 1 = 1 \ne 0$.
+:::
+::::
+
+::::{solution} exr-calc-functions-odd-at-zero
+:label: sol-calc-functions-odd-at-zero
+:class: dropdown
+We put $x = 0$ in the condition that defines an odd function. Since $f$ is odd and
+$0 \in \dom f$, the condition $f(-x) = -f(x)$ holds for $x = 0$. As
+$-0 = 0$, it says $f(0) = -f(0)$, so $2 f(0) = 0$ and $f(0) = 0$.
+
+The function $x \mapsto x^3 + 1$ has domain $\R$, which contains $0$, and its value there is
+$0^3 + 1 = 1 \ne 0$. If it were odd, its value at $0$ would be $0$; so it is not odd.
 ::::
 
 ::::{exercise} The cube is strictly increasing
@@ -842,7 +923,8 @@ g(x) = \frac{f(x) + f(-x)}{2}, \qquad h(x) = \frac{f(x) - f(-x)}{2}
 $$
 for every $x$. So $g$ and $h$ are determined by $f$.
 
-*This pair works.* Define $g$ and $h$ by these formulas. Then $g(x) + h(x) = f(x)$, and
+*This pair works.* Define $g$ and $h$ by these formulas. Then $g(x) + h(x) = f(x)$, their
+common domain $\R$ is symmetric about $0$, and
 $$
 g(-x) = \frac{f(-x) + f(x)}{2} = g(x), \qquad h(-x) = \frac{f(-x) - f(x)}{2} = -h(x),
 $$
