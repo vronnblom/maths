@@ -1,6 +1,7 @@
 # CLAUDE.md
 
-> **v1, Phase 0 done** (2026-10-07). Next is Phase 1a: `calc-real-numbers`,
+> **v1, Phase 0 done** (2026-10-07; the first Phase 1a session also checks that a new cloud
+> session starts with the SessionStart hook, 09). Next is Phase 1a: `calc-real-numbers`,
 > `calc-functions` and `calc-absolute-value-inequalities`, then the exemplar `calc-limit`
 > (`docs/plan/09-roadmap.md`). This file must always describe the repo as it is: update it in
 > the PR that changes what it says.

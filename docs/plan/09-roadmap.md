@@ -48,8 +48,9 @@ Phases 3 and 4 can overlap: they share only the MVT/FTC boundary, and the graph
   `.github/{pull_request_template.md,CODEOWNERS,ISSUE_TEMPLATE/*}`; Dependabot config.
 - `README.md`, `CONTRIBUTING.md`, `LICENSE` (MIT), `LICENSE-CONTENT.md` (CC BY-SA 4.0),
   `CLAUDE.md` updated from v0 to v1.
-- `.claude/` SessionStart hook (`npm ci && uv sync`) and a `/new-topic` skill wrapping the
-  "add a topic" procedure ([10](10-ai-agents.md)).
+- `.claude/` SessionStart hook (`npm ci && uv sync`, and the theme) and a `/new-topic` skill
+  wrapping the "add a topic" procedure, plus `/verify-topic` and `/review-math`
+  ([10](10-ai-agents.md)).
 - `tests/fixtures/` with deliberately broken pages (bad label, cycle, missing answer, KaTeX
   error (`gate-katex-*`, through the build gate), broken ref, unknown directive) and a pytest in
   `tests/` that runs each checker on them (run by `npm run check`); the verification defects (a
@@ -60,8 +61,15 @@ Phases 3 and 4 can overlap: they share only the MVT/FTC boundary, and the graph
 - [x] `https://vronnblom.github.io/maths/` serves the site with a home page, the about pages and an empty Calculus subject page showing the Mermaid prerequisite map from `curriculum.yml` (2026-10-07: the 12 maps render, no console errors).
 - [x] Each checker has been shown to **fail** on its fixture and pass on the clean tree (fixture tests in CI).
 - [x] The remaining items in [05 §5.3](05-tooling-and-build.md) are validated on the real HTML build (dropdowns, KaTeX macros with arguments, anywidget rendering, search) and the results are recorded in 05; anywidget also on the deployed site.
-- [ ] A fresh clone gets to a green `npm run all` by following only `README.md`, and so does a
-      Claude Code cloud session after its SessionStart hook.
+- [x] A fresh clone gets to a green `npm run all` by following only `README.md` (stage 5,
+      2026-10-07: `git clone` of the branch, `npm ci && uv sync` in 3.6 s, `npm run all` green
+      in 1 min 56 s).
+- [ ] …and so does a Claude Code cloud session after its SessionStart hook. Stage 5 ran the
+      hook in a fresh clone exactly as Claude Code runs it (the command from
+      `.claude/settings.json`, `CLAUDE_CODE_REMOTE=true`, cold npm and uv caches): 6.8 s, then
+      0.25 s on a rerun, and `npm run all` green in 1 min 52 s. Still open until a brand-new
+      cloud session *starts* with the hook, which can only happen once it is on the branch a
+      session starts from: the first Phase 1a session is that test.
 
 ## Phase 1a: the gold-standard page `calc-limit`
 

@@ -3,8 +3,9 @@
 **Status:** decision-ready plan, 2026-10-07. **Phase 0 is done**: stages 1 (site skeleton,
 build, Pages deploy), 2 (checks, schema, curriculum and prerequisite graph), 3 (plugin and first
 widget), 4 (verification harness, coverage gate, verified-page guard) and 5 (agent support and
-governance) are in place, and the site is live at <https://vronnblom.github.io/maths/>. Next is
-**Phase 1a**: the three Preliminaries prerequisites of `calc-limit`, then `calc-limit` itself.
+governance) are in place, and the site is live at <https://vronnblom.github.io/maths/>. One
+item of its definition of done waits for the first Phase 1a session: that a brand-new cloud
+session starts with the SessionStart hook (09). Next is **Phase 1a**: the three Preliminaries prerequisites of `calc-limit`, then `calc-limit` itself.
 **First subject:** Calculus. **Architecture:** scales to any subject by adding a folder.
 
 ## Decisions at a glance
