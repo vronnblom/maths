@@ -7,7 +7,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
-import { HeaderError, buildIndex, chapterTopics, topicHeader, whereThisLeads } from "../_lib/header.mjs";
+import { HeaderError, buildIndex, chapterTopics, erratumUrl, topicHeader, whereThisLeads } from "../_lib/header.mjs";
 import plugin, { loadProject, readFrontmatter, tocFiles } from "../topic-header.mjs";
 
 const fm = (label, maths, title = label) => ({ title, label, maths });
@@ -112,6 +112,26 @@ test("{where-this-leads}: written dependants as links, then planned ones, coming
   assert.match(textOf(nodes), /One-Sided Limits \(coming soon\).*An Extension \(coming soon\)/);
   const none = whereThisLeads(topic("calc-functions", []), "calculus/preliminaries/functions.md", buildIndex({ pages: [], curricula: [] }));
   assert.equal(textOf(none), "Nothing builds on this topic yet.");
+});
+
+test("{where-this-leads} ends with the erratum link, the page filled in (11 §11.4)", () => {
+  const github = "https://github.com/vronnblom/maths";
+  const f = page("calc-limit").fm;
+  const url = erratumUrl(f, "calculus/limits/limit-of-a-function.md", github);
+  const q = new URL(url).searchParams;
+  assert.equal(url.split("?")[0], `${github}/issues/new`);
+  assert.equal(q.get("template"), "erratum.yml");
+  assert.equal(q.get("page"), "calc-limit (content/calculus/limits/limit-of-a-function.md)");
+  assert.equal(q.get("title"), `Erratum: ${f.title}`);
+  assert.ok(!url.includes("+") && !url.includes(" "));  // spaces as %20, never a literal +
+  const nodes = whereThisLeads(f, "calculus/limits/limit-of-a-function.md", index, { github });
+  const link = [...walk(nodes)].filter((n) => n.type === "link").at(-1);
+  assert.equal(link.url, url);
+  assert.match(textOf(nodes.slice(-1)), /^Found an error on this page\? Report it/);
+  const none = whereThisLeads(topic("calc-functions", []), "calculus/preliminaries/functions.md", buildIndex({ pages: [], curricula: [] }), { github });
+  assert.match(textOf(none), /Nothing builds on this topic yet\.Found an error/);
+  // Without project.github there is nothing to link to.
+  assert.equal([...walk(whereThisLeads(f, "calculus/limits/limit-of-a-function.md", index))].filter((n) => n.type === "link").length, 0);
 });
 
 test("{where-this-leads} on a chapter page: dependants outside the chapter", () => {

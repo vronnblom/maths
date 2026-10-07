@@ -1,0 +1,56 @@
+# docs/plan/05-tooling-and-build.md §5.7: the weekly external-link check. Builds the site,
+# runs lychee over the HTML (http and https links only; internal links are the build gate's job),
+# and keeps one open issue, "External links report", up to date: opened or updated when links
+# are broken, closed when they all pass again. It never runs on pull requests, so it never blocks
+# one: external sites flake. Only runs on main touch the issue; a manual run on a branch only
+# writes the job summary.
+name: Links
+on:
+  schedule:
+    - cron: '23 5 * * 1'                     # Mondays, 05:23 UTC
+  workflow_dispatch: {}
+permissions: {}
+concurrency: { group: links, cancel-in-progress: false }
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write                          # the report issue, and nothing else
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1          # v7.0.1
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7        # v10.2.0
+      - run: uv sync --frozen
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020        # v7.0.0
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - id: theme                                    # the pinned theme commit from myst.yml (§5.5)
+        run: echo "sha=$(grep -oE 'book-theme/archive/[0-9a-f]{40}' content/myst.yml | cut -d/ -f3)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9             # v6.1.0
+        with: { path: content/_build/templates, key: 'theme-${{ steps.theme.outputs.sha }}' }
+      - name: Build the site
+        run: npm run build
+      - id: lychee
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8  # v2.9.0 (lychee 0.24.2)
+        with:
+          # --root-dir turns root-relative links (/calculus/…) into file:// links, which
+          # --scheme then leaves out. 429 (rate limited) is not a broken link.
+          args: >-
+            --no-progress --max-retries 3 --accept '200..=299,429'
+            --root-dir '${{ github.workspace }}/content/_build/html'
+            --scheme https --scheme http
+            'content/_build/html/**/*.html'
+          fail: false
+          output: lychee/out.md
+      - name: Open, update or close the "External links report" issue
+        if: github.ref == 'refs/heads/main' && (steps.lychee.outputs.exit_code == '0' || steps.lychee.outputs.exit_code == '2')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          EXIT_CODE: ${{ steps.lychee.outputs.exit_code }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: bash scripts/links_report.sh
+      - name: Fail on a lychee error that is not a broken link (bad arguments, no input)
+        if: steps.lychee.outputs.exit_code != '0' && steps.lychee.outputs.exit_code != '2'
+        run: 'echo "::error::lychee exited with ${{ steps.lychee.outputs.exit_code }}"; exit 1'

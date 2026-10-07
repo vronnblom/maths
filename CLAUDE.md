@@ -1,19 +1,10 @@
 # CLAUDE.md
 
-> **Status: Phase 0, stages 1–4 done.** What exists now: `content/` (home, about pages, the
-> Calculus subject page with its generated prerequisite map), `content/calculus/curriculum.yml`
-> (the plan of all 82 topics), `schema/` (pages, curriculum, widget configs), the checks in
-> `scripts/` (`check_all.py`, `graph.py`, `generate.py`, `write_redirects.py`,
-> `check_widgets.py`, …), `labels.lock`, codespell, `tests/` (fixtures proving each check
-> fails), the plugin `plugins/topic-header.mjs`, the `function-plot` widget (`widgets/`, shown
-> on `about/how-to-read.md`) with its Node tests, the verification harness `verify/mathcheck/`
-> with `extract_answers.py` and the coverage gate `check_coverage.py`, the verified-page edit
-> guard (`check_verified_edits.py`, `guard.yml`), `ci.yml` (`checks`, `verify` and `build`
-> jobs) and `deploy.yml` (the site is live at https://vronnblom.github.io/maths/). The rest
-> is specified in `docs/plan/` and arrives in **stage 5** of Phase 0
-> (`docs/plan/09-roadmap.md`): the SessionStart hook, `CONTRIBUTING.md`, templates for PRs and
-> issues. Items marked *(stage N)* don't exist yet. Update this file in the PR that lands each
-> piece; it must always describe the repo as it is.
+> **v1, Phase 0 done** (2026-10-07; the first Phase 1a session also checks that a new cloud
+> session starts with the SessionStart hook, 09). Next is Phase 1a: `calc-real-numbers`,
+> `calc-functions` and `calc-absolute-value-inequalities`, then the exemplar `calc-limit`
+> (`docs/plan/09-roadmap.md`). This file must always describe the repo as it is: update it in
+> the PR that changes what it says.
 
 ## What this repo is
 
@@ -35,6 +26,8 @@ npm run build                     # generate, then scripts/build_site.sh: myst b
 npm run all                       # check + verify + test:widgets + build: everything CI runs (CI calls these same scripts). Run before every push.
 uv run python scripts/graph.py ready calc        # planned topics whose prerequisites are all ≥ reviewed
 uv run python scripts/graph.py closure calc-mean-value-theorem   # every transitive prerequisite
+uv run python scripts/new_topic.py calc-real-numbers              # scaffold a topic: page, verify stubs, toc, labels.lock (/new-topic)
+uv run python scripts/new_topic.py --stubs calc-real-numbers      # add @covers stubs for the page's new eg-/exr- labels
 uv run python scripts/check_labels.py --update-lock               # add your new labels to labels.lock
 uv run python widgets/_tests/make_fixtures.py                     # after adding a function-plot table: SymPy's expected values
 uv run pytest verify/calculus/limits -q          # after npm run verify: rerun one chapter's tests while you work
@@ -55,6 +48,12 @@ only together with mystmd. mystmd renders every formula with KaTeX at build time
 KaTeX error (red text on the page) is a `⛔️` build error and fails `npm run build` (the
 `gate-katex-*` fixtures prove it; there is no separate KaTeX check). Math in the front-matter
 `title` and `description` is never rendered: it shows as literal `$…$`, so keep math out of them.
+
+In a Claude Code cloud session the **SessionStart hook** (`.claude/settings.json` →
+`.claude/hooks/session-start.sh`) has already run `npm ci` (skipped when `node_modules/` matches
+the lockfile), `uv sync --frozen` and `fetch_theme.sh`; its one-line report is in your context.
+If it failed, it said which step: fix that and rerun it with
+`CLAUDE_CODE_REMOTE=true bash .claude/hooks/session-start.sh`. On a laptop it does nothing.
 
 `npm run verify` = `npm run ast` (`myst build --site`, the AST only) →
 `scripts/extract_answers.py` (every exercise's Answer, as printed, into the git-ignored
@@ -84,12 +83,21 @@ verify/mathcheck/                      covers, answer, the canonical symbols, eq
 verify/conftest.py, test_mathcheck.py  loads _answers.json, records coverage; the harness's own tests and AST fixture
 scripts/                               the checks (check_all.py and the scripts it runs), graph.py, generate.py,
                                        write_redirects.py, build_site.sh, myst_gate.sh, fetch_theme.sh,
-                                       extract_answers.py, check_coverage.py, check_verified_edits.py
+                                       extract_answers.py, check_coverage.py, check_verified_edits.py,
+                                       new_topic.py (the /new-topic scaffolder), links_report.sh (links.yml)
 schema/                                JSON Schemas: page front matter, curriculum.yml, widgets/<name>.schema.json
 labels.lock                            every label ever merged (06 §6.7)
 tests/                                 the checkers' tests; tests/fixtures/ has one broken project per check
-templates/                             copy these to start a page or test
-docs/plan/                             the plan (architecture decisions)
+templates/                             the page and test templates (new_topic.py builds on topic.md)
+docs/plan/                             the plan (ADR 0000); docs/decisions/ holds later ADRs (11 §11.3)
+docs/agents/README.md                  index of the agent roles and their skills
+.claude/settings.json, .claude/hooks/  the SessionStart hook (cloud sessions only)
+.claude/skills/                        /new-topic, /verify-topic, /review-math: the role prompts (their only copy)
+.github/workflows/                     ci.yml (checks, verify, build), guard.yml (verified-edits, PRs only),
+                                       deploy.yml (Pages), links.yml (weekly external links → one issue)
+.github/                               pull_request_template.md, ISSUE_TEMPLATE/ (erratum, new-topic, widget),
+                                       CODEOWNERS, dependabot.yml (actions, npm except mystmd/jsxgraph, uv)
+CONTRIBUTING.md, CODE_OF_CONDUCT.md    for people; agents read this file
 ```
 
 ## Conventions (the short version)
@@ -140,32 +148,47 @@ docs/plan/                             the plan (architecture decisions)
   `function-plot`. After adding or changing a `function-plot` with a `table`, run
   `widgets/_tests/make_fixtures.py` (a test fails otherwise).
 
+## Roles
+
+Every topic goes through three roles, each a different session (`docs/plan/10-ai-agents.md`
+§10.1–§10.3); each role's prompt is its skill, and only there:
+
+- **Author**: `/new-topic <label>` (`.claude/skills/new-topic/SKILL.md`) writes the page and
+  leaves `@covers` stubs. Never computes expected values.
+- **Verifier**: `/verify-topic <path>` writes the SymPy tests from the statements, pushes them
+  to the topic branch, and reports disagreements. Never edits the page.
+- **Reviewer**: `/review-math <path>` reviews against the 06 §6.3 checklist and the 08 §8.3
+  circularity table and posts findings ranked by severity. Never rewrites the page.
+
+None of them sets a status, `reviewed_by` or `maths.manual_checked`: the owner does, when
+approving. A session that wrote a page doesn't verify or review it.
+
 ## How to add a topic
 
-Every step works now; the first topics wait for stage 5 (Phase 1a starts after it). The
-procedure:
+`/new-topic <label>` walks these steps (`.claude/skills/new-topic/SKILL.md` has the detail):
 
 1. Pick a topic from `uv run python scripts/graph.py ready <subject>` (or as assigned).
-   Branch: `topic/<label>`.
-2. Copy `templates/topic.md` to the path in `content/<subject>/curriculum.yml` (`file` is
-   relative to the subject folder). Fill in the front matter from the curriculum entry
-   (title, level, prerequisites, objectives, and those of its widgets that are built); the entry's `results` list the labels
-   and proof policies to write. Keep `status: draft`. To change the plan (a prerequisite, a
-   title), change `curriculum.yml` first, in its own PR.
+   Branch: `topic/<label>`. One topic per PR. To change the plan (a prerequisite, a title),
+   change `curriculum.yml` first, in its own `curriculum` PR.
+2. Scaffold it: `uv run python scripts/new_topic.py <label>`. From the `curriculum.yml` entry
+   it writes the page (front matter, every result of `results` with the proof blocks its
+   policy asks for, the sections of `templates/topic.md`), the verify file at `maths.verify`
+   (`verify/<subject>/<chapter>/test_<topic>.py`, `-` → `_`), and the toc entry (under a
+   chapter group until the chapter index exists), then runs `check_labels.py --update-lock`.
+   It refuses a label that is in no curriculum and a page that exists. Keep `status: draft`.
 3. Read the direct prerequisite pages, reuse their labels, and don't redefine anything.
-   Read the exemplar `content/calculus/limits/limit-of-a-function.md` for the quality bar.
-4. Write the page. ≥ 3 worked examples, ≥ 1 common mistake, 6–15 exercises across tiers,
-   each with an answer and a solution.
-5. Create `verify/<subject>/<chapter>/test_<topic>.py` from `templates/verify_test.py`
-   with an `@covers` stub (`pytest.skip("for the verifier")`) for every `eg-`/`exr-` label.
-   Its path is the page's `maths.verify` (`-` → `_`; `check_frontmatter.py` checks it).
-   Stubs count as uncovered. **If you are the author, leave the expected values to the
-   verifier.**
-6. Add the page to the toc in `content/myst.yml`.
-7. Run `uv run python scripts/check_labels.py --update-lock` and commit `labels.lock`.
-8. Run `npm run all` and fix every error and warning. `check_coverage.py` (in `npm run verify`)
-   prints the page's coverage; copy it into the PR.
-9. Open a PR using the template. One topic per PR.
+   Read the exemplar `content/calculus/limits/limit-of-a-function.md` (once it exists) for the
+   quality bar.
+4. Write the page, replacing every `TODO`: ≥ 3 worked examples, ≥ 1 common mistake, 6–15
+   exercises across tiers, each with an answer and a solution.
+5. `uv run python scripts/new_topic.py --stubs <label>` adds an `@covers` stub
+   (`pytest.skip("for the verifier")`) for every `eg-`/`exr-` label. Stubs count as uncovered.
+   **If you are the author, leave the expected values to the verifier.**
+6. Run `uv run python scripts/check_labels.py --update-lock` and commit `labels.lock`.
+7. `grep -n TODO <page>` prints nothing; `npm run all` passes with no errors or warnings.
+   `check_coverage.py` (in `npm run verify`) prints the page's coverage; copy it into the PR.
+8. Open the PR with `.github/pull_request_template.md`: type, summary of the mathematics,
+   results with policies, coverage, the proof checklist, sources.
 
 ## How to verify mathematics
 
@@ -198,7 +221,7 @@ Details: `docs/plan/06-quality-assurance.md` §6.1. The harness is `verify/mathc
 - Don't rename, delete or reuse labels. Don't move a page without listing its old path in
   `maths.aliases` (mystmd has no `aliases:` key; `scripts/write_redirects.py` makes the redirect).
 - Don't set `status: reviewed`/`verified`, add yourself to `reviewed_by`, or add
-  `maths.manual_checked` entries; the owner (or the reviewer) does that.
+  `maths.manual_checked` entries; the owner (or a human reviewer) does that.
 - Don't edit another page's mathematics in a topic PR (open a separate PR).
 - Don't add dependencies, front-matter keys, directive kinds or widget types without a
   `tooling` PR (the checks' parser, `scripts/myst_source.py`, fails on directives it doesn't

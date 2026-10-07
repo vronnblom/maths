@@ -1,9 +1,11 @@
 # Plan: an open, verified university mathematics repository
 
-**Status:** decision-ready plan, 2026-10-07. Phase 0 in progress: stages 1 (site skeleton, build,
-Pages deploy), 2 (checks, schema, curriculum and prerequisite graph), 3 (plugin and first
-widget) and 4 (verification harness, coverage gate, verified-page guard) are in place, and the
-site is live at <https://vronnblom.github.io/maths/>; next is stage 5 (agent support).
+**Status:** decision-ready plan, 2026-10-07. **Phase 0 is done**: stages 1 (site skeleton,
+build, Pages deploy), 2 (checks, schema, curriculum and prerequisite graph), 3 (plugin and first
+widget), 4 (verification harness, coverage gate, verified-page guard) and 5 (agent support and
+governance) are in place, and the site is live at <https://vronnblom.github.io/maths/>. One
+item of its definition of done waits for the first Phase 1a session: that a brand-new cloud
+session starts with the SessionStart hook (09). Next is **Phase 1a**: the three Preliminaries prerequisites of `calc-limit`, then `calc-limit` itself.
 **First subject:** Calculus. **Architecture:** scales to any subject by adding a folder.
 
 ## Decisions at a glance
@@ -85,5 +87,14 @@ block snippets, chapter and subject index pages, and a verification test.
    the `verify` CI job, and the verified-page edit guard (`check_verified_edits.py`,
    `guard.yml`). KaTeX errors already fail the gated build, so there is no `check_katex.mjs`
    (05 §5.3).
-5. **Agent support**: a SessionStart hook (`npm ci && uv sync`), `CONTRIBUTING.md`, the PR and issue templates, and `/new-topic` skill. Then start
-   Phase 1a: its three Preliminaries prerequisites, then `calc-limit`.
+5. **Agent support and governance** (stage 5, built): the SessionStart hook
+   (`.claude/hooks/session-start.sh`: `npm ci` when needed, `uv sync --frozen`, the theme; cloud
+   sessions only), the skills `/new-topic` (with `scripts/new_topic.py`), `/verify-topic` and
+   `/review-math` (the role prompts of 10 §10.3, now only there), `CONTRIBUTING.md`,
+   `CODE_OF_CONDUCT.md`, `CODEOWNERS`, the PR template and issue forms, the pre-filled erratum
+   link on every topic and chapter page, `docs/decisions/` (ADRs), Dependabot and `links.yml`.
+   `CLAUDE.md` is v1.
+6. **Phase 1a** (next): `calc-real-numbers`, then `calc-functions` and
+   `calc-absolute-value-inequalities`, each `/new-topic <label>` in its own session and PR,
+   verified and reviewed by other sessions; then `calc-limit` with the `epsilon-delta` widget
+   (09).

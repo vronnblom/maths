@@ -3,7 +3,8 @@
 //   {topic-header}      prerequisites (links; "coming soon" for planned topics without a page),
 //                       objectives, time, difficulty, a status badge, and the draft banner
 //                       (topic and chapter pages)
-//   {where-this-leads}  the topics that list this one as a prerequisite (reverse edges)
+//   {where-this-leads}  the topics that list this one as a prerequisite (reverse edges), then
+//                       a link that reports an error on the page (the erratum form, pre-filled)
 //   {chapter-topics}    a chapter page's table of its topics, from curriculum.yml
 //
 // Registered in content/myst.yml under project.plugins. This file reads the files; what to
@@ -126,7 +127,7 @@ const plugin = {
     directive("topic-header", "Prerequisites, objectives, time, difficulty and status, from the front matter (docs/plan/03 §3.6).",
       ({ fm, rel, index, config, ctx }) => topicHeader(fm, rel, index, { parseInline: inlineParser(ctx), github: config?.project?.github ?? null })),
     directive("where-this-leads", "The topics that build on this one (reverse prerequisite edges, from the toc and curriculum.yml).",
-      ({ fm, rel, index }) => whereThisLeads(fm, rel, index)),
+      ({ fm, rel, index, config }) => whereThisLeads(fm, rel, index, { github: config?.project?.github ?? null })),
     directive("chapter-topics", "A chapter page's table of topics: title, time, difficulty, status (from curriculum.yml and front matter).",
       ({ fm, rel, index }) => chapterTopics(fm, rel, index)),
   ],

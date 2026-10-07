@@ -1,0 +1,60 @@
+# The erratum form (docs/plan/11 §11.4). The "Report an error" action in content/myst.yml and
+# the link at the foot of every topic and chapter page open it; the page link pre-fills `page`
+# (and the title) through the query string, which uses these field ids.
+name: Erratum
+description: Report an error on the site, such as a wrong statement, an unclear step, a typo or a broken widget.
+title: "Erratum: "
+labels: [erratum]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you: reports of errors are the most valuable contribution. We triage them within
+        about a week ([how errata are handled](https://github.com/vronnblom/maths/blob/main/docs/plan/11-governance.md#114-errata-process)).
+  - type: input
+    id: page
+    attributes:
+      label: Page
+      description: The page's address or label. The link at the foot of each page fills this in.
+      placeholder: https://vronnblom.github.io/maths/calculus/limits/limit-of-a-function
+    validations:
+      required: true
+  - type: input
+    id: block
+    attributes:
+      label: Label of the block, if you know it
+      description: The definition, theorem, example or exercise, e.g. `thm-calc-squeeze` or "Exercise 3". The label is the part after `#` in the block's link.
+      placeholder: exr-calc-limit-table-estimate
+    validations:
+      required: false
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type of error
+      options:
+        - Mathematical error
+        - Unclear or misleading
+        - Typo or formatting
+        - Broken widget or link
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong
+      description: Quote the passage if you can. Math in `$…$` renders here too.
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: Suggested correction (optional)
+    validations:
+      required: false
+  - type: textarea
+    id: found
+    attributes:
+      label: How you found it (optional)
+      description: For example, a value you computed or a case you tried. It helps us write a regression test.
+    validations:
+      required: false

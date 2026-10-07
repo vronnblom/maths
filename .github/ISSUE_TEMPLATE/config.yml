@@ -1,0 +1,9 @@
+# The issue chooser (docs/plan/11 §11.4–§11.5): the three forms, plus links for what is not an issue.
+blank_issues_enabled: true
+contact_links:
+  - name: How to contribute
+    url: https://github.com/vronnblom/maths/blob/main/CONTRIBUTING.md
+    about: Ways to help, the setup, and how a topic is written, verified and reviewed.
+  - name: The site
+    url: https://vronnblom.github.io/maths/
+    about: Read the pages. Each one has a link at its foot that reports an error on that page.

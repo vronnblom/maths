@@ -1,8 +1,8 @@
 # 10. Working with AI agents
 
 The repository is designed so that most content can be **drafted by AI agents and verified
-by machines and the owner**. Agents follow `CLAUDE.md` at the repo root (draft v0 committed
-alongside this plan). This document explains the workflow behind it.
+by machines and the owner**. Agents follow `CLAUDE.md` at the repo root (v1 since Phase 0
+stage 5). This document explains the workflow behind it.
 
 ## 10.1 Principles
 
@@ -52,36 +52,19 @@ graph.py ready ──► [1 Author agent] ──► draft page (status: draft), 
                      Owner review ──► approves; status → reviewed (or verified if 100 % coverage + both checklists)
 ```
 
-### Prompt templates (stored in `docs/agents/` in Phase 0)
+### The role prompts: the skills in `.claude/skills/`
 
-**Author**
-> Write the topic page `<label>` for the subject `<subject>`.
-> Inputs: its entry in `content/<subject>/curriculum.yml` (title, prerequisites, objectives,
-> results with proof policies, widgets), `templates/topic.md`, `templates/blocks.md`,
-> `content/about/notation.md`, and the exemplar `content/calculus/limits/limit-of-a-function.md`
-> as the quality bar. Read the pages of the direct prerequisites so you use their labels and
-> don't redefine anything. Cite earlier results only via `[name](#label)`.
-> Output: the page with `status: draft`, the new labels added to `labels.lock`
-> (`check_labels.py --update-lock`), and a
-> `verify/<subject>/<chapter>/test_<topic>.py` containing only the `@covers` skeleton: one
-> `pytest.skip("for the verifier")` stub per `eg-` and `exr-` label (stubs count as uncovered).
-> Run `npm run all` and fix every error and warning.
-> Do **not** compute expected values in the test file.
+The three role prompts live in one place only, the Claude Code skills that run them (built in
+Phase 0 stage 5; `docs/agents/README.md` is the index):
 
-**Verifier**
-> For the page `<path>`, write the SymPy tests in `<test path>`. Derive every expected value
-> **independently**: read the problem statements and displayed steps, but do not copy numbers
-> from answers or solutions into the test. Use `answer(label)` to read the page's answers.
-> For worked examples, assert each displayed equality. If a test fails, do **not** edit the
-> page: report the label, the page's claim, your result and the SymPy evidence in the PR.
+| Role | Skill | What it does |
+|---|---|---|
+| Author | `/new-topic <label>` ([`.claude/skills/new-topic/SKILL.md`](../../.claude/skills/new-topic/SKILL.md)) | scaffolds the page, the verify file (`@covers` stubs only) and the toc entry with `scripts/new_topic.py`, then writes the page and walks the "How to add a topic" checklist; never computes expected values |
+| Verifier | `/verify-topic <path>` ([`.claude/skills/verify-topic/SKILL.md`](../../.claude/skills/verify-topic/SKILL.md)) | writes the SymPy tests from the statements only, reads answers with `answer(label)`, never edits the page, reports disagreements with evidence |
+| Reviewer | `/review-math <path>` ([`.claude/skills/review-math/SKILL.md`](../../.claude/skills/review-math/SKILL.md)) | reviews against the 06 §6.3 checklist and the 08 §8.3 circularity table, tries counterexamples, checks proof policies, ranks findings by severity, never rewrites the page |
 
-**Reviewer**
-> Review `<path>` adversarially against `docs/plan/06-quality-assurance.md` §6.3 and the
-> circularity table in `docs/plan/08-calculus-curriculum.md` §8.3. For every theorem, try to
-> find a counterexample to the statement as written. For every proof, check each step and
-> name the hypothesis it uses. Check that the proof policy (F/R/S/D) matches the curriculum.
-> Report findings as review comments ranked by severity: wrong mathematics > missing
-> hypothesis > gap in proof > unclear > style. Do not rewrite the page.
+A person or an agent without Claude Code reads the same files as prompts. Change a role by
+changing its skill; this section only says which skill holds it.
 
 ## 10.4 Running work in parallel
 
@@ -96,7 +79,8 @@ graph.py ready ──► [1 Author agent] ──► draft page (status: draft), 
   move to `reviewed` until every prerequisite page exists and is `reviewed` (CI-enforced). This keeps agents busy without breaking the quality order.
 - **The owner is the bottleneck**, so pace work to review capacity, about 3–6 topic PRs open
   at a time. Planned mitigations: agent review absorbs the first pass, CI absorbs everything
-  mechanical, and PR descriptions follow a fixed template (summary of mathematical content,
+  mechanical, and PR descriptions follow a fixed template
+  (`.github/pull_request_template.md`: summary of mathematical content,
   list of theorems with policies, verification coverage, checklist), so review is reading
   mathematics rather than hunting for context.
 - **Conflicts** only arise in shared files: `content/myst.yml` (toc) and `labels.lock`.
@@ -122,13 +106,19 @@ graph.py ready ──► [1 Author agent] ──► draft page (status: draft), 
 
 ## 10.6 Repository support for agents (built in Phase 0)
 
-- **`CLAUDE.md`**: conventions, commands, procedures and "don'ts" (draft v0 is in the repo now).
-- **SessionStart hook** (`.claude/settings.json`): runs `npm ci && uv sync` in cloud sessions
-  so `npm run all` works immediately. This also needs the pinned theme to be reachable from
-  the session (allowed in the environment's network settings, or vendored; 05 §5.5);
-  Phase 0's definition of done checks it in a real cloud session.
-- **Skill `/new-topic <label>`** (`.claude/skills/new-topic/SKILL.md`): scaffolds the page and
-  verify file from templates and the curriculum entry, then walks the author checklist.
-- **Skill `/verify-topic <path>`**: the verifier role as a reusable skill.
-- **Skill `/review-math <path>`**: the reviewer role as a reusable skill.
-- **`docs/agents/`**: the three prompt templates above and the PR description template.
+- **`CLAUDE.md`**: conventions, commands, procedures and "don'ts" (v1 since Phase 0 stage 5).
+- **SessionStart hook** (`.claude/settings.json` → `.claude/hooks/session-start.sh`): in a
+  cloud session only (`CLAUDE_CODE_REMOTE=true`; on a laptop it exits at once), it runs
+  `npm ci` (skipped when `node_modules/` was installed from the current lockfile by the same
+  Node version), `uv sync --frozen` and `scripts/fetch_theme.sh`, so `npm run all` works
+  immediately. The theme comes with `git fetch`, which cloud sessions allow (05 §5.5), so no
+  network-settings change is needed. A failing step stops it with exit code 2 and a message
+  naming the step. It is synchronous, so the session starts with everything installed.
+- **Skill `/new-topic <label>`** (`.claude/skills/new-topic/SKILL.md`): the Author. Runs
+  `scripts/new_topic.py`, which scaffolds the page (front matter, every result with its
+  proof-policy blocks), the verify file and the toc entry from the curriculum entry, refusing
+  labels outside the curriculum and pages that exist; then walks the author checklist.
+- **Skill `/verify-topic <path>`**: the Verifier.
+- **Skill `/review-math <path>`**: the Reviewer.
+- **`docs/agents/README.md`**: the index of the roles and their skills.
+- **`.github/pull_request_template.md`**: the fixed PR description of §10.4 (11 §11.5).
