@@ -31,10 +31,10 @@ Corrections of mathematical errors in verified pages are logged publicly on the
 
 ## Pages by status
 
-At the moment no topic pages have been written, so there is nothing to list yet.
+The tables below are generated from the curriculum and the pages themselves each time the site
+is built, so they always match the published pages. A planned topic is one that is in the
+curriculum but not written yet.
 
-:::{note}
-This section will show a table of every page and its status, generated from the pages
-themselves each time the site is built, so it can never be out of date. The generator is
-being built in the next stage of setting up the site.
-:::
+% Written by scripts/generate.py before every build; never edit or commit it.
+```{include} _generated/status-table.md
+```

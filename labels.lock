@@ -1,0 +1,11 @@
+# labels.lock: every label ever merged to main (docs/plan/02 §2.4, 06 §6.7).
+# One line per label: `<label>  <page, relative to content/>`, sorted. New labels are added by
+#   uv run python scripts/check_labels.py --update-lock
+# which also updates the page of a moved label. Never delete a line: a label that is removed
+# from the content keeps a tombstone instead, `<label> → <replacement label, or the reason>`.
+calc-subject  calculus/index.md
+site-errata  about/errata.md
+site-home  index.md
+site-how-to-read  about/how-to-read.md
+site-notation  about/notation.md
+site-status  about/status.md

@@ -1,0 +1,47 @@
+# A fixture curriculum (the shape of content/calculus/curriculum.yml).
+subject: calc
+chapters:
+  - slug: preliminaries
+    title: Preliminaries
+    topics:
+      - label: calc-real-numbers
+        file: preliminaries/real-numbers-and-intervals.md
+        title: Real Numbers and Intervals
+        level: core
+        prerequisites: []
+        objectives: [Use interval notation., State the completeness axiom.]
+        results: []
+      - label: calc-absolute-value-inequalities
+        file: preliminaries/absolute-value-and-inequalities.md
+        title: Absolute Value and Inequalities
+        level: core
+        prerequisites: [calc-real-numbers]
+        objectives: [Solve absolute-value inequalities., Apply the triangle inequality.]
+        results: []
+      - label: calc-functions
+        file: preliminaries/functions.md
+        title: Functions and Their Graphs
+        level: core
+        prerequisites: [calc-limit]
+        objectives: [Determine the natural domain., Sketch graphs.]
+        results: []
+  - slug: limits
+    title: Limits
+    topics:
+      - label: calc-limit
+        file: limits/limit-of-a-function.md
+        title: The Limit of a Function
+        level: core
+        prerequisites: [calc-functions, calc-absolute-value-inequalities]
+        objectives: [State the definition of a limit., Prove simple limits.]
+        results:
+          - {label: def-calc-limit}
+          - {label: thm-calc-limit-unique, policy: R}
+      - label: calc-limit-laws
+        file: limits/limit-laws.md
+        title: Limit Laws
+        level: core
+        prerequisites: [calc-limit]
+        objectives: [Evaluate limits with the limit laws., Justify direct substitution.]
+        results:
+          - {label: thm-calc-limit-laws, policy: F+R+S}

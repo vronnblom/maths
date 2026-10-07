@@ -27,9 +27,12 @@ Totals: **11 chapters, 82 topic pages** (of which 5 are `level: extension`), abo
 **D** deferred (to a later page or another subject; target named). Definitions are listed
 with `def-` labels; results with `thm-`/`lem-`/`cor-`/`prop-` labels.
 
-The format below is machine-parseable: each topic starts with a bold label line and has
-a `Prereqs:` line. `scripts/graph.py` will import it into `content/calculus/curriculum.yml`
-in Phase 0.
+> **`content/calculus/curriculum.yml` is now the machine-readable source.** Phase 0 stage 2
+> imported the list below into it with a one-off script (11 chapters, 82 topics, 5 extension,
+> 194 results), and `scripts/graph.py` reads only that file. Change the curriculum there first
+> (in its own PR), then this page. The list below stays as the readable commentary: each topic
+> starts with a bold label line and has `Prereqs:`, `Objectives:`, `Results:` and optional
+> `Widgets:` lines.
 
 ---
 
@@ -253,7 +256,7 @@ pages, many exercises, few proofs.*
 **`calc-lhopital`** · Indeterminate Forms and L'Hôpital's Rule · `lhopital.md`
 - Prereqs: `calc-mean-value-theorem`, `calc-derivatives-exp-log`, `calc-limits-at-infinity`
 - Objectives: identify indeterminate forms; apply L'Hôpital's rule correctly (checking hypotheses); convert $0\cdot\infty$, $\infty-\infty$, $1^\infty$, $0^0$, $\infty^0$.
-- Results: `thm-calc-cauchy-mvt` **R**; `thm-calc-lhopital` (0/0, finite $a$) **R**; ∞/∞ and $a=\pm\infty$ versions **S**; `rem-calc-lhopital-misuse` (examples where it fails or is circular).
+- Results: `thm-calc-cauchy-mvt` **R**; `thm-calc-lhopital` (0/0, finite $a$) **R**; `thm-calc-lhopital-general` (the ∞/∞ and $a=\pm\infty$ versions) **S**; `rem-calc-lhopital-misuse` (examples where it fails or is circular).
 
 **`calc-linearisation`** · Linear Approximation and Differentials · `linear-approximation.md`
 - Prereqs: `calc-differentiation-rules`
@@ -264,7 +267,7 @@ pages, many exercises, few proofs.*
 **`calc-newtons-method`** · Newton's Method · `newtons-method.md`
 - Prereqs: `calc-linearisation`, `calc-ivt`
 - Objectives: derive and run Newton's iteration; recognise failure modes (bad start, cycles, $f'=0$).
-- Results: `thm-calc-newton-convergence` (quadratic convergence near a simple root) **S**, **D** → numerical analysis.
+- Results: `thm-calc-newton-convergence` (quadratic convergence near a simple root) **S**, **D** → beyond scope (numerical analysis).
 - Widgets: `newton-method`
 
 **`calc-taylor-polynomials`** · Taylor Polynomials and Taylor's Theorem · `taylor-polynomials.md`
@@ -332,7 +335,7 @@ pages, many exercises, few proofs.*
 **`calc-partial-fractions`** · Partial Fractions · `partial-fractions.md`
 - Prereqs: `calc-substitution`, `calc-polynomial-rational`
 - Objectives: decompose rational functions (distinct, repeated, irreducible quadratic factors); integrate them.
-- Results: `thm-calc-partial-fraction-decomposition` (existence) **S**, **D** → `linalg`/algebra.
+- Results: `thm-calc-partial-fraction-decomposition` (existence) **S**, **D** → `linalg` (algebra).
 
 **`calc-integration-strategy`** · Strategy for Integration · `integration-strategy.md`
 - Prereqs: `calc-integration-by-parts`, `calc-trig-substitution`, `calc-partial-fractions`

@@ -1,0 +1,1088 @@
+# The Calculus curriculum: the plan, in machine-readable form (docs/plan/02 §2.5).
+# Imported once from docs/plan/08-calculus-curriculum.md; from now on this file is the source,
+# and 08 is the commentary. Page front matter is the truth for written pages: `graph.py check`
+# fails if a written page disagrees with its entry here (label, file, title, level,
+# prerequisites).
+#
+# Per topic: label, file (relative to content/calculus/), title, level (core | extension),
+# prerequisites (direct only), objectives, widgets, results, notes.
+# Per result: label, policy (F full proof in core, R rigorous track, S sketch, D deferred;
+# "S+R" means a sketch in the core and the full proof in the rigorous track, "S+D" a sketch
+# here and the full proof deferred; a note says which part gets which policy), deferred_to (a
+# topic label, a subject code, or out-of-scope; required with D), note.
+subject: calc
+chapters:
+  - slug: preliminaries
+    title: Preliminaries
+    topics:
+      - label: calc-real-numbers
+        file: preliminaries/real-numbers-and-intervals.md
+        title: Real Numbers and Intervals
+        level: core
+        prerequisites: []
+        objectives:
+          - Use interval and set-builder notation.
+          - "Distinguish ℕ, ℤ, ℚ, ℝ."
+          - State what "bounded above" and "supremum" mean (rigorous track).
+        results:
+          - {label: def-calc-interval}
+          - {label: ax-calc-completeness, policy: S, note: "completeness axiom (stated, rigorous track)"}
+          - {label: thm-calc-sqrt2-irrational, policy: F}
+      - label: calc-absolute-value-inequalities
+        file: preliminaries/absolute-value-and-inequalities.md
+        title: Absolute Value and Inequalities
+        level: core
+        prerequisites: [calc-real-numbers]
+        objectives:
+          - "Solve linear, quadratic and absolute-value inequalities."
+          - Translate $\lvert x-a\rvert<\delta$ into an interval.
+          - Apply the triangle inequality.
+        results:
+          - {label: def-calc-absolute-value}
+          - {label: thm-calc-triangle-inequality, policy: F}
+          - {label: prop-calc-abs-interval, policy: F, note: $\lvert x-a\rvert<\delta \iff a-\delta<x<a+\delta$}
+      - label: calc-functions
+        file: preliminaries/functions.md
+        title: Functions and Their Graphs
+        level: core
+        prerequisites: [calc-real-numbers]
+        objectives:
+          - Determine the natural domain and the range.
+          - Read and sketch graphs.
+          - Recognise even/odd and increasing/decreasing functions.
+          - Model a situation with a function.
+        results:
+          - {label: def-calc-function}
+          - {label: def-calc-domain-range}
+          - {label: def-calc-even-odd}
+          - {label: def-calc-monotone}
+      - label: calc-function-operations
+        file: preliminaries/combining-and-transforming-functions.md
+        title: Combining and Transforming Functions
+        level: core
+        prerequisites: [calc-functions]
+        objectives:
+          - Form compositions and find their domains.
+          - Decompose a function into a composition.
+          - "Predict the effect of shifts, stretches and reflections on a graph."
+        widgets: [function-plot]
+        results:
+          - {label: def-calc-composition}
+          - {label: prop-calc-graph-transformations, policy: F}
+        notes:
+          - "Widget function-plot: sliders for $a f(b(x-c))+d$"
+      - label: calc-inverse-functions
+        file: preliminaries/inverse-functions.md
+        title: Inverse Functions
+        level: core
+        prerequisites: [calc-function-operations]
+        objectives:
+          - Test injectivity.
+          - Find inverse functions and their domains.
+          - "Relate the graphs of $f$ and $f^{-1}$."
+          - Restrict domains to obtain invertibility.
+        results:
+          - {label: def-calc-injective}
+          - {label: def-calc-inverse-function}
+          - {label: prop-calc-strictly-monotone-injective, policy: F}
+          - {label: prop-calc-inverse-graph-reflection, policy: F}
+      - label: calc-polynomial-rational
+        file: preliminaries/polynomial-and-rational-functions.md
+        title: Polynomial and Rational Functions
+        level: core
+        prerequisites: [calc-functions]
+        objectives:
+          - Factor polynomials using known roots.
+          - Perform polynomial division.
+          - "Find domains, zeros and the sign of rational functions."
+        results:
+          - {label: thm-calc-factor-theorem, policy: F}
+          - {label: thm-calc-polynomial-division, policy: S}
+          - {label: thm-calc-polynomial-roots-bound, policy: F, note: at most $n$ roots}
+      - label: calc-exponential-functions
+        file: preliminaries/exponential-functions.md
+        title: Exponential Functions and the Number e
+        level: core
+        prerequisites: [calc-function-operations]
+        objectives:
+          - Apply the laws of exponents.
+          - Graph $a^x$ for different bases.
+          - Model growth and decay.
+          - Describe $e$ via continuous compounding.
+        results:
+          - {label: def-calc-exponential-function, policy: S+D, deferred_to: calc-ln-integral, note: "rational exponents, extension to real exponents S, rigorous construction D"}
+          - {label: prop-calc-exponent-laws, policy: S, note: stated}
+          - {label: def-calc-e, policy: D, deferred_to: calc-ln-integral, note: "informal: $\\lim_{n\\to\\infty}(1+1/n)^n$, made precise later"}
+      - label: calc-logarithms
+        file: preliminaries/logarithms.md
+        title: Logarithms
+        level: core
+        prerequisites: [calc-exponential-functions, calc-inverse-functions]
+        objectives:
+          - Define $\log_b$ as the inverse of $b^x$.
+          - Use the logarithm laws and change of base.
+          - Solve exponential equations.
+        results:
+          - {label: def-calc-logarithm}
+          - {label: def-calc-ln}
+          - {label: thm-calc-log-laws, policy: F, note: from exponent laws}
+          - {label: prop-calc-change-of-base, policy: F}
+      - label: calc-trig-functions
+        file: preliminaries/trigonometric-functions.md
+        title: Trigonometric Functions
+        level: core
+        prerequisites: [calc-functions]
+        objectives:
+          - Work in radians.
+          - Define sin and cos on the unit circle.
+          - Use the core identities.
+          - "Graph trigonometric functions with amplitude, period and phase."
+        widgets: [function-plot]
+        results:
+          - {label: def-calc-radian}
+          - {label: def-calc-sin-cos}
+          - {label: def-calc-tan-sec-csc-cot}
+          - {label: thm-calc-pythagorean-identity, policy: F}
+          - {label: thm-calc-addition-formulas, policy: R, note: geometric proof}
+          - {label: lem-calc-sin-bounds, policy: F, note: "$\\sin\\theta<\\theta<\\tan\\theta$ for $0<\\theta<\\pi/2$, by comparing areas"}
+        notes:
+          - "Widget function-plot: unit circle ↔ graph"
+      - label: calc-inverse-trig
+        file: preliminaries/inverse-trigonometric-functions.md
+        title: Inverse Trigonometric Functions
+        level: core
+        prerequisites: [calc-trig-functions, calc-inverse-functions]
+        objectives:
+          - "Define arcsin, arccos and arctan with their principal ranges."
+          - Evaluate and simplify expressions like $\cos(\arcsin x)$.
+          - "Avoid the $\\sin^{-1}$ ambiguity."
+        results:
+          - {label: def-calc-arcsin}
+          - {label: def-calc-arccos}
+          - {label: def-calc-arctan}
+          - {label: prop-calc-arcsin-arccos-sum, policy: F}
+      - label: calc-hyperbolic-functions
+        file: preliminaries/hyperbolic-functions.md
+        title: Hyperbolic Functions
+        level: extension
+        prerequisites: [calc-exponential-functions]
+        objectives:
+          - "Define sinh, cosh and tanh."
+          - Prove $\cosh^2-\sinh^2=1$.
+          - Relate them to the hyperbola.
+        results:
+          - {label: def-calc-hyperbolic}
+          - {label: thm-calc-hyperbolic-identity, policy: F}
+      - label: calc-complex-numbers
+        file: preliminaries/complex-numbers.md
+        title: Complex Numbers
+        level: extension
+        prerequisites: [calc-trig-functions, calc-polynomial-rational]
+        objectives:
+          - Compute in rectangular and polar form.
+          - "Use $e^{i\\theta}=\\cos\\theta+i\\sin\\theta$ as notation (justified by `calc-taylor-series`)."
+          - Solve quadratics with complex roots.
+        results:
+          - {label: def-calc-complex-number}
+          - {label: def-calc-complex-polar}
+          - {label: thm-calc-de-moivre, policy: F}
+          - {label: def-calc-euler-formula, policy: D, deferred_to: calc-taylor-series, note: "definition here, consistency with series"}
+  - slug: limits
+    title: Limits
+    topics:
+      - label: calc-limit
+        file: limits/limit-of-a-function.md
+        title: The Limit of a Function
+        level: core
+        prerequisites: [calc-functions, calc-absolute-value-inequalities]
+        objectives:
+          - Estimate limits from tables and graphs and explain how this can mislead.
+          - State the precise (ε–δ) definition and interpret it as an ε–δ game.
+          - Prove limits of linear and quadratic functions from the definition.
+          - Recognise when a limit does not exist.
+        widgets: [epsilon-delta, function-plot]
+        results:
+          - {label: def-calc-limit, note: "precise definition, in core with intuitive unpacking"}
+          - {label: thm-calc-limit-unique, policy: R}
+          - {label: eg-calc-limit-linear-eps-delta, policy: F, note: worked ε–δ proof in core}
+          - {label: eg-calc-limit-quadratic-eps-delta, policy: R}
+          - {label: eg-calc-limit-sin-1-over-x, note: non-existence}
+        notes:
+          - gold-standard page
+          - "Widget epsilon-delta: signature widget"
+          - "Widget function-plot: table of values, zoom"
+      - label: calc-one-sided-limits
+        file: limits/one-sided-limits.md
+        title: One-Sided Limits
+        level: core
+        prerequisites: [calc-limit]
+        objectives:
+          - "Compute left and right limits, including for piecewise functions."
+          - Decide existence of a limit from the one-sided limits.
+        results:
+          - {label: def-calc-one-sided-limit}
+          - {label: thm-calc-limit-iff-one-sided, policy: R}
+      - label: calc-limit-laws
+        file: limits/limit-laws.md
+        title: Limit Laws
+        level: core
+        prerequisites: [calc-limit]
+        objectives:
+          - "Evaluate limits with the sum, product, quotient, power and root laws."
+          - Justify direct substitution for polynomials and rational functions.
+          - Identify when the laws do not apply.
+        results:
+          - {label: thm-calc-limit-laws, policy: F+R+S, note: "sum F as the model ε/2 proof; product, quotient R; power, root S"}
+          - {label: cor-calc-direct-substitution, policy: F}
+      - label: calc-computing-limits
+        file: limits/computing-limits.md
+        title: Computing Limits Algebraically
+        level: core
+        prerequisites: [calc-limit-laws, calc-polynomial-rational]
+        objectives:
+          - "Resolve 0/0 forms by factoring, rationalising and simplifying."
+          - Justify each step with the "agree except at a point" lemma.
+        results:
+          - {label: lem-calc-limit-agree-except-point, policy: F}
+      - label: calc-squeeze-theorem
+        file: limits/squeeze-theorem.md
+        title: The Squeeze Theorem
+        level: core
+        prerequisites: [calc-limit-laws, calc-trig-functions]
+        objectives:
+          - "Apply the squeeze theorem, including to oscillating factors."
+          - "Prove $\\lim_{x\\to0}\\frac{\\sin x}{x}=1$ geometrically."
+          - Use it for related trigonometric limits.
+        widgets: [function-plot]
+        results:
+          - {label: thm-calc-squeeze, policy: R}
+          - {label: thm-calc-sin-x-over-x, policy: F, note: "geometric, via `lem-calc-sin-bounds`; *must not* use derivatives or L'Hôpital"}
+          - {label: cor-calc-one-minus-cos-over-x, policy: F}
+        notes:
+          - "Widget function-plot: squeeze band"
+      - label: calc-infinite-limits
+        file: limits/infinite-limits.md
+        title: Infinite Limits and Vertical Asymptotes
+        level: core
+        prerequisites: [calc-one-sided-limits]
+        objectives:
+          - Determine infinite one-sided limits via sign analysis.
+          - Locate vertical asymptotes.
+          - Explain why "$=\infty$" means the limit does not exist in ℝ.
+        results:
+          - {label: def-calc-infinite-limit, note: precise version in rigorous track}
+          - {label: def-calc-vertical-asymptote}
+          - {label: prop-calc-reciprocal-power-limits, policy: F}
+      - label: calc-limits-at-infinity
+        file: limits/limits-at-infinity.md
+        title: Limits at Infinity and Horizontal Asymptotes
+        level: core
+        prerequisites: [calc-limit-laws, calc-infinite-limits]
+        objectives:
+          - Compute limits at ±∞ of rational and root expressions.
+          - Find horizontal asymptotes.
+          - Compare growth informally.
+        results:
+          - {label: def-calc-limit-at-infinity, note: "precise: ε–M"}
+          - {label: thm-calc-limit-laws-at-infinity, policy: S}
+          - {label: prop-calc-rational-at-infinity, policy: F}
+  - slug: continuity
+    title: Continuity
+    topics:
+      - label: calc-continuity
+        file: continuity/continuity.md
+        title: Continuity
+        level: core
+        prerequisites: [calc-limit-laws, calc-one-sided-limits]
+        objectives:
+          - Test continuity at a point and on an interval.
+          - "Classify discontinuities (removable, jump, infinite, oscillating)."
+          - Build continuous functions from known ones.
+        results:
+          - {label: def-calc-continuity}
+          - {label: def-calc-continuity-interval}
+          - {label: thm-calc-continuity-algebra, policy: F, note: from the limit laws}
+      - label: calc-continuity-elementary
+        file: continuity/continuity-of-elementary-functions.md
+        title: Continuity of Elementary Functions
+        level: core
+        prerequisites: [calc-continuity, calc-squeeze-theorem, calc-logarithms, calc-inverse-trig]
+        objectives:
+          - "Justify continuity of polynomial, rational, root, trigonometric, exponential and logarithmic functions on their domains."
+          - Evaluate limits of compositions.
+        results:
+          - {label: thm-calc-limit-of-composition, policy: R}
+          - {label: thm-calc-composition-continuous, policy: F, note: given the previous}
+          - {label: prop-calc-sin-cos-continuous, policy: F, note: via squeeze}
+          - {label: prop-calc-exp-log-continuous, policy: S+D, deferred_to: calc-ln-integral}
+          - {label: thm-calc-inverse-continuous, policy: S+D, deferred_to: ana}
+      - label: calc-ivt
+        file: continuity/intermediate-value-theorem.md
+        title: The Intermediate Value Theorem
+        level: core
+        prerequisites: [calc-continuity]
+        objectives:
+          - Apply the IVT to prove existence of roots and solutions.
+          - Locate roots by bisection.
+          - Explain why continuity is needed.
+        widgets: [function-plot]
+        results:
+          - {label: thm-calc-ivt, policy: S+R, note: "S in core (picture), R full proof by bisection plus `ax-calc-completeness`"}
+          - {label: cor-calc-root-existence, policy: F}
+        notes:
+          - "Widget function-plot: bisection mode"
+      - label: calc-evt
+        file: continuity/extreme-value-theorem.md
+        title: The Extreme Value Theorem
+        level: core
+        prerequisites: [calc-continuity]
+        objectives:
+          - State the EVT and check its hypotheses.
+          - Give counterexamples when a hypothesis fails.
+        results:
+          - {label: thm-calc-evt, policy: S+D, deferred_to: ana, note: "S, full proof D (Bolzano–Weierstrass)"}
+          - {label: eg-calc-evt-hypotheses-needed, policy: F, note: counterexamples}
+  - slug: derivatives
+    title: Derivatives
+    topics:
+      - label: calc-tangents-rates
+        file: derivatives/tangent-lines-and-rates.md
+        title: Tangent Lines and Rates of Change
+        level: core
+        prerequisites: [calc-limit]
+        objectives:
+          - Compute slopes of secant lines and average rates.
+          - Obtain tangent slopes and instantaneous velocity as limits.
+        widgets: [secant-tangent]
+        results:
+          - {label: def-calc-average-rate}
+          - {label: def-calc-tangent-line}
+      - label: calc-derivative
+        file: derivatives/the-derivative.md
+        title: The Derivative
+        level: core
+        prerequisites: [calc-tangents-rates, calc-continuity]
+        objectives:
+          - Compute derivatives from the definition.
+          - Interpret $f'$ as a function and sketch it from the graph of $f$.
+          - "Recognise non-differentiability (corner, cusp, vertical tangent, discontinuity)."
+        widgets: [zoom-to-linear, function-plot]
+        results:
+          - {label: def-calc-derivative}
+          - {label: def-calc-differentiable}
+          - {label: thm-calc-differentiable-implies-continuous, policy: F}
+          - {label: eg-calc-derivative-abs-not-differentiable, policy: F}
+        notes:
+          - "Widget function-plot: f and f′ linked"
+      - label: calc-differentiation-rules
+        file: derivatives/differentiation-rules.md
+        title: Basic Differentiation Rules
+        level: core
+        prerequisites: [calc-derivative]
+        objectives:
+          - "Differentiate polynomials and rational functions with the constant, power (integer), sum, product and quotient rules."
+          - Find tangent lines.
+        results:
+          - {label: thm-calc-power-rule-integer, policy: F}
+          - {label: thm-calc-sum-rule, policy: F}
+          - {label: thm-calc-product-rule, policy: F}
+          - {label: thm-calc-quotient-rule, policy: F}
+      - label: calc-derivatives-trig
+        file: derivatives/derivatives-of-trigonometric-functions.md
+        title: Derivatives of Trigonometric Functions
+        level: core
+        prerequisites: [calc-differentiation-rules, calc-squeeze-theorem]
+        objectives:
+          - Derive $(\sin x)'=\cos x$ from the fundamental trigonometric limits.
+          - Differentiate all six trigonometric functions.
+        results:
+          - {label: thm-calc-derivative-sin-cos, policy: F}
+          - {label: cor-calc-derivative-tan-etc, policy: F}
+      - label: calc-chain-rule
+        file: derivatives/chain-rule.md
+        title: The Chain Rule
+        level: core
+        prerequisites: [calc-differentiation-rules]
+        objectives:
+          - Differentiate compositions in prime and Leibniz notation.
+          - Recognise the composition structure of expressions.
+        results:
+          - {label: thm-calc-chain-rule, policy: F, note: "via the Carathéodory/\"linear approximation\" formulation, which avoids the $\\Delta u = 0$ gap of the classic proof; a remark explains the gap"}
+      - label: calc-implicit-differentiation
+        file: derivatives/implicit-differentiation.md
+        title: Implicit Differentiation
+        level: core
+        prerequisites: [calc-chain-rule]
+        objectives:
+          - Differentiate implicitly defined curves.
+          - Find tangent lines to curves such as circles and the folium.
+          - Explain when implicit differentiation is justified (implicit function theorem D → `mvc`).
+        results:
+          - {label: rem-calc-implicit-function-theorem, policy: D, deferred_to: mvc, note: statement}
+      - label: calc-inverse-function-derivatives
+        file: derivatives/derivatives-of-inverse-functions.md
+        title: Derivatives of Inverse Functions
+        level: core
+        prerequisites: [calc-chain-rule, calc-continuity-elementary, calc-derivatives-trig]
+        objectives:
+          - "Apply $(f^{-1})'(y)=1/f'(f^{-1}(y))$."
+          - "Derive the derivatives of arcsin, arccos and arctan."
+        results:
+          - {label: thm-calc-inverse-function-derivative, policy: S+R, note: "S in core (formula from the chain rule *assuming* differentiability), R full proof"}
+          - {label: cor-calc-derivative-inverse-trig, policy: F}
+      - label: calc-derivatives-exp-log
+        file: derivatives/derivatives-of-exponential-and-logarithmic-functions.md
+        title: Derivatives of Exponential and Logarithmic Functions
+        level: core
+        prerequisites: [calc-inverse-function-derivatives]
+        objectives:
+          - "Differentiate $e^x$, $a^x$, $\\ln x$, $\\log_b x$ and $x^r$ for real $r$."
+          - Use logarithmic differentiation.
+        results:
+          - {label: lem-calc-exp-limit, policy: D, deferred_to: calc-ln-integral, note: "$\\lim_{h\\to0}\\frac{e^h-1}{h}=1$; stated as a fact characterising $e$"}
+          - {label: thm-calc-derivative-exp, policy: F, note: given the lemma}
+          - {label: thm-calc-derivative-ln, policy: F}
+          - {label: thm-calc-general-power-rule, policy: F}
+      - label: calc-higher-derivatives
+        file: derivatives/higher-derivatives.md
+        title: Higher Derivatives
+        level: core
+        prerequisites: [calc-derivatives-trig]
+        objectives:
+          - Compute second and $n$-th derivatives.
+          - Interpret acceleration.
+          - "Find patterns (e.g. $(\\sin x)^{(n)}$)."
+        results:
+          - {label: def-calc-higher-derivative}
+          - {label: prop-calc-leibniz-product-rule, policy: R, note: by induction}
+      - label: calc-related-rates
+        file: derivatives/related-rates.md
+        title: Related Rates
+        level: core
+        prerequisites: [calc-implicit-differentiation, calc-derivatives-trig]
+        objectives:
+          - Model a related-rates problem.
+          - Differentiate the relation with respect to time.
+          - Interpret the result with units.
+        results: []
+        notes:
+          - None (method page).
+          - ≥ 5 worked examples.
+  - slug: derivative-applications
+    title: Applications of Derivatives
+    topics:
+      - label: calc-extreme-values
+        file: derivative-applications/extreme-values.md
+        title: Extreme Values and Critical Points
+        level: core
+        prerequisites: [calc-differentiation-rules, calc-evt]
+        objectives:
+          - Distinguish local and global extrema.
+          - Find critical points.
+          - Apply the closed interval method.
+        results:
+          - {label: def-calc-local-extremum}
+          - {label: def-calc-critical-point}
+          - {label: thm-calc-fermat, policy: F}
+      - label: calc-mean-value-theorem
+        file: derivative-applications/mean-value-theorem.md
+        title: Rolle's Theorem and the Mean Value Theorem
+        level: core
+        prerequisites: [calc-extreme-values]
+        objectives:
+          - State and apply Rolle's theorem and the MVT.
+          - Use the MVT to prove inequalities and uniqueness of roots.
+        widgets: [secant-tangent]
+        results:
+          - {label: thm-calc-rolle, policy: F}
+          - {label: thm-calc-mvt, policy: F}
+          - {label: cor-calc-zero-derivative-constant, policy: F}
+          - {label: cor-calc-same-derivative, policy: F}
+        notes:
+          - "Widget secant-tangent: MVT mode"
+      - label: calc-monotonicity
+        file: derivative-applications/monotonicity.md
+        title: Monotonicity and the First Derivative Test
+        level: core
+        prerequisites: [calc-mean-value-theorem]
+        objectives:
+          - Determine intervals of increase and decrease from the sign of $f'$.
+          - Classify critical points with the first derivative test.
+        results:
+          - {label: thm-calc-monotonicity-test, policy: F, note: from the MVT}
+          - {label: thm-calc-first-derivative-test, policy: F}
+      - label: calc-concavity
+        file: derivative-applications/concavity.md
+        title: Concavity and the Second Derivative Test
+        level: core
+        prerequisites: [calc-monotonicity, calc-higher-derivatives]
+        objectives:
+          - Determine concavity and inflection points.
+          - Apply the second derivative test and know when it is inconclusive.
+        results:
+          - {label: def-calc-concave, note: via increasing $f'$}
+          - {label: thm-calc-concavity-test, policy: F}
+          - {label: thm-calc-second-derivative-test, policy: F}
+      - label: calc-curve-sketching
+        file: derivative-applications/curve-sketching.md
+        title: Curve Sketching
+        level: core
+        prerequisites: [calc-concavity, calc-limits-at-infinity]
+        objectives:
+          - "Produce a complete sketch (domain, symmetry, intercepts, asymptotes including oblique, monotonicity, extrema, concavity)."
+          - Check it against a plot.
+        widgets: [function-plot]
+        results:
+          - {label: def-calc-oblique-asymptote}
+        notes:
+          - Method page.
+          - "Widget function-plot: reveal features step by step"
+      - label: calc-optimisation
+        file: derivative-applications/optimisation.md
+        title: Optimisation Problems
+        level: core
+        prerequisites: [calc-monotonicity]
+        objectives:
+          - Translate a word problem into an objective function with constraints.
+          - Justify that a critical point is a global optimum.
+        results:
+          - {label: prop-calc-single-critical-point, policy: F, note: a unique local extremum on an interval is global}
+      - label: calc-lhopital
+        file: derivative-applications/lhopital.md
+        title: Indeterminate Forms and L'Hôpital's Rule
+        level: core
+        prerequisites: [calc-mean-value-theorem, calc-derivatives-exp-log, calc-limits-at-infinity]
+        objectives:
+          - Identify indeterminate forms.
+          - Apply L'Hôpital's rule correctly (checking hypotheses).
+          - "Convert $0\\cdot\\infty$, $\\infty-\\infty$, $1^\\infty$, $0^0$, $\\infty^0$."
+        results:
+          - {label: thm-calc-cauchy-mvt, policy: R}
+          - {label: thm-calc-lhopital, policy: R, note: "0/0, finite $a$"}
+          - {label: thm-calc-lhopital-general, policy: S, note: the ∞/∞ and $a=\pm\infty$ versions}
+          - {label: rem-calc-lhopital-misuse, note: examples where it fails or is circular}
+      - label: calc-linearisation
+        file: derivative-applications/linear-approximation.md
+        title: Linear Approximation and Differentials
+        level: core
+        prerequisites: [calc-differentiation-rules]
+        objectives:
+          - Build the linearisation.
+          - Estimate values and errors.
+          - Use differentials for error propagation.
+        widgets: [zoom-to-linear]
+        results:
+          - {label: def-calc-linearisation}
+          - {label: def-calc-differential}
+          - {label: prop-calc-linearisation-error-little-o, policy: F}
+      - label: calc-newtons-method
+        file: derivative-applications/newtons-method.md
+        title: Newton's Method
+        level: core
+        prerequisites: [calc-linearisation, calc-ivt]
+        objectives:
+          - Derive and run Newton's iteration.
+          - "Recognise failure modes (bad start, cycles, $f'=0$)."
+        widgets: [newton-method]
+        results:
+          - {label: thm-calc-newton-convergence, policy: S+D, deferred_to: out-of-scope, note: "quadratic convergence near a simple root; S, D (numerical analysis)"}
+      - label: calc-taylor-polynomials
+        file: derivative-applications/taylor-polynomials.md
+        title: Taylor Polynomials and Taylor's Theorem
+        level: core
+        prerequisites: [calc-linearisation, calc-mean-value-theorem, calc-higher-derivatives]
+        objectives:
+          - Compute Taylor polynomials.
+          - Bound the error with the Lagrange remainder.
+          - Use Taylor polynomials for approximation and limits.
+        widgets: [taylor]
+        results:
+          - {label: def-calc-taylor-polynomial}
+          - {label: thm-calc-taylor-lagrange, policy: R, note: repeated Rolle / Cauchy MVT}
+          - {label: cor-calc-taylor-error-bound, policy: F}
+          - {label: prop-calc-ordo-arithmetic, policy: F, note: big-O rules}
+  - slug: integrals
+    title: Integrals
+    topics:
+      - label: calc-antiderivatives
+        file: integrals/antiderivatives.md
+        title: Antiderivatives
+        level: core
+        prerequisites: [calc-mean-value-theorem, calc-derivatives-exp-log]
+        objectives:
+          - Find antiderivatives from a table of basic forms.
+          - Explain the $+C$ (on an interval) using the MVT.
+          - Solve simple initial value problems.
+        results:
+          - {label: def-calc-antiderivative}
+          - {label: thm-calc-antiderivatives-differ-by-constant, policy: F, note: from `cor-calc-same-derivative`}
+      - label: calc-sigma-notation
+        file: integrals/sigma-notation.md
+        title: Sums and Sigma Notation
+        level: core
+        prerequisites: [calc-real-numbers]
+        objectives:
+          - Read and manipulate sigma notation.
+          - "Use the formulas for $\\sum k$, $\\sum k^2$, $\\sum k^3$."
+          - Recognise telescoping sums.
+        results:
+          - {label: thm-calc-power-sums, policy: F, note: "by induction, with a short induction primer"}
+          - {label: prop-calc-telescoping-sum, policy: F}
+      - label: calc-area-riemann-sums
+        file: integrals/area-and-riemann-sums.md
+        title: Area and Riemann Sums
+        level: core
+        prerequisites: [calc-sigma-notation, calc-limits-at-infinity]
+        objectives:
+          - "Approximate areas with left, right and midpoint sums."
+          - Compute exact areas as limits for polynomials.
+        widgets: [riemann-sum]
+        results:
+          - {label: def-calc-riemann-sum}
+      - label: calc-definite-integral
+        file: integrals/definite-integral.md
+        title: The Definite Integral
+        level: core
+        prerequisites: [calc-area-riemann-sums, calc-continuity]
+        objectives:
+          - Define the integral as a limit of Riemann sums.
+          - Interpret it as signed area.
+          - "Apply linearity, additivity and comparison properties."
+        results:
+          - {label: def-calc-definite-integral, note: upper/lower Darboux sums in the rigorous track}
+          - {label: thm-calc-continuous-integrable, policy: S+D, deferred_to: ana}
+          - {label: thm-calc-integral-properties, policy: S+R, note: "linearity, additivity, comparison S; R for comparison"}
+      - label: calc-ftc
+        file: integrals/fundamental-theorem.md
+        title: The Fundamental Theorem of Calculus
+        level: core
+        prerequisites: [calc-definite-integral, calc-antiderivatives]
+        objectives:
+          - Differentiate accumulation functions $\int_a^x f$.
+          - Evaluate definite integrals with antiderivatives.
+          - Explain why differentiation and integration are inverse processes.
+        widgets: [area-accumulation]
+        results:
+          - {label: thm-calc-mvt-integrals, policy: F}
+          - {label: thm-calc-ftc-1, policy: F}
+          - {label: thm-calc-ftc-2, policy: F}
+      - label: calc-substitution
+        file: integrals/substitution.md
+        title: Integration by Substitution
+        level: core
+        prerequisites: [calc-ftc]
+        objectives:
+          - Choose a substitution.
+          - Change limits in definite integrals.
+          - "Recognise symmetry ($\\int_{-a}^a$ of odd/even functions)."
+        results:
+          - {label: thm-calc-substitution-rule, policy: F, note: indefinite and definite}
+          - {label: prop-calc-odd-even-integrals, policy: F}
+      - label: calc-ln-integral
+        file: integrals/logarithm-as-integral.md
+        title: The Logarithm Defined as an Integral
+        level: extension
+        prerequisites: [calc-ftc, calc-ivt]
+        objectives:
+          - "Define $\\ln x=\\int_1^x \\frac{dt}{t}$ and derive all log laws."
+          - Define $\exp$ as its inverse and $e=\exp(1)$.
+          - "Prove `lem-calc-exp-limit` and the compound-interest limit, closing the loop from chapters 1 and 4."
+        results:
+          - {label: def-calc-ln-integral}
+          - {label: thm-calc-ln-integral-properties, policy: F}
+          - {label: thm-calc-exp-as-inverse, policy: R}
+          - {label: thm-calc-e-compound-interest, policy: F}
+          - {label: thm-calc-definitions-agree, policy: F}
+  - slug: integration-techniques
+    title: Integration Techniques
+    topics:
+      - label: calc-integration-by-parts
+        file: integration-techniques/integration-by-parts.md
+        title: Integration by Parts
+        level: core
+        prerequisites: [calc-substitution]
+        objectives:
+          - Apply integration by parts (including repeated application and the "solve for the integral" trick).
+          - "Choose $u$ and $\\mathrm{d}v$ well."
+        results:
+          - {label: thm-calc-integration-by-parts, policy: F, note: indefinite and definite}
+      - label: calc-trig-integrals
+        file: integration-techniques/trigonometric-integrals.md
+        title: Trigonometric Integrals
+        level: core
+        prerequisites: [calc-substitution]
+        objectives:
+          - Integrate products of powers of sin/cos and tan/sec.
+          - Use power-reduction identities.
+        results:
+          - {label: prop-calc-power-reduction, policy: F}
+        notes:
+          - Method page.
+      - label: calc-trig-substitution
+        file: integration-techniques/trigonometric-substitution.md
+        title: Trigonometric Substitution
+        level: core
+        prerequisites: [calc-trig-integrals]
+        objectives:
+          - "Use $x=a\\sin\\theta$, $a\\tan\\theta$, $a\\sec\\theta$ for $\\sqrt{a^2-x^2}$ and similar."
+          - Convert back to $x$ with a reference triangle.
+        results: []
+        notes:
+          - Method page.
+      - label: calc-partial-fractions
+        file: integration-techniques/partial-fractions.md
+        title: Partial Fractions
+        level: core
+        prerequisites: [calc-substitution, calc-polynomial-rational]
+        objectives:
+          - "Decompose rational functions (distinct, repeated, irreducible quadratic factors)."
+          - Integrate them.
+        results:
+          - {label: thm-calc-partial-fraction-decomposition, policy: S+D, deferred_to: linalg, note: "existence; S, D (algebra)"}
+      - label: calc-integration-strategy
+        file: integration-techniques/integration-strategy.md
+        title: Strategy for Integration
+        level: core
+        prerequisites: [calc-integration-by-parts, calc-trig-substitution, calc-partial-fractions]
+        objectives:
+          - Choose a method for an unfamiliar integral.
+          - Use tables and CAS responsibly.
+          - "Recognise that some integrals (e.g. $\\int e^{-x^2}\\mathrm{d}x$) are not elementary."
+        results:
+          - {label: rem-calc-nonelementary-integrals, policy: D, deferred_to: out-of-scope, note: "statement, Liouville"}
+      - label: calc-numerical-integration
+        file: integration-techniques/numerical-integration.md
+        title: Numerical Integration
+        level: core
+        prerequisites: [calc-definite-integral, calc-taylor-polynomials]
+        objectives:
+          - "Apply the midpoint, trapezoid and Simpson rules."
+          - Use error bounds to choose $n$.
+        widgets: [riemann-sum]
+        results:
+          - {label: thm-calc-trapezoid-error, policy: R}
+          - {label: thm-calc-simpson-error, policy: S}
+        notes:
+          - "Widget riemann-sum: trapezoid/Simpson modes"
+  - slug: integral-applications
+    title: Applications of Integrals
+    topics:
+      - label: calc-area-between-curves
+        file: integral-applications/area-between-curves.md
+        title: Area Between Curves
+        level: core
+        prerequisites: [calc-substitution]
+        objectives:
+          - Set up area integrals with respect to $x$ or $y$.
+          - Find intersection points.
+          - Split at crossings.
+        results: []
+        notes:
+          - Method page.
+      - label: calc-volumes-slicing
+        file: integral-applications/volumes-by-slicing.md
+        title: Volumes by Slicing
+        level: core
+        prerequisites: [calc-area-between-curves]
+        objectives:
+          - Compute volumes from cross-sectional areas.
+          - Use disks and washers for solids of revolution.
+        widgets: [solid-of-revolution]
+        results:
+          - {label: def-calc-volume-by-slicing, note: justified by Riemann sums}
+      - label: calc-volumes-shells
+        file: integral-applications/volumes-by-shells.md
+        title: Volumes by Cylindrical Shells
+        level: core
+        prerequisites: [calc-volumes-slicing, calc-integration-by-parts]
+        objectives:
+          - Set up shell integrals.
+          - Choose between washers and shells.
+        results:
+          - {label: rem-calc-shells-washers-agree, policy: S}
+        notes:
+          - Method page.
+      - label: calc-arc-length
+        file: integral-applications/arc-length.md
+        title: Arc Length and Surface Area
+        level: core
+        prerequisites: [calc-substitution]
+        objectives:
+          - Derive and apply the arc-length formula (via the MVT on polygonal approximations).
+          - Compute areas of surfaces of revolution.
+        results:
+          - {label: def-calc-arc-length, policy: F, note: derivation}
+          - {label: def-calc-surface-area, policy: S, note: derivation}
+      - label: calc-average-value
+        file: integral-applications/average-value.md
+        title: Average Value of a Function
+        level: core
+        prerequisites: [calc-ftc]
+        objectives:
+          - Compute averages of functions.
+          - Interpret the MVT for integrals.
+        results:
+          - {label: def-calc-average-value}
+        notes:
+          - Uses `thm-calc-mvt-integrals`.
+      - label: calc-physics-applications
+        file: integral-applications/work-mass-centre-of-mass.md
+        title: "Work, Mass and Centre of Mass"
+        level: core
+        prerequisites: [calc-area-between-curves]
+        objectives:
+          - "Set up integrals for work (springs, pumping), mass from density, and centroids of plane regions."
+          - Keep track of units.
+        results: []
+        notes:
+          - Method page.
+  - slug: improper-integrals
+    title: Improper Integrals
+    topics:
+      - label: calc-improper-integrals
+        file: improper-integrals/improper-integrals.md
+        title: Improper Integrals
+        level: core
+        prerequisites: [calc-ftc, calc-lhopital]
+        objectives:
+          - Evaluate type I (infinite interval) and type II (unbounded integrand) integrals.
+          - Decide convergence of $p$-integrals.
+        results:
+          - {label: def-calc-improper-integral}
+          - {label: thm-calc-p-integrals, policy: F}
+      - label: calc-improper-comparison
+        file: improper-integrals/comparison-tests-for-integrals.md
+        title: Comparison Tests for Improper Integrals
+        level: core
+        prerequisites: [calc-improper-integrals]
+        objectives:
+          - "Decide convergence without evaluating, using direct and limit comparison."
+          - Choose a comparison function from the dominant behaviour of the integrand.
+        results:
+          - {label: thm-calc-improper-comparison, policy: R, note: "needs monotone bounded ⇒ convergent, from `ax-calc-completeness`"}
+          - {label: thm-calc-improper-limit-comparison, policy: F, note: given comparison}
+          - {label: thm-calc-absolute-convergence-integrals, policy: F}
+      - label: calc-probability-densities
+        file: improper-integrals/probability-densities.md
+        title: Probability Density Functions
+        level: extension
+        prerequisites: [calc-improper-integrals, calc-integration-by-parts]
+        objectives:
+          - Check that a density is valid.
+          - "Compute probabilities, means and variances of exponential and normal-type densities."
+        results:
+          - {label: def-calc-pdf}
+          - {label: prop-calc-gaussian-integral, policy: D, deferred_to: mvc, note: "value stated, proof"}
+  - slug: sequences-series
+    title: Sequences and Series
+    topics:
+      - label: calc-sequences
+        file: sequences-series/sequences.md
+        title: Sequences
+        level: core
+        prerequisites: [calc-lhopital]
+        objectives:
+          - Compute limits of sequences.
+          - Use the function-limit connection and the squeeze theorem.
+          - Prove simple limits from the definition (rigorous track).
+        results:
+          - {label: def-calc-sequence-limit, note: "precise: ε–N"}
+          - {label: thm-calc-sequence-limit-laws, policy: S}
+          - {label: thm-calc-sequence-from-function, policy: F}
+          - {label: thm-calc-sequence-squeeze, policy: F}
+      - label: calc-monotone-sequences
+        file: sequences-series/monotone-sequences.md
+        title: Monotone and Bounded Sequences
+        level: core
+        prerequisites: [calc-sequences]
+        objectives:
+          - Prove monotonicity and boundedness.
+          - "Apply the monotone convergence theorem, including to recursive sequences."
+        results:
+          - {label: thm-calc-convergent-bounded, policy: F}
+          - {label: thm-calc-monotone-convergence, policy: R, note: from `ax-calc-completeness`}
+      - label: calc-series
+        file: sequences-series/series.md
+        title: Infinite Series
+        level: core
+        prerequisites: [calc-sequences, calc-sigma-notation]
+        objectives:
+          - Define convergence via partial sums.
+          - Sum geometric and telescoping series.
+          - Apply the divergence test.
+        widgets: [partial-sums]
+        results:
+          - {label: def-calc-series-convergence}
+          - {label: thm-calc-geometric-series, policy: F}
+          - {label: thm-calc-divergence-test, policy: F}
+          - {label: prop-calc-series-linearity, policy: F}
+      - label: calc-integral-test
+        file: sequences-series/integral-test.md
+        title: The Integral Test and p-Series
+        level: core
+        prerequisites: [calc-series, calc-monotone-sequences, calc-improper-integrals]
+        objectives:
+          - Apply the integral test.
+          - State the $p$-series result.
+          - Estimate remainders.
+        results:
+          - {label: thm-calc-integral-test, policy: F}
+          - {label: cor-calc-p-series, policy: F}
+          - {label: thm-calc-integral-test-remainder, policy: F}
+      - label: calc-comparison-tests
+        file: sequences-series/comparison-tests.md
+        title: Comparison Tests for Series
+        level: core
+        prerequisites: [calc-integral-test]
+        objectives:
+          - Choose a comparison series.
+          - Apply direct and limit comparison.
+        results:
+          - {label: thm-calc-series-comparison, policy: F, note: via monotone convergence of partial sums}
+          - {label: thm-calc-series-limit-comparison, policy: F}
+      - label: calc-alternating-series
+        file: sequences-series/alternating-series.md
+        title: Alternating Series
+        level: core
+        prerequisites: [calc-series, calc-monotone-sequences]
+        objectives:
+          - Apply the alternating series test.
+          - Bound the error of a partial sum.
+        results:
+          - {label: thm-calc-alternating-series-test, policy: F}
+          - {label: thm-calc-alternating-error-bound, policy: F}
+      - label: calc-absolute-convergence
+        file: sequences-series/absolute-convergence.md
+        title: "Absolute Convergence, Ratio and Root Tests"
+        level: core
+        prerequisites: [calc-comparison-tests, calc-alternating-series]
+        objectives:
+          - Distinguish absolute and conditional convergence.
+          - Apply the ratio and root tests.
+          - Choose a test strategically.
+        results:
+          - {label: thm-calc-absolute-implies-convergence, policy: F}
+          - {label: thm-calc-ratio-test, policy: F}
+          - {label: thm-calc-root-test, policy: R}
+          - {label: rem-calc-riemann-rearrangement, policy: S+D, deferred_to: ana}
+      - label: calc-power-series
+        file: sequences-series/power-series.md
+        title: Power Series
+        level: core
+        prerequisites: [calc-absolute-convergence]
+        objectives:
+          - Find the radius of convergence with the ratio or root test.
+          - "Determine the interval of convergence, checking each endpoint separately."
+        results:
+          - {label: def-calc-power-series}
+          - {label: thm-calc-radius-of-convergence, policy: R}
+      - label: calc-power-series-calculus
+        file: sequences-series/calculus-with-power-series.md
+        title: Calculus with Power Series
+        level: core
+        prerequisites: [calc-power-series]
+        objectives:
+          - Differentiate and integrate power series term by term.
+          - "Build series for $\\frac{1}{1-x}$, $\\ln(1+x)$ and $\\arctan x$."
+        results:
+          - {label: thm-calc-term-by-term, policy: S+D, deferred_to: ana, note: "stated; S, D (uniform convergence)"}
+      - label: calc-taylor-series
+        file: sequences-series/taylor-series.md
+        title: Taylor and Maclaurin Series
+        level: core
+        prerequisites: [calc-power-series-calculus, calc-taylor-polynomials, calc-complex-numbers]
+        objectives:
+          - Compute Taylor series.
+          - "Prove convergence to the function via the remainder for $e^x$, $\\sin x$ and $\\cos x$."
+          - State the standard series.
+          - Explain why not every smooth function equals its Taylor series.
+        widgets: [taylor]
+        results:
+          - {label: thm-calc-taylor-series-convergence, policy: F, note: "for $e^x$, $\\sin$, $\\cos$"}
+          - {label: eg-calc-taylor-series-smooth-not-analytic, policy: R, note: "$e^{-1/x^2}$"}
+          - {label: thm-calc-euler-formula-series, policy: F, note: closes `def-calc-euler-formula`}
+        notes:
+          - "Widget taylor: series mode"
+      - label: calc-taylor-applications
+        file: sequences-series/taylor-series-applications.md
+        title: Applications of Taylor Series
+        level: extension
+        prerequisites: [calc-taylor-series]
+        objectives:
+          - Use series to evaluate limits and integrals and to approximate with a guaranteed error.
+          - Use the binomial series.
+        results:
+          - {label: thm-calc-binomial-series, policy: S}
+  - slug: differential-equations
+    title: Introduction to Differential Equations
+    topics:
+      - label: calc-ode-intro
+        file: differential-equations/differential-equations-intro.md
+        title: Differential Equations and Slope Fields
+        level: core
+        prerequisites: [calc-antiderivatives]
+        objectives:
+          - Verify solutions.
+          - Read slope fields.
+          - Distinguish general and particular solutions.
+          - Explain what an existence-uniqueness theorem guarantees.
+        widgets: [slope-field]
+        results:
+          - {label: def-calc-ode}
+          - {label: def-calc-ivp}
+          - {label: thm-calc-picard-lindelof, policy: D, deferred_to: ode, note: stated}
+      - label: calc-separable-equations
+        file: differential-equations/separable-equations.md
+        title: Separable Equations
+        level: core
+        prerequisites: [calc-ode-intro, calc-partial-fractions]
+        objectives:
+          - "Solve separable equations, including lost constant solutions."
+          - Handle the absolute value from $\ln\lvert y\rvert$ correctly.
+        results:
+          - {label: thm-calc-separation-of-variables, policy: F, note: "justified via the chain rule, not \"multiplying by $\\mathrm{d}x$\""}
+      - label: calc-first-order-linear
+        file: differential-equations/first-order-linear-equations.md
+        title: First-Order Linear Equations
+        level: core
+        prerequisites: [calc-ode-intro, calc-integration-by-parts]
+        objectives:
+          - Solve $y'+p(x)y=q(x)$ with an integrating factor.
+          - Solve IVPs.
+        results:
+          - {label: thm-calc-integrating-factor, policy: F, note: including that all solutions have this form}
+      - label: calc-ode-models
+        file: differential-equations/modelling-with-differential-equations.md
+        title: Modelling with First-Order Equations
+        level: core
+        prerequisites: [calc-separable-equations, calc-first-order-linear]
+        objectives:
+          - "Build and solve models of growth/decay, Newton cooling, mixing and logistic growth."
+          - Interpret equilibria.
+        results:
+          - {label: prop-calc-logistic-solution, policy: F}
+      - label: calc-eulers-method
+        file: differential-equations/eulers-method.md
+        title: Euler's Method
+        level: core
+        prerequisites: [calc-ode-intro, calc-linearisation]
+        objectives:
+          - Run Euler's method by hand and in code.
+          - Observe first-order error behaviour.
+        widgets: [slope-field]
+        results:
+          - {label: thm-calc-euler-error-order, policy: S+D, deferred_to: ode}
+        notes:
+          - "Widget slope-field: Euler overlay"
+      - label: calc-second-order-linear
+        file: differential-equations/second-order-linear-equations.md
+        title: Second-Order Linear Equations with Constant Coefficients
+        level: core
+        prerequisites: [calc-first-order-linear, calc-complex-numbers]
+        objectives:
+          - Solve $ay''+by'+cy=0$ in the three root cases.
+          - "Find particular solutions with undetermined coefficients for polynomial, exponential and trigonometric right-hand sides."
+          - Model oscillators.
+        results:
+          - {label: thm-calc-superposition, policy: F}
+          - {label: thm-calc-characteristic-equation-solutions, policy: F+D, deferred_to: ode, note: F (these are solutions) + all solutions D}

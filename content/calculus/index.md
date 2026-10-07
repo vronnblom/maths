@@ -53,11 +53,12 @@ The chapters are planned in this order. Each one will be linked here once it is 
 
 ## Prerequisite map
 
-:::{note}
-A map of all the topics and the prerequisites between them will appear here. It is generated
-from the curriculum each time the site is built, and the generator is being built in the
-next stage of setting up the site.
-:::
+Every planned topic of this subject and the topics it builds on. It is generated from the
+curriculum and the pages each time the site is built.
+
+% Written by scripts/generate.py (graph.py mermaid) before every build; never edit or commit it.
+```{include} _generated/prereq-map.md
+```
 
 ## Suggested paths
 

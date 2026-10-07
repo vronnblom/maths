@@ -202,28 +202,27 @@ template for topic PRs.
 - [ ] Intuition comes before formalism; at least one picture or widget per main concept.
 - [ ] Common mistakes reflect real student errors.
 - [ ] Notation follows [04](04-notation-and-style.md) (`check_all.py` lints the mechanical part:
-      bare `\log`, `\sin^{-1}`, raw `dx` in integrals, degrees).
+      bare `\log`, `\sin^{-1}`, raw `dx` in integrals, `]a, b[`, `\mathrm{e}`, degrees,
+      "clearly"/"obviously"; 04 §4.4).
 
 ## 6.4 CI checks (all blocking unless noted)
 
-| Check | Tool | Catches |
-|---|---|---|
 Each check runs in the CI job (and npm script) shown, so local and CI runs match
 ([05 §5.5](05-tooling-and-build.md)).
 
 | Check | Tool (job / npm script) | Catches |
 |---|---|---|
 | Site builds | `scripts/build_site.sh`: `myst build --html --strict` + filter on ⛔️ and ⚠️ (`build` / `build`) | MyST syntax errors, unknown directives, **broken internal cross-references**, missing files, unresolved labels |
-| Front matter | `check_frontmatter.py` + `schema/page.schema.json` (`checks` / `check`) | missing/invalid fields, unknown tags, bad label format, status preconditions that need no tests, including the **prerequisite-status gate**: a page may be `reviewed` or `verified` only if every prerequisite page exists and is at least `reviewed` |
-| Labels | `check_labels.py` (`checks` / `check`) | duplicate labels (also across pages), label grammar, kind prefix matching the directive (`thm-` on `proof:theorem`), every exercise has exactly one solution, every proof directly after its statement or paired with it by label (`prf-<slug>`), every `{anywidget}` alone in a `{figure}` labelled `wdg-…`, labels removed without a tombstone, and labels in the content that are missing from `labels.lock` (§6.7) |
-| Graph | `graph.py check` (`checks` / `check`) | unknown prerequisites, cycles, cross-subject edges violating `depends_on`, mismatch with `curriculum.yml` |
+| Front matter | `check_frontmatter.py` + `schema/page.schema.json` (`checks` / `check`) | missing/invalid fields (per kind), unknown tags (`content/tags.yml`), bad label format, kind vs path, status preconditions that need no tests (`reviewed_by`, the `verify` file exists), including the **prerequisite-status gate**: a page may be `reviewed` or `verified` only if every prerequisite page exists and is at least `reviewed` |
+| Labels | `check_labels.py` (`checks` / `check`) | duplicate labels (also across pages), label grammar, kind prefix matching the directive (`thm-` on `proof:theorem`), required labels, examples/exercises/solutions prefixed by their topic, every exercise has a tier, exactly one Answer admonition and exactly one solution after it, every proof directly after its statement or paired with it by label (`prf-<slug>`), references to unknown labels or with other syntax than `[text](#label)`, every `{anywidget}` alone in a `{figure}` labelled `wdg-…` (stage 3), labels removed without a tombstone, and labels in the content that are missing from `labels.lock` (§6.7). It reads the Markdown source with a small parser (`scripts/myst_source.py`) that fails on syntax it doesn't know; a test compares it with mystmd's AST of `templates/topic.md` |
+| Graph | `graph.py check` (`checks` / `check`) | `curriculum.yml` schema, unknown prerequisites, cycles, cross-subject edges violating `depends_on`, mismatch with `curriculum.yml`, deferred proofs whose target comes earlier; redundant transitive edges (warning) |
 | Forward references | `check_labels.py --forward-refs` (`checks` / `check`) | citations outside the prerequisite closure; inside proofs and solutions, also citations of a block that comes *later* on the same page (warning; error on verified pages) |
 | ToC | `check_toc.py` (`checks` / `check`) | `.md` files missing from the toc, toc entries without files |
 | Widgets | `check_all.py` (`checks` / `check`) | widget JSON vs schema, widget file exists, figure caption (the text description) present |
-| Notation lint | `check_all.py` (`checks` / `check`) | bare `\log`, `\sin^{-1}`, raw `dx`, `]a,b[`, `\mathrm{e}`, degrees in calculus pages |
+| Notation lint | `check_all.py` (`notation_lint.py`; `checks` / `check`) | bare `\log`, `\sin^{-1}`, raw `dx`, `]a,b[`, `\mathrm{e}`, degrees in calculus pages, "clearly"/"obviously"/"trivially" in prose (04 §4.4) |
 | Spelling | `codespell` with the en-GB dictionary (`checks` / `check`) | typos and US spellings |
-| Checker tests | `pytest tests` (`checks` / `check`) | a checker that stops detecting its fixture's error |
-| Verified-page edits | `check_verified_edits.py` (`guard.yml` / –, PRs only) | see §6.6 |
+| Checker tests | `pytest tests` (`checks` / `check`) | a checker that stops detecting its fixture's error; the build gate (`scripts/myst_gate.sh`) on a broken reference and an unknown directive |
+| Verified-page edits | `check_verified_edits.py` (`guard.yml` / –, PRs only; stage 4, with the coverage gate) | see §6.6 |
 | Verification | `pytest verify` (`verify` / `verify`) | wrong computations and answers |
 | Coverage gate | `check_coverage.py` after pytest (`verify` / `verify`) | status vs verification coverage actually achieved (§6.1, §6.6) |
 | LaTeX renders | `scripts/check_katex.mjs` on the AST (`verify` / `verify`) | unsupported commands or macros that the build would only render as red error text |
@@ -285,7 +284,11 @@ disappear ([02 §2.4](02-information-architecture.md)). New labels must get into
 protects nothing:
 - `check_labels.py` **fails** if a label in the content is missing from `labels.lock`;
 - `uv run python scripts/check_labels.py --update-lock` appends the missing labels (sorted,
-  with the page they live on). Authors run it as a step of "how to add a topic" (CLAUDE.md)
-  and commit the result with the page;
+  with the page they live on) and updates the page of a label that moved. Authors run it as a
+  step of "how to add a topic" (CLAUDE.md) and commit the result with the page;
 - a removed label needs a tombstone line in the lock (`label → replacement or reason`);
-  otherwise the check fails.
+  otherwise the check fails. `--update-lock` never deletes a line, and a tombstoned label can't
+  come back into the content.
+
+The format is one label per line, `<label>  <page relative to content/>`, sorted, with `#`
+comments at the top; a tombstone is `<label> → <replacement or reason>`.

@@ -1,0 +1,42 @@
+# Tests for the repository checks
+
+`npm run check` runs `uv run pytest tests -q` after `check_all.py` and codespell; CI runs it in
+the `checks` job. These tests check the *checkers* (docs/plan/06 §6.4, "Checker tests"): each one
+must fail on a fixture with exactly one deliberate defect, with the intended message, and pass on
+the clean fixture and on the real tree. The mathematics is tested in `verify/` (stage 4).
+
+## Fixtures
+
+Each folder in `fixtures/` is a tiny repository: `content/myst.yml` with a toc, a few pages,
+often `content/calculus/curriculum.yml`, a `labels.lock`, and sometimes a `verify/` file.
+
+| Fixture | Defect | Caught by |
+|---|---|---|
+| `clean` | none: `templates/topic.md` verbatim (a test keeps them identical), plus a lock with a tombstone | – |
+| `bad-label` | `def-calc-Limit` | `check_labels.py` |
+| `duplicate-label` | `def-calc-limit` on two pages | `check_labels.py` |
+| `label-missing-from-lock` | a label that `labels.lock` lacks | `check_labels.py` |
+| `removed-label-without-tombstone` | a locked label that left the content | `check_labels.py` |
+| `kind-prefix-mismatch` | `thm-` on a `{proof:lemma}` | `check_labels.py` |
+| `exercise-without-solution` | no `{solution}` | `check_labels.py` |
+| `exercise-without-answer` | no Answer admonition | `check_labels.py` |
+| `orphan-proof` | a proof after prose, without a `prf-` label | `check_labels.py` |
+| `forward-reference-outside-closure` | a verified page cites a page outside its closure | `check_labels.py --forward-refs` |
+| `forward-citation-in-proof` | a rigorous-track proof cites a lemma stated after its theorem | `check_labels.py --forward-refs` |
+| `prerequisite-cycle` | `calc-functions` ↔ `calc-limit` in the curriculum | `graph.py check` |
+| `unknown-prerequisite` | `calc-no-such-topic` | `graph.py check` |
+| `reviewed-with-draft-prerequisite` | a reviewed page needs a draft one | `check_frontmatter.py` |
+| `schema-violation` | `difficulty: 7` | `check_frontmatter.py` |
+| `toc-mismatch` | a page that is not in the toc | `check_toc.py` |
+| `lint-*` | one hit for each notation-lint rule | `check_all.py` (`notation_lint.py`) |
+| `us-spelling` | "behavior" | codespell |
+| `redirect-collision` | an alias that is a live page | `write_redirects.py` |
+| `redirects` | none: two aliases, to show that redirects are written | – |
+| `gate-*` | a broken reference, an unknown directive (and a clean page) | `scripts/myst_gate.sh` |
+
+`fixtures/ast/topic.json` is mystmd's AST of `templates/topic.md`; `test_parser.py` compares it
+with what `scripts/myst_source.py` reads. Regenerate it with `tests/make_ast_fixture.py` after
+changing the template or upgrading mystmd.
+
+A new check gets a new fixture with exactly one defect, and an entry in `DEFECTS` in
+`test_checkers.py`, which also asserts that `check_all.py` reports nothing else on it.
