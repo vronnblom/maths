@@ -34,7 +34,8 @@ uv run pytest verify/calculus/limits -q          # after npm run verify: rerun o
 ```
 
 `npm run check` = `scripts/check_all.py` (`check_toc`, `check_frontmatter`, `check_labels
---forward-refs`, `graph.py check`, the notation lint, `check_widgets`; errors fail, warnings
+--forward-refs`, `graph.py check`, the notation lint, `check_widgets`, which compiles every widget
+expression with Node through `scripts/compile_expressions.mjs`; errors fail, warnings
 don't) + codespell + `pytest tests`. Every check prints `file:line: error: message`. Each script also runs alone
 (`uv run python scripts/check_labels.py`) and takes `--root` (default `content/`).
 

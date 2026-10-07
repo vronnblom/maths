@@ -21,6 +21,9 @@
     { "config": { "f": "x + 1)", "xRange": [0, 1], "yRange": [0, 1] }, "problem": "f: unmatched )" },
     { "config": { "f": "x(x + 1)", "xRange": [0, 1], "yRange": [0, 1] }, "problem": "f: x is not a function" },
     { "config": { "f": "(x + 1)(x - 1)", "xRange": [0, 1], "yRange": [0, 1] }, "problem": "f: missing * after )" },
+    { "config": { "f": "sin()", "xRange": [0, 1], "yRange": [0, 1] }, "problem": "f: JessieCode cannot parse \"sin()\"" },
+    { "config": { "f": "x+", "xRange": [0, 1], "yRange": [0, 1] }, "problem": "f: JessieCode cannot parse \"x+\"" },
+    { "config": { "f": "a*x+", "xRange": [0, 1], "yRange": [0, 1], "parameters": { "a": { "value": 1, "min": 0, "max": 2 } } }, "problem": "f: JessieCode cannot parse \"a*x+\"" },
     { "config": { "f": "t^2", "variable": "t", "xRange": [0, 1], "yRange": [0, 1], "parameters": { "a": { "value": 1, "min": 0, "max": 2 } }, "table": { "points": [0, 1] } }, "problem": null }
   ]
 }

@@ -99,6 +99,11 @@ sign`. Multiplication is always written: `2*x`, `a*(x - c)`. `ln` is the natural
 for negative x. JSXGraph's JessieCode compiles the expression, but only after the allowlist
 in `_lib/expression.mjs` has accepted it, because JessieCode on its own returns the argument
 of an unknown function (`sec(x)` would be x) and accepts statements and property access.
+JessieCode builds the function by running `eval` on the code it generates, so the guarantee
+is the allowlist: no statement, property access, string or unknown name reaches it (tested
+in `_tests/expression.test.mjs`). The allowlist does not check the grammar, so `npm run check`
+also compiles every expression with JessieCode (`scripts/compile_expressions.mjs`, run by
+`check_widgets.py`): `sin()` and `x+` are errors there, as in the browser.
 
 **Modes to come** (docs/plan/08, `content/calculus/curriculum.yml`): unit circle ↔ graph,
 squeeze band, bisection, f and f′ linked, reveal step by step. Each will be a new optional

@@ -109,7 +109,7 @@ test("spread keeps the ends and at most n items", () => {
 function allProblems(config) {
   const problems = configProblems(config);
   try {
-    checkExpression(config.f, ["x"]);
+    compileExpression(JXG, config.f, "x"); // the allowlist, then JessieCode (F7)
   } catch (e) {
     problems.push(`f: ${e.message}`);
   }

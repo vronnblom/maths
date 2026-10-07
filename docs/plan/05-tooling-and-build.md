@@ -608,14 +608,23 @@ git-ignored, so stale copies can't be committed.
   so it always shows. Widgets are numbered as figures ("Figure 2"); cross-page links name
   them as usual.
 - Expressions (`"f": "x^2"`) are compiled with JSXGraph's built-in JessieCode parser, so
-  there is no `eval` of config strings and no extra runtime dependency. Found in stage 3:
+  there is no extra runtime dependency. Config strings are compiled by JessieCode **behind an
+  allowlist**; JessieCode itself builds the function by running `eval` on the code it
+  generates (found in the review of the `epsilon-delta` PR: compiling `x^2` makes one `eval`
+  call), so the claim is not "no eval" but "nothing outside the allowlist reaches JessieCode":
+  no statement, property access, string or unknown name (`expression.test.mjs` tests these
+  injections). Found in stage 3:
   JessieCode alone is too forgiving for author input (an unknown function returns its
   argument, so `sec(x)` is x; an unknown name is `undefined`; `2x` compiles to a function that
   does nothing; it accepts `;`, `==`, `?:` and property access). So `widgets/_lib/expression.mjs`
   first tokenizes the expression against an allowlist (numbers, the variable, the parameters,
   `+ - * / ^ ( )`, `pi`, `e`, and 17 functions; `ln`, never `log`; multiplication always
   written), with clear messages, and only then hands it to JessieCode. The allowlist is in the
-  widget's schema (`$defs`), so `check_widgets.py` applies the same rules in CI.
+  widget's schema (`$defs`), so `check_widgets.py` applies the same rules in CI. The allowlist
+  does not check the grammar (`sin()` and `x+` pass it, and JessieCode rejects them), so
+  `check_widgets.py` also compiles every expression it accepts with the browser's compiler: a
+  small Node step, `scripts/compile_expressions.mjs`, runs `compileExpression` with the pinned
+  JessieCode (rather than a second grammar in Python, which would drift).
   JessieCode needs a board, not a DOM: `new JXG.Board(…, new JXG.NoRenderer(), …)` compiles
   in Node too, so the widget tests evaluate through the browser's evaluator, from the pinned
   `jsxgraph` dev dependency (§5.4). That board must have its events switched off, or in a
@@ -623,10 +632,10 @@ git-ignored, so stale copies can't be committed.
 - Each widget has a JSON Schema (`schema/widgets/<name>.schema.json`, `additionalProperties:
   false` at every level, so a typo is an error); `check_all.py` (`scripts/check_widgets.py`)
   validates every widget block in the content, plus the rules a schema cannot express (ranges
-  increasing, values inside them, the names in an expression; the widget's `_lib/` has the
-  same rules, and one shared table of cases tests both). It also checks that every
-  `{anywidget}` is the only content of a `{figure}` with a `wdg-` label and a non-empty
-  caption, that the widget exists, and that every `maths.widgets` id is a widget.
+  increasing, values inside them, the names in an expression, and that it compiles; the
+  widget's `_lib/` has the same rules, and one shared table of cases tests both). It also
+  checks that every `{anywidget}` is the only content of a `{figure}` with a `wdg-` label and
+  a non-empty caption, that the widget exists, and that every `maths.widgets` id is a widget.
 - Shared helpers in `widgets/_lib/` handle board creation, theme-aware colours (light/dark,
   with a contrast test: ≥ 3:1 for lines and points, ≥ 4.5:1 for text) and keyboard-operable
   sliders (native `<input type="range">`), buttons and value tables (real `<table>`s).

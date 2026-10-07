@@ -9,6 +9,8 @@
   functions in `f`, mirroring widgets/_lib/plot.mjs and expression.mjs; epsilon-delta: ranges
   increasing, a strictly inside xRange, L inside yRange, eps inside epsRange, delta and epsStep
   small enough, eps and delta on their sliders' grids, and `f`, mirroring widgets/_lib/epsdelta.mjs);
+- every expression that passes the allowlist also compiles with JessieCode, the browser's
+  compiler (scripts/compile_expressions.mjs, run with Node: `sin()` and `x+` pass the allowlist);
 - every id in `maths.widgets` is a widget of the catalogue.
 
 The catalogue and the schemas are always this repository's, also for a fixture project under
@@ -21,6 +23,7 @@ import argparse
 import json
 import math
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -109,6 +112,40 @@ def check_expression(src: str, names: list[str], functions: list[str], constants
     return tokens
 
 
+# Every expression that passes the allowlist is also compiled with the browser's compiler,
+# JessieCode, by scripts/compile_expressions.mjs (review of PR 10, F7): the allowlist does not
+# check the grammar (`sin()`, `x+`), and re-implementing JessieCode's in Python would drift.
+COMPILER = REPO / "scripts" / "compile_expressions.mjs"
+_compiled: dict[tuple[str, str, tuple[str, ...]], str | None] = {}
+
+
+def compile_problems(items: list[tuple[str, str, tuple[str, ...]]]) -> list[str | None]:
+    """For each (f, variable, params): None if JessieCode compiles it, else its message. One Node
+    run for everything not already compiled in this process."""
+    todo = [i for i in dict.fromkeys(items) if i not in _compiled]
+    if todo:
+        payload = json.dumps([{"f": f, "variable": v, "params": list(p)} for f, v, p in todo])
+        try:
+            run = subprocess.run(["node", str(COMPILER)], input=payload, capture_output=True, text=True, timeout=120, check=False)
+        except OSError as e:
+            raise RuntimeError(f"cannot run node {COMPILER.relative_to(REPO)} (the widget expression compiler): {e}") from e
+        if run.returncode != 0:
+            raise RuntimeError(f"node {COMPILER.relative_to(REPO)} failed (run npm ci?): {run.stderr.strip()[-500:]}")
+        for item, message in zip(todo, json.loads(run.stdout), strict=True):
+            _compiled[item] = message
+    return [_compiled[i] for i in items]
+
+
+def _expression_problems(src: str, variable: str, params: list[str], schema: dict) -> list[str]:
+    """The allowlist (as widgets/_lib/expression.mjs), then, if it passes, JessieCode itself."""
+    try:
+        check_expression(src, [variable, *params], schema["$defs"]["functions"]["enum"], schema["$defs"]["constants"]["enum"])
+    except ExpressionError as e:
+        return [f"f: {e}"]
+    message, = compile_problems([(src, variable, tuple(params))])
+    return [] if message is None else [f"f: {message}"]
+
+
 def function_plot_problems(config: dict, schema: dict) -> list[str]:
     """The rules of configProblems() in widgets/_lib/plot.mjs, plus the expression rules."""
     problems = []
@@ -136,11 +173,7 @@ def function_plot_problems(config: dict, schema: dict) -> list[str]:
     for key in ("hole", "trace"):
         if key in config and not inside(config[key]["x"]):
             problems.append(f"{key}.x: {_js_number(config[key]['x'])} lies outside xRange")
-    try:
-        check_expression(config["f"], [variable, *params], schema["$defs"]["functions"]["enum"],
-                         schema["$defs"]["constants"]["enum"])
-    except ExpressionError as e:
-        problems.append(f"f: {e}")
+    problems += _expression_problems(config["f"], variable, list(params), schema)
     return problems
 
 
@@ -189,10 +222,7 @@ def epsilon_delta_problems(config: dict, schema: dict) -> list[str]:
             problems.append("eps: must be on the ε slider's grid, epsRange[0] + k·epsStep (epsStep defaults to a hundredth of epsRange)")
         if "delta" in config and not (config["delta"] >= delta_step and _on_grid(config["delta"], 0, delta_step)):
             problems.append("delta: must be on the δ slider's grid, k thousandths of the distance from a to the nearer end of xRange")
-    try:
-        check_expression(config["f"], ["x"], schema["$defs"]["functions"]["enum"], schema["$defs"]["constants"]["enum"])
-    except ExpressionError as e:
-        problems.append(f"f: {e}")
+    problems += _expression_problems(config["f"], "x", [], schema)
     return problems
 
 

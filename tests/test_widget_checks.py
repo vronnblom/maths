@@ -64,6 +64,9 @@ def test_clean_template_passes(tmp_path):
     ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "a": 3.5, "L": 4,', 102, "widget epsilon-delta: a: must lie strictly inside xRange"),
     ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "a": 2, "L": 12,', 102, "widget epsilon-delta: L: must lie inside yRange"),
     ('"f": "x^2", "a": 2, "L": 4,', '"f": "x*x(1)", "a": 2, "L": 4,', 102, "widget epsilon-delta: f: x is not a function"),
+    # the allowlist passes these, the browser's compiler does not (review F7)
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "sin()", "a": 2, "L": 4,', 102, 'widget epsilon-delta: f: JessieCode cannot parse "sin()"'),
+    ('"f": "(5*(1+h)^2 - 5)/h"', '"f": "(5*(1+h)^2 - 5)/h +"', 52, 'widget function-plot: f: JessieCode cannot parse "(5*(1+h)^2 - 5)/h +"'),
 ])
 def test_figure_and_config_rules(tmp_path, old, new, line, message):
     errors = check(tmp_path, old, new)
