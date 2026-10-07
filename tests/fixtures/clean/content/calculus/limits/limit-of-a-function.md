@@ -28,7 +28,7 @@ maths:
     - Prove limits of linear functions directly from the definition.
     - Recognise when a limit does not exist (jump, oscillation, unboundedness).
   verify: verify/calculus/limits/test_limit_of_a_function.py
-  widgets: [epsilon-delta, function-plot]
+  widgets: [function-plot]        # Phase 1a adds epsilon-delta (see the comment in "What a limit is")
   reviewed_by: []
   sources: []
 ---
@@ -54,15 +54,17 @@ maths:
   "xRange": [-1, 1],
   "yRange": [5, 15],
   "table": { "points": [0.1, 0.01, 0.001, -0.001, -0.01, -0.1] },
-  "hole": { "x": 0 }
+  "hole": { "x": 0 },
+  "trace": { "x": 0.5 }
 }
 ```
 
-Graph of the average speed $\frac{5(1+h)^2 - 5}{h}$ for $h$ between $-1$ and $1$, with a hole
-at $h = 0$. A table lists the values for $h = \pm 0.1, \pm 0.01, \pm 0.001$; they approach $10$.
+Graph of the average speed $\frac{5(1+h)^2 - 5}{h}$ for $-1 \le h \le 1$, with a hole at
+$h = 0$, and a point on the graph that a slider for $h$ moves. A table lists the values for
+$h = \pm 0.1, \pm 0.01, \pm 0.001$; they approach $10$.
 ::::
 
-**Try this:** drag $h$ towards $0$ from both sides. Which number do the average speeds
+**Try this:** move $h$ towards $0$ from both sides. Which number do the average speeds
 approach? Why can't you simply put $h = 0$?
 
 ## What a limit is
@@ -90,24 +92,28 @@ $$
 window of half-width $\delta$ around $a$ such that every $x$ in that window (other than $a$)
 has $f(x)$ within the tolerance.
 
-::::{figure}
-:label: wdg-calc-limit-eps-delta
-
-```{anywidget} ../../../widgets/epsilon-delta.mjs
-{
-  "f": "x^2", "a": 2, "L": 4,
-  "eps": 0.5, "epsRange": [0.05, 1.5],
-  "xRange": [0, 3.5], "yRange": [0, 9]
-}
-```
-
-Graph of $y = x^2$ near $x = 2$ with a horizontal band of half-width $\eps$ around $y = 4$ and a
-vertical band of half-width $\delta$ around $x = 2$. Shrinking $\eps$ shrinks the largest
-admissible $\delta$.
-::::
-
-**Try this:** set $\eps = 0.1$. What is the largest $\delta$ that works? Is it the same on
-both sides of $a = 2$?
+% Phase 1a adds the epsilon-delta widget (widgets/epsilon-delta.mjs does not exist yet, so
+% check_widgets.py would reject it). Its figure will go here, uncommented, with `epsilon-delta`
+% added to maths.widgets:
+%
+% ::::{figure}
+% :label: wdg-calc-limit-eps-delta
+%
+% ```{anywidget} ../../../widgets/epsilon-delta.mjs
+% {
+%   "f": "x^2", "a": 2, "L": 4,
+%   "eps": 0.5, "epsRange": [0.05, 1.5],
+%   "xRange": [0, 3.5], "yRange": [0, 9]
+% }
+% ```
+%
+% Graph of $y = x^2$ near $x = 2$ with a horizontal band of half-width $\eps$ around $y = 4$ and a
+% vertical band of half-width $\delta$ around $x = 2$. Shrinking $\eps$ shrinks the largest
+% admissible $\delta$.
+% ::::
+%
+% **Try this:** set $\eps = 0.1$. What is the largest $\delta$ that works? Is it the same on
+% both sides of $a = 2$?
 
 :::{proof:remark} The value at $a$ does not matter
 :label: rem-calc-limit-value-irrelevant

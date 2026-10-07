@@ -7,6 +7,8 @@ CI `checks` job run this, then codespell and the checkers' own tests (pytest tes
                                           forward references (warnings; errors on verified pages)
     graph         graph.py check          prerequisites resolve, no cycles, depends_on, curriculum agreement
     notation      notation_lint.py        bare \\log, \\sin^{-1}, raw dx, ]a, b[, \\mathrm{e}, degrees, "clearly"
+    widgets       check_widgets.py        {anywidget} alone in a wdg- figure with a caption, the widget exists,
+                                          its JSON against schema/widgets/, maths.widgets ids
 
 Exits non-zero on any error. Warnings are printed but don't fail.
 """
@@ -19,6 +21,7 @@ import sys
 import check_frontmatter
 import check_labels
 import check_toc
+import check_widgets
 import graph
 import notation_lint
 from project import Project, Reporter, add_root_argument
@@ -30,6 +33,7 @@ def run(project: Project, rep: Reporter) -> None:
     labels = check_labels.check(project, rep, forward_refs=True)
     graph.check(project, rep)
     notation_lint.check(project, rep, docs=labels.docs)
+    check_widgets.check(project, rep, docs=labels.docs)
 
 
 def main(argv=None) -> int:

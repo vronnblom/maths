@@ -1,5 +1,5 @@
 # docs/plan/05-tooling-and-build.md §5.7. Every job calls the npm scripts, so CI and
-# `npm run all` cannot drift apart. Stage 4 adds the `verify` job.
+# `npm run all` cannot drift apart. Stage 4 adds the `verify` job (and moves test:widgets there).
 name: CI
 on:
   pull_request:                                 # default types: label changes don't re-run CI
@@ -21,8 +21,11 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020        # v7.0.0
         with: { node-version-file: .nvmrc, cache: npm }   # tests/test_build_gate.py runs myst
       - run: npm ci
-      - name: Front matter, labels, graph, toc, notation lint, spelling, checker fixture tests
+      - name: Front matter, labels, graph, toc, notation lint, widgets, spelling, checker fixture tests
         run: npm run check                           # check_all.py emits ::error file=…,line=…:: annotations
+      # Here until stage 4 adds the `verify` job, which takes this step over (05 §5.7).
+      - name: Widget maths and plugin logic (node --test)
+        run: npm run test:widgets
 
   build:
     runs-on: ubuntu-latest

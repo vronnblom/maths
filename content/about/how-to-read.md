@@ -81,9 +81,38 @@ route.
 
 ## Interactive figures
 
-Some figures are interactive: you can drag points or move sliders. Each one comes with a
-**Try this** prompt saying what to change and what to notice, and a caption describing what
-it shows, so the content is also available without the interaction.
+Some figures are interactive: you can move sliders, zoom, and read off values. Each one
+comes with a **Try this** prompt saying what to change and what to notice, and a caption
+describing what it shows, so the content is also available without the interaction (for
+example when JavaScript is off). The sliders and buttons work with the keyboard: press Tab to
+reach one, then use the arrow keys (or Home and End) to move a slider. Here is one:
+
+::::{figure}
+:label: wdg-site-transformed-sine
+
+```{anywidget} ../../widgets/function-plot.mjs
+{
+  "f": "a*sin(b*(x - c)) + d",
+  "xRange": [-6.5, 6.5],
+  "yRange": [-4, 4],
+  "parameters": {
+    "a": { "value": 1, "min": -2, "max": 2, "step": 0.5 },
+    "b": { "value": 1, "min": 0.5, "max": 3, "step": 0.5 },
+    "c": { "value": 0, "min": -3, "max": 3, "step": 0.5 },
+    "d": { "value": 0, "min": -1.5, "max": 1.5, "step": 0.5 }
+  },
+  "table": { "points": [0, 0.5, 1, 1.5, 2] }
+}
+```
+
+Graph of $y = a \sin(b(x - c)) + d$ for $-6.5 \le x \le 6.5$, with a slider for each of $a$,
+$b$, $c$ and $d$, and a table of values at $x = 0, 0.5, 1, 1.5, 2$. At first
+$a = b = 1$ and $c = d = 0$, which gives $y = \sin x$. Changing $a$ stretches the graph
+vertically, $b$ squeezes it horizontally, $c$ shifts it to the right and $d$ shifts it up.
+::::
+
+**Try this:** set $b = 2$. How far apart are the peaks now? Then make $a$ negative: what
+happens to the graph, and to the values in the table?
 
 ## Page status
 

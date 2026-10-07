@@ -68,7 +68,12 @@ maths/
 │   ├── function-plot.mjs
 │   ├── epsilon-delta.mjs
 │   ├── _lib/                    # shared helpers + pure maths modules (published via static_files)
+│   ├── _tests/                  # node --test against SymPy-computed fixtures (make_fixtures.py)
 │   └── README.md                # widget catalogue: purpose + JSON config schema per widget
+├── plugins/                     # the MyST plugin (03 §3.6), registered in myst.yml
+│   ├── topic-header.mjs         # {topic-header}, {where-this-leads}, {chapter-topics}
+│   ├── _lib/header.mjs          # its logic: front matter → AST nodes (pure)
+│   └── _tests/                  # node --test, run by `npm run test:widgets`
 ├── verify/                      # SymPy/pytest verification, mirrors content/
 │   ├── conftest.py
 │   ├── mathcheck/               # helper package: @covers registry, LaTeX→SymPy, equality checks
@@ -95,6 +100,7 @@ maths/
 │   ├── project.py               # shared: the toc, front matter with line numbers, curricula, diagnostics
 │   ├── myst_source.py           # the small MyST source parser the label and notation checks use
 │   ├── notation_lint.py         # the notation lint, run by check_all.py
+│   ├── check_widgets.py         # widget figures, files and configs, run by check_all.py
 │   ├── build_site.sh            # the gated site build (05 §5.5)
 │   ├── myst_gate.sh             # the ⛔️/⚠️ log gate around `myst build`, used by build_site.sh and tests/
 │   └── fetch_theme.sh           # the pinned book-theme via git, for cloud sessions (05 §5.5)

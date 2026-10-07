@@ -50,8 +50,8 @@ html.dark {
 .myst-admonition.rigor { border-left: 4px solid var(--maths-rigor); }
 
 /* ── Status badges ─────────────────────────────────────────────────────────────
-   Hooks for the {topic-header} plugin (a later stage of Phase 0), which
-   renders a page's maths.status as <span class="maths-badge maths-status-…">. */
+   plugins/topic-header.mjs renders a page's maths.status as
+   <span class="maths-badge maths-status-…">Draft</span> (the word, not only the colour). */
 .maths-badge {
   display: inline-block;
   padding: 0.05em 0.5em;
@@ -63,6 +63,14 @@ html.dark {
 .maths-status-draft { color: var(--maths-draft); }
 .maths-status-reviewed { color: var(--maths-reviewed); }
 .maths-status-verified { color: var(--maths-verified); }
+
+/* ── The {topic-header}, {where-this-leads} and {chapter-topics} output ──────── */
+.maths-topic-header .myst-admonition-body > p:first-child { margin-top: 0.5rem; }
+.maths-difficulty { white-space: nowrap; }
+.maths-dots { letter-spacing: 0.1em; }
+.maths-coming-soon { font-style: italic; opacity: 0.8; }
+table.maths-chapter-topics td:not(:first-child),
+table.maths-chapter-topics th:not(:first-child) { white-space: nowrap; }
 
 /* ── End-of-proof mark ─────────────────────────────────────────────────────────
    The theme draws no ∎. A {proof:proof} renders as .myst-proof with the theme's

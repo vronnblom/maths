@@ -1,0 +1,26 @@
+{
+  "_comment": "Configs that are valid against schema/widgets/function-plot.schema.json but break a rule it cannot express. Both widgets/_lib (plot.test.mjs) and scripts/check_widgets.py (tests/test_widget_checks.py) must report `problem` for each, so the two implementations stay in step.",
+  "cases": [
+    { "config": { "f": "x", "xRange": [1, -1], "yRange": [0, 1] }, "problem": "xRange: the first number must be smaller than the second" },
+    { "config": { "f": "x", "xRange": [0, 1], "yRange": [2, 2] }, "problem": "yRange: the first number must be smaller than the second" },
+    { "config": { "f": "a*x", "xRange": [0, 1], "yRange": [0, 1], "parameters": { "a": { "value": 5, "min": 0, "max": 2 } } }, "problem": "parameters.a: value must lie between min and max" },
+    { "config": { "f": "a*x", "xRange": [0, 1], "yRange": [0, 1], "parameters": { "a": { "value": 1, "min": 2, "max": 1 } } }, "problem": "parameters.a: min must be smaller than max" },
+    { "config": { "f": "x", "xRange": [0, 1], "yRange": [0, 1], "parameters": { "x": { "value": 1, "min": 0, "max": 2 } } }, "problem": "parameters.x: a parameter cannot have the name of the variable" },
+    { "config": { "f": "x", "xRange": [-1, 1], "yRange": [0, 1], "table": { "points": [0.5, 3] } }, "problem": "table.points: 3 lies outside xRange" },
+    { "config": { "f": "x", "xRange": [-1, 1], "yRange": [0, 1], "hole": { "x": 2 } }, "problem": "hole.x: 2 lies outside xRange" },
+    { "config": { "f": "x", "xRange": [-1, 1], "yRange": [0, 1], "trace": { "x": -5 } }, "problem": "trace.x: -5 lies outside xRange" },
+    { "config": { "f": "2x", "xRange": [0, 1], "yRange": [0, 1] }, "problem": "f: missing * after 2: write 2*x" },
+    { "config": { "f": "sec(x)", "xRange": [0, 1], "yRange": [0, 1] }, "problem": "f: unknown name sec" },
+    { "config": { "f": "log(x)", "xRange": [0, 1], "yRange": [0, 1] }, "problem": "f: write ln for the natural logarithm, not log" },
+    { "config": { "f": "x; alert(1)", "xRange": [0, 1], "yRange": [0, 1] }, "problem": "f: unexpected character \";\" at position 2" },
+    { "config": { "f": "this.constructor", "xRange": [0, 1], "yRange": [0, 1] }, "problem": "f: unexpected character \".\" at position 5" },
+    { "config": { "f": "x == 1", "xRange": [0, 1], "yRange": [0, 1] }, "problem": "f: unexpected character \"=\"" },
+    { "config": { "f": "a*x", "xRange": [0, 1], "yRange": [0, 1] }, "problem": "f: unknown name a" },
+    { "config": { "f": "sin x", "xRange": [0, 1], "yRange": [0, 1] }, "problem": "f: sin needs parentheses" },
+    { "config": { "f": "(x + 1", "xRange": [0, 1], "yRange": [0, 1] }, "problem": "f: unmatched (" },
+    { "config": { "f": "x + 1)", "xRange": [0, 1], "yRange": [0, 1] }, "problem": "f: unmatched )" },
+    { "config": { "f": "x(x + 1)", "xRange": [0, 1], "yRange": [0, 1] }, "problem": "f: x is not a function" },
+    { "config": { "f": "(x + 1)(x - 1)", "xRange": [0, 1], "yRange": [0, 1] }, "problem": "f: missing * after )" },
+    { "config": { "f": "t^2", "variable": "t", "xRange": [0, 1], "yRange": [0, 1], "parameters": { "a": { "value": 1, "min": 0, "max": 2 } }, "table": { "points": [0, 1] } }, "problem": null }
+  ]
+}

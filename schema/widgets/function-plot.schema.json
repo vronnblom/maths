@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/vronnblom/maths/schema/widgets/function-plot.schema.json",
+  "title": "function-plot widget config",
+  "description": "The JSON body of ```{anywidget} …/widgets/function-plot.mjs (docs/plan/05 §5.8, widgets/README.md). Built now: the graph of f, parameter sliders, a table of values, a hole, a traced point, zoom. Later modes (unit circle, squeeze band, bisection, f and f′ linked, reveal) are added as new optional keys, so existing configs stay valid. Rules JSON Schema cannot express (ranges increasing, values inside ranges, the names in f) are checked by scripts/check_widgets.py and widgets/_lib/plot.mjs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["f", "xRange", "yRange"],
+  "properties": {
+    "f": {
+      "description": "The function, in the expression language of widgets/README.md: numbers, the variable, the parameters, + - * / ^ and parentheses, pi, e, and the functions in $defs/functions. Multiplication is always written: 2*x.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "variable": {
+      "description": "The name of the variable (default x).",
+      "$ref": "#/$defs/name"
+    },
+    "xRange": {
+      "description": "[min, max] of the x-axis shown at first.",
+      "$ref": "#/$defs/range"
+    },
+    "yRange": {
+      "description": "[min, max] of the y-axis shown at first.",
+      "$ref": "#/$defs/range"
+    },
+    "parameters": {
+      "description": "One slider per parameter, e.g. a, b, c, d for a f(b(x − c)) + d.",
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 6,
+      "propertyNames": { "$ref": "#/$defs/name" },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["value", "min", "max"],
+        "properties": {
+          "value": { "type": "number", "description": "the starting value" },
+          "min": { "type": "number" },
+          "max": { "type": "number" },
+          "step": { "type": "number", "exclusiveMinimum": 0, "description": "default (max − min)/100" }
+        }
+      }
+    },
+    "table": {
+      "description": "A table of values of f, below the graph.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["points"],
+      "properties": {
+        "points": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 1,
+          "maxItems": 12
+        }
+      }
+    },
+    "hole": {
+      "description": "An open circle where f is undefined but has a limit: at x, and at height y (default: the limit of f at x, estimated from both sides).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" }
+      }
+    },
+    "trace": {
+      "description": "A point on the graph moved by a slider for the variable, with a readout of x and f(x).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x"],
+      "properties": {
+        "x": { "type": "number", "description": "the starting value of the variable" },
+        "step": { "type": "number", "exclusiveMinimum": 0, "description": "default (xRange width)/200" }
+      }
+    },
+    "zoom": {
+      "description": "Show the Zoom in / Zoom out / Reset view buttons (default true).",
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "range": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "name": {
+      "description": "A one-letter name; not e, which is Euler's number.",
+      "type": "string",
+      "pattern": "^[a-df-z]$"
+    },
+    "functions": {
+      "description": "The functions an expression may call (widgets/_lib/expression.mjs FUNCTIONS; a test keeps the two equal). ln is the natural logarithm; log is not allowed (docs/plan/04 §4.2).",
+      "enum": ["sin", "cos", "tan", "asin", "acos", "atan", "sinh", "cosh", "tanh", "exp", "ln", "sqrt", "cbrt", "abs", "floor", "ceil", "sign"]
+    },
+    "constants": {
+      "description": "The constants an expression may use (expression.mjs CONSTANTS).",
+      "enum": ["pi", "e"]
+    }
+  }
+}

@@ -157,7 +157,12 @@ Each widget that computes something (the δ in `epsilon-delta`, Riemann sums, Ta
 coefficients, Newton iterates) keeps those computations in a pure module in `widgets/_lib/`,
 separate from rendering and with no JSXGraph import ([05 §5.8](05-tooling-and-build.md)).
 `widgets/_tests/*.test.mjs` checks them against values that SymPy precomputed and committed
-as JSON fixtures. `npm run test:widgets` runs them locally and in the CI `verify` job.
+as JSON fixtures: `uv run python widgets/_tests/make_fixtures.py` writes them, and a test in
+`tests/test_widget_checks.py` fails if the committed JSON differs from what the script writes
+now, so nobody types an expected value. The
+fixtures include the table of values of every `function-plot` figure on the site, so a new
+figure's table is checked automatically. `npm run test:widgets` runs them locally and in CI
+(in the `checks` job until stage 4 adds the `verify` job).
 
 ## 6.3 Proof review checklist
 
@@ -214,11 +219,11 @@ Each check runs in the CI job (and npm script) shown, so local and CI runs match
 |---|---|---|
 | Site builds | `scripts/build_site.sh`: `myst build --html --strict` + filter on ⛔️ and ⚠️ (`build` / `build`) | MyST syntax errors, unknown directives, **broken internal cross-references**, missing files, unresolved labels |
 | Front matter | `check_frontmatter.py` + `schema/page.schema.json` (`checks` / `check`) | missing/invalid fields (per kind), unknown tags (`content/tags.yml`), bad label format, kind vs path, status preconditions that need no tests (`reviewed_by`, the `verify` file exists), including the **prerequisite-status gate**: a page may be `reviewed` or `verified` only if every prerequisite page exists and is at least `reviewed` |
-| Labels | `check_labels.py` (`checks` / `check`) | duplicate labels (also across pages), label grammar, kind prefix matching the directive (`thm-` on `proof:theorem`), required labels, examples/exercises/solutions prefixed by their topic, every exercise has a tier, exactly one Answer admonition and exactly one solution after it, every proof directly after its statement or paired with it by label (`prf-<slug>`), references to unknown labels or with other syntax than `[text](#label)`, every `{anywidget}` alone in a `{figure}` labelled `wdg-…` (stage 3), labels removed without a tombstone, and labels in the content that are missing from `labels.lock` (§6.7). It reads the Markdown source with a small parser (`scripts/myst_source.py`) that fails on syntax it doesn't know; a test compares it with mystmd's AST of `templates/topic.md` |
+| Labels | `check_labels.py` (`checks` / `check`) | duplicate labels (also across pages), label grammar, kind prefix matching the directive (`thm-` on `proof:theorem`), required labels, examples/exercises/solutions prefixed by their topic, every exercise has a tier, exactly one Answer admonition and exactly one solution after it, every proof directly after its statement or paired with it by label (`prf-<slug>`), references to unknown labels or with other syntax than `[text](#label)`, labels removed without a tombstone, and labels in the content that are missing from `labels.lock` (§6.7). It reads the Markdown source with a small parser (`scripts/myst_source.py`) that fails on syntax it doesn't know; a test compares it with mystmd's AST of `templates/topic.md` |
 | Graph | `graph.py check` (`checks` / `check`) | `curriculum.yml` schema, unknown prerequisites, cycles, cross-subject edges violating `depends_on`, mismatch with `curriculum.yml`, deferred proofs whose target comes earlier; redundant transitive edges (warning) |
 | Forward references | `check_labels.py --forward-refs` (`checks` / `check`) | citations outside the prerequisite closure; inside proofs and solutions, also citations of a block that comes *later* on the same page (warning; error on verified pages) |
 | ToC | `check_toc.py` (`checks` / `check`) | `.md` files missing from the toc, toc entries without files |
-| Widgets | `check_all.py` (`checks` / `check`) | widget JSON vs schema, widget file exists, figure caption (the text description) present |
+| Widgets | `check_widgets.py`, run by `check_all.py` (`checks` / `check`) | every `{anywidget}` alone in a `{figure}` labelled `wdg-…` with a non-empty caption (the text description); the widget file exists; its JSON valid against `schema/widgets/<name>.schema.json` (typos rejected) and the rules a schema cannot express; every `maths.widgets` id is a widget |
 | Notation lint | `check_all.py` (`notation_lint.py`; `checks` / `check`) | bare `\log`, `\sin^{-1}`, raw `dx`, `]a,b[`, `\mathrm{e}`, degrees in calculus pages, "clearly"/"obviously"/"trivially" in prose (04 §4.4) |
 | Spelling | `codespell` with the en-GB dictionary (`checks` / `check`) | typos and US spellings |
 | Checker tests | `pytest tests` (`checks` / `check`) | a checker that stops detecting its fixture's error; the build gate (`scripts/myst_gate.sh`) on a broken reference and an unknown directive |
@@ -226,7 +231,7 @@ Each check runs in the CI job (and npm script) shown, so local and CI runs match
 | Verification | `pytest verify` (`verify` / `verify`) | wrong computations and answers |
 | Coverage gate | `check_coverage.py` after pytest (`verify` / `verify`) | status vs verification coverage actually achieved (§6.1, §6.6) |
 | LaTeX renders | `scripts/check_katex.mjs` on the AST (`verify` / `verify`) | unsupported commands or macros that the build would only render as red error text |
-| Widget maths | `node --test "widgets/_tests/*.test.mjs"` (`verify` / `test:widgets`) | wrong numbers in widgets |
+| Widget maths | `node --test "widgets/_tests/*.test.mjs" "plugins/_tests/*.test.mjs"` (`checks` until stage 4, then `verify` / `test:widgets`) | wrong numbers in widgets (against SymPy fixtures), widget module rules (no static `https:` import, pure `_lib/`, one JSXGraph version), colour contrast, and the plugin's logic |
 | External links | lychee, weekly, **non-blocking** | dead external links |
 
 > Why a separate KaTeX check? KaTeX rendering failures show up as red text on the page, not

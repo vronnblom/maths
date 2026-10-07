@@ -8,6 +8,10 @@ project:
   license:
     content: CC-BY-SA-4.0
     code: MIT
+  plugins:
+    - ../plugins/topic-header.mjs     # {topic-header}, {where-this-leads}, {chapter-topics} (03 §3.6)
+  static_files:                       # mystmd publishes only the .mjs named in {anywidget};
+    - ../widgets/_lib                 # the helpers it imports are copied next to it (05 §5.8)
   # KaTeX macros: the full list from docs/plan/04-notation-and-style.md §4.1.
   # content/about/notation.md uses every one of them (it is the render test).
   math:

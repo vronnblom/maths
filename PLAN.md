@@ -1,8 +1,8 @@
 # Plan: an open, verified university mathematics repository
 
 **Status:** decision-ready plan, 2026-10-07. Phase 0 in progress: stages 1 (site skeleton, build,
-Pages deploy) and 2 (checks, schema, curriculum and prerequisite graph) are in place; next is
-stage 3 (plugin and first widget).
+Pages deploy), 2 (checks, schema, curriculum and prerequisite graph) and 3 (plugin and first
+widget) are in place; next is stage 4 (verification harness).
 **First subject:** Calculus. **Architecture:** scales to any subject by adding a folder.
 
 ## Decisions at a glance
@@ -64,14 +64,17 @@ block snippets, chapter and subject index pages, and a verification test.
    `scripts/build_site.sh`, and `deploy.yml`. Done when the site is live on GitHub Pages and the
    remaining PoC items (rendered dropdowns, KaTeX macros with arguments, anywidget, search)
    are confirmed. Dropdowns, macros and search are confirmed on the HTML build (05 §5.3);
-   anywidget waits for item 3; the theme reaches cloud sessions via `scripts/fetch_theme.sh`.
+   anywidget is confirmed in item 3; the theme reaches cloud sessions via `scripts/fetch_theme.sh`.
 2. **Checks and schema** (stage 2, built): `schema/page.schema.json`, `content/tags.yml`,
    `content/calculus/curriculum.yml` (imported once from 08, now the source), `scripts/check_*.py`,
    `graph.py`, `generate.py` (the Mermaid maps and the status table), `write_redirects.py`,
    `labels.lock`, codespell with the en-GB list, the `checks` CI job, and `tests/` with broken
    fixtures proving that each check fails.
-3. **Plugin and first widget**: `plugins/topic-header.mjs` (`{topic-header}`,
-   `{where-this-leads}`) and `widgets/function-plot.mjs` with its schema and Node test.
+3. **Plugin and first widget** (stage 3, built): `plugins/topic-header.mjs` (`{topic-header}`,
+   `{where-this-leads}`, `{chapter-topics}`), `widgets/function-plot.mjs` with `_lib/`, its
+   schema, the catalogue (`widgets/README.md`) and Node tests against SymPy fixtures,
+   `check_widgets.py`, and the widget on `about/how-to-read.md`. anywidget rendering is
+   confirmed on the HTML build (05 §5.3); the deployed site is the remaining check.
 4. **Verification harness**: `verify/mathcheck/` (`covers`, `answer`, `equal`…, LaTeX
    normalisation with the antlr backend), `scripts/extract_answers.py`, `check_coverage.py`
    and the coverage-based status preconditions, the `verify` CI job, and the verified-page edit

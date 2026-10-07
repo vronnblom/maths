@@ -222,7 +222,8 @@ $h$ approaches $0$ the secant approaches the tangent of slope $2$.
   static HTML, so readers get it even when JavaScript is off or the widget fails to load.
   Required, and checked by CI.
 - The path is relative to the page (`../../../widgets/` from `content/<subject>/<chapter>/`).
-- The JSON must validate against `schema/widgets/<widget>.schema.json`.
+- The JSON must validate against `schema/widgets/<widget>.schema.json`. Use only widgets that
+  exist: `widgets/README.md` is the catalogue (`secant-tangent`, shown here, comes in Phase 3).
 - Choose `xRange`/`yRange` so that every point the sliders can move stays in view. Here
   $f(1+h)$ ranges over about $[-0.4, 6]$ for $h \in [-1, 1]$.
 

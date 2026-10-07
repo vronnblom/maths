@@ -24,7 +24,7 @@ things are. Optional sections are marked.
 
 | # | Section (H2 heading) | Content | Required |
 |---|---|---|---|
-| 0 | *(no heading)* `:::{topic-header}` | Rendered by the plugin from front matter: "Before you start" (prerequisite links), learning objectives, estimated time, difficulty, status badge | ✔ |
+| 0 | *(no heading)* `:::{topic-header}` | Rendered by the plugin from front matter (§3.6): the draft banner, "Before you start" (prerequisite links), learning objectives, estimated time, difficulty, status badge | ✔ |
 | 1 | `## Why this matters` | 1–3 paragraphs plus a picture or widget: the question this topic answers and a concrete motivating example. No formal definitions yet. | ✔ |
 | 2 | `## Definitions` (or a concept-named heading) | `proof:definition` blocks. Each is followed by a plain-language unpacking and at least one example/non-example. | ✔ if the page defines anything |
 | 3 | `## Main results` (or concept-named headings) | `proof:theorem` / `lemma` / `corollary` / `proposition` with proofs according to the proof policy (F/R/S/D) | ✔ if the page has results |
@@ -135,7 +135,7 @@ Every block is a MyST directive. Snippets are in [`templates/blocks.md`](../../t
 | Rigorous aside | `:::{admonition} <Title>` + `:class: dropdown rigor` | | | for counterexamples and subtleties outside a proof |
 | Exercise | `::::{exercise} <optional short title>` + `:class: tier-a\|tier-b\|tier-c` | `exr-…` required | | contains hint and answer dropdowns; see 07 |
 | Solution | `::::{solution} exr-…` + `:class: dropdown` | `sol-…` required | | full worked solution |
-| Widget | `::::{figure}` containing only ```` ```{anywidget} ../../../widgets/<w>.mjs ```` + JSON body, then the caption | `wdg-…` on the figure | caption = the text description | JSON validated against `schema/widgets/<w>.schema.json`; followed by **Try this:**. See 05 §5.8 for why the label and description live on the figure |
+| Widget | `::::{figure}` containing only ```` ```{anywidget} ../../../widgets/<w>.mjs ```` + JSON body, then the caption | `wdg-…` on the figure | caption = the text description | JSON validated against `schema/widgets/<w>.schema.json` (`check_widgets.py`); followed by **Try this:**. The catalogue and each widget's keys: `widgets/README.md`. See 05 §5.8 for why the label and description live on the figure |
 | Figure (static) | `:::{figure} ./img/<file>.svg` | `fig-…` | caption | SVG preferred; alt text required |
 | Displayed equation | `$$ … $$ (eq-…)` | `eq-…` if referenced | | |
 
@@ -154,7 +154,8 @@ labelled equations, dropdown theorems and the `{anywidget}` directive.
 ## 3.5 Chapter and subject pages
 
 **Chapter `index.md`** contains `:::{topic-header}` (chapter-level objectives), the chapter
-storyline (1–2 paragraphs), a topic table (title, time, difficulty, status), `## Review
+storyline (1–2 paragraphs), the topic table (`:::{chapter-topics}`, generated: title, time,
+difficulty, status), `## Review
 exercises` (6–12 mixed exercises that require choosing a method), and `## Chapter summary`
 (a concept map or bullet summary).
 
@@ -165,17 +166,38 @@ chapters 1–6; Calculus II: 7–11").
 
 ## 3.6 Plugins (rendering front matter)
 
-`plugins/topic-header.mjs` (≈ 150 lines, MIT) registers two directives.
+`plugins/topic-header.mjs` (MIT, a plain ES module that uses the `yaml` package, registered
+under `project.plugins` in `content/myst.yml`) registers three directives. What to render is
+decided by pure functions in `plugins/_lib/header.mjs`, which `node --test` runs without mystmd
+(`plugins/_tests/`, part of `npm run test:widgets`); the plugin file only reads files.
 
-- `{topic-header}` reads the current file's front matter (`vfile.path`, parsed with the
-  `yaml` npm package) and emits a MyST admonition with: prerequisites as
-  `crossReference` nodes (MyST resolves them to page titles with hover previews), the
-  objectives list, `est_minutes`, the difficulty as dots, and a status badge. A planned
-  but unwritten prerequisite is rendered as plain text "(coming soon)".
-- `{where-this-leads}` reads the front matter of every page in the toc of `content/myst.yml`
-  once per build (cached), computes reverse edges, and emits links to pages that list this
-  page as a prerequisite. It does not glob `content/**/*.md`, which would also match the
-  stale page copies under `content/_build/`.
+- `{topic-header}` (topic and chapter pages) reads the current file's front matter
+  (`vfile.path`) and emits:
+  - on a `draft` page, a warning admonition "Draft — may contain errors" (06 §6.6);
+  - an admonition "Before you start" (topic) or "About this chapter" (chapter) with the status
+    badge (`<span class="maths-badge maths-status-…">`, the word as well as the colour; a
+    verified page's badge links to its test file on GitHub), and, on a topic page, "About
+    *n* minutes" and the difficulty as dots ("●●○○○ (2 of 5)");
+  - the prerequisites as `crossReference` nodes, which MyST resolves to the page title and
+    URL. A planned but unwritten prerequisite (in `curriculum.yml`, with no page in the toc) is
+    its curriculum title, followed by "(coming soon)";
+  - the objectives as a list, each parsed as MyST, so `$…$` renders.
+- `{where-this-leads}` lists the topics that have this page as a prerequisite (reverse edges):
+  written pages first, as links, in toc order, then planned topics from `curriculum.yml`, as
+  "(coming soon)". On a chapter page it lists the topics outside the chapter that build on
+  the chapter's topics.
+- `{chapter-topics}` (chapter pages) is the chapter's topic table, in curriculum order: the
+  title (a link once the page exists, else "coming soon"), the time, the difficulty and the
+  status from the topic's front matter; extension topics are marked.
+
+All three read the pages listed in the toc of `content/myst.yml` and the `curriculum.yml` of
+their subject folders, once per build (cached, and re-read by `myst start` when one of those
+files changes). They never glob `content/**/*.md`, which would also match the stale page
+copies under `content/_build/`. Malformed or missing front matter (no `maths:` block, a
+difficulty of 7, an unknown prerequisite) is a `⛔️` build error at the directive's line, so
+`build_site.sh` fails; the page shows the error rather than an empty header.
 
 The PoC proved the key mechanism: a plugin directive reading `vfile.path`, emitting
-`crossReference` nodes that MyST resolved to the target page title and URL.
+`crossReference` nodes that MyST resolved to the target page title and URL. Found in stage 3:
+a reference to a *page* label resolves to a plain internal link, and book-theme v1.4.1 shows no
+hover preview for it (it shows previews for references to blocks such as theorems).

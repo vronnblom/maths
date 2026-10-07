@@ -35,10 +35,10 @@ Phases 3 and 4 can overlap: they share only the MVT/FTC boundary, and the graph
   `verify/_answers.json`, `verify/_coverage.json`).
 - `site.template` pinned to a book-theme commit, and the theme reachable from cloud sessions
   (05 §5.5).
-- `plugins/topic-header.mjs` (`{topic-header}`, `{where-this-leads}`).
+- `plugins/topic-header.mjs` (`{topic-header}`, `{where-this-leads}`, `{chapter-topics}`).
 - `scripts/`: `check_all.py`, `check_frontmatter.py`, `check_labels.py` (+ `labels.lock`),
   `graph.py`, `check_toc.py`, `check_coverage.py`, `check_verified_edits.py`,
-  `extract_answers.py`, `check_katex.mjs`, `generate.py`, `write_redirects.py`,
+  `extract_answers.py`, `check_katex.mjs`, `generate.py`, `write_redirects.py`, `check_widgets.py`,
   `build_site.sh`; `schema/page.schema.json`; `verify/mathcheck/` with its own tests and the
   runtime coverage plugin.
 - One widget end-to-end: `widgets/function-plot.mjs` + schema + `_lib/` (published with
