@@ -70,15 +70,22 @@ project:
 
 Exercise answers are parsed by SymPy (see [06](06-quality-assurance.md)), so answers in
 `Answer` dropdowns must use this subset. SymPy 1.14's `antlr` backend reads all of it, but
-returns `\pi` and `e` as plain symbols and drops list items after the first comma, so
-`parse_answer` post-processes its output (06 §6.1). Its golden tests cover every item below:
+returns `\pi` and `e` as plain symbols, drops list items after the first comma, and reads a
+command it doesn't know as a variable of that name (`\approx 0.69` "parses"). So
+`parse_answer` normalises its input, **refuses every command outside this list**, and
+post-processes the output (06 §6.1). Its golden tests cover every item below:
 
-- numbers, `\frac{}{}`, `\sqrt{}`, `\sqrt[n]{}`, `^{}`, `\pi`, `e`, `\infty`, `-\infty`
-- `\sin \cos \tan \arcsin \arccos \arctan \ln \log_{b}`, `\abs{}` / `|x|`
+- numbers (a decimal is read exactly: `0.69` is $\tfrac{69}{100}$), `\frac{}{}`, `\sqrt{}`,
+  `\sqrt[n]{}`, `^{}`, `\pi`, `e`, `\infty`, `-\infty`; `\cdot` or `\times` for a product;
+  variables are single letters or Greek letters, optionally with a subscript (`x_1`)
+- `\sin \cos \tan \arcsin \arccos \arctan \ln \log_{b}` (a bare `\log` is refused), `\abs{}` / `|x|`
 - `+C` for antiderivatives (the checker differentiates instead of comparing)
 - several answers as a comma-separated list (each element is checked); intervals as
   `(a, b)` / `[a, b]` with the `set` answer type (see 07); without it, `(a, b)` is a point
-- **not** `\mathrm{e}` and not `\dfrac` (normalised by the checker, but avoid them anyway)
+- **not** `\mathrm{e}` and not `\dfrac` (normalised by the checker, but avoid them anyway); the
+  project macros are expanded from `content/myst.yml`, and `\left`/`\right` and spacing
+  commands are dropped
+- an answer is a value, not an equation: `2`, not `x = 2`
 
 Answers that are not expressions (proofs, sketches, "does not exist") use
 `:class: dropdown answer manual` and are reviewed by hand.

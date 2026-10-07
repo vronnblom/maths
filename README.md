@@ -3,9 +3,11 @@
 An open, interactive and verified body of university mathematics: definitions, theorems,
 proofs, worked examples and exercises, published as a website. Calculus is the first subject.
 
-**Status:** Phase 0 (setting up the repository). The site skeleton builds and deploys, the
-repository checks run in CI, the plugin that renders page headers works, and the first
-interactive widget (`function-plot`) is on the "How to read this site" page. The curriculum is
+**Status:** Phase 0 (setting up the repository). The site is live at
+<https://vronnblom.github.io/maths/>. The repository checks run in CI, the plugin that renders
+page headers works, the first interactive widget (`function-plot`) is on the "How to read this
+site" page, and the SymPy verification harness checks worked examples and exercise answers
+(read from the built pages) and gates each page's status on the coverage it reaches. The curriculum is
 planned (`content/calculus/curriculum.yml`), but there is no topic content yet. Start with [PLAN.md](PLAN.md). Agents should read [CLAUDE.md](CLAUDE.md).
 
 ## Building the site
@@ -17,10 +19,12 @@ You need [Node.js 22](https://nodejs.org/) (see `.nvmrc`), [uv](https://docs.ast
 npm ci && uv sync     # install mystmd (pinned) and the Python tooling
 npm run check         # the repository checks: front matter, labels, prerequisite graph, toc,
                       # notation lint, widgets, spelling, and the checkers' own tests
+npm run verify        # the mathematics: build the AST, extract every exercise's answer,
+                      # run the SymPy tests in verify/, then the coverage gate
 npm run test:widgets  # the widgets' mathematics (against SymPy) and the plugin's logic
 npm run build         # build the site into content/_build/html; fails on any error or warning
 npm run dev           # live-reloading site at http://localhost:3000
-npm run all           # everything CI runs: check, test:widgets, then build
+npm run all           # everything CI runs: check, verify, test:widgets, then build
 ```
 
 `build` and `dev` first run `npm run generate`, which writes the prerequisite maps and the
@@ -42,14 +46,17 @@ content/          the MyST project: myst.yml, the pages, curriculum.yml, tags.ym
 plugins/          the MyST plugin: {topic-header}, {where-this-leads}, {chapter-topics}
 widgets/          interactive widgets (anywidget modules using JSXGraph), _lib/, _tests/;
                   the catalogue is widgets/README.md
+verify/           SymPy verification tests, the mathcheck helpers and their own tests
 scripts/          the checks (check_all.py), graph.py, generate.py, write_redirects.py,
-                  build_site.sh (the gated build), myst_gate.sh, fetch_theme.sh
+                  build_site.sh (the gated build), myst_gate.sh, fetch_theme.sh,
+                  extract_answers.py, check_coverage.py, check_verified_edits.py
 schema/           JSON Schemas for page front matter, curriculum.yml and widget configs
 labels.lock       every label ever published (labels are permanent)
 tests/            the checkers' tests, with one broken fixture project per check
 docs/plan/        the plan
 templates/        page and test templates
-.github/workflows ci.yml (checks, build), deploy.yml (GitHub Pages)
+.github/workflows ci.yml (checks, verify, build), guard.yml (the verified-page edit guard on
+                  pull requests), deploy.yml (GitHub Pages)
 ```
 
 ## Licences

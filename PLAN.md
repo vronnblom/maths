@@ -1,8 +1,9 @@
 # Plan: an open, verified university mathematics repository
 
 **Status:** decision-ready plan, 2026-10-07. Phase 0 in progress: stages 1 (site skeleton, build,
-Pages deploy), 2 (checks, schema, curriculum and prerequisite graph) and 3 (plugin and first
-widget) are in place; next is stage 4 (verification harness).
+Pages deploy), 2 (checks, schema, curriculum and prerequisite graph), 3 (plugin and first
+widget) and 4 (verification harness, coverage gate, verified-page guard) are in place, and the
+site is live at <https://vronnblom.github.io/maths/>; next is stage 5 (agent support).
 **First subject:** Calculus. **Architecture:** scales to any subject by adding a folder.
 
 ## Decisions at a glance
@@ -65,6 +66,8 @@ block snippets, chapter and subject index pages, and a verification test.
    remaining PoC items (rendered dropdowns, KaTeX macros with arguments, anywidget, search)
    are confirmed. Dropdowns, macros and search are confirmed on the HTML build (05 §5.3);
    anywidget is confirmed in item 3; the theme reaches cloud sessions via `scripts/fetch_theme.sh`.
+   **The site is live** (2026-10-07, after the owner enabled Pages: Deploy run 4 on `main`
+   succeeded, and `/maths/`, `/maths/about/how-to-read/` and `/maths/calculus/` serve).
 2. **Checks and schema** (stage 2, built): `schema/page.schema.json`, `content/tags.yml`,
    `content/calculus/curriculum.yml` (imported once from 08, now the source), `scripts/check_*.py`,
    `graph.py`, `generate.py` (the Mermaid maps and the status table), `write_redirects.py`,
@@ -74,11 +77,13 @@ block snippets, chapter and subject index pages, and a verification test.
    `{where-this-leads}`, `{chapter-topics}`), `widgets/function-plot.mjs` with `_lib/`, its
    schema, the catalogue (`widgets/README.md`) and Node tests against SymPy fixtures,
    `check_widgets.py`, and the widget on `about/how-to-read.md`. anywidget rendering is
-   confirmed on the HTML build (05 §5.3); the deployed site is the remaining check.
-4. **Verification harness**: `verify/mathcheck/` (`covers`, `answer`, `equal`…, LaTeX
-   normalisation with the antlr backend), `scripts/extract_answers.py`, `check_coverage.py`
-   and the coverage-based status preconditions, the `verify` CI job, and the verified-page edit
-   guard (`check_verified_edits.py`, `guard.yml`), which protects the verified status and so
-   lands with the coverage gate.
+   confirmed on the HTML build and **on the deployed site** (05 §5.3).
+4. **Verification harness** (stage 4, built): `verify/mathcheck/` (`covers`, `answer`, the
+   canonical symbols, `equal`…, `limit_is`…, `parse_answer` with the antlr backend and its
+   normalisation), `scripts/extract_answers.py`, `check_coverage.py` and the coverage-based
+   status preconditions (with the reviewer's note for `manual` answers, `maths.manual_checked`),
+   the `verify` CI job, and the verified-page edit guard (`check_verified_edits.py`,
+   `guard.yml`). KaTeX errors already fail the gated build, so there is no `check_katex.mjs`
+   (05 §5.3).
 5. **Agent support**: a SessionStart hook (`npm ci && uv sync`), `CONTRIBUTING.md`, the PR and issue templates, and `/new-topic` skill. Then start
    Phase 1a: its three Preliminaries prerequisites, then `calc-limit`.
