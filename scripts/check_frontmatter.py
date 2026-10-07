@@ -4,9 +4,17 @@
   kind and status);
 - tags come from content/tags.yml; the label's subject prefix matches maths.subject; the kind
   matches the path (03 §3.1); a page in a subject folder has that folder's subject;
+- maths.verify is the page's own test file, verify/<subject>/<chapter>/test_<topic>.py (with
+  `-` → `_`; test_index.py for a chapter page), so the verified badge links to the right file;
 - status ≥ reviewed: the maths.verify file exists, and every prerequisite page exists and is at
-  least reviewed (the prerequisite-status gate). The coverage-based preconditions are checked by
-  check_coverage.py in the verify job (stage 4).
+  least reviewed (the prerequisite-status gate);
+- maths.manual_checked (the reviewer's note, 06 §6.6): every key is an exercise on this page whose
+  Answer is `manual`, and every value is a reviewer listed in maths.reviewed_by.
+
+The preconditions that need test results (≥ 50 % coverage for reviewed, 100 % for verified) are
+checked by check_coverage.py after `pytest verify`, in `npm run verify` and the CI `verify` job.
+"No forward-reference warnings" on verified pages is check_labels.py --forward-refs, which
+reports them as errors there; "KaTeX clean" is the build gate (a KaTeX error is a ⛔️ build error).
 """
 
 from __future__ import annotations
@@ -17,6 +25,7 @@ import sys
 
 import jsonschema
 
+import myst_source as ms
 from project import REPO, STATUS_RANK, Page, Project, Reporter, add_root_argument
 
 KIND_PATHS = {
@@ -51,11 +60,46 @@ def _schema_message(e: jsonschema.ValidationError, page: Page) -> str:
         return f"label {e.instance!r} does not fit the grammar for a {page.kind} page (docs/plan/02 §2.4)"
     if e.validator == "not" and path == "label":
         return f"label {e.instance!r} does not fit the grammar for a {page.kind} page (docs/plan/02 §2.4)"
+    if e.validator == "pattern" and path == "maths.manual_checked":
+        return (f"maths.manual_checked: {e.instance} is not an exercise label; only an exercise whose Answer is "
+                f"manual gets a reviewer's note (examples always need a test)")
     if e.validator == "minItems" and path == "maths.reviewed_by":
         return "maths.reviewed_by: a reviewed or verified page needs at least one reviewer"
     if e.validator == "required" and "verify" in e.message:
         return "maths.verify: a reviewed or verified page needs its verification test file"
     return f"{where}: {e.message}"
+
+
+def _verify_path(rel: str) -> str:
+    """calculus/limits/limit-laws.md → verify/calculus/limits/test_limit_laws.py"""
+    folder, _, name = rel.rpartition("/")
+    return f"verify/{folder}/test_{name[: -len('.md')].replace('-', '_')}.py"
+
+
+def _check_manual_notes(page: Page, rep: Reporter) -> None:
+    notes = page.maths.get("manual_checked") or {}
+    if not notes:
+        return
+    try:
+        doc = ms.parse(page.text)
+    except ms.ParseError:
+        return  # check_labels.py reports it
+    manual, computed = set(), set()
+    for d in doc.directives():
+        if d.name == "exercise" and d.label:
+            answers = [c for c in d.children if isinstance(c, ms.Directive) and c.name == "admonition" and "answer" in c.classes]
+            (manual if any("manual" in a.classes for a in answers) else computed).add(d.label)
+    reviewers = set(page.maths.get("reviewed_by") or [])
+    for label, who in notes.items():
+        line = page.line("maths", "manual_checked", label)
+        if label in computed:
+            rep.error(page.path, line, f"maths.manual_checked: {label} has a machine-checkable Answer, so it needs a "
+                                       f"test, not a reviewer's note (only `manual` answers can be checked by hand)")
+        elif label not in manual:
+            rep.error(page.path, line, f"maths.manual_checked: {label} is not an exercise on this page")
+        if who not in reviewers:
+            rep.error(page.path, line, f"maths.manual_checked: {label} names {who}, who is not in maths.reviewed_by; "
+                                       f"the note is the reviewer's, added by them (docs/plan/06 §6.6)")
 
 
 def check(project: Project, rep: Reporter) -> None:
@@ -100,6 +144,14 @@ def check(project: Project, rep: Reporter) -> None:
             for k, t in enumerate(page.fm.get("tags") or []):
                 if t not in tags:
                     rep.error(page.path, page.line("tags", k), f"tag {t!r} is not in content/tags.yml")
+
+        v = m.get("verify")
+        if v and kind in ("topic", "chapter"):
+            want = _verify_path(page.rel)
+            if v != want:
+                rep.error(page.path, page.line("maths", "verify"), f"maths.verify is {v}, but this page's test file is {want} "
+                                                                    f"(templates/verify_test.py)")
+        _check_manual_notes(page, rep)
 
         status = m["status"]
         if STATUS_RANK[status] >= STATUS_RANK["reviewed"]:

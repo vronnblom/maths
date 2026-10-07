@@ -79,8 +79,9 @@ def fmt(rep):
 
 def test_every_fixture_is_listed():
     projects = {p.parent.parent.name for p in FIXTURES.glob("*/content/myst.yml")}
-    other = {"clean", "us-spelling", "redirects", "redirect-collision", "gate-clean", "gate-broken-reference", "gate-unknown-directive"}
-    assert projects == set(DEFECTS) | other
+    other = {"clean", "us-spelling", "redirects", "redirect-collision"}
+    gate = {p for p in projects if p.startswith("gate-")}  # tests/test_build_gate.py
+    assert projects == set(DEFECTS) | other | gate
 
 
 @pytest.mark.parametrize("name", sorted(DEFECTS))
@@ -181,3 +182,47 @@ def test_github_annotations(capsys, monkeypatch):
 def test_check_all_cli_exit_codes():
     assert check_all.main(["--root", str(FIXTURES / "clean" / "content")]) == 0
     assert check_all.main(["--root", str(FIXTURES / "orphan-proof" / "content")]) == 1
+
+
+# ── maths.verify and maths.manual_checked (check_frontmatter.py, docs/plan/06 §6.6) ──
+
+PAGE_REL = Path("calculus") / "limits" / "limit-of-a-function.md"
+NOTE = "  reviewed_by: [vronnblom]\n  manual_checked:\n    {label}: {who}\n"
+
+FRONTMATTER_CASES = {
+    "note-on-a-computed-answer": ("  reviewed_by: []\n", NOTE.format(label="exr-calc-limit-table-estimate", who="vronnblom"), 34,
+                                  "maths.manual_checked: exr-calc-limit-table-estimate has a machine-checkable Answer, so it needs a test"),
+    "note-by-someone-not-a-reviewer": ("  reviewed_by: []\n", NOTE.format(label="exr-calc-limit-eps-delta-linear", who="someone"), 34,
+                                       "maths.manual_checked: exr-calc-limit-eps-delta-linear names someone, who is not in maths.reviewed_by"),
+    "note-on-an-unknown-exercise": ("  reviewed_by: []\n", NOTE.format(label="exr-calc-limit-nothing", who="vronnblom"), 34,
+                                    "maths.manual_checked: exr-calc-limit-nothing is not an exercise on this page"),
+    "note-on-an-example": ("  reviewed_by: []\n", NOTE.format(label="eg-calc-limit-linear-eps-delta", who="vronnblom"), 33,
+                           "maths.manual_checked: eg-calc-limit-linear-eps-delta is not an exercise label"),
+    "verify-path-of-another-page": ("verify/calculus/limits/test_limit_of_a_function.py", "verify/calculus/limits/test_limits.py", 30,
+                                    "maths.verify is verify/calculus/limits/test_limits.py, but this page's test file is "
+                                    "verify/calculus/limits/test_limit_of_a_function.py"),
+}
+
+
+def _edited_clean(tmp_path, old, new) -> Path:
+    shutil.copytree(FIXTURES / "clean", tmp_path / "clean")
+    page = tmp_path / "clean" / "content" / PAGE_REL
+    text = page.read_text(encoding="utf-8")
+    assert text.count(old) == 1
+    page.write_text(text.replace(old, new), encoding="utf-8")
+    return tmp_path / "clean" / "content"
+
+
+@pytest.mark.parametrize("name", sorted(FRONTMATTER_CASES))
+def test_frontmatter_rejects(name, tmp_path):
+    old, new, line, message = FRONTMATTER_CASES[name]
+    rep = run(_edited_clean(tmp_path, old, new), "check_frontmatter")
+    hits = [d for d in rep.errors if message in d.message]
+    assert hits, fmt(rep)
+    assert (hits[0].path.name, hits[0].line) == ("limit-of-a-function.md", line), fmt(rep)
+
+
+def test_frontmatter_accepts_a_reviewers_note(tmp_path):
+    root = _edited_clean(tmp_path, "  reviewed_by: []\n", NOTE.format(label="exr-calc-limit-eps-delta-linear", who="vronnblom"))
+    rep = run(root)
+    assert not rep.diagnostics, fmt(rep)

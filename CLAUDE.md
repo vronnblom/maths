@@ -1,16 +1,17 @@
 # CLAUDE.md
 
-> **Status: Phase 0, stages 1–3 done.** What exists now: `content/` (home, about pages, the
+> **Status: Phase 0, stages 1–4 done.** What exists now: `content/` (home, about pages, the
 > Calculus subject page with its generated prerequisite map), `content/calculus/curriculum.yml`
 > (the plan of all 82 topics), `schema/` (pages, curriculum, widget configs), the checks in
 > `scripts/` (`check_all.py`, `graph.py`, `generate.py`, `write_redirects.py`,
 > `check_widgets.py`, …), `labels.lock`, codespell, `tests/` (fixtures proving each check
 > fails), the plugin `plugins/topic-header.mjs`, the `function-plot` widget (`widgets/`, shown
-> on `about/how-to-read.md`) with its Node tests, `ci.yml` (`checks` and `build` jobs) and
-> `deploy.yml`. The rest is specified in `docs/plan/` and arrives in the later stages of
-> Phase 0 (`docs/plan/09-roadmap.md`): **stage 4**
-> `verify/`, the coverage gate and the verified-page edit guard (`check_verified_edits.py`,
-> `guard.yml`); **stage 5** the SessionStart hook, `CONTRIBUTING.md`, templates for PRs and
+> on `about/how-to-read.md`) with its Node tests, the verification harness `verify/mathcheck/`
+> with `extract_answers.py` and the coverage gate `check_coverage.py`, the verified-page edit
+> guard (`check_verified_edits.py`, `guard.yml`), `ci.yml` (`checks`, `verify` and `build`
+> jobs) and `deploy.yml` (the site is live at https://vronnblom.github.io/maths/). The rest
+> is specified in `docs/plan/` and arrives in **stage 5** of Phase 0
+> (`docs/plan/09-roadmap.md`): the SessionStart hook, `CONTRIBUTING.md`, templates for PRs and
 > issues. Items marked *(stage N)* don't exist yet. Update this file in the PR that lands each
 > piece; it must always describe the repo as it is.
 
@@ -28,13 +29,15 @@ the details.
 npm ci && uv sync                 # install (Node 22 + mystmd 1.11.0; Python 3.12+ via uv)
 npm run dev                       # live site at http://localhost:3000 (myst start in content/)
 npm run check                     # front matter, labels, graph, toc, notation lint, widgets, spelling, checker tests
+npm run verify                    # AST → answers → SymPy tests (pytest verify/) → coverage gate
 npm run test:widgets              # widget maths against SymPy fixtures, and the plugin's logic (node --test)
 npm run build                     # generate, then scripts/build_site.sh: myst build (fails on any error or warning), redirects
-npm run all                       # check + test:widgets + build: everything CI runs (CI calls these same scripts). Run before every push.
+npm run all                       # check + verify + test:widgets + build: everything CI runs (CI calls these same scripts). Run before every push.
 uv run python scripts/graph.py ready calc        # planned topics whose prerequisites are all ≥ reviewed
 uv run python scripts/graph.py closure calc-mean-value-theorem   # every transitive prerequisite
 uv run python scripts/check_labels.py --update-lock               # add your new labels to labels.lock
 uv run python widgets/_tests/make_fixtures.py                     # after adding a function-plot table: SymPy's expected values
+uv run pytest verify/calculus/limits -q          # after npm run verify: rerun one chapter's tests while you work
 ```
 
 `npm run check` = `scripts/check_all.py` (`check_toc`, `check_frontmatter`, `check_labels
@@ -49,13 +52,18 @@ Both then run `scripts/fetch_theme.sh`, which git-fetches the book-theme
 commit pinned in `content/myst.yml` into `content/_build/templates/` (cloud sessions can't
 download github.com archives; see `docs/plan/05-tooling-and-build.md` §5.5). Bump the theme
 only together with mystmd. mystmd renders every formula with KaTeX at build time, so a
-KaTeX error (red text on the page) is a `⛔️` build error and fails `npm run build`.
+KaTeX error (red text on the page) is a `⛔️` build error and fails `npm run build` (the
+`gate-katex-*` fixtures prove it; there is no separate KaTeX check). Math in the front-matter
+`title` and `description` is never rendered: it shows as literal `$…$`, so keep math out of them.
 
-Coming later (and then part of `npm run all`):
-
-```bash
-npm run verify                    # (stage 4) AST → answers → SymPy tests (pytest verify/) → coverage
-```
+`npm run verify` = `npm run ast` (`myst build --site`, the AST only) →
+`scripts/extract_answers.py` (every exercise's Answer, as printed, into the git-ignored
+`verify/_answers.json`) → `pytest verify` (which refuses to run on a missing or stale
+`_answers.json` and writes `verify/_coverage.json`) → `scripts/check_coverage.py` (each page's
+status against the coverage that run achieved; it prints the per-page coverage for your PR).
+On pull requests, `guard.yml` runs `check_verified_edits.py`: changing a block of a `verified`
+page fails unless its `maths.verify` file changes too, the status is lowered, or the PR has the
+`typo-only` label.
 
 ## Layout
 
@@ -71,9 +79,12 @@ widgets/*.mjs, widgets/README.md       interactive widgets (anywidget ES modules
 widgets/_lib/, widgets/_tests/         shared helpers and pure maths modules; node tests against SymPy fixtures
 plugins/topic-header.mjs               {topic-header}, {where-this-leads}, {chapter-topics}: rendered from front matter
                                        and curriculum.yml (logic in plugins/_lib/, tests in plugins/_tests/)
-verify/<subject>/<chapter>/test_*.py   (stage 4) SymPy tests, @covers("<label>")
+verify/<subject>/<chapter>/test_*.py   SymPy tests, @covers("<label>"); one file per page, at its maths.verify path
+verify/mathcheck/                      covers, answer, the canonical symbols, equal…, limit_is…; latex.py (parse_answer)
+verify/conftest.py, test_mathcheck.py  loads _answers.json, records coverage; the harness's own tests and AST fixture
 scripts/                               the checks (check_all.py and the scripts it runs), graph.py, generate.py,
-                                       write_redirects.py, build_site.sh, myst_gate.sh, fetch_theme.sh
+                                       write_redirects.py, build_site.sh, myst_gate.sh, fetch_theme.sh,
+                                       extract_answers.py, check_coverage.py, check_verified_edits.py
 schema/                                JSON Schemas: page front matter, curriculum.yml, widgets/<name>.schema.json
 labels.lock                            every label ever merged (06 §6.7)
 tests/                                 the checkers' tests; tests/fixtures/ has one broken project per check
@@ -93,7 +104,7 @@ docs/plan/                             the plan (architecture decisions)
     `docs/plan/02-information-architecture.md` §2.4.
 - **Front matter**: native MyST keys (`title`, `label`, `description`, `tags`) plus our
   `maths:` block (`kind, subject, status, level, difficulty, est_minutes, prerequisites,
-  objectives, verify, widgets, reviewed_by, sources`), validated against
+  objectives, verify, widgets, reviewed_by, manual_checked, sources`), validated against
   `schema/page.schema.json`. Tags come from `content/tags.yml`. A topic page's label, file,
   title, level and prerequisites must match its `curriculum.yml` entry. The MyST warning
   `'frontmatter' extra key ignored: maths` is expected and is the only allowed build warning.
@@ -114,8 +125,11 @@ docs/plan/                             the plan (architecture decisions)
   `% notation-lint: off (reason)` … `% notation-lint: on`.
 - **Exercises**: tier class `tier-a|tier-b|tier-c` (+ `rigor`, `applied`). Hints are
   `:class: dropdown hint`. One `Answer` admonition with `:class: dropdown answer` in the
-  machine-checkable LaTeX subset (`\frac`, `\sqrt`, `\pi`, `e`, `\ln`, `\infty`, …), or
-  `answer manual` for proofs. A `{solution}` follows each exercise, collapsed.
+  machine-checkable LaTeX subset (`\frac`, `\sqrt`, `\pi`, `e`, `\ln`, `\infty`, …; 04 §4.3), or
+  `answer manual` for proofs. An extra class gives the answer type: `expr` (default),
+  `antiderivative` (ends `+ C`), `set` (brackets are intervals), `bool` (the word True or
+  False), `numeric-<tol>` (`numeric-5e-3` for two decimal places). A `{solution}` follows
+  each exercise, collapsed.
 - **Writing**: en-GB spelling, "we" for reasoning, "you" for instructions. No "clearly" or
   "obviously". Alt text on every figure.
 - **Widgets**: every widget sits alone in a `{figure}` labelled `wdg-…`, whose caption is its
@@ -128,8 +142,8 @@ docs/plan/                             the plan (architecture decisions)
 
 ## How to add a topic
 
-Steps 1–4 and 6–9 work now; step 5 needs `verify/` (stage 4), and the first topics also wait
-for stage 5 (Phase 1a starts after it). The procedure:
+Every step works now; the first topics wait for stage 5 (Phase 1a starts after it). The
+procedure:
 
 1. Pick a topic from `uv run python scripts/graph.py ready <subject>` (or as assigned).
    Branch: `topic/<label>`.
@@ -144,22 +158,36 @@ for stage 5 (Phase 1a starts after it). The procedure:
    each with an answer and a solution.
 5. Create `verify/<subject>/<chapter>/test_<topic>.py` from `templates/verify_test.py`
    with an `@covers` stub (`pytest.skip("for the verifier")`) for every `eg-`/`exr-` label.
+   Its path is the page's `maths.verify` (`-` → `_`; `check_frontmatter.py` checks it).
    Stubs count as uncovered. **If you are the author, leave the expected values to the
    verifier.**
 6. Add the page to the toc in `content/myst.yml`.
 7. Run `uv run python scripts/check_labels.py --update-lock` and commit `labels.lock`.
-8. Run `npm run all` and fix every error and warning.
+8. Run `npm run all` and fix every error and warning. `check_coverage.py` (in `npm run verify`)
+   prints the page's coverage; copy it into the PR.
 9. Open a PR using the template. One topic per PR.
 
 ## How to verify mathematics
 
-The harness (`verify/mathcheck/`) arrives in stage 4.
+Details: `docs/plan/06-quality-assurance.md` §6.1. The harness is `verify/mathcheck/`.
 
 - Every displayed step in a worked example and every exercise answer gets a SymPy check in
-  `verify/`, using `mathcheck` helpers (`equal`, `equal_up_to_constant`, `limit_is`,
-  `numeric_spot_check`, `answer(label)`).
+  `verify/`, using `mathcheck` helpers (`equal`, `equal_up_to_constant`, `equal_on_domain`,
+  `numeric_spot_check`, `limit_is`, `series_converges_to`, `solves_ode`, `answer(label)`).
+  Import the symbols from `mathcheck` (`from mathcheck import x, n`): they are the ones
+  `answer()` uses (real; `n` an integer), and `equal` rejects a foreign `sp.Symbol("x")`.
 - `answer(label)` parses the answer **as printed on the page**, so never duplicate it in
-  Python. Compare with `equal(...)`, never `==`.
+  Python. Compare with `equal(...)`, never `==`. A multi-part answer comes back as a tuple of
+  its parts, in order.
+- What counts (06 §6.1): a label is covered only by a test that declares it with `@covers`
+  and **passes**; an `exr-` test must call `answer(label)`; an `eg-` test must make at least one
+  mathcheck assertion. A helper counts as an assertion only when it returns True, and a
+  comparison SymPy cannot decide raises (it never passes). Skipped, xfailed and failed tests
+  count for nothing. Thresholds: `reviewed` ≥ 50 %, `verified` 100 %.
+- A `manual` answer (a proof, a sketch) has nothing for `answer()` to read; test its key claims
+  anyway. It counts as covered only through the **reviewer's note**: the reviewer adds
+  `<exr label>: <their handle>` under `maths.manual_checked`, and the handle must be in
+  `maths.reviewed_by`. Authors and verifiers never add it.
 - Derive expected values independently, and **never weaken a test to make it pass**. If the
   page and SymPy disagree, report it in the PR with the evidence.
 - Proofs: go through `docs/plan/06-quality-assurance.md` §6.3, including the circularity
@@ -169,7 +197,8 @@ The harness (`verify/mathcheck/`) arrives in stage 4.
 
 - Don't rename, delete or reuse labels. Don't move a page without listing its old path in
   `maths.aliases` (mystmd has no `aliases:` key; `scripts/write_redirects.py` makes the redirect).
-- Don't set `status: reviewed`/`verified` or add yourself to `reviewed_by`; the owner does that.
+- Don't set `status: reviewed`/`verified`, add yourself to `reviewed_by`, or add
+  `maths.manual_checked` entries; the owner (or the reviewer) does that.
 - Don't edit another page's mathematics in a topic PR (open a separate PR).
 - Don't add dependencies, front-matter keys, directive kinds or widget types without a
   `tooling` PR (the checks' parser, `scripts/myst_source.py`, fails on directives it doesn't

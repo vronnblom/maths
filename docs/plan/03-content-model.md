@@ -102,10 +102,11 @@ maths:
 | `maths.est_minutes` | int 5–90 | ✔ topic | reading + examples, excluding exercises |
 | `maths.prerequisites` | label[] | ✔ topic, chapter | topic labels only (written or planned). May be empty only for the first topic of a subject without dependencies. For a topic, the same set as its `curriculum.yml` entry (`graph.py check`). For a chapter, the earlier-chapter topics it builds on; its own topics are added to its closure automatically (02 §2.5) |
 | `maths.objectives` | string[] 2–6 | ✔ topic | each starts with an observable verb (*state, compute, prove, decide, sketch, explain, apply, estimate, recognise, …*); never *understand* or *know* |
-| `maths.verify` | path | ✔ if status ≥ reviewed (topic and chapter pages) | must exist; `verify/…/test_<name>.py`. Subject and meta pages have nothing to verify |
+| `maths.verify` | path | ✔ if status ≥ reviewed (topic and chapter pages) | must exist; the page's own path, `verify/<subject>/<chapter>/test_<topic with - → _>.py` (`test_index.py` for a chapter); only tests in it count towards the page's coverage. Subject and meta pages have nothing to verify |
 | `maths.widgets` | widget id[] | | must exist in `widgets/` (a mode of a widget, e.g. bisection, is configuration, not a separate id) |
 | `maths.aliases` | path[] | | old URL paths of a moved page; `write_redirects.py` turns each into a redirect (02 §2.3) |
 | `maths.reviewed_by` | string[] | ✔ if status ≥ reviewed (every kind) | GitHub handles |
+| `maths.manual_checked` | map `exr-` label → handle | topic, chapter | the reviewer's note (06 §6.6): an exercise whose Answer is `manual`, checked by hand by a reviewer listed in `reviewed_by`; it then counts towards coverage. Added by the reviewer, never the author |
 | `maths.sources` | string[] | | attribution; required if anything was adapted |
 | `maths.depends_on` | subject code[] | subject pages only | cross-subject dependencies |
 

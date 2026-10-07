@@ -75,13 +75,16 @@ Rules:
   should have at least one.
 - **Answer**: final result only, in the machine-checkable subset
   ([04 §4.3](04-notation-and-style.md)). Several parts are listed as `(a) … (b) …`, each in
-  its own math span. Non-expression answers ("does not exist", a proof) use
-  `:class: dropdown answer manual`.
+  its own math span; `answer(label)` returns them as a tuple, in order. Non-expression
+  answers ("does not exist", a proof) use `:class: dropdown answer manual`; such an exercise
+  counts towards coverage only through a reviewer's note (`maths.manual_checked`, 06 §6.6).
 - **Answer types** (an extra class on the answer admonition, so the checker knows how to
-  compare): `expr` (default; a bracketed pair `(a, b)` is a point), `antiderivative`
-  (compare up to a constant), `set` (solution sets/intervals: only here are brackets read as
-  intervals), `bool` (true/false questions), `numeric` (with tolerance, e.g.
-  `numeric-1e-4`), `manual`. An answer asked "to $n$ decimal places" uses the tolerance
+  compare): `expr` (default; a bracketed pair `(a, b)` is a point; a comma-separated list is
+  a tuple), `antiderivative` (ends in `+ C`; compare up to a constant), `set` (solution
+  sets/intervals: only here are brackets read as intervals; numbers form a finite set, and a
+  list is the union), `bool` (true/false questions: the word True or False, in plain text),
+  `numeric-<tolerance>` (e.g. `numeric-1e-4`; a bare `numeric` is an error), `manual`. Any
+  other class on the Answer is an error, so a typo can't silently fall back to `expr`. An answer asked "to $n$ decimal places" uses the tolerance
   $\tfrac12 \cdot 10^{-n}$ (`numeric-5e-3` for two places), and its test compares the
   printed value with the correctly rounded one, so a wrongly rounded answer fails.
 - **Solution**: complete, at the level of a worked example. It cites earlier results by link

@@ -74,9 +74,10 @@ maths/
 │   ├── topic-header.mjs         # {topic-header}, {where-this-leads}, {chapter-topics}
 │   ├── _lib/header.mjs          # its logic: front matter → AST nodes (pure)
 │   └── _tests/                  # node --test, run by `npm run test:widgets`
-├── verify/                      # SymPy/pytest verification, mirrors content/
-│   ├── conftest.py
+├── verify/                      # SymPy/pytest verification, mirrors content/ (06 §6.1)
+│   ├── conftest.py              # loads _answers.json (refuses a stale one), records coverage
 │   ├── mathcheck/               # helper package: @covers registry, LaTeX→SymPy, equality checks
+│   ├── test_mathcheck.py        # the harness's own tests; fixtures/ holds its AST fixture
 │   └── calculus/
 │       └── limits/
 │           └── test_limit_of_a_function.py

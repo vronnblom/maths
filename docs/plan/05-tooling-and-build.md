@@ -109,9 +109,19 @@ A `BASE_URL=/maths` build prefixes every link and asset in the HTML, the favicon
 | Under `/maths/` | ✔ A `BASE_URL=/maths` build served under `/maths/` loads `/maths/build/function-plot-<hash>.mjs`, `/maths/build/_lib/*.mjs` and JSXGraph, and the widget works as above. |
 | Plugin | ✔ `vfile.message(…)` with `fatal = true` logs `⛔️ <file>:<line> …` (a thrown error also logs ⛔️, without the line). `ctx.parseMyst()` parses inline Markdown and math. A `span` or `div` node with a `class`, and `admonition` with `class`, reach the HTML. |
 
-**Still to validate**: that the deployed site actually serves the site and the widget under
-`/maths/` (Pages had not deployed when stage 3 was written); search quality on math-heavy
-topic pages; and the build time with about 100 pages.
+**Validated in Phase 0 stage 4** (2026-10-07, mystmd 1.11.0, SymPy 1.14.0,
+antlr4-python3-runtime 4.11.1):
+
+| Question | Result |
+|---|---|
+| Deployed site | ✔ Once the owner enabled Pages, Deploy run 4 on `main` succeeded. `https://vronnblom.github.io/maths/` serves every page. On `/maths/about/how-to-read/` (Playwright, Chromium) the hashed `function-plot` module, all six `/maths/build/_lib/*.mjs` and JSXGraph load (200), the widget draws its board in the shadow root with its 4 sliders, its table shows 0, 0.479426, 0.841471, 0.997495, 0.909297 (the SymPy fixture), and there are no console errors. |
+| Is a KaTeX check needed besides the build gate? | **No.** Through `myst_gate.sh`, in `--md` and in `--html` with the real theme, each of these is a `⛔️ <file>:<line> <KaTeX message>` error that fails the build: an unknown macro (`\foo{x}`), a command KaTeX does not support (`\bbox[5px]{x}`, `\mathbbm{1}`), a project macro missing an argument (`\dv{x}`, `\abs` alone), an unclosed `\frac{1}{`. The same holds inline, in displays, in a `{math}` directive, in a heading, in a directive title, in a figure caption, in an exercise's Answer and in an objective rendered by the plugin. mystmd also marks the node `"error": true` in the AST. So `scripts/check_katex.mjs` and the `katex` devDependency are dropped (06 §6.4); the `gate-katex-*` fixtures in `tests/` keep the evidence. |
+| Math in front-matter `title`/`description` | Not rendered at all: the theme shows `$\foo$` literally, in the page heading and the `<title>`, and the build reports nothing (it is not math to KaTeX). No check could catch a KaTeX error there, and none is needed; titles simply carry no math (the curriculum's titles have none). |
+| How answers look in the AST | Number-only inline math is a `text` node (`$-3$`, `$0.69$`, `$+5$`, `$-0.5$`). A power of plain numbers is a `span` of `text` + `superscript` (`$2^{10}$`, `$10^{-3}$`, `$2^{-1}$`); anything with a letter stays `inlineMath` (`$x^2$`, `$e^{2}$`, `$2^x$`, `$x_1$`). `verify/fixtures/answers-ast.json` pins these shapes. |
+| SymPy's `parse_latex(…, backend="antlr")` | It takes `strict=True` (without it, `-2, 4` reads as `-2`), but it is **far more forgiving** than 06 assumed: an unknown command becomes a symbol of that name (`\approx 0.69` → `approx·0.69`; `\text{True}` → a product of letters; `\lvert x \rvert` → `lvert·rvert·x`), a bare `\log` is the natural logarithm, a decimal is a 15-digit float, `\pi`/`e` are symbols, and `\frac{1}{2}` stays `Pow(2, -1)`. So `parse_answer` allowlists commands and rejects multi-letter names (06 §6.1). |
+
+**Still to validate**: search quality on math-heavy topic pages, and the build time with
+about 100 pages.
 
 ## 5.4 Dependencies (each justified)
 
@@ -121,7 +131,7 @@ topic pages; and the build time with about 100 pages.
 | **mystmd** | exact pin (`1.11.0`), lockfile | the site engine | `jupyter-book` 2 on PyPI wraps the same engine but adds a layer; we need npm for the plugin anyway |
 | **yaml** (npm) | caret, lockfile | the plugin parses front matter properly | a hand-rolled regex (fragile) |
 | **book-theme** (site theme, downloaded by mystmd) | commit SHA in `site.template` (§5.5) | the stock MyST web theme | an unpinned `template: book-theme` (follows the theme's `main`) |
-| **katex** (npm, dev) | exact, matching the KaTeX of mystmd and the pinned theme commit: **0.15.6** (§5.3) | `scripts/check_katex.mjs` fails CI on math that would render as red error text (mystmd is a single bundled package, so KaTeX isn't otherwise importable). Found in stage 1: mystmd already renders every formula with KaTeX at build time and logs errors as `⛔️`, so `build_site.sh` catches them; stage 4 decides whether this check still adds anything (it would run in the `verify` job, whose `--site` build is not log-gated) | relying on visual inspection |
+| ~~**katex** (npm, dev)~~ | **dropped in stage 4** | It was for `scripts/check_katex.mjs`, a check for math that would render as red error text. Stage 4 showed that every kind of KaTeX error is a `⛔️` error in mystmd's own build-time rendering (bundled KaTeX 0.15.6), which the gated build already fails on (§5.3), so neither the script nor the dependency is needed. The `verify` job's `--site` build is not gated, but the `build` job's is, on the same pages | – |
 | **JSXGraph** | exact version (**1.14.0**) in the URL that widgets `import()` at render time (`widgets/_lib/jsxgraph.mjs`); vendored copy as a manual fallback | interactive geometry/plots: sliders, gliders, function graphs, keyboard support, small (≈ 300 kB), MIT/LGPL dual licence, maintained since 2008 by a university group | Plotly (heavy, data-viz oriented), D3 (too low-level), Desmos API (licence/API key for production, not version-controlled), GeoGebra (heavy, external) |
 | **jsxgraph** (npm, dev) | exact, the **same** version as the URL above (a test checks it) | the widget tests run expressions through JSXGraph's JessieCode, the evaluator the browser uses (§5.8). Checked in stage 3: the package's `distrib/jsxgraphcore.mjs` (the file jsDelivr serves) imports in Node 22 and compiles JessieCode on a board with JSXGraph's `NoRenderer`, no DOM needed. It is never published or imported by the site | a second, hand-written evaluator for the tests (the tests would then not check what readers see) |
 | **Python ≥ 3.12 + uv** | `uv.lock` | reproducible env for verification and checks; uv is fast and handles the lockfile | pip + requirements.txt (no lock), poetry (slower, heavier) |
@@ -206,8 +216,7 @@ site:
 **The theme is a dependency too.** mystmd downloads the site theme at build time; it is not
 an npm package, so neither the mystmd pin, the lockfile nor Dependabot covers it. The
 `<commit-sha>` above is the pin. It is bumped only in the same dedicated upgrade PRs as
-mystmd (with the visual check of the exemplar pages), and `katex` is pinned to the KaTeX
-version of that theme commit. CI and deploy cache `content/_build/templates` keyed on the
+mystmd (with the visual check of the exemplar pages). CI and deploy cache `content/_build/templates` keyed on the
 SHA alone, which a step greps from `myst.yml` (keying on a hash of the whole `myst.yml`
 would miss on every toc change, i.e. on almost every topic PR).
 
@@ -247,27 +256,28 @@ until it's needed.
     "generate": "uv run python scripts/generate.py",
     "dev": "npm run generate && bash scripts/fetch_theme.sh && cd content && myst start",
     "check": "uv run python scripts/check_all.py && uv run codespell content docs templates && uv run pytest tests -q",
-    "ast": "npm run generate && cd content && myst build --site --ci",
-    "verify": "npm run ast && uv run python scripts/extract_answers.py content/_build/site/content -o verify/_answers.json && uv run pytest verify -q && uv run python scripts/check_coverage.py && node scripts/check_katex.mjs content/_build/site/content",
+    "ast": "npm run generate && bash scripts/fetch_theme.sh && cd content && myst build --site --ci",
+    "verify": "npm run ast && uv run python scripts/extract_answers.py content/_build/site/content -o verify/_answers.json && uv run pytest verify -q && uv run python scripts/check_coverage.py",
     "test:widgets": "node --test \"widgets/_tests/*.test.mjs\" \"plugins/_tests/*.test.mjs\"",
     "build": "npm run generate && bash scripts/build_site.sh",
     "all": "npm run check && npm run verify && npm run test:widgets && npm run build"
   },
   "dependencies": { "mystmd": "1.11.0", "yaml": "^2.8.0" },
-  "devDependencies": { "jsxgraph": "1.14.0", "katex": "<pinned to the KaTeX version of the pinned theme commit>" }
+  "devDependencies": { "jsxgraph": "1.14.0" }
 }
 ```
 
 The npm scripts are the **only** definition of each step: CI calls the same scripts, so
 `npm run all` really is "everything CI runs".
-This is the end state of Phase 0. After stage 3, `package.json` has `generate`, `dev`, `check`,
-`test:widgets`, `build`, `all` = `check` + `test:widgets` + `build`, and the `jsxgraph` dev
-dependency; `ast`, `verify` and `katex` arrive with stage 4.
+This is `package.json` since stage 4, the end state of Phase 0 (stage 4 dropped the planned
+`katex` devDependency and the KaTeX step of `verify`, §5.3).
+- `ast` fetches the pinned theme first (`--site` needs it, like `--html`), so `npm run verify`
+  works from a clean checkout.
 - `test:widgets` also runs the plugin's tests (`plugins/_tests/`), whose logic is the same kind
   of pure module (03 §3.6); stage 3 added that second glob.
 - `generate` writes the generated includes (§5.7, "Generated content") before any build.
 - `verify` always rebuilds the AST and re-extracts the answers, so tests never read a stale
-  `verify/_answers.json`.
+  `verify/_answers.json`. Run alone, `pytest verify` refuses a missing or stale one (06 §6.1).
 - `check_coverage.py` reads the coverage that the pytest run just recorded (06 §6.1), so it
   runs after `pytest`.
 - `node --test` is given a glob. A bare directory argument is treated as a module on Node 22
@@ -397,7 +407,6 @@ jobs:
       - run: npm ci
       - name: Front matter, labels, graph, toc, notation lint, widgets, spelling, checker fixture tests
         run: npm run check                           # check_all.py emits ::error file=…,line=…:: annotations
-      # Until stage 4, `npm run test:widgets` runs here; the verify job below takes it over.
 
   verify:
     runs-on: ubuntu-latest
@@ -412,7 +421,7 @@ jobs:
         run: echo "sha=$(grep -oE 'book-theme/archive/[0-9a-f]{40}' content/myst.yml | cut -d/ -f3)" >> "$GITHUB_OUTPUT"
       - uses: actions/cache@<sha>                    # the pinned theme; --site needs it too
         with: { path: content/_build/templates, key: 'theme-${{ steps.theme.outputs.sha }}' }
-      - name: AST, answers, SymPy verification, coverage, KaTeX
+      - name: AST, answers, SymPy verification, coverage gate
         run: npm run verify
       - name: Widget maths
         run: npm run test:widgets
@@ -497,8 +506,7 @@ jobs:
 ```
 
 Branch protection on `main`: require `checks`, `verify`, `build` (ci.yml) and `verified-edits`
-(guard.yml); require one approving review (the owner); linear history (squash merge). Until
-stage 4 lands `verify` and `guard.yml`, require `checks` and `build`.
+(guard.yml); require one approving review (the owner); linear history (squash merge).
 
 ### `.github/workflows/links.yml`
 

@@ -38,9 +38,10 @@ Phases 3 and 4 can overlap: they share only the MVT/FTC boundary, and the graph
 - `plugins/topic-header.mjs` (`{topic-header}`, `{where-this-leads}`, `{chapter-topics}`).
 - `scripts/`: `check_all.py`, `check_frontmatter.py`, `check_labels.py` (+ `labels.lock`),
   `graph.py`, `check_toc.py`, `check_coverage.py`, `check_verified_edits.py`,
-  `extract_answers.py`, `check_katex.mjs`, `generate.py`, `write_redirects.py`, `check_widgets.py`,
+  `extract_answers.py`, `generate.py`, `write_redirects.py`, `check_widgets.py`,
   `build_site.sh`; `schema/page.schema.json`; `verify/mathcheck/` with its own tests and the
-  runtime coverage plugin.
+  runtime coverage plugin. (`check_katex.mjs` was dropped in stage 4: KaTeX errors already fail
+  the gated build, 05 §5.3.)
 - One widget end-to-end: `widgets/function-plot.mjs` + schema + `_lib/` (published with
   `static_files`, 05 §5.8) + a Node test, rendering on the deployed site.
 - `.github/workflows/{ci,guard,deploy,links}.yml`; branch protection on `main`;
@@ -50,13 +51,15 @@ Phases 3 and 4 can overlap: they share only the MVT/FTC boundary, and the graph
 - `.claude/` SessionStart hook (`npm ci && uv sync`) and a `/new-topic` skill wrapping the
   "add a topic" procedure ([10](10-ai-agents.md)).
 - `tests/fixtures/` with deliberately broken pages (bad label, cycle, missing answer, KaTeX
-  error, broken ref, unknown directive, a `@covers` stub on a `verified` page) and a pytest in
-  `tests/` that runs each checker on them (run by `npm run check`).
+  error (`gate-katex-*`, through the build gate), broken ref, unknown directive) and a pytest in
+  `tests/` that runs each checker on them (run by `npm run check`); the verification defects (a
+  `@covers` stub on a `verified` page, a failing test, an answer outside the subset, …) are
+  one-edit variants of the template project in `tests/test_verify_pipeline.py`.
 
 **Definition of done**
-- [ ] `https://vronnblom.github.io/maths/` serves the site with a home page, the about pages and an empty Calculus subject page showing the Mermaid prerequisite map from `curriculum.yml`.
-- [ ] Each checker has been shown to **fail** on its fixture and pass on the clean tree (fixture tests in CI).
-- [ ] The remaining items in [05 §5.3](05-tooling-and-build.md) are validated on the real HTML build (dropdowns, KaTeX macros with arguments, anywidget rendering, search) and the results are recorded in 05.
+- [x] `https://vronnblom.github.io/maths/` serves the site with a home page, the about pages and an empty Calculus subject page showing the Mermaid prerequisite map from `curriculum.yml` (2026-10-07: the 12 maps render, no console errors).
+- [x] Each checker has been shown to **fail** on its fixture and pass on the clean tree (fixture tests in CI).
+- [x] The remaining items in [05 §5.3](05-tooling-and-build.md) are validated on the real HTML build (dropdowns, KaTeX macros with arguments, anywidget rendering, search) and the results are recorded in 05; anywidget also on the deployed site.
 - [ ] A fresh clone gets to a green `npm run all` by following only `README.md`, and so does a
       Claude Code cloud session after its SessionStart hook.
 

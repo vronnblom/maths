@@ -109,7 +109,8 @@ graph.py ready ──► [1 Author agent] ──► draft page (status: draft), 
 ## 10.5 Guardrails for agents (summarised in `CLAUDE.md`)
 
 - Never rename or delete a label; never change another page's mathematics in a topic PR.
-- Never mark `status: reviewed`/`verified`; never add yourself to `reviewed_by`.
+- Never mark `status: reviewed`/`verified`; never add yourself to `reviewed_by`; never add a
+  `maths.manual_checked` entry (the reviewer's note for a `manual` answer, 06 §6.6).
 - Never weaken a test to make it pass; report the disagreement instead.
 - Never add dependencies, new front-matter keys or new directive kinds without a `tooling` PR.
 - Never copy text, exercises or figures from non-compatible sources ([07 §7.4](07-exercises.md));

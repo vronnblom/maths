@@ -7,9 +7,11 @@
     "generate": "uv run python scripts/generate.py",
     "dev": "npm run generate && bash scripts/fetch_theme.sh && cd content && myst start",
     "check": "uv run python scripts/check_all.py && uv run codespell content docs templates && uv run pytest tests -q",
+    "ast": "npm run generate && bash scripts/fetch_theme.sh && cd content && myst build --site --ci",
+    "verify": "npm run ast && uv run python scripts/extract_answers.py content/_build/site/content -o verify/_answers.json && uv run pytest verify -q && uv run python scripts/check_coverage.py",
     "test:widgets": "node --test \"widgets/_tests/*.test.mjs\" \"plugins/_tests/*.test.mjs\"",
     "build": "npm run generate && bash scripts/build_site.sh",
-    "all": "npm run check && npm run test:widgets && npm run build"
+    "all": "npm run check && npm run verify && npm run test:widgets && npm run build"
   },
   "dependencies": { "mystmd": "1.11.0", "yaml": "^2.8.0" },
   "devDependencies": { "jsxgraph": "1.14.0" }

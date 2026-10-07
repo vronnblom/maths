@@ -1,0 +1,8 @@
+# A fixture project for tests/ (see tests/README.md).
+version: 1
+project:
+  title: Fixture
+  math:
+    '\dv': '\frac{\mathrm{d} #1}{\mathrm{d} #2}'
+  toc:
+    - file: index.md
