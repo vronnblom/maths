@@ -1,0 +1,4553 @@
+{
+ "mystmd": "1.11.0",
+ "frontmatter": {
+  "label": "calc-limit"
+ },
+ "mdast": {
+  "type": "root",
+  "children": [
+   {
+    "type": "block",
+    "children": [
+     {
+      "type": "mystDirective",
+      "name": "topic-header",
+      "position": {
+       "start": {
+        "line": 36,
+        "column": 1
+       },
+       "end": {
+        "line": 37,
+        "column": 1
+       }
+      }
+     },
+     {
+      "type": "heading",
+      "depth": 2,
+      "position": {
+       "start": {
+        "line": 39,
+        "column": 1
+       },
+       "end": {
+        "line": 39,
+        "column": 1
+       }
+      },
+      "children": [
+       {
+        "type": "text",
+        "value": "Why this matters",
+        "position": {
+         "start": {
+          "line": 39,
+          "column": 1
+         },
+         "end": {
+          "line": 39,
+          "column": 1
+         }
+        }
+       }
+      ],
+      "identifier": "why-this-matters",
+      "label": "Why this matters",
+      "html_id": "why-this-matters",
+      "implicit": true
+     },
+     {
+      "type": "comment",
+      "value": "1–3 paragraphs. Start from a concrete question, not a definition.\n Example: a ball's position is s(t) = 5t²; what is its speed at exactly t = 1?\n Average speeds over [1, 1+h] approach a number as h shrinks — that \"approach\" is a limit.",
+      "position": {
+       "start": {
+        "line": 41,
+        "column": 1
+       },
+       "end": {
+        "line": 43,
+        "column": 1
+       }
+      }
+     },
+     {
+      "type": "comment",
+      "value": "A widget sits alone in a {figure}: the figure carries the wdg- label, and its caption is\n the text description (shown even when the widget can't load). See docs/plan/05 §5.8.",
+      "position": {
+       "start": {
+        "line": 45,
+        "column": 1
+       },
+       "end": {
+        "line": 46,
+        "column": 1
+       }
+      }
+     },
+     {
+      "type": "container",
+      "kind": "figure",
+      "children": [
+       {
+        "type": "anywidget",
+        "esm": "../../../widgets/function-plot.mjs",
+        "model": {
+         "f": "(5*(1+h)^2 - 5)/h",
+         "variable": "h",
+         "xRange": [
+          -1,
+          1
+         ],
+         "yRange": [
+          5,
+          15
+         ],
+         "table": {
+          "points": [
+           0.1,
+           0.01,
+           0.001,
+           -0.001,
+           -0.01,
+           -0.1
+          ]
+         },
+         "hole": {
+          "x": 0
+         }
+        },
+        "id": "6oPiRGHrewE3rkpB9Xx-h"
+       },
+       {
+        "type": "caption",
+        "children": [
+         {
+          "type": "paragraph",
+          "position": {
+           "start": {
+            "line": 61,
+            "column": 1
+           },
+           "end": {
+            "line": 62,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "captionNumber",
+            "kind": "figure",
+            "label": "wdg-calc-limit-average-speed",
+            "identifier": "wdg-calc-limit-average-speed",
+            "html_id": "wdg-calc-limit-average-speed",
+            "enumerator": "1",
+            "children": [
+             {
+              "type": "text",
+              "value": "Figure "
+             },
+             {
+              "type": "text",
+              "value": "1"
+             },
+             {
+              "type": "text",
+              "value": ":"
+             }
+            ],
+            "template": "Figure %s:"
+           },
+           {
+            "type": "text",
+            "value": "Graph of the average speed ",
+            "position": {
+             "start": {
+              "line": 61,
+              "column": 1
+             },
+             "end": {
+              "line": 61,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "\\frac{5(1+h)^2 - 5}{h}",
+            "position": {
+             "start": {
+              "line": 61,
+              "column": 1
+             },
+             "end": {
+              "line": 61,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " for ",
+            "position": {
+             "start": {
+              "line": 61,
+              "column": 1
+             },
+             "end": {
+              "line": 61,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "h",
+            "position": {
+             "start": {
+              "line": 61,
+              "column": 1
+             },
+             "end": {
+              "line": 61,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " between ",
+            "position": {
+             "start": {
+              "line": 61,
+              "column": 1
+             },
+             "end": {
+              "line": 61,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": "-1",
+            "position": {
+             "start": {
+              "line": 61,
+              "column": 1
+             },
+             "end": {
+              "line": 61,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " and ",
+            "position": {
+             "start": {
+              "line": 61,
+              "column": 1
+             },
+             "end": {
+              "line": 61,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": "1",
+            "position": {
+             "start": {
+              "line": 61,
+              "column": 1
+             },
+             "end": {
+              "line": 61,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": ", with a hole\nat ",
+            "position": {
+             "start": {
+              "line": 61,
+              "column": 1
+             },
+             "end": {
+              "line": 61,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "h = 0",
+            "position": {
+             "start": {
+              "line": 61,
+              "column": 1
+             },
+             "end": {
+              "line": 61,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": ". A table lists the values for ",
+            "position": {
+             "start": {
+              "line": 61,
+              "column": 1
+             },
+             "end": {
+              "line": 61,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "h = \\pm 0.1, \\pm 0.01, \\pm 0.001",
+            "position": {
+             "start": {
+              "line": 61,
+              "column": 1
+             },
+             "end": {
+              "line": 61,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": "; they approach ",
+            "position": {
+             "start": {
+              "line": 61,
+              "column": 1
+             },
+             "end": {
+              "line": 61,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": "10",
+            "position": {
+             "start": {
+              "line": 61,
+              "column": 1
+             },
+             "end": {
+              "line": 61,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": ".",
+            "position": {
+             "start": {
+              "line": 61,
+              "column": 1
+             },
+             "end": {
+              "line": 61,
+              "column": 1
+             }
+            }
+           }
+          ]
+         }
+        ]
+       }
+      ],
+      "label": "wdg-calc-limit-average-speed",
+      "identifier": "wdg-calc-limit-average-speed",
+      "enumerator": "1",
+      "html_id": "wdg-calc-limit-average-speed"
+     },
+     {
+      "type": "paragraph",
+      "position": {
+       "start": {
+        "line": 65,
+        "column": 1
+       },
+       "end": {
+        "line": 66,
+        "column": 1
+       }
+      },
+      "children": [
+       {
+        "type": "strong",
+        "position": {
+         "start": {
+          "line": 65,
+          "column": 1
+         },
+         "end": {
+          "line": 65,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "text",
+          "value": "Try this:",
+          "position": {
+           "start": {
+            "line": 65,
+            "column": 1
+           },
+           "end": {
+            "line": 65,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "text",
+        "value": " drag ",
+        "position": {
+         "start": {
+          "line": 65,
+          "column": 1
+         },
+         "end": {
+          "line": 65,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "h",
+        "position": {
+         "start": {
+          "line": 65,
+          "column": 1
+         },
+         "end": {
+          "line": 65,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": " towards ",
+        "position": {
+         "start": {
+          "line": 65,
+          "column": 1
+         },
+         "end": {
+          "line": 65,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": "0",
+        "position": {
+         "start": {
+          "line": 65,
+          "column": 1
+         },
+         "end": {
+          "line": 65,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": " from both sides. Which number do the average speeds\napproach? Why can’t you simply put ",
+        "position": {
+         "start": {
+          "line": 65,
+          "column": 1
+         },
+         "end": {
+          "line": 65,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "h = 0",
+        "position": {
+         "start": {
+          "line": 65,
+          "column": 1
+         },
+         "end": {
+          "line": 65,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": "?",
+        "position": {
+         "start": {
+          "line": 65,
+          "column": 1
+         },
+         "end": {
+          "line": 65,
+          "column": 1
+         }
+        }
+       }
+      ]
+     },
+     {
+      "type": "heading",
+      "depth": 2,
+      "position": {
+       "start": {
+        "line": 68,
+        "column": 1
+       },
+       "end": {
+        "line": 68,
+        "column": 1
+       }
+      },
+      "children": [
+       {
+        "type": "text",
+        "value": "What a limit is",
+        "position": {
+         "start": {
+          "line": 68,
+          "column": 1
+         },
+         "end": {
+          "line": 68,
+          "column": 1
+         }
+        }
+       }
+      ],
+      "identifier": "what-a-limit-is",
+      "label": "What a limit is",
+      "html_id": "what-a-limit-is",
+      "implicit": true
+     },
+     {
+      "type": "comment",
+      "value": "Intuitive description first (no new symbols), then a precise definition.",
+      "position": {
+       "start": {
+        "line": 70,
+        "column": 1
+       },
+       "end": {
+        "line": 70,
+        "column": 1
+       }
+      }
+     },
+     {
+      "type": "paragraph",
+      "position": {
+       "start": {
+        "line": 72,
+        "column": 1
+       },
+       "end": {
+        "line": 73,
+        "column": 1
+       }
+      },
+      "children": [
+       {
+        "type": "text",
+        "value": "Informally, ",
+        "position": {
+         "start": {
+          "line": 72,
+          "column": 1
+         },
+         "end": {
+          "line": 72,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "\\lim_{x \\to a} f(x) = L",
+        "position": {
+         "start": {
+          "line": 72,
+          "column": 1
+         },
+         "end": {
+          "line": 72,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": " means that ",
+        "position": {
+         "start": {
+          "line": 72,
+          "column": 1
+         },
+         "end": {
+          "line": 72,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "f(x)",
+        "position": {
+         "start": {
+          "line": 72,
+          "column": 1
+         },
+         "end": {
+          "line": 72,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": " can be made as close to ",
+        "position": {
+         "start": {
+          "line": 72,
+          "column": 1
+         },
+         "end": {
+          "line": 72,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "L",
+        "position": {
+         "start": {
+          "line": 72,
+          "column": 1
+         },
+         "end": {
+          "line": 72,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": " as we\nlike by taking ",
+        "position": {
+         "start": {
+          "line": 72,
+          "column": 1
+         },
+         "end": {
+          "line": 72,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "x",
+        "position": {
+         "start": {
+          "line": 72,
+          "column": 1
+         },
+         "end": {
+          "line": 72,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": " close enough to ",
+        "position": {
+         "start": {
+          "line": 72,
+          "column": 1
+         },
+         "end": {
+          "line": 72,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "a",
+        "position": {
+         "start": {
+          "line": 72,
+          "column": 1
+         },
+         "end": {
+          "line": 72,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": ", but not equal to ",
+        "position": {
+         "start": {
+          "line": 72,
+          "column": 1
+         },
+         "end": {
+          "line": 72,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "a",
+        "position": {
+         "start": {
+          "line": 72,
+          "column": 1
+         },
+         "end": {
+          "line": 72,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": ".",
+        "position": {
+         "start": {
+          "line": 72,
+          "column": 1
+         },
+         "end": {
+          "line": 72,
+          "column": 1
+         }
+        }
+       }
+      ]
+     },
+     {
+      "type": "proof",
+      "kind": "definition",
+      "enumerated": true,
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "Limit of a function",
+          "position": {
+           "start": {
+            "line": 75,
+            "column": 1
+           },
+           "end": {
+            "line": 75,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "paragraph",
+        "position": {
+         "start": {
+          "line": 78,
+          "column": 1
+         },
+         "end": {
+          "line": 86,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "text",
+          "value": "Let ",
+          "position": {
+           "start": {
+            "line": 78,
+            "column": 1
+           },
+           "end": {
+            "line": 78,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "f",
+          "position": {
+           "start": {
+            "line": 78,
+            "column": 1
+           },
+           "end": {
+            "line": 78,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " be defined on an open interval containing ",
+          "position": {
+           "start": {
+            "line": 78,
+            "column": 1
+           },
+           "end": {
+            "line": 78,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "a",
+          "position": {
+           "start": {
+            "line": 78,
+            "column": 1
+           },
+           "end": {
+            "line": 78,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": ", except possibly at ",
+          "position": {
+           "start": {
+            "line": 78,
+            "column": 1
+           },
+           "end": {
+            "line": 78,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "a",
+          "position": {
+           "start": {
+            "line": 78,
+            "column": 1
+           },
+           "end": {
+            "line": 78,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " itself. We say\nthat ",
+          "position": {
+           "start": {
+            "line": 78,
+            "column": 1
+           },
+           "end": {
+            "line": 78,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "strong",
+          "position": {
+           "start": {
+            "line": 78,
+            "column": 1
+           },
+           "end": {
+            "line": 78,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "text",
+            "value": "the limit of ",
+            "position": {
+             "start": {
+              "line": 78,
+              "column": 1
+             },
+             "end": {
+              "line": 78,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "f(x)",
+            "position": {
+             "start": {
+              "line": 78,
+              "column": 1
+             },
+             "end": {
+              "line": 78,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " as ",
+            "position": {
+             "start": {
+              "line": 78,
+              "column": 1
+             },
+             "end": {
+              "line": 78,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "x",
+            "position": {
+             "start": {
+              "line": 78,
+              "column": 1
+             },
+             "end": {
+              "line": 78,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " approaches ",
+            "position": {
+             "start": {
+              "line": 78,
+              "column": 1
+             },
+             "end": {
+              "line": 78,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "a",
+            "position": {
+             "start": {
+              "line": 78,
+              "column": 1
+             },
+             "end": {
+              "line": 78,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " is ",
+            "position": {
+             "start": {
+              "line": 78,
+              "column": 1
+             },
+             "end": {
+              "line": 78,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "L",
+            "position": {
+             "start": {
+              "line": 78,
+              "column": 1
+             },
+             "end": {
+              "line": 78,
+              "column": 1
+             }
+            }
+           }
+          ]
+         },
+         {
+          "type": "text",
+          "value": ", and write",
+          "position": {
+           "start": {
+            "line": 78,
+            "column": 1
+           },
+           "end": {
+            "line": 78,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "math",
+        "value": "\\lim_{x \\to a} f(x) = L,",
+        "position": {
+         "start": {
+          "line": 78,
+          "column": 1
+         },
+         "end": {
+          "line": 78,
+          "column": 1
+         }
+        },
+        "tight": true,
+        "enumerator": "1"
+       },
+       {
+        "type": "paragraph",
+        "position": {
+         "start": {
+          "line": 78,
+          "column": 1
+         },
+         "end": {
+          "line": 86,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "text",
+          "value": "if for every ",
+          "position": {
+           "start": {
+            "line": 78,
+            "column": 1
+           },
+           "end": {
+            "line": 78,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "\\eps > 0",
+          "position": {
+           "start": {
+            "line": 78,
+            "column": 1
+           },
+           "end": {
+            "line": 78,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " there exists ",
+          "position": {
+           "start": {
+            "line": 78,
+            "column": 1
+           },
+           "end": {
+            "line": 78,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "\\delta > 0",
+          "position": {
+           "start": {
+            "line": 78,
+            "column": 1
+           },
+           "end": {
+            "line": 78,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " such that",
+          "position": {
+           "start": {
+            "line": 78,
+            "column": 1
+           },
+           "end": {
+            "line": 78,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "math",
+        "value": "0 < \\abs{x - a} < \\delta \\quad\\text{implies}\\quad \\abs{f(x) - L} < \\eps .",
+        "position": {
+         "start": {
+          "line": 78,
+          "column": 1
+         },
+         "end": {
+          "line": 78,
+          "column": 1
+         }
+        },
+        "tight": "before",
+        "enumerator": "2"
+       }
+      ],
+      "label": "def-calc-limit",
+      "identifier": "def-calc-limit",
+      "enumerator": "1",
+      "html_id": "def-calc-limit"
+     },
+     {
+      "type": "paragraph",
+      "position": {
+       "start": {
+        "line": 89,
+        "column": 1
+       },
+       "end": {
+        "line": 91,
+        "column": 1
+       }
+      },
+      "children": [
+       {
+        "type": "strong",
+        "position": {
+         "start": {
+          "line": 89,
+          "column": 1
+         },
+         "end": {
+          "line": 89,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "text",
+          "value": "In words.",
+          "position": {
+           "start": {
+            "line": 89,
+            "column": 1
+           },
+           "end": {
+            "line": 89,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "text",
+        "value": " Whatever tolerance ",
+        "position": {
+         "start": {
+          "line": 89,
+          "column": 1
+         },
+         "end": {
+          "line": 89,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "\\eps",
+        "position": {
+         "start": {
+          "line": 89,
+          "column": 1
+         },
+         "end": {
+          "line": 89,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": " someone demands around ",
+        "position": {
+         "start": {
+          "line": 89,
+          "column": 1
+         },
+         "end": {
+          "line": 89,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "L",
+        "position": {
+         "start": {
+          "line": 89,
+          "column": 1
+         },
+         "end": {
+          "line": 89,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": ", you can answer with a\nwindow of half-width ",
+        "position": {
+         "start": {
+          "line": 89,
+          "column": 1
+         },
+         "end": {
+          "line": 89,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "\\delta",
+        "position": {
+         "start": {
+          "line": 89,
+          "column": 1
+         },
+         "end": {
+          "line": 89,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": " around ",
+        "position": {
+         "start": {
+          "line": 89,
+          "column": 1
+         },
+         "end": {
+          "line": 89,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "a",
+        "position": {
+         "start": {
+          "line": 89,
+          "column": 1
+         },
+         "end": {
+          "line": 89,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": " such that every ",
+        "position": {
+         "start": {
+          "line": 89,
+          "column": 1
+         },
+         "end": {
+          "line": 89,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "x",
+        "position": {
+         "start": {
+          "line": 89,
+          "column": 1
+         },
+         "end": {
+          "line": 89,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": " in that window (other than ",
+        "position": {
+         "start": {
+          "line": 89,
+          "column": 1
+         },
+         "end": {
+          "line": 89,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "a",
+        "position": {
+         "start": {
+          "line": 89,
+          "column": 1
+         },
+         "end": {
+          "line": 89,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": ")\nhas ",
+        "position": {
+         "start": {
+          "line": 89,
+          "column": 1
+         },
+         "end": {
+          "line": 89,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "f(x)",
+        "position": {
+         "start": {
+          "line": 89,
+          "column": 1
+         },
+         "end": {
+          "line": 89,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": " within the tolerance.",
+        "position": {
+         "start": {
+          "line": 89,
+          "column": 1
+         },
+         "end": {
+          "line": 89,
+          "column": 1
+         }
+        }
+       }
+      ]
+     },
+     {
+      "type": "container",
+      "kind": "figure",
+      "children": [
+       {
+        "type": "anywidget",
+        "esm": "../../../widgets/epsilon-delta.mjs",
+        "model": {
+         "f": "x^2",
+         "a": 2,
+         "L": 4,
+         "eps": 0.5,
+         "epsRange": [
+          0.05,
+          1.5
+         ],
+         "xRange": [
+          0,
+          3.5
+         ],
+         "yRange": [
+          0,
+          9
+         ]
+        },
+        "id": "-L4xjDLChVWpcW5TNk8Tm"
+       },
+       {
+        "type": "caption",
+        "children": [
+         {
+          "type": "paragraph",
+          "position": {
+           "start": {
+            "line": 104,
+            "column": 1
+           },
+           "end": {
+            "line": 106,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "captionNumber",
+            "kind": "figure",
+            "label": "wdg-calc-limit-eps-delta",
+            "identifier": "wdg-calc-limit-eps-delta",
+            "html_id": "wdg-calc-limit-eps-delta",
+            "enumerator": "2",
+            "children": [
+             {
+              "type": "text",
+              "value": "Figure "
+             },
+             {
+              "type": "text",
+              "value": "2"
+             },
+             {
+              "type": "text",
+              "value": ":"
+             }
+            ],
+            "template": "Figure %s:"
+           },
+           {
+            "type": "text",
+            "value": "Graph of ",
+            "position": {
+             "start": {
+              "line": 104,
+              "column": 1
+             },
+             "end": {
+              "line": 104,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "y = x^2",
+            "position": {
+             "start": {
+              "line": 104,
+              "column": 1
+             },
+             "end": {
+              "line": 104,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " near ",
+            "position": {
+             "start": {
+              "line": 104,
+              "column": 1
+             },
+             "end": {
+              "line": 104,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "x = 2",
+            "position": {
+             "start": {
+              "line": 104,
+              "column": 1
+             },
+             "end": {
+              "line": 104,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " with a horizontal band of half-width ",
+            "position": {
+             "start": {
+              "line": 104,
+              "column": 1
+             },
+             "end": {
+              "line": 104,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "\\eps",
+            "position": {
+             "start": {
+              "line": 104,
+              "column": 1
+             },
+             "end": {
+              "line": 104,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " around ",
+            "position": {
+             "start": {
+              "line": 104,
+              "column": 1
+             },
+             "end": {
+              "line": 104,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "y = 4",
+            "position": {
+             "start": {
+              "line": 104,
+              "column": 1
+             },
+             "end": {
+              "line": 104,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " and a\nvertical band of half-width ",
+            "position": {
+             "start": {
+              "line": 104,
+              "column": 1
+             },
+             "end": {
+              "line": 104,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "\\delta",
+            "position": {
+             "start": {
+              "line": 104,
+              "column": 1
+             },
+             "end": {
+              "line": 104,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " around ",
+            "position": {
+             "start": {
+              "line": 104,
+              "column": 1
+             },
+             "end": {
+              "line": 104,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "x = 2",
+            "position": {
+             "start": {
+              "line": 104,
+              "column": 1
+             },
+             "end": {
+              "line": 104,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": ". Shrinking ",
+            "position": {
+             "start": {
+              "line": 104,
+              "column": 1
+             },
+             "end": {
+              "line": 104,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "\\eps",
+            "position": {
+             "start": {
+              "line": 104,
+              "column": 1
+             },
+             "end": {
+              "line": 104,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " shrinks the largest\nadmissible ",
+            "position": {
+             "start": {
+              "line": 104,
+              "column": 1
+             },
+             "end": {
+              "line": 104,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "\\delta",
+            "position": {
+             "start": {
+              "line": 104,
+              "column": 1
+             },
+             "end": {
+              "line": 104,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": ".",
+            "position": {
+             "start": {
+              "line": 104,
+              "column": 1
+             },
+             "end": {
+              "line": 104,
+              "column": 1
+             }
+            }
+           }
+          ]
+         }
+        ]
+       }
+      ],
+      "label": "wdg-calc-limit-eps-delta",
+      "identifier": "wdg-calc-limit-eps-delta",
+      "enumerator": "2",
+      "html_id": "wdg-calc-limit-eps-delta"
+     },
+     {
+      "type": "paragraph",
+      "position": {
+       "start": {
+        "line": 109,
+        "column": 1
+       },
+       "end": {
+        "line": 110,
+        "column": 1
+       }
+      },
+      "children": [
+       {
+        "type": "strong",
+        "position": {
+         "start": {
+          "line": 109,
+          "column": 1
+         },
+         "end": {
+          "line": 109,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "text",
+          "value": "Try this:",
+          "position": {
+           "start": {
+            "line": 109,
+            "column": 1
+           },
+           "end": {
+            "line": 109,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "text",
+        "value": " set ",
+        "position": {
+         "start": {
+          "line": 109,
+          "column": 1
+         },
+         "end": {
+          "line": 109,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "\\eps = 0.1",
+        "position": {
+         "start": {
+          "line": 109,
+          "column": 1
+         },
+         "end": {
+          "line": 109,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": ". What is the largest ",
+        "position": {
+         "start": {
+          "line": 109,
+          "column": 1
+         },
+         "end": {
+          "line": 109,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "\\delta",
+        "position": {
+         "start": {
+          "line": 109,
+          "column": 1
+         },
+         "end": {
+          "line": 109,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": " that works? Is it the same on\nboth sides of ",
+        "position": {
+         "start": {
+          "line": 109,
+          "column": 1
+         },
+         "end": {
+          "line": 109,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "inlineMath",
+        "value": "a = 2",
+        "position": {
+         "start": {
+          "line": 109,
+          "column": 1
+         },
+         "end": {
+          "line": 109,
+          "column": 1
+         }
+        }
+       },
+       {
+        "type": "text",
+        "value": "?",
+        "position": {
+         "start": {
+          "line": 109,
+          "column": 1
+         },
+         "end": {
+          "line": 109,
+          "column": 1
+         }
+        }
+       }
+      ]
+     },
+     {
+      "type": "proof",
+      "kind": "remark",
+      "enumerated": true,
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "The value at ",
+          "position": {
+           "start": {
+            "line": 112,
+            "column": 1
+           },
+           "end": {
+            "line": 112,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "a",
+          "position": {
+           "start": {
+            "line": 112,
+            "column": 1
+           },
+           "end": {
+            "line": 112,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " does not matter",
+          "position": {
+           "start": {
+            "line": 112,
+            "column": 1
+           },
+           "end": {
+            "line": 112,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "comment",
+        "value": "Example and non-example: f(x) = (x²−1)/(x−1) is undefined at 1 but has limit 2.",
+        "position": {
+         "start": {
+          "line": 114,
+          "column": 1
+         },
+         "end": {
+          "line": 114,
+          "column": 1
+         }
+        }
+       }
+      ],
+      "label": "rem-calc-limit-value-irrelevant",
+      "identifier": "rem-calc-limit-value-irrelevant",
+      "enumerator": "1",
+      "html_id": "rem-calc-limit-value-irrelevant"
+     },
+     {
+      "type": "heading",
+      "depth": 2,
+      "position": {
+       "start": {
+        "line": 117,
+        "column": 1
+       },
+       "end": {
+        "line": 117,
+        "column": 1
+       }
+      },
+      "children": [
+       {
+        "type": "text",
+        "value": "Main results",
+        "position": {
+         "start": {
+          "line": 117,
+          "column": 1
+         },
+         "end": {
+          "line": 117,
+          "column": 1
+         }
+        }
+       }
+      ],
+      "identifier": "main-results",
+      "label": "Main results",
+      "html_id": "main-results",
+      "implicit": true
+     },
+     {
+      "type": "proof",
+      "kind": "theorem",
+      "enumerated": true,
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "Uniqueness of limits",
+          "position": {
+           "start": {
+            "line": 119,
+            "column": 1
+           },
+           "end": {
+            "line": 119,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "paragraph",
+        "position": {
+         "start": {
+          "line": 121,
+          "column": 1
+         },
+         "end": {
+          "line": 121,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "text",
+          "value": "If ",
+          "position": {
+           "start": {
+            "line": 121,
+            "column": 1
+           },
+           "end": {
+            "line": 121,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "\\lim_{x\\to a} f(x) = L",
+          "position": {
+           "start": {
+            "line": 121,
+            "column": 1
+           },
+           "end": {
+            "line": 121,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " and ",
+          "position": {
+           "start": {
+            "line": 121,
+            "column": 1
+           },
+           "end": {
+            "line": 121,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "\\lim_{x\\to a} f(x) = M",
+          "position": {
+           "start": {
+            "line": 121,
+            "column": 1
+           },
+           "end": {
+            "line": 121,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": ", then ",
+          "position": {
+           "start": {
+            "line": 121,
+            "column": 1
+           },
+           "end": {
+            "line": 121,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "L = M",
+          "position": {
+           "start": {
+            "line": 121,
+            "column": 1
+           },
+           "end": {
+            "line": 121,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": ".",
+          "position": {
+           "start": {
+            "line": 121,
+            "column": 1
+           },
+           "end": {
+            "line": 121,
+            "column": 1
+           }
+          }
+         }
+        ]
+       }
+      ],
+      "label": "thm-calc-limit-unique",
+      "identifier": "thm-calc-limit-unique",
+      "enumerator": "1",
+      "html_id": "thm-calc-limit-unique"
+     },
+     {
+      "type": "proof",
+      "kind": "proof",
+      "enumerated": false,
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "Rigorous track",
+          "position": {
+           "start": {
+            "line": 124,
+            "column": 1
+           },
+           "end": {
+            "line": 124,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "comment",
+        "value": "Policy R (docs/plan/08). Strategy sentence first: \"Suppose L ≠ M and take ε = |L − M|/2 …\"",
+        "position": {
+         "start": {
+          "line": 128,
+          "column": 1
+         },
+         "end": {
+          "line": 128,
+          "column": 1
+         }
+        }
+       }
+      ],
+      "class": "dropdown",
+      "label": "prf-calc-limit-unique",
+      "identifier": "prf-calc-limit-unique",
+      "html_id": "prf-calc-limit-unique"
+     },
+     {
+      "type": "heading",
+      "depth": 2,
+      "position": {
+       "start": {
+        "line": 131,
+        "column": 1
+       },
+       "end": {
+        "line": 131,
+        "column": 1
+       }
+      },
+      "children": [
+       {
+        "type": "text",
+        "value": "Worked examples",
+        "position": {
+         "start": {
+          "line": 131,
+          "column": 1
+         },
+         "end": {
+          "line": 131,
+          "column": 1
+         }
+        }
+       }
+      ],
+      "identifier": "worked-examples",
+      "label": "Worked examples",
+      "html_id": "worked-examples",
+      "implicit": true
+     },
+     {
+      "type": "proof",
+      "kind": "example",
+      "enumerated": true,
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "Prove ",
+          "position": {
+           "start": {
+            "line": 133,
+            "column": 1
+           },
+           "end": {
+            "line": 133,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "\\lim_{x \\to 3} (2x - 1) = 5",
+          "position": {
+           "start": {
+            "line": 133,
+            "column": 1
+           },
+           "end": {
+            "line": 133,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " from the definition",
+          "position": {
+           "start": {
+            "line": 133,
+            "column": 1
+           },
+           "end": {
+            "line": 133,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "paragraph",
+        "position": {
+         "start": {
+          "line": 136,
+          "column": 1
+         },
+         "end": {
+          "line": 136,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "strong",
+          "position": {
+           "start": {
+            "line": 136,
+            "column": 1
+           },
+           "end": {
+            "line": 136,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "text",
+            "value": "Goal.",
+            "position": {
+             "start": {
+              "line": 136,
+              "column": 1
+             },
+             "end": {
+              "line": 136,
+              "column": 1
+             }
+            }
+           }
+          ]
+         },
+         {
+          "type": "text",
+          "value": " Given ",
+          "position": {
+           "start": {
+            "line": 136,
+            "column": 1
+           },
+           "end": {
+            "line": 136,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "\\eps > 0",
+          "position": {
+           "start": {
+            "line": 136,
+            "column": 1
+           },
+           "end": {
+            "line": 136,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": ", find ",
+          "position": {
+           "start": {
+            "line": 136,
+            "column": 1
+           },
+           "end": {
+            "line": 136,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "\\delta > 0",
+          "position": {
+           "start": {
+            "line": 136,
+            "column": 1
+           },
+           "end": {
+            "line": 136,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " with ",
+          "position": {
+           "start": {
+            "line": 136,
+            "column": 1
+           },
+           "end": {
+            "line": 136,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "0 < \\abs{x-3} < \\delta \\implies \\abs{(2x-1) - 5} < \\eps",
+          "position": {
+           "start": {
+            "line": 136,
+            "column": 1
+           },
+           "end": {
+            "line": 136,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": ".",
+          "position": {
+           "start": {
+            "line": 136,
+            "column": 1
+           },
+           "end": {
+            "line": 136,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "list",
+        "ordered": true,
+        "start": 1,
+        "spread": false,
+        "position": {
+         "start": {
+          "line": 138,
+          "column": 1
+         },
+         "end": {
+          "line": 142,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "listItem",
+          "spread": true,
+          "position": {
+           "start": {
+            "line": 138,
+            "column": 1
+           },
+           "end": {
+            "line": 138,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "paragraph",
+            "children": [
+             {
+              "type": "strong",
+              "position": {
+               "start": {
+                "line": 138,
+                "column": 1
+               },
+               "end": {
+                "line": 138,
+                "column": 1
+               }
+              },
+              "children": [
+               {
+                "type": "text",
+                "value": "Scratch work.",
+                "position": {
+                 "start": {
+                  "line": 138,
+                  "column": 1
+                 },
+                 "end": {
+                  "line": 138,
+                  "column": 1
+                 }
+                }
+               }
+              ]
+             },
+             {
+              "type": "text",
+              "value": " ",
+              "position": {
+               "start": {
+                "line": 138,
+                "column": 1
+               },
+               "end": {
+                "line": 138,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "inlineMath",
+              "value": "\\abs{(2x - 1) - 5} = \\abs{2x - 6} = 2\\abs{x - 3}",
+              "position": {
+               "start": {
+                "line": 138,
+                "column": 1
+               },
+               "end": {
+                "line": 138,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "text",
+              "value": ".",
+              "position": {
+               "start": {
+                "line": 138,
+                "column": 1
+               },
+               "end": {
+                "line": 138,
+                "column": 1
+               }
+              }
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "type": "listItem",
+          "spread": true,
+          "position": {
+           "start": {
+            "line": 139,
+            "column": 1
+           },
+           "end": {
+            "line": 139,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "paragraph",
+            "children": [
+             {
+              "type": "strong",
+              "position": {
+               "start": {
+                "line": 139,
+                "column": 1
+               },
+               "end": {
+                "line": 139,
+                "column": 1
+               }
+              },
+              "children": [
+               {
+                "type": "text",
+                "value": "Choose ",
+                "position": {
+                 "start": {
+                  "line": 139,
+                  "column": 1
+                 },
+                 "end": {
+                  "line": 139,
+                  "column": 1
+                 }
+                }
+               },
+               {
+                "type": "inlineMath",
+                "value": "\\delta",
+                "position": {
+                 "start": {
+                  "line": 139,
+                  "column": 1
+                 },
+                 "end": {
+                  "line": 139,
+                  "column": 1
+                 }
+                }
+               },
+               {
+                "type": "text",
+                "value": ".",
+                "position": {
+                 "start": {
+                  "line": 139,
+                  "column": 1
+                 },
+                 "end": {
+                  "line": 139,
+                  "column": 1
+                 }
+                }
+               }
+              ]
+             },
+             {
+              "type": "text",
+              "value": " We need ",
+              "position": {
+               "start": {
+                "line": 139,
+                "column": 1
+               },
+               "end": {
+                "line": 139,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "inlineMath",
+              "value": "2\\abs{x-3} < \\eps",
+              "position": {
+               "start": {
+                "line": 139,
+                "column": 1
+               },
+               "end": {
+                "line": 139,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "text",
+              "value": ", so take ",
+              "position": {
+               "start": {
+                "line": 139,
+                "column": 1
+               },
+               "end": {
+                "line": 139,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "inlineMath",
+              "value": "\\delta = \\eps/2",
+              "position": {
+               "start": {
+                "line": 139,
+                "column": 1
+               },
+               "end": {
+                "line": 139,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "text",
+              "value": ".",
+              "position": {
+               "start": {
+                "line": 139,
+                "column": 1
+               },
+               "end": {
+                "line": 139,
+                "column": 1
+               }
+              }
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "type": "listItem",
+          "spread": true,
+          "position": {
+           "start": {
+            "line": 140,
+            "column": 1
+           },
+           "end": {
+            "line": 142,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "paragraph",
+            "children": [
+             {
+              "type": "strong",
+              "position": {
+               "start": {
+                "line": 140,
+                "column": 1
+               },
+               "end": {
+                "line": 140,
+                "column": 1
+               }
+              },
+              "children": [
+               {
+                "type": "text",
+                "value": "Proof.",
+                "position": {
+                 "start": {
+                  "line": 140,
+                  "column": 1
+                 },
+                 "end": {
+                  "line": 140,
+                  "column": 1
+                 }
+                }
+               }
+              ]
+             },
+             {
+              "type": "text",
+              "value": " If ",
+              "position": {
+               "start": {
+                "line": 140,
+                "column": 1
+               },
+               "end": {
+                "line": 140,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "inlineMath",
+              "value": "0 < \\abs{x - 3} < \\delta = \\eps/2",
+              "position": {
+               "start": {
+                "line": 140,
+                "column": 1
+               },
+               "end": {
+                "line": 140,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "text",
+              "value": ", then\n",
+              "position": {
+               "start": {
+                "line": 140,
+                "column": 1
+               },
+               "end": {
+                "line": 140,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "inlineMath",
+              "value": "\\abs{(2x-1) - 5} = 2\\abs{x-3} < 2 \\cdot \\tfrac{\\eps}{2} = \\eps",
+              "position": {
+               "start": {
+                "line": 140,
+                "column": 1
+               },
+               "end": {
+                "line": 140,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "text",
+              "value": ".",
+              "position": {
+               "start": {
+                "line": 140,
+                "column": 1
+               },
+               "end": {
+                "line": 140,
+                "column": 1
+               }
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "type": "math",
+        "value": "\\boxed{\\delta = \\tfrac{\\eps}{2}}",
+        "position": {
+         "start": {
+          "line": 143,
+          "column": 1
+         },
+         "end": {
+          "line": 145,
+          "column": 1
+         }
+        },
+        "enumerator": "3"
+       },
+       {
+        "type": "paragraph",
+        "position": {
+         "start": {
+          "line": 147,
+          "column": 1
+         },
+         "end": {
+          "line": 147,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "strong",
+          "position": {
+           "start": {
+            "line": 147,
+            "column": 1
+           },
+           "end": {
+            "line": 147,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "text",
+            "value": "Check.",
+            "position": {
+             "start": {
+              "line": 147,
+              "column": 1
+             },
+             "end": {
+              "line": 147,
+              "column": 1
+             }
+            }
+           }
+          ]
+         },
+         {
+          "type": "text",
+          "value": " For ",
+          "position": {
+           "start": {
+            "line": 147,
+            "column": 1
+           },
+           "end": {
+            "line": 147,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "\\eps = 0.1",
+          "position": {
+           "start": {
+            "line": 147,
+            "column": 1
+           },
+           "end": {
+            "line": 147,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": ": ",
+          "position": {
+           "start": {
+            "line": 147,
+            "column": 1
+           },
+           "end": {
+            "line": 147,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "\\delta = 0.05",
+          "position": {
+           "start": {
+            "line": 147,
+            "column": 1
+           },
+           "end": {
+            "line": 147,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": ", and ",
+          "position": {
+           "start": {
+            "line": 147,
+            "column": 1
+           },
+           "end": {
+            "line": 147,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "x = 3.04",
+          "position": {
+           "start": {
+            "line": 147,
+            "column": 1
+           },
+           "end": {
+            "line": 147,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " gives ",
+          "position": {
+           "start": {
+            "line": 147,
+            "column": 1
+           },
+           "end": {
+            "line": 147,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "\\abs{2(3.04) - 1 - 5} = 0.08 < 0.1",
+          "position": {
+           "start": {
+            "line": 147,
+            "column": 1
+           },
+           "end": {
+            "line": 147,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": ". ✓",
+          "position": {
+           "start": {
+            "line": 147,
+            "column": 1
+           },
+           "end": {
+            "line": 147,
+            "column": 1
+           }
+          }
+         }
+        ]
+       }
+      ],
+      "label": "eg-calc-limit-linear-eps-delta",
+      "identifier": "eg-calc-limit-linear-eps-delta",
+      "enumerator": "1",
+      "html_id": "eg-calc-limit-linear-eps-delta"
+     },
+     {
+      "type": "comment",
+      "value": "Add 2–6 more examples: the typical, the edge case, an applied one; non-existence examples.",
+      "position": {
+       "start": {
+        "line": 150,
+        "column": 1
+       },
+       "end": {
+        "line": 150,
+        "column": 1
+       }
+      }
+     },
+     {
+      "type": "heading",
+      "depth": 2,
+      "position": {
+       "start": {
+        "line": 152,
+        "column": 1
+       },
+       "end": {
+        "line": 152,
+        "column": 1
+       }
+      },
+      "children": [
+       {
+        "type": "text",
+        "value": "Common mistakes",
+        "position": {
+         "start": {
+          "line": 152,
+          "column": 1
+         },
+         "end": {
+          "line": 152,
+          "column": 1
+         }
+        }
+       }
+      ],
+      "identifier": "common-mistakes",
+      "label": "Common mistakes",
+      "html_id": "common-mistakes",
+      "implicit": true
+     },
+     {
+      "type": "admonition",
+      "kind": "warning",
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "“The limit is just ",
+          "position": {
+           "start": {
+            "line": 154,
+            "column": 1
+           },
+           "end": {
+            "line": 154,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "f(a)",
+          "position": {
+           "start": {
+            "line": 154,
+            "column": 1
+           },
+           "end": {
+            "line": 154,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": "”",
+          "position": {
+           "start": {
+            "line": 154,
+            "column": 1
+           },
+           "end": {
+            "line": 154,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "comment",
+        "value": "✗ wrong — why — ✓ right. Use the (x²−1)/(x−1) example: f(1) is undefined, the limit is 2.",
+        "position": {
+         "start": {
+          "line": 155,
+          "column": 1
+         },
+         "end": {
+          "line": 155,
+          "column": 1
+         }
+        }
+       }
+      ]
+     },
+     {
+      "type": "admonition",
+      "kind": "warning",
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "Letting ",
+          "position": {
+           "start": {
+            "line": 158,
+            "column": 1
+           },
+           "end": {
+            "line": 158,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "\\delta",
+          "position": {
+           "start": {
+            "line": 158,
+            "column": 1
+           },
+           "end": {
+            "line": 158,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " depend on ",
+          "position": {
+           "start": {
+            "line": 158,
+            "column": 1
+           },
+           "end": {
+            "line": 158,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "x",
+          "position": {
+           "start": {
+            "line": 158,
+            "column": 1
+           },
+           "end": {
+            "line": 158,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "comment",
+        "value": "✗ \"take δ = |x − 3|\" — δ must depend only on ε (and a), chosen before x.",
+        "position": {
+         "start": {
+          "line": 159,
+          "column": 1
+         },
+         "end": {
+          "line": 159,
+          "column": 1
+         }
+        }
+       }
+      ]
+     },
+     {
+      "type": "heading",
+      "depth": 2,
+      "position": {
+       "start": {
+        "line": 162,
+        "column": 1
+       },
+       "end": {
+        "line": 162,
+        "column": 1
+       }
+      },
+      "children": [
+       {
+        "type": "text",
+        "value": "Rigorous track",
+        "position": {
+         "start": {
+          "line": 162,
+          "column": 1
+         },
+         "end": {
+          "line": 162,
+          "column": 1
+         }
+        }
+       }
+      ],
+      "identifier": "rigorous-track",
+      "label": "Rigorous track",
+      "html_id": "rigorous-track",
+      "implicit": true
+     },
+     {
+      "type": "admonition",
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "Why “",
+          "position": {
+           "start": {
+            "line": 164,
+            "column": 1
+           },
+           "end": {
+            "line": 164,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "0 < \\abs{x - a}",
+          "position": {
+           "start": {
+            "line": 164,
+            "column": 1
+           },
+           "end": {
+            "line": 164,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": "”?",
+          "position": {
+           "start": {
+            "line": 164,
+            "column": 1
+           },
+           "end": {
+            "line": 164,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "comment",
+        "value": "Explain that excluding x = a is what makes limits useful for derivatives (0/0).",
+        "position": {
+         "start": {
+          "line": 166,
+          "column": 1
+         },
+         "end": {
+          "line": 166,
+          "column": 1
+         }
+        }
+       }
+      ],
+      "class": "dropdown rigor"
+     },
+     {
+      "type": "heading",
+      "depth": 2,
+      "position": {
+       "start": {
+        "line": 169,
+        "column": 1
+       },
+       "end": {
+        "line": 169,
+        "column": 1
+       }
+      },
+      "children": [
+       {
+        "type": "text",
+        "value": "Summary",
+        "position": {
+         "start": {
+          "line": 169,
+          "column": 1
+         },
+         "end": {
+          "line": 169,
+          "column": 1
+         }
+        }
+       }
+      ],
+      "identifier": "summary",
+      "label": "Summary",
+      "html_id": "summary",
+      "implicit": true
+     },
+     {
+      "type": "list",
+      "ordered": false,
+      "spread": false,
+      "position": {
+       "start": {
+        "line": 171,
+        "column": 1
+       },
+       "end": {
+        "line": 175,
+        "column": 1
+       }
+      },
+      "children": [
+       {
+        "type": "listItem",
+        "spread": true,
+        "position": {
+         "start": {
+          "line": 171,
+          "column": 1
+         },
+         "end": {
+          "line": 171,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "paragraph",
+          "children": [
+           {
+            "type": "inlineMath",
+            "value": "\\lim_{x\\to a} f(x) = L",
+            "position": {
+             "start": {
+              "line": 171,
+              "column": 1
+             },
+             "end": {
+              "line": 171,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " is about values of ",
+            "position": {
+             "start": {
+              "line": 171,
+              "column": 1
+             },
+             "end": {
+              "line": 171,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "f",
+            "position": {
+             "start": {
+              "line": 171,
+              "column": 1
+             },
+             "end": {
+              "line": 171,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " ",
+            "position": {
+             "start": {
+              "line": 171,
+              "column": 1
+             },
+             "end": {
+              "line": 171,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "strong",
+            "position": {
+             "start": {
+              "line": 171,
+              "column": 1
+             },
+             "end": {
+              "line": 171,
+              "column": 1
+             }
+            },
+            "children": [
+             {
+              "type": "text",
+              "value": "near",
+              "position": {
+               "start": {
+                "line": 171,
+                "column": 1
+               },
+               "end": {
+                "line": 171,
+                "column": 1
+               }
+              }
+             }
+            ]
+           },
+           {
+            "type": "text",
+            "value": " ",
+            "position": {
+             "start": {
+              "line": 171,
+              "column": 1
+             },
+             "end": {
+              "line": 171,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "a",
+            "position": {
+             "start": {
+              "line": 171,
+              "column": 1
+             },
+             "end": {
+              "line": 171,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": ", never ",
+            "position": {
+             "start": {
+              "line": 171,
+              "column": 1
+             },
+             "end": {
+              "line": 171,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "strong",
+            "position": {
+             "start": {
+              "line": 171,
+              "column": 1
+             },
+             "end": {
+              "line": 171,
+              "column": 1
+             }
+            },
+            "children": [
+             {
+              "type": "text",
+              "value": "at",
+              "position": {
+               "start": {
+                "line": 171,
+                "column": 1
+               },
+               "end": {
+                "line": 171,
+                "column": 1
+               }
+              }
+             }
+            ]
+           },
+           {
+            "type": "text",
+            "value": " ",
+            "position": {
+             "start": {
+              "line": 171,
+              "column": 1
+             },
+             "end": {
+              "line": 171,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "a",
+            "position": {
+             "start": {
+              "line": 171,
+              "column": 1
+             },
+             "end": {
+              "line": 171,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": ".",
+            "position": {
+             "start": {
+              "line": 171,
+              "column": 1
+             },
+             "end": {
+              "line": 171,
+              "column": 1
+             }
+            }
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "type": "listItem",
+        "spread": true,
+        "position": {
+         "start": {
+          "line": 172,
+          "column": 1
+         },
+         "end": {
+          "line": 172,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "paragraph",
+          "children": [
+           {
+            "type": "text",
+            "value": "Precisely: for every ",
+            "position": {
+             "start": {
+              "line": 172,
+              "column": 1
+             },
+             "end": {
+              "line": 172,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "\\eps > 0",
+            "position": {
+             "start": {
+              "line": 172,
+              "column": 1
+             },
+             "end": {
+              "line": 172,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " there is ",
+            "position": {
+             "start": {
+              "line": 172,
+              "column": 1
+             },
+             "end": {
+              "line": 172,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "\\delta > 0",
+            "position": {
+             "start": {
+              "line": 172,
+              "column": 1
+             },
+             "end": {
+              "line": 172,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " such that ",
+            "position": {
+             "start": {
+              "line": 172,
+              "column": 1
+             },
+             "end": {
+              "line": 172,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "0<\\abs{x-a}<\\delta \\implies \\abs{f(x)-L}<\\eps",
+            "position": {
+             "start": {
+              "line": 172,
+              "column": 1
+             },
+             "end": {
+              "line": 172,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": ".",
+            "position": {
+             "start": {
+              "line": 172,
+              "column": 1
+             },
+             "end": {
+              "line": 172,
+              "column": 1
+             }
+            }
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "type": "listItem",
+        "spread": true,
+        "position": {
+         "start": {
+          "line": 173,
+          "column": 1
+         },
+         "end": {
+          "line": 173,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "paragraph",
+          "children": [
+           {
+            "type": "text",
+            "value": "Tables and graphs suggest limits but cannot prove them.",
+            "position": {
+             "start": {
+              "line": 173,
+              "column": 1
+             },
+             "end": {
+              "line": 173,
+              "column": 1
+             }
+            }
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "type": "listItem",
+        "spread": true,
+        "position": {
+         "start": {
+          "line": 174,
+          "column": 1
+         },
+         "end": {
+          "line": 175,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "paragraph",
+          "children": [
+           {
+            "type": "text",
+            "value": "A limit, if it exists, is unique (",
+            "position": {
+             "start": {
+              "line": 174,
+              "column": 1
+             },
+             "end": {
+              "line": 174,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "crossReference",
+            "position": {
+             "start": {
+              "line": 174,
+              "column": 1
+             },
+             "end": {
+              "line": 174,
+              "column": 1
+             }
+            },
+            "children": [
+             {
+              "type": "text",
+              "value": "Theorem "
+             },
+             {
+              "type": "text",
+              "value": "1"
+             }
+            ],
+            "identifier": "thm-calc-limit-unique",
+            "label": "thm-calc-limit-unique",
+            "kind": "proof:theorem",
+            "template": "Theorem %s",
+            "enumerator": "1",
+            "resolved": true,
+            "html_id": "thm-calc-limit-unique"
+           },
+           {
+            "type": "text",
+            "value": ").",
+            "position": {
+             "start": {
+              "line": 174,
+              "column": 1
+             },
+             "end": {
+              "line": 174,
+              "column": 1
+             }
+            }
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "type": "heading",
+      "depth": 2,
+      "position": {
+       "start": {
+        "line": 176,
+        "column": 1
+       },
+       "end": {
+        "line": 176,
+        "column": 1
+       }
+      },
+      "children": [
+       {
+        "type": "text",
+        "value": "Exercises",
+        "position": {
+         "start": {
+          "line": 176,
+          "column": 1
+         },
+         "end": {
+          "line": 176,
+          "column": 1
+         }
+        }
+       }
+      ],
+      "identifier": "exercises",
+      "label": "Exercises",
+      "html_id": "exercises",
+      "implicit": true
+     },
+     {
+      "type": "comment",
+      "value": "Tiers: A (check) ~40 %, B (practice) ~40 %, C (challenge) ~20 %. See docs/plan/07-exercises.md.\n Every exercise: label, tier class, optional hints, an Answer (machine-checkable LaTeX), and a solution.",
+      "position": {
+       "start": {
+        "line": 178,
+        "column": 1
+       },
+       "end": {
+        "line": 179,
+        "column": 1
+       }
+      }
+     },
+     {
+      "type": "exercise",
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "Reading a limit from a table",
+          "position": {
+           "start": {
+            "line": 181,
+            "column": 1
+           },
+           "end": {
+            "line": 181,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "paragraph",
+        "position": {
+         "start": {
+          "line": 185,
+          "column": 1
+         },
+         "end": {
+          "line": 186,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "text",
+          "value": "Use a table of values with ",
+          "position": {
+           "start": {
+            "line": 185,
+            "column": 1
+           },
+           "end": {
+            "line": 185,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "x = 0.1, 0.01, 0.001",
+          "position": {
+           "start": {
+            "line": 185,
+            "column": 1
+           },
+           "end": {
+            "line": 185,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " (and the negatives) to estimate\n",
+          "position": {
+           "start": {
+            "line": 185,
+            "column": 1
+           },
+           "end": {
+            "line": 185,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "\\displaystyle \\lim_{x \\to 0} \\frac{2^x - 1}{x}",
+          "position": {
+           "start": {
+            "line": 185,
+            "column": 1
+           },
+           "end": {
+            "line": 185,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " to two decimal places.",
+          "position": {
+           "start": {
+            "line": 185,
+            "column": 1
+           },
+           "end": {
+            "line": 185,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "admonition",
+        "children": [
+         {
+          "type": "admonitionTitle",
+          "children": [
+           {
+            "type": "text",
+            "value": "Hint 1",
+            "position": {
+             "start": {
+              "line": 188,
+              "column": 1
+             },
+             "end": {
+              "line": 188,
+              "column": 1
+             }
+            }
+           }
+          ]
+         },
+         {
+          "type": "paragraph",
+          "position": {
+           "start": {
+            "line": 190,
+            "column": 1
+           },
+           "end": {
+            "line": 190,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "text",
+            "value": "Evaluate on both sides of ",
+            "position": {
+             "start": {
+              "line": 190,
+              "column": 1
+             },
+             "end": {
+              "line": 190,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": "0",
+            "position": {
+             "start": {
+              "line": 190,
+              "column": 1
+             },
+             "end": {
+              "line": 190,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": ". Do the values settle as ",
+            "position": {
+             "start": {
+              "line": 190,
+              "column": 1
+             },
+             "end": {
+              "line": 190,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "x",
+            "position": {
+             "start": {
+              "line": 190,
+              "column": 1
+             },
+             "end": {
+              "line": 190,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " shrinks?",
+            "position": {
+             "start": {
+              "line": 190,
+              "column": 1
+             },
+             "end": {
+              "line": 190,
+              "column": 1
+             }
+            }
+           }
+          ]
+         }
+        ],
+        "class": "dropdown hint"
+       },
+       {
+        "type": "admonition",
+        "children": [
+         {
+          "type": "admonitionTitle",
+          "children": [
+           {
+            "type": "text",
+            "value": "Answer",
+            "position": {
+             "start": {
+              "line": 193,
+              "column": 1
+             },
+             "end": {
+              "line": 193,
+              "column": 1
+             }
+            }
+           }
+          ]
+         },
+         {
+          "type": "paragraph",
+          "position": {
+           "start": {
+            "line": 195,
+            "column": 1
+           },
+           "end": {
+            "line": 195,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "text",
+            "value": "0.69",
+            "position": {
+             "start": {
+              "line": 195,
+              "column": 1
+             },
+             "end": {
+              "line": 195,
+              "column": 1
+             }
+            }
+           }
+          ]
+         }
+        ],
+        "class": "dropdown answer numeric-5e-3"
+       }
+      ],
+      "class": "tier-a",
+      "label": "exr-calc-limit-table-estimate",
+      "identifier": "exr-calc-limit-table-estimate",
+      "enumerated": true,
+      "enumerator": "1",
+      "html_id": "exr-calc-limit-table-estimate"
+     },
+     {
+      "type": "solution",
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "Solution to "
+         },
+         {
+          "type": "crossReference",
+          "label": "exr-calc-limit-table-estimate",
+          "identifier": "exr-calc-limit-table-estimate",
+          "kind": "exercise",
+          "children": [
+           {
+            "type": "text",
+            "value": "Exercise "
+           },
+           {
+            "type": "text",
+            "value": "1"
+           }
+          ],
+          "template": "Exercise %s",
+          "enumerator": "1",
+          "resolved": true,
+          "html_id": "exr-calc-limit-table-estimate"
+         }
+        ]
+       },
+       {
+        "type": "comment",
+        "value": "Full table, then the estimate 0.69. Do not cite the exact value here: it is ln 2, but the\n pages that show it are outside this page's prerequisite closure. Mention it, if at all,\n in a looking-ahead admonition (templates/blocks.md), e.g. \"The exact value is ln 2; see\n [Derivatives of Exponential and Logarithmic Functions](#calc-derivatives-exp-log).\"",
+        "position": {
+         "start": {
+          "line": 202,
+          "column": 1
+         },
+         "end": {
+          "line": 205,
+          "column": 1
+         }
+        }
+       }
+      ],
+      "class": "dropdown",
+      "label": "sol-calc-limit-table-estimate",
+      "identifier": "sol-calc-limit-table-estimate",
+      "html_id": "sol-calc-limit-table-estimate"
+     },
+     {
+      "type": "exercise",
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "An ε–δ proof",
+          "position": {
+           "start": {
+            "line": 208,
+            "column": 1
+           },
+           "end": {
+            "line": 208,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "paragraph",
+        "position": {
+         "start": {
+          "line": 212,
+          "column": 1
+         },
+         "end": {
+          "line": 212,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "text",
+          "value": "Prove from ",
+          "position": {
+           "start": {
+            "line": 212,
+            "column": 1
+           },
+           "end": {
+            "line": 212,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "crossReference",
+          "position": {
+           "start": {
+            "line": 212,
+            "column": 1
+           },
+           "end": {
+            "line": 212,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "text",
+            "value": "the definition",
+            "position": {
+             "start": {
+              "line": 212,
+              "column": 1
+             },
+             "end": {
+              "line": 212,
+              "column": 1
+             }
+            }
+           }
+          ],
+          "identifier": "def-calc-limit",
+          "label": "def-calc-limit",
+          "kind": "proof:definition",
+          "template": "Definition %s",
+          "enumerator": "1",
+          "resolved": true,
+          "html_id": "def-calc-limit"
+         },
+         {
+          "type": "text",
+          "value": " that ",
+          "position": {
+           "start": {
+            "line": 212,
+            "column": 1
+           },
+           "end": {
+            "line": 212,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "\\lim_{x \\to -1} (4 - 3x) = 7",
+          "position": {
+           "start": {
+            "line": 212,
+            "column": 1
+           },
+           "end": {
+            "line": 212,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": ".",
+          "position": {
+           "start": {
+            "line": 212,
+            "column": 1
+           },
+           "end": {
+            "line": 212,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "admonition",
+        "children": [
+         {
+          "type": "admonitionTitle",
+          "children": [
+           {
+            "type": "text",
+            "value": "Hint 1",
+            "position": {
+             "start": {
+              "line": 214,
+              "column": 1
+             },
+             "end": {
+              "line": 214,
+              "column": 1
+             }
+            }
+           }
+          ]
+         },
+         {
+          "type": "paragraph",
+          "position": {
+           "start": {
+            "line": 216,
+            "column": 1
+           },
+           "end": {
+            "line": 216,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "text",
+            "value": "Start from ",
+            "position": {
+             "start": {
+              "line": 216,
+              "column": 1
+             },
+             "end": {
+              "line": 216,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "\\abs{(4 - 3x) - 7}",
+            "position": {
+             "start": {
+              "line": 216,
+              "column": 1
+             },
+             "end": {
+              "line": 216,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " and factor out a constant.",
+            "position": {
+             "start": {
+              "line": 216,
+              "column": 1
+             },
+             "end": {
+              "line": 216,
+              "column": 1
+             }
+            }
+           }
+          ]
+         }
+        ],
+        "class": "dropdown hint"
+       },
+       {
+        "type": "admonition",
+        "children": [
+         {
+          "type": "admonitionTitle",
+          "children": [
+           {
+            "type": "text",
+            "value": "Answer",
+            "position": {
+             "start": {
+              "line": 219,
+              "column": 1
+             },
+             "end": {
+              "line": 219,
+              "column": 1
+             }
+            }
+           }
+          ]
+         },
+         {
+          "type": "paragraph",
+          "position": {
+           "start": {
+            "line": 221,
+            "column": 1
+           },
+           "end": {
+            "line": 221,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "inlineMath",
+            "value": "\\delta = \\eps / 3",
+            "position": {
+             "start": {
+              "line": 221,
+              "column": 1
+             },
+             "end": {
+              "line": 221,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " works.",
+            "position": {
+             "start": {
+              "line": 221,
+              "column": 1
+             },
+             "end": {
+              "line": 221,
+              "column": 1
+             }
+            }
+           }
+          ]
+         }
+        ],
+        "class": "dropdown answer manual"
+       }
+      ],
+      "class": "tier-c rigor",
+      "label": "exr-calc-limit-eps-delta-linear",
+      "identifier": "exr-calc-limit-eps-delta-linear",
+      "enumerated": true,
+      "enumerator": "2",
+      "html_id": "exr-calc-limit-eps-delta-linear"
+     },
+     {
+      "type": "solution",
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "Solution to "
+         },
+         {
+          "type": "crossReference",
+          "label": "exr-calc-limit-eps-delta-linear",
+          "identifier": "exr-calc-limit-eps-delta-linear",
+          "kind": "exercise",
+          "children": [
+           {
+            "type": "text",
+            "value": "Exercise "
+           },
+           {
+            "type": "text",
+            "value": "2"
+           }
+          ],
+          "template": "Exercise %s",
+          "enumerator": "2",
+          "resolved": true,
+          "html_id": "exr-calc-limit-eps-delta-linear"
+         }
+        ]
+       },
+       {
+        "type": "comment",
+        "value": "Mirror the structure of the worked example: scratch work, choice of δ, proof.",
+        "position": {
+         "start": {
+          "line": 228,
+          "column": 1
+         },
+         "end": {
+          "line": 228,
+          "column": 1
+         }
+        }
+       }
+      ],
+      "class": "dropdown",
+      "label": "sol-calc-limit-eps-delta-linear",
+      "identifier": "sol-calc-limit-eps-delta-linear",
+      "html_id": "sol-calc-limit-eps-delta-linear"
+     },
+     {
+      "type": "heading",
+      "depth": 2,
+      "position": {
+       "start": {
+        "line": 231,
+        "column": 1
+       },
+       "end": {
+        "line": 231,
+        "column": 1
+       }
+      },
+      "children": [
+       {
+        "type": "text",
+        "value": "Where this leads",
+        "position": {
+         "start": {
+          "line": 231,
+          "column": 1
+         },
+         "end": {
+          "line": 231,
+          "column": 1
+         }
+        }
+       }
+      ],
+      "identifier": "where-this-leads",
+      "label": "Where this leads",
+      "html_id": "where-this-leads",
+      "implicit": true
+     },
+     {
+      "type": "mystDirective",
+      "name": "where-this-leads",
+      "position": {
+       "start": {
+        "line": 233,
+        "column": 1
+       },
+       "end": {
+        "line": 234,
+        "column": 1
+       }
+      }
+     },
+     {
+      "type": "comment",
+      "value": "Optional, hand-written:\n - See also: …\n - Further reading: Active Calculus 2.0 §1.7 (CC BY-SA 4.0)",
+      "position": {
+       "start": {
+        "line": 236,
+        "column": 1
+       },
+       "end": {
+        "line": 238,
+        "column": 1
+       }
+      }
+     }
+    ]
+   }
+  ]
+ }
+}

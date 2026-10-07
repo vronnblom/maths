@@ -100,14 +100,19 @@ maths:
 | `maths.level` | enum | ✔ topic | `core` · `extension` |
 | `maths.difficulty` | int 1–5 | ✔ topic | |
 | `maths.est_minutes` | int 5–90 | ✔ topic | reading + examples, excluding exercises |
-| `maths.prerequisites` | label[] | ✔ topic, chapter | may be empty only for the first topic of a subject without dependencies. For a chapter, the earlier-chapter topics it builds on; its own topics are added to its closure automatically (02 §2.5) |
+| `maths.prerequisites` | label[] | ✔ topic, chapter | topic labels only (written or planned). May be empty only for the first topic of a subject without dependencies. For a topic, the same set as its `curriculum.yml` entry (`graph.py check`). For a chapter, the earlier-chapter topics it builds on; its own topics are added to its closure automatically (02 §2.5) |
 | `maths.objectives` | string[] 2–6 | ✔ topic | each starts with an observable verb (*state, compute, prove, decide, sketch, explain, apply, estimate, recognise, …*); never *understand* or *know* |
-| `maths.verify` | path | ✔ if status ≥ reviewed | must exist |
+| `maths.verify` | path | ✔ if status ≥ reviewed (topic and chapter pages) | must exist; `verify/…/test_<name>.py`. Subject and meta pages have nothing to verify |
 | `maths.widgets` | widget id[] | | must exist in `widgets/` (a mode of a widget, e.g. bisection, is configuration, not a separate id) |
 | `maths.aliases` | path[] | | old URL paths of a moved page; `write_redirects.py` turns each into a redirect (02 §2.3) |
-| `maths.reviewed_by` | string[] | ✔ if status ≥ reviewed | |
+| `maths.reviewed_by` | string[] | ✔ if status ≥ reviewed (every kind) | GitHub handles |
 | `maths.sources` | string[] | | attribution; required if anything was adapted |
 | `maths.depends_on` | subject code[] | subject pages only | cross-subject dependencies |
+
+Each kind allows only its own fields (`level`, `difficulty`, `est_minutes` are topic-only;
+`depends_on` is subject-only; a meta page has no `subject` or `prerequisites`), so a misplaced
+field is an error rather than silently ignored. `check_frontmatter.py` also checks that the
+kind matches the path (§3.1) and that the label starts with the page's subject.
 
 There is no `id` field: `label` is the ID. There is no `date` or `author`: git history is the
 record. There is no `version`: the status plus git history covers it.

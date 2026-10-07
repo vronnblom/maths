@@ -104,7 +104,7 @@ quality on math-heavy topic pages; and the build time with about 100 pages.
 | **mystmd** | exact pin (`1.11.0`), lockfile | the site engine | `jupyter-book` 2 on PyPI wraps the same engine but adds a layer; we need npm for the plugin anyway |
 | **yaml** (npm) | caret, lockfile | the plugin parses front matter properly | a hand-rolled regex (fragile) |
 | **book-theme** (site theme, downloaded by mystmd) | commit SHA in `site.template` (§5.5) | the stock MyST web theme | an unpinned `template: book-theme` (follows the theme's `main`) |
-| **katex** (npm, dev) | exact, matching the KaTeX of mystmd and the pinned theme commit: **0.15.6** (§5.3) | `scripts/check_katex.mjs` fails CI on math that would render as red error text (mystmd is a single bundled package, so KaTeX isn't otherwise importable). Found in stage 1: mystmd already renders every formula with KaTeX at build time and logs errors as `⛔️`, so `build_site.sh` catches them; stage 2 decides whether this check still adds anything (it would run in the `verify` job, whose `--site` build is not log-gated) | relying on visual inspection |
+| **katex** (npm, dev) | exact, matching the KaTeX of mystmd and the pinned theme commit: **0.15.6** (§5.3) | `scripts/check_katex.mjs` fails CI on math that would render as red error text (mystmd is a single bundled package, so KaTeX isn't otherwise importable). Found in stage 1: mystmd already renders every formula with KaTeX at build time and logs errors as `⛔️`, so `build_site.sh` catches them; stage 4 decides whether this check still adds anything (it would run in the `verify` job, whose `--site` build is not log-gated) | relying on visual inspection |
 | **JSXGraph** | exact version in the URL that widgets `import()` at render time; vendored copy as a manual fallback | interactive geometry/plots: sliders, gliders, function graphs, keyboard support, small (≈ 300 kB), MIT/LGPL dual licence, maintained since 2008 by a university group | Plotly (heavy, data-viz oriented), D3 (too low-level), Desmos API (licence/API key for production, not version-controlled), GeoGebra (heavy, external) |
 | **Python ≥ 3.12 + uv** | `uv.lock` | reproducible env for verification and checks; uv is fast and handles the lockfile | pip + requirements.txt (no lock), poetry (slower, heavier) |
 | **sympy** | lock | symbolic verification of every computation | – |
@@ -242,6 +242,9 @@ until it's needed.
 
 The npm scripts are the **only** definition of each step: CI calls the same scripts, so
 `npm run all` really is "everything CI runs".
+This is the end state of Phase 0. After stage 2, `package.json` has `generate`, `dev`, `check`,
+`build` and `all` = `check` + `build`; `ast`, `verify`, `test:widgets` and the `katex` dev
+dependency arrive with stages 3–4.
 - `generate` writes the generated includes (§5.7, "Generated content") before any build.
 - `verify` always rebuilds the AST and re-extracts the answers, so tests never read a stale
   `verify/_answers.json`.
@@ -254,20 +257,36 @@ The npm scripts are the **only** definition of each step: CI calls the same scri
 
 ```bash
 #!/usr/bin/env bash
+set -euo pipefail
+here="$(cd "$(dirname "$0")" && pwd)"
+bash "$here/fetch_theme.sh"           # the pinned theme, via git (no-op when cached)
+cd "$here/../content"
+bash "$here/myst_gate.sh" --html      # errors and warnings fail, except the whitelisted one
+# Redirect pages for moved pages (02 §2.3). Run here, not only on deploy, so a redirect that
+# collides with a live page fails the PR. Reads BASE_URL (/maths on deploy) like mystmd.
+uv run python "$here/write_redirects.py" _build/html
+```
+
+The gate itself is `scripts/myst_gate.sh`, so that `tests/test_build_gate.py` can run it on
+fixture projects (a broken reference, an unknown directive) in the `checks` job:
+
+```bash
+#!/usr/bin/env bash
 set -euo pipefail            # pipefail: a non-zero myst exit survives the pipe into tee
-bash "$(dirname "$0")/fetch_theme.sh"   # the pinned theme, via git (no-op when cached)
-cd "$(dirname "$0")/../content"
-myst build --html --strict --ci 2>&1 | tee build.log
+myst build "$@" --strict --ci 2>&1 | tee build.log
 # --strict exits non-zero only on errors. mystmd 1.11 prints errors with ⛔️ (some, e.g. an
 # unknown directive, even with exit code 0) and warnings with ⚠️. Both fail the build, except
 # the one expected warning about our `maths` front-matter key.
 if grep -E '⛔️|⚠️' build.log | grep -v "extra key ignored: maths"; then
   echo "::error::MyST build produced errors or warnings"; exit 1
 fi
-# Redirect pages for moved pages (02 §2.3). Run here, not only on deploy, so a redirect that
-# collides with a live page fails the PR. Reads BASE_URL (/maths on deploy) like mystmd.
-uv run python ../scripts/write_redirects.py _build/html
 ```
+
+The fixture tests can't use `--html` (no theme in `checks`). Found in stage 2: a bare
+`myst build`, or `--site` without a site config, reports an unknown directive but not a broken
+reference, because references are resolved only for an export. `myst build <page> --md --force`
+resolves them and logs the same ⛔️/⚠️ lines in about a second without a theme, so the
+tests use that.
 
 ### `pyproject.toml`
 
@@ -292,7 +311,7 @@ pythonpath = ["verify", "scripts"]       # `import mathcheck`, and the checkers 
 addopts = "-ra --strict-markers --import-mode=importlib"
 
 [tool.codespell]
-skip = "*.lock,*.json,_build,node_modules,build.log"
+skip = "*.lock,*.json,*.css,_build,_generated,node_modules,build.log"   # CSS is code (`color`); _generated/ is rebuilt
 ignore-words = ".codespell-ignore"       # allowlist, seeded with `crossreference` (a MyST node type)
 builtin = "clear,rare"
 # Our US→GB list first, then "-" (codespell's default dictionary). The default dictionaries
@@ -303,6 +322,9 @@ builtin = "clear,rare"
 # `labeled`, `synchronize`, `artifact`.
 dictionary = ".codespell-en-gb.txt,-"
 ```
+
+`.codespell-en-gb.txt` has one `us->gb` pair per line and nothing else: codespell reads every
+line as a pair, so the file can't hold comments.
 
 ## 5.6 Local development workflow
 
@@ -350,7 +372,7 @@ jobs:
       - uses: actions/checkout@<sha>
       - uses: astral-sh/setup-uv@<sha>
       - run: uv sync --frozen
-      - uses: actions/setup-node@<sha>               # the fixture tests in tests/ also run check_katex.mjs
+      - uses: actions/setup-node@<sha>               # tests/test_build_gate.py runs myst on fixtures
         with: { node-version-file: .nvmrc, cache: npm }
       - run: npm ci
       - name: Front matter, labels, graph, toc, notation lint, spelling, checker fixture tests
@@ -454,7 +476,8 @@ jobs:
 ```
 
 Branch protection on `main`: require `checks`, `verify`, `build` (ci.yml) and `verified-edits`
-(guard.yml); require one approving review (the owner); linear history (squash merge).
+(guard.yml); require one approving review (the owner); linear history (squash merge). Until
+stage 4 lands `verify` and `guard.yml`, require `checks` and `build`.
 
 ### `.github/workflows/links.yml`
 

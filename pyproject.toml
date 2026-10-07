@@ -16,3 +16,15 @@ testpaths = ["verify", "tests"]          # verify/: mathematics; tests/: the che
 pythonpath = ["verify", "scripts"]       # `import mathcheck`, and the checkers for tests/
 # importlib mode: test files may share a basename (every chapter has a verify/…/test_index.py)
 addopts = "-ra --strict-markers --import-mode=importlib"
+
+[tool.codespell]
+skip = "*.lock,*.json,*.css,_build,_generated,node_modules,build.log"   # CSS is code (`color`); _generated/ is rebuilt
+ignore-words = ".codespell-ignore"       # allowlist, seeded with `crossreference` (a MyST node type)
+builtin = "clear,rare"
+# Our US→GB list first, then "-" (codespell's default dictionary). The default dictionaries
+# accept US spellings, and the built-in en-GB_to_en-US flags the British ones, so en-GB is
+# enforced by a curated list (normalize->normalise, behavior->behaviour, color->colour, …).
+# Words that are also class names or code identifiers stay out of the list: `rigor`, `center`,
+# `license` (the LICENSE file, `license:` in myst.yml and package.json), and GitHub's
+# `labeled`, `synchronize`, `artifact`.
+dictionary = ".codespell-en-gb.txt,-"

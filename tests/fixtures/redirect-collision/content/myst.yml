@@ -1,0 +1,7 @@
+# A fixture project for tests/ (see tests/README.md).
+version: 1
+project:
+  title: Fixture
+  toc:
+    - file: index.md
+    - file: about/notation.md

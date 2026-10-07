@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/vronnblom/maths/schema/page.schema.json",
+  "title": "Front matter of a page under content/",
+  "description": "docs/plan/03-content-model.md §3.3. Checked by scripts/check_frontmatter.py, which adds the rules a schema can't express: tags from content/tags.yml, the label's subject prefix, the verify file, the prerequisite-status gate and the kind ↔ path rule.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["title", "label", "description", "maths"],
+  "properties": {
+    "title": { "type": "string", "minLength": 1, "maxLength": 60 },
+    "short_title": { "type": "string", "minLength": 1, "maxLength": 30 },
+    "label": { "type": "string", "pattern": "^(calc|linalg|mvc|found|disc|prob|ana|ode|cplx|site)-[a-z0-9]+(-[a-z0-9]+)*$" },
+    "description": { "type": "string", "minLength": 1, "maxLength": 300 },
+    "tags": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "numbering": { "type": "object" },
+    "maths": { "$ref": "#/$defs/maths" }
+  },
+  "$defs": {
+    "subject": { "enum": ["calc", "linalg", "mvc", "found", "disc", "prob", "ana", "ode", "cplx"] },
+    "pageLabel": { "type": "string", "pattern": "^(calc|linalg|mvc|found|disc|prob|ana|ode|cplx)-[a-z0-9]+(-[a-z0-9]+)*$" },
+    "maths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "status"],
+      "properties": {
+        "kind": { "enum": ["subject", "chapter", "topic", "meta"] },
+        "subject": { "$ref": "#/$defs/subject" },
+        "status": { "enum": ["draft", "reviewed", "verified"] },
+        "level": { "enum": ["core", "extension"] },
+        "difficulty": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "est_minutes": { "type": "integer", "minimum": 5, "maximum": 90 },
+        "prerequisites": { "type": "array", "items": { "$ref": "#/$defs/pageLabel" }, "uniqueItems": true },
+        "objectives": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 6,
+          "items": {
+            "type": "string",
+            "description": "Starts with an observable verb (state, compute, prove, …), never understand/know.",
+            "pattern": "^(?!(?:Understand|Know|Learn|Appreciate|Be aware|Be familiar)\\b)[A-Z]"
+          }
+        },
+        "verify": { "type": "string", "pattern": "^verify/[a-z0-9_/-]+/test_[a-z0-9_]+\\.py$" },
+        "widgets": { "type": "array", "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }, "uniqueItems": true },
+        "aliases": { "type": "array", "items": { "type": "string", "pattern": "^(/[a-z0-9]+(-[a-z0-9]+)*)+$" }, "uniqueItems": true },
+        "reviewed_by": { "type": "array", "items": { "type": "string", "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$" }, "uniqueItems": true },
+        "sources": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "depends_on": { "type": "array", "items": { "$ref": "#/$defs/subject" }, "uniqueItems": true }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "topic" } } },
+          "then": {
+            "required": ["subject", "level", "difficulty", "est_minutes", "prerequisites", "objectives"],
+            "propertyNames": { "enum": ["kind", "subject", "status", "level", "difficulty", "est_minutes", "prerequisites", "objectives", "verify", "widgets", "aliases", "reviewed_by", "sources"] }
+          }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "chapter" } } },
+          "then": {
+            "required": ["subject", "prerequisites"],
+            "propertyNames": { "enum": ["kind", "subject", "status", "prerequisites", "objectives", "verify", "widgets", "aliases", "reviewed_by", "sources"] }
+          }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "subject" } } },
+          "then": {
+            "required": ["subject"],
+            "propertyNames": { "enum": ["kind", "subject", "status", "depends_on", "widgets", "aliases", "reviewed_by", "sources"] }
+          }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "meta" } } },
+          "then": {
+            "propertyNames": { "enum": ["kind", "status", "widgets", "aliases", "reviewed_by", "sources"] }
+          }
+        },
+        {
+          "if": { "properties": { "status": { "enum": ["reviewed", "verified"] } }, "required": ["status"] },
+          "then": { "required": ["reviewed_by"], "properties": { "reviewed_by": { "minItems": 1 } } }
+        },
+        {
+          "if": {
+            "properties": { "status": { "enum": ["reviewed", "verified"] }, "kind": { "enum": ["topic", "chapter"] } },
+            "required": ["status", "kind"]
+          },
+          "then": { "required": ["verify"] }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "maths": { "properties": { "kind": { "const": "topic" } }, "required": ["kind"] } }, "required": ["maths"] },
+      "then": { "properties": { "label": { "not": { "pattern": "-(chapter|subject)$" } } } }
+    },
+    {
+      "if": { "properties": { "maths": { "properties": { "kind": { "const": "chapter" } }, "required": ["kind"] } }, "required": ["maths"] },
+      "then": { "properties": { "label": { "pattern": "^[a-z0-9]+-[a-z0-9]+(-[a-z0-9]+)*-chapter$" } } }
+    },
+    {
+      "if": { "properties": { "maths": { "properties": { "kind": { "const": "subject" } }, "required": ["kind"] } }, "required": ["maths"] },
+      "then": { "properties": { "label": { "pattern": "^[a-z0-9]+-subject$" } } }
+    },
+    {
+      "if": { "properties": { "maths": { "properties": { "kind": { "const": "meta" } }, "required": ["kind"] } }, "required": ["maths"] },
+      "then": { "properties": { "label": { "pattern": "^site-" } } }
+    },
+    {
+      "if": { "properties": { "maths": { "properties": { "kind": { "enum": ["topic", "chapter", "subject"] } }, "required": ["kind"] } }, "required": ["maths"] },
+      "then": { "properties": { "label": { "not": { "pattern": "^site-" } } } }
+    }
+  ]
+}

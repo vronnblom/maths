@@ -1,7 +1,8 @@
 # Plan: an open, verified university mathematics repository
 
-**Status:** decision-ready plan, 2026-10-07. Phase 0 in progress: stage 1 (site skeleton, build,
-Pages deploy) is in place; next is stage 2 (checks and schema).
+**Status:** decision-ready plan, 2026-10-07. Phase 0 in progress: stages 1 (site skeleton, build,
+Pages deploy) and 2 (checks, schema, curriculum and prerequisite graph) are in place; next is
+stage 3 (plugin and first widget).
 **First subject:** Calculus. **Architecture:** scales to any subject by adding a folder.
 
 ## Decisions at a glance
@@ -64,12 +65,17 @@ block snippets, chapter and subject index pages, and a verification test.
    remaining PoC items (rendered dropdowns, KaTeX macros with arguments, anywidget, search)
    are confirmed. Dropdowns, macros and search are confirmed on the HTML build (05 §5.3);
    anywidget waits for item 3; the theme reaches cloud sessions via `scripts/fetch_theme.sh`.
-2. **Checks and schema**: `schema/page.schema.json`, `scripts/check_*.py`, `graph.py` (import
-   `curriculum.yml` from 08), `labels.lock`, `ci.yml`, plus broken fixtures proving that each
-   check fails.
+2. **Checks and schema** (stage 2, built): `schema/page.schema.json`, `content/tags.yml`,
+   `content/calculus/curriculum.yml` (imported once from 08, now the source), `scripts/check_*.py`,
+   `graph.py`, `generate.py` (the Mermaid maps and the status table), `write_redirects.py`,
+   `labels.lock`, codespell with the en-GB list, the `checks` CI job, and `tests/` with broken
+   fixtures proving that each check fails.
 3. **Plugin and first widget**: `plugins/topic-header.mjs` (`{topic-header}`,
    `{where-this-leads}`) and `widgets/function-plot.mjs` with its schema and Node test.
 4. **Verification harness**: `verify/mathcheck/` (`covers`, `answer`, `equal`…, LaTeX
-   normalisation with the antlr backend), `scripts/extract_answers.py`, `check_coverage.py`.
+   normalisation with the antlr backend), `scripts/extract_answers.py`, `check_coverage.py`
+   and the coverage-based status preconditions, the `verify` CI job, and the verified-page edit
+   guard (`check_verified_edits.py`, `guard.yml`), which protects the verified status and so
+   lands with the coverage gate.
 5. **Agent support**: a SessionStart hook (`npm ci && uv sync`), `CONTRIBUTING.md`, the PR and issue templates, and `/new-topic` skill. Then start
    Phase 1a: its three Preliminaries prerequisites, then `calc-limit`.

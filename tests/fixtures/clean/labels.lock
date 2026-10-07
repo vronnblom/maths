@@ -1,0 +1,18 @@
+# labels.lock: every label ever merged to main (docs/plan/02 §2.4, 06 §6.7).
+# One line per label: `<label>  <page, relative to content/>`, sorted. New labels are added by
+#   uv run python scripts/check_labels.py --update-lock
+# which also updates the page of a moved label. Never delete a line: a label that is removed
+# from the content keeps a tombstone instead, `<label> → <replacement label, or the reason>`.
+calc-limit  calculus/limits/limit-of-a-function.md
+def-calc-limit  calculus/limits/limit-of-a-function.md
+eg-calc-limit-linear-eps-delta  calculus/limits/limit-of-a-function.md
+exr-calc-limit-eps-delta-linear  calculus/limits/limit-of-a-function.md
+exr-calc-limit-table-estimate  calculus/limits/limit-of-a-function.md
+prf-calc-limit-unique  calculus/limits/limit-of-a-function.md
+rem-calc-limit-value-irrelevant  calculus/limits/limit-of-a-function.md
+sol-calc-limit-eps-delta-linear  calculus/limits/limit-of-a-function.md
+sol-calc-limit-table-estimate  calculus/limits/limit-of-a-function.md
+thm-calc-limit-old → thm-calc-limit-unique (merged into it)
+thm-calc-limit-unique  calculus/limits/limit-of-a-function.md
+wdg-calc-limit-average-speed  calculus/limits/limit-of-a-function.md
+wdg-calc-limit-eps-delta  calculus/limits/limit-of-a-function.md

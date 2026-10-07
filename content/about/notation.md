@@ -73,6 +73,8 @@ $$
 
 ## Notation table
 
+% notation-lint: off (the "We do not write" column shows what the lint rejects)
+
 | Topic | We write | We do **not** write | Notes |
 |---|---|---|---|
 | Natural numbers | $\N = \{0, 1, 2, \dots\}$; positive integers $\Z_{>0}$ or "$n \ge 1$" | $\N$ meaning $\{1, 2, \dots\}$ | This follows ISO 80000-2. In statements we prefer an explicit range ("for $n \ge 1$"). |
@@ -102,12 +104,18 @@ $$
 | Decimal mark | a point: $3.14$ | a comma | |
 | Set-builder notation | $\{x \in \R : x > 0\}$ | $\{x \mid x > 0\}$ | |
 
+% notation-lint: on
+
 ### Intervals in other countries
+
+% notation-lint: off (this paragraph names the reversed-bracket convention)
 
 In some countries, for example France and Sweden, an open interval is written with reversed
 brackets: $]a, b[$ for what we write as $(a, b)$, and $]a, b]$ for $(a, b]$. This site always
 uses round brackets, which can be confused with an ordered pair $(a, b)$; the context makes
 clear which is meant.
+
+% notation-lint: on
 
 ## For contributors
 

@@ -4,9 +4,11 @@
   "type": "module",
   "engines": { "node": ">=22" },
   "scripts": {
-    "dev": "bash scripts/fetch_theme.sh && cd content && myst start",
-    "build": "bash scripts/build_site.sh",
-    "all": "npm run build"
+    "generate": "uv run python scripts/generate.py",
+    "dev": "npm run generate && bash scripts/fetch_theme.sh && cd content && myst start",
+    "check": "uv run python scripts/check_all.py && uv run codespell content docs templates && uv run pytest tests -q",
+    "build": "npm run generate && bash scripts/build_site.sh",
+    "all": "npm run check && npm run build"
   },
   "dependencies": { "mystmd": "1.11.0", "yaml": "^2.8.0" }
 }

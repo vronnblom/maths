@@ -1,0 +1,6 @@
+# Fixture lock (format: scripts/check_labels.py).
+calc-limit  calculus/limits/limit-of-a-function.md
+def-calc-limit  calculus/limits/limit-of-a-function.md
+lem-calc-limit-local  calculus/limits/limit-of-a-function.md
+prf-calc-limit-unique  calculus/limits/limit-of-a-function.md
+thm-calc-limit-unique  calculus/limits/limit-of-a-function.md

@@ -42,7 +42,7 @@ project:
 | Natural numbers | $\N = \{0, 1, 2, \dots\}$, positive integers $\Z_{>0}$ or "$n \ge 1$" | $\N$ meaning $\{1,2,\dots\}$ | ISO 80000-2 and Swedish convention. In statements prefer an explicit range ("for $n \ge 1$"). |
 | Intervals | $[a,b]$, $(a,b)$, $[a,b)$, $(a,\infty)$ | $]a,b[$, $]a,b]$ | The reversed-bracket convention is mentioned on the notation page only. |
 | Natural log | $\ln x$ | $\log x$ for natural log | |
-| Other logs | $\log_{10} x$, $\log_2 x$, $\log_b x$ | bare $\log x$ | A bare `\log` is a CI lint warning. |
+| Other logs | $\log_{10} x$, $\log_2 x$, $\log_b x$ | bare $\log x$ | A bare `\log` fails the CI notation lint. |
 | Exponential | $e^{x}$, $\exp(x)$ for large exponents | $\mathrm{e}^x$ | Italic $e$ (matches the major calculus texts); the macro set allows a global switch later. |
 | Inverse trig | $\arcsin x$, $\arccos x$, $\arctan x$ | $\sin^{-1}x$ (except on the inverse-trig page, where it is mentioned as an alternative and the $1/\sin x$ ambiguity is explained) | |
 | Powers of trig | $\sin^2 x = (\sin x)^2$ | $\sin x^2$ when $(\sin x)^2$ is meant | |
@@ -90,6 +90,13 @@ Answers that are not expressions (proofs, sketches, "does not exist") use
   (`.codespell-en-gb.txt`, see 05 §5.5), because its built-in dictionaries accept US spellings.
 - **Voice**: "we" for shared reasoning ("we now show"), "you" for instructions to the reader
   ("try dragging ε"). Present tense.
+- **The notation lint** (`scripts/notation_lint.py`, run by `npm run check`) rejects, in math,
+  a bare `\log`, `\sin^{-1}` (and the other inverse-trig powers), a raw `dx` or
+  `\mathrm{d}x` in an integral, reversed-bracket intervals `]a, b[`, `\mathrm{e}`, and on
+  calculus pages degrees (`°`, `^\circ`); in prose, "clearly", "obviously" and "trivially"
+  (a quoted mention is fine). A page that must *show* a rejected form, such as the notation
+  guide or the inverse-trig page, wraps that part in `% notation-lint: off (reason)` …
+  `% notation-lint: on`.
 - **Sentences**: short. One idea per sentence in definitions and theorem statements.
 - **Bold** only for terms being defined. *Italics* for emphasis, sparingly.
 - **Headings**: sentence case ("Common mistakes", not "Common Mistakes"). Page titles are

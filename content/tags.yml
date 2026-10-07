@@ -1,0 +1,26 @@
+# The controlled vocabulary for the `tags` front-matter key (docs/plan/03 §3.3).
+# check_frontmatter.py rejects any tag that is not listed here, which avoids drift such as
+# `limit`/`limits`. Add tags in the PR that first uses them: lowercase kebab-case, plural for
+# topics ("limits"), and a short description.
+tags:
+  # Calculus chapters (docs/plan/08)
+  preliminaries: Real numbers, functions and the elementary functions
+  limits: Limits of functions, one-sided limits and limits involving infinity
+  continuity: Continuous functions and the intermediate and extreme value theorems
+  derivatives: The derivative and the rules for computing it
+  derivative-applications: Extreme values, the mean value theorem, curve sketching and approximation
+  integrals: Riemann sums, the definite integral and the fundamental theorem
+  integration-techniques: Substitution, parts, trigonometric methods, partial fractions, numerical integration
+  integral-applications: Areas, volumes, arc length, average value and physical applications
+  improper-integrals: Integrals over unbounded intervals or of unbounded functions
+  sequences-series: Sequences, series, convergence tests, power and Taylor series
+  differential-equations: First- and second-order ordinary differential equations
+  # Cross-cutting themes
+  epsilon-delta: Precise ε–δ (and ε–N, ε–M) arguments
+  proofs: Pages or exercises that teach a proof technique
+  inequalities: Working with inequalities and absolute values
+  trigonometry: Trigonometric functions and identities
+  exponentials-logarithms: Exponential and logarithmic functions
+  approximation: Linear and polynomial approximation, error bounds
+  numerical-methods: Bisection, Newton's method, numerical integration, Euler's method
+  modelling: Building and interpreting models of real situations

@@ -43,6 +43,7 @@ maths/
 ├── content/                     # ← the MyST project root (myst.yml lives here)
 │   ├── myst.yml                 # project + site config, toc, KaTeX macros
 │   ├── index.md                 # site home: subject cards, how to use the site
+│   ├── tags.yml                 # the controlled vocabulary for `tags` (03 §3.3)
 │   ├── about/
 │   │   ├── how-to-read.md       # core vs rigorous track, statuses, exercise tiers
 │   │   ├── notation.md          # published notation guide (from 04-notation-and-style)
@@ -76,7 +77,10 @@ maths/
 │           └── test_limit_of_a_function.py
 ├── schema/
 │   ├── page.schema.json         # front-matter schema for all pages
+│   ├── curriculum.schema.json   # the shape of content/<subject>/curriculum.yml
 │   └── widgets/*.schema.json    # one JSON schema per widget config
+├── labels.lock                  # every label ever merged (§2.4, 06 §6.7)
+├── tests/                       # the checkers' tests; fixtures/ holds one broken project per check
 ├── scripts/                     # repository checks (Python, stdlib + pyyaml/jsonschema)
 │   ├── check_all.py             # runs every check below; used by CI and `npm run check`
 │   ├── check_frontmatter.py
@@ -88,7 +92,11 @@ maths/
 │   ├── extract_answers.py       # exercise answers from MyST AST → JSON for verify/
 │   ├── generate.py              # generated includes: prerequisite maps, status table
 │   ├── write_redirects.py       # redirect pages for old URLs (§2.3), run by build_site.sh
+│   ├── project.py               # shared: the toc, front matter with line numbers, curricula, diagnostics
+│   ├── myst_source.py           # the small MyST source parser the label and notation checks use
+│   ├── notation_lint.py         # the notation lint, run by check_all.py
 │   ├── build_site.sh            # the gated site build (05 §5.5)
+│   ├── myst_gate.sh             # the ⛔️/⚠️ log gate around `myst build`, used by build_site.sh and tests/
 │   └── fetch_theme.sh           # the pinned book-theme via git, for cloud sessions (05 §5.5)
 ├── templates/                   # copy these to start a page; see 03-content-model
 ├── docs/
@@ -219,9 +227,11 @@ every page, so a bare "Theorem 2" pointing to another page is ambiguous.
 
 ### `curriculum.yml` (one per subject)
 
-This is the machine-readable form of [08](08-calculus-curriculum.md). It is the **plan**,
-while the page front matter is the **truth** for written pages. CI checks that the two
-agree once a page exists.
+This is the machine-readable form of [08](08-calculus-curriculum.md); since Phase 0 stage 2
+it is the source, and 08 the commentary. It is the **plan**, while the page front matter is
+the **truth** for written pages. `graph.py check` fails if a written topic page disagrees with
+its entry (label, file, title, level, prerequisites), or if a topic page is not in the
+curriculum at all. Its shape is `schema/curriculum.schema.json`.
 
 ```yaml
 # content/calculus/curriculum.yml
@@ -231,23 +241,41 @@ chapters:
     title: Limits
     topics:
       - label: calc-limit
-        file: limits/limit-of-a-function.md
+        file: limits/limit-of-a-function.md      # relative to content/calculus/
         title: The Limit of a Function
+        level: core                              # core | extension
         prerequisites: [calc-functions, calc-absolute-value-inequalities]
+        objectives:
+          - Estimate limits from tables and graphs and explain how this can mislead.
+          - …
         widgets: [epsilon-delta, function-plot]
+        results:                                 # labels to write, with the proof policy (08 §8.2)
+          - {label: def-calc-limit, note: "precise definition, in core with intuitive unpacking"}
+          - {label: thm-calc-limit-unique, policy: R}
+          - …
+        notes: [gold-standard page, …]
       - label: calc-limit-laws
         file: limits/limit-laws.md
         title: Limit Laws
+        level: core
         prerequisites: [calc-limit]
+        objectives: […]
+        results:
+          - {label: thm-calc-limit-laws, policy: F+R+S, note: "sum F as the model ε/2 proof; product, quotient R; power, root S"}
 ```
+
+A result's `policy` is one letter or a combination such as `S+R` (a sketch in the core, the
+full proof in the rigorous track) or `S+D` (a sketch here, the proof deferred). With `D`,
+`deferred_to` names a later topic, another subject's code, or `out-of-scope`; `graph.py check`
+rejects a target that is in the topic's own prerequisite closure.
 
 ### What `scripts/graph.py` does
 
 | Command | Purpose |
 |---|---|
-| `graph.py check` | every prerequisite resolves (to a page or a planned topic); no cycles (stdlib `graphlib.TopologicalSorter`); cross-subject edges respect `depends_on`; warns about redundant transitive edges |
-| `graph.py mermaid calc` | writes `content/calculus/_generated/prereq-map.md`, a Mermaid `flowchart` included on the subject landing page (MyST renders Mermaid natively). Run before every build by `scripts/generate.py` (05 §5.7). |
-| `graph.py ready calc` | lists planned topics whose prerequisites all have `status ≥ reviewed`. This is the queue for parallel authoring ([10](10-ai-agents.md)). |
+| `graph.py check` | `curriculum.yml` matches its schema; every prerequisite resolves (to a page or a planned topic); no cycles (stdlib `graphlib.TopologicalSorter`); cross-subject edges respect `depends_on`; written pages agree with the curriculum; warns about redundant transitive edges |
+| `graph.py mermaid calc` | writes `content/calculus/_generated/prereq-map.md`, included on the subject landing page (MyST renders Mermaid natively): a flowchart of the chapters, then one flowchart per chapter with its topics and their prerequisites from other chapters. (One flowchart of all 82 topics was tried in stage 2: scaled to the page width it is unreadable.) Planned topics are dashed; written ones are coloured by status and link to their page. Run before every build by `scripts/generate.py` (05 §5.7). |
+| `graph.py ready calc` | lists planned (not yet written) topics whose prerequisites are all written and have `status ≥ reviewed`. This is the queue for parallel authoring ([10](10-ai-agents.md)). |
 | `graph.py closure calc-mean-value-theorem` | prints all transitive prerequisites; used by the forward-reference check |
 
 ### Forward-reference check (`check_labels.py --forward-refs`)
@@ -261,7 +289,13 @@ For every cross-reference on page P to a block on page Q, one of these must hold
   several statements, and two such proofs could then cite each other's theorems;
 - Q is P itself, the reference is inside a **solution**, and the target block comes earlier
   on the page than the reference;
-- the reference sits inside an admonition with class `see-also` / `looking-ahead`.
+- the reference sits inside an admonition with class `see-also` / `looking-ahead` (or a
+  `{seealso}` admonition);
+- Q is a meta page (`site-…`: notation, how to read, …). Meta pages document the site, so
+  they are also exempt as P.
+
+A reference to a label that no page in the toc has is always an error (the build would fail
+on it too).
 
 **Which statement a proof proves.** A proof directly after a statement block proves that
 statement. A proof anywhere else (in practice, in the Rigorous track section) must carry the
@@ -287,8 +321,9 @@ The same holds for a subject `index.md` and its chapters.
 
 ## 2.6 Adding a new subject (the scale test)
 
-1. Pick a subject code and add it to the table in §2.4 (and to `schema/page.schema.json`'s
-   `subject` enum).
+1. Pick a subject code and add it to the table in §2.4, and to the subject lists in
+   `schema/page.schema.json` (the `subject` enum and the label patterns),
+   `schema/curriculum.schema.json` and `SUBJECTS` in `scripts/project.py`.
 2. Create `content/<subject>/` from `templates/subject-index.md` (as `index.md`) and
    `templates/chapter-index.md` (one per chapter folder), plus `curriculum.yml`.
 3. Write `curriculum.yml` (chapters, topics, prerequisites, proof policies) and get it
