@@ -157,6 +157,22 @@ export function spread(items, n) {
 }
 
 /**
+ * The steps of the two sliders: ε from epsRange[0] in steps of epsStep (default: a hundredth of
+ * epsRange), and δ in steps of a thousandth of the distance from a to the nearer end of xRange.
+ */
+export function sliderSteps(config) {
+  const [e0, e1] = config.epsRange;
+  return { eps: config.epsStep ?? (e1 - e0) / 100, delta: Math.min(config.a - config.xRange[0], config.xRange[1] - config.a) / 1000 };
+}
+
+// Whether v is start + k·step for a whole k ≥ 0 (up to rounding): a range input snaps any other
+// value, so the widget would not start where the caption says.
+const onGrid = (v, start, step) => {
+  const k = (v - start) / step;
+  return k > -1e-6 && Math.abs(k - Math.round(k)) <= 1e-6;
+};
+
+/**
  * The semantic rules that JSON Schema cannot express (scripts/check_widgets.py applies the same
  * rules in CI; widgets/_tests/fixtures/epsilon-delta-invalid.json keeps the two in step).
  * Returns a list of messages, empty if the config is fine.
@@ -181,6 +197,15 @@ export function configProblems(config) {
   }
   if (xOk && config.delta !== undefined && !(config.delta <= Math.min(config.a - x0, x1 - config.a))) {
     problems.push("delta: must be at most the distance from a to the nearer end of xRange");
+  }
+  if (!problems.length) {
+    const step = sliderSteps(config);
+    if (!onGrid(config.eps, config.epsRange[0], step.eps)) {
+      problems.push("eps: must be on the ε slider's grid, epsRange[0] + k·epsStep (epsStep defaults to a hundredth of epsRange)");
+    }
+    if (config.delta !== undefined && !(config.delta >= step.delta && onGrid(config.delta, 0, step.delta))) {
+      problems.push("delta: must be on the δ slider's grid, k thousandths of the distance from a to the nearer end of xRange");
+    }
   }
   return problems;
 }

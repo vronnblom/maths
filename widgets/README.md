@@ -128,10 +128,10 @@ Schema: `schema/widgets/epsilon-delta.schema.json`.
 | `f` | ✔ | the function of `x`, in the expression language of `function-plot` above |
 | `a` | ✔ | the point x approaches; strictly inside `xRange` |
 | `L` | ✔ | the claimed limit, the centre of the band; inside `yRange`. A wrong L is allowed: the widget then finds no δ for small ε |
-| `eps` | ✔ | the starting ε (> 0), inside `epsRange` |
+| `eps` | ✔ | the starting ε (> 0), inside `epsRange` and on the ε slider's grid, `epsRange[0]` + k·`epsStep` (a range input would snap any other value, and the widget would not start at the ε the caption names) |
 | `epsRange` | ✔ | `[min, max]` of the ε slider, both > 0 |
 | `epsStep` | | the ε slider's step (default: the `epsRange` width / 100). Put the values a **Try this:** names on the grid: `"epsRange": [0.05, 1.5], "epsStep": 0.05` reaches 0.1 |
-| `delta` | | the starting δ (default: half the distance from a to the nearer end of `xRange`, which is the δ slider's maximum; its step is a thousandth of that) |
+| `delta` | | the starting δ (default: half the distance from a to the nearer end of `xRange`, which is the δ slider's maximum; its step is a thousandth of that, and `delta` must be a whole number of steps) |
 | `xRange`, `yRange` | ✔ | `[min, max]` of the view at first. The largest δ is searched up to the ends of `xRange` |
 
 **How the largest δ is computed** (`_lib/epsdelta.mjs`, where the method is documented in
@@ -154,6 +154,8 @@ and re-checks the result on the reader's-check sample, retreating if anything fa
   the scale of the figure.
 - `widgets/_tests/epsdelta.test.mjs` checks every case against SymPy's exact δ (it solves
   |f(x) − L| < ε; for sin(1/x) the one-sided limit's accumulation bounds decide that no δ
-  exists): the reported δ is ≤ the exact one and within 2 × 10⁻⁵ of it, "no δ" agrees, the
-  reported δ passes the reader's check, and a δ 0.1 % or 10⁻⁶ larger fails. The cases include
+  exists; `make_fixtures.py` checks each interval SymPy returns, because `solveset` is
+  sometimes wrong, and refuses a case that does not check out): the reported δ is ≤ the exact
+  one and within 2 × 10⁻⁵ of it, "no δ" agrees, the reported δ passes the reader's check, and
+  a δ 0.1 % or 10⁻⁶ larger fails. The cases include
   every `epsilon-delta` figure on the site, at its starting ε and at both ends of its slider.

@@ -126,12 +126,17 @@ def test_epsilon_delta_schema_rejects_typos_and_bad_shapes(config, where):
     assert any(where in m for m in messages), messages
 
 
-def test_widget_fixtures_are_fresh():
-    """widgets/_tests/fixtures/function-plot.json and epsilon-delta.json are exactly what
-    make_fixtures.py writes now."""
+def load_make_fixtures():
     spec = importlib.util.spec_from_file_location("make_fixtures", REPO / "widgets" / "_tests" / "make_fixtures.py")
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
+    return mod
+
+
+def test_widget_fixtures_are_fresh():
+    """widgets/_tests/fixtures/function-plot.json and epsilon-delta.json are exactly what
+    make_fixtures.py writes now."""
+    mod = load_make_fixtures()
     for path, data in mod.outputs().items():
         committed = path.read_text(encoding="utf-8")
         assert committed == mod.render(data), f"{path.name}: run uv run python widgets/_tests/make_fixtures.py and commit the result"
@@ -142,3 +147,14 @@ def test_every_site_widget_table_is_in_the_fixtures():
     data = json.loads((REPO / "widgets" / "_tests" / "fixtures" / "function-plot.json").read_text(encoding="utf-8"))
     sources = {t["source"].split(":")[0] for t in data["tables"]}
     assert {"about/how-to-read.md", "templates/topic.md"} <= sources
+
+
+def test_epsilon_delta_fixtures_refuse_a_wrong_solveset():
+    """SymPy 1.14 solves |abs(x) − 1/2| < 13/10 on (1/2, 3) as the whole interval (it is
+    (1/2, 1.8)); make_fixtures.py checks SymPy's interval and refuses it instead of writing
+    δ₊ = 5/2. Its correct answers still pass: δ₊ = 1/10 for ε = 1/10."""
+    mod = load_make_fixtures()
+    with pytest.raises(ValueError, match="does not check out"):
+        mod.epsilon_delta_case("test", "abs", "abs(x)", 0.5, 0.5, [-1.5, 3], 1.3)
+    case = mod.epsilon_delta_case("test", "abs", "abs(x)", 0.5, 0.5, [-1.5, 3], 0.1)
+    assert case["right"]["sympy"] == "1/10" and case["left"]["sympy"] == "1/10"

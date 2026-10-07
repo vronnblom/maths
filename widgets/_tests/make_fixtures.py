@@ -275,7 +275,17 @@ def exact_side(expr, var, a, L, eps, side: int, reach) -> dict:
         return {"none": True, "delta": 0, "capped": False, "sympy": f"no solution interval starts at a; limit {lim}"}
     assert gap < eps, f"{expr}: a solution interval at a, but the limit {lim} is not within ε"
     delta = sp.nsimplify(touching[0].sup - a if side > 0 else a - touching[0].inf)
-    return {"none": False, "delta": float(sp.N(delta, 30)), "capped": bool(delta == reach), "sympy": str(delta)}
+    capped = bool(delta == reach)
+    # solveset is sometimes wrong (SymPy 1.14: |abs(x) − 1/2| < 13/10 gives all of ℝ), so check
+    # its interval: f is within ε of L inside it and, unless it reaches the end, not just past it.
+    d = float(sp.N(delta, 30))
+    inside = [value_at(expr, var, float(a) + side * d * k / 65) for k in range(1, 65)]
+    past = None if capped else value_at(expr, var, float(a) + side * d * (1 + 1e-6))
+    if any(v is None or not abs(v - float(L)) < float(eps) for v in inside) or (
+        not capped and past is not None and abs(past - float(L)) < float(eps)
+    ):
+        raise ValueError(f"SymPy's δ = {delta} for |{expr} − {L}| < {eps} on {window} does not check out; choose another ε")
+    return {"none": False, "delta": d, "capped": capped, "sympy": str(delta)}
 
 
 def epsilon_delta_case(source, what, f, a, L, x_range, eps) -> dict:

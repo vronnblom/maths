@@ -11,7 +11,7 @@
 import { JSXGRAPH_URL } from "./_lib/jsxgraph.mjs";
 import { compileExpression } from "./_lib/expression.mjs";
 import { formatNumber, sample } from "./_lib/plot.mjs";
-import { METHOD, checkDelta, configProblems, largestDelta, spread } from "./_lib/epsdelta.mjs";
+import { METHOD, checkDelta, configProblems, largestDelta, sliderSteps, spread } from "./_lib/epsdelta.mjs";
 import { PALETTES, currentScheme, watchScheme } from "./_lib/colours.mjs";
 import { STYLES, button, el, slider } from "./_lib/controls.mjs";
 import { createBoard, freeBoard, visibleRange, zoomAbout } from "./_lib/board.mjs";
@@ -206,9 +206,9 @@ async function render({ model, el: host }) {
   };
 
   // ── Controls ──
-  const epsStep = config.epsStep ?? (config.epsRange[1] - config.epsRange[0]) / 100;
+  const steps = sliderSteps(config);
   const epsSlider = slider(doc, {
-    name: "ε", min: config.epsRange[0], max: config.epsRange[1], step: epsStep, value: eps,
+    name: "ε", min: config.epsRange[0], max: config.epsRange[1], step: steps.eps, value: eps,
     onInput: (v) => {
       eps = v;
       compute();
@@ -218,9 +218,8 @@ async function render({ model, el: host }) {
       board?.update();
     },
   });
-  const deltaStep = maxDelta / 1000;
   const deltaSlider = slider(doc, {
-    name: "δ", min: deltaStep, max: maxDelta, step: deltaStep, value: delta,
+    name: "δ", min: steps.delta, max: maxDelta, step: steps.delta, value: delta,
     onInput: (v) => {
       delta = v;
       judge();

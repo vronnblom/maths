@@ -8,7 +8,7 @@
   cannot express (function-plot: ranges increasing, values inside ranges, and the names and
   functions in `f`, mirroring widgets/_lib/plot.mjs and expression.mjs; epsilon-delta: ranges
   increasing, a strictly inside xRange, L inside yRange, eps inside epsRange, delta and epsStep
-  small enough, and `f`, mirroring widgets/_lib/epsdelta.mjs);
+  small enough, eps and delta on their sliders' grids, and `f`, mirroring widgets/_lib/epsdelta.mjs);
 - every id in `maths.widgets` is a widget of the catalogue.
 
 The catalogue and the schemas are always this repository's, also for a fixture project under
@@ -143,6 +143,12 @@ def function_plot_problems(config: dict, schema: dict) -> list[str]:
     return problems
 
 
+def _on_grid(v: float, start: float, step: float) -> bool:
+    """Whether v is start + k·step for a whole k ≥ 0, up to rounding (onGrid in epsdelta.mjs)."""
+    k = (v - start) / step
+    return k > -1e-6 and abs(k - round(k)) <= 1e-6
+
+
 def epsilon_delta_problems(config: dict, schema: dict) -> list[str]:
     """The rules of configProblems() in widgets/_lib/epsdelta.mjs, plus the expression rules."""
     problems = []
@@ -170,6 +176,15 @@ def epsilon_delta_problems(config: dict, schema: dict) -> list[str]:
             problems.append("eps: must lie inside epsRange")
         if "epsStep" in config and not config["epsStep"] <= e1 - e0:
             problems.append("epsStep: must be at most the width of epsRange")
+    if not problems:
+        e0, e1 = config["epsRange"]
+        x0, x1 = config["xRange"]
+        eps_step = config.get("epsStep", (e1 - e0) / 100)
+        delta_step = min(a - x0, x1 - a) / 1000
+        if not _on_grid(config["eps"], e0, eps_step):
+            problems.append("eps: must be on the ε slider's grid, epsRange[0] + k·epsStep (epsStep defaults to a hundredth of epsRange)")
+        if "delta" in config and not (config["delta"] >= delta_step and _on_grid(config["delta"], 0, delta_step)):
+            problems.append("delta: must be on the δ slider's grid, k thousandths of the distance from a to the nearer end of xRange")
     try:
         check_expression(config["f"], ["x"], schema["$defs"]["functions"]["enum"], schema["$defs"]["constants"]["enum"])
     except ExpressionError as e:
