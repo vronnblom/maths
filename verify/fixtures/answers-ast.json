@@ -1,0 +1,805 @@
+{
+ "mystmd": "1.11.0",
+ "location": "/index.md",
+ "page": "---\ntitle: Answer shapes\n---\n\n::::{exercise} A symbolic answer\n:label: exr-calc-shapes-symbolic\n:class: tier-a\n\nCompute something.\n\n:::{admonition} Answer\n:class: dropdown answer\n$\\frac{1}{2}$\n:::\n::::\n\n::::{exercise} A numeric answer\n:label: exr-calc-shapes-numeric\n:class: tier-a\n\nEstimate something to two decimal places.\n\n:::{admonition} Answer\n:class: dropdown answer numeric-5e-3\n$0.69$\n:::\n::::\n\n::::{exercise} A power of numbers\n:label: exr-calc-shapes-power\n:class: tier-a\n\nHow many subsets does a set of ten elements have?\n\n:::{admonition} Answer\n:class: dropdown answer\n$2^{10}$\n:::\n::::\n\n::::{exercise} Three parts\n:label: exr-calc-shapes-parts\n:class: tier-b\n\nThree things.\n\n:::{admonition} Answer\n:class: dropdown answer\n(a) $-3$ (b) $10^{-3}$ (c) $\\sqrt{2}, \\pi$\n:::\n::::\n\n::::{exercise} A solution set\n:label: exr-calc-shapes-set\n:class: tier-a\n\nSolve an inequality.\n\n:::{admonition} Answer\n:class: dropdown answer set\n$[0, 1)$\n:::\n::::\n\n::::{exercise} A proof\n:label: exr-calc-shapes-manual\n:class: tier-c\n\nProve something.\n\n:::{admonition} Answer\n:class: dropdown answer manual\n$\\delta = \\eps / 3$ works.\n:::\n::::\n",
+ "mdast": {
+  "type": "root",
+  "children": [
+   {
+    "type": "block",
+    "children": [
+     {
+      "type": "exercise",
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "A symbolic answer",
+          "position": {
+           "start": {
+            "line": 5,
+            "column": 1
+           },
+           "end": {
+            "line": 5,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "paragraph",
+        "position": {
+         "start": {
+          "line": 9,
+          "column": 1
+         },
+         "end": {
+          "line": 9,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "text",
+          "value": "Compute something.",
+          "position": {
+           "start": {
+            "line": 9,
+            "column": 1
+           },
+           "end": {
+            "line": 9,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "admonition",
+        "children": [
+         {
+          "type": "admonitionTitle",
+          "children": [
+           {
+            "type": "text",
+            "value": "Answer",
+            "position": {
+             "start": {
+              "line": 11,
+              "column": 1
+             },
+             "end": {
+              "line": 11,
+              "column": 1
+             }
+            }
+           }
+          ]
+         },
+         {
+          "type": "paragraph",
+          "position": {
+           "start": {
+            "line": 13,
+            "column": 1
+           },
+           "end": {
+            "line": 13,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "inlineMath",
+            "value": "\\frac{1}{2}",
+            "position": {
+             "start": {
+              "line": 13,
+              "column": 1
+             },
+             "end": {
+              "line": 13,
+              "column": 1
+             }
+            }
+           }
+          ]
+         }
+        ],
+        "class": "dropdown answer"
+       }
+      ],
+      "class": "tier-a",
+      "label": "exr-calc-shapes-symbolic",
+      "identifier": "exr-calc-shapes-symbolic",
+      "enumerated": true,
+      "enumerator": "1",
+      "html_id": "exr-calc-shapes-symbolic"
+     },
+     {
+      "type": "exercise",
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "A numeric answer",
+          "position": {
+           "start": {
+            "line": 17,
+            "column": 1
+           },
+           "end": {
+            "line": 17,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "paragraph",
+        "position": {
+         "start": {
+          "line": 21,
+          "column": 1
+         },
+         "end": {
+          "line": 21,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "text",
+          "value": "Estimate something to two decimal places.",
+          "position": {
+           "start": {
+            "line": 21,
+            "column": 1
+           },
+           "end": {
+            "line": 21,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "admonition",
+        "children": [
+         {
+          "type": "admonitionTitle",
+          "children": [
+           {
+            "type": "text",
+            "value": "Answer",
+            "position": {
+             "start": {
+              "line": 23,
+              "column": 1
+             },
+             "end": {
+              "line": 23,
+              "column": 1
+             }
+            }
+           }
+          ]
+         },
+         {
+          "type": "paragraph",
+          "position": {
+           "start": {
+            "line": 25,
+            "column": 1
+           },
+           "end": {
+            "line": 25,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "text",
+            "value": "0.69",
+            "position": {
+             "start": {
+              "line": 25,
+              "column": 1
+             },
+             "end": {
+              "line": 25,
+              "column": 1
+             }
+            }
+           }
+          ]
+         }
+        ],
+        "class": "dropdown answer numeric-5e-3"
+       }
+      ],
+      "class": "tier-a",
+      "label": "exr-calc-shapes-numeric",
+      "identifier": "exr-calc-shapes-numeric",
+      "enumerated": true,
+      "enumerator": "2",
+      "html_id": "exr-calc-shapes-numeric"
+     },
+     {
+      "type": "exercise",
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "A power of numbers",
+          "position": {
+           "start": {
+            "line": 29,
+            "column": 1
+           },
+           "end": {
+            "line": 29,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "paragraph",
+        "position": {
+         "start": {
+          "line": 33,
+          "column": 1
+         },
+         "end": {
+          "line": 33,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "text",
+          "value": "How many subsets does a set of ten elements have?",
+          "position": {
+           "start": {
+            "line": 33,
+            "column": 1
+           },
+           "end": {
+            "line": 33,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "admonition",
+        "children": [
+         {
+          "type": "admonitionTitle",
+          "children": [
+           {
+            "type": "text",
+            "value": "Answer",
+            "position": {
+             "start": {
+              "line": 35,
+              "column": 1
+             },
+             "end": {
+              "line": 35,
+              "column": 1
+             }
+            }
+           }
+          ]
+         },
+         {
+          "type": "paragraph",
+          "position": {
+           "start": {
+            "line": 37,
+            "column": 1
+           },
+           "end": {
+            "line": 37,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "span",
+            "position": {
+             "start": {
+              "line": 37,
+              "column": 1
+             },
+             "end": {
+              "line": 37,
+              "column": 1
+             }
+            },
+            "children": [
+             {
+              "type": "text",
+              "value": "2"
+             },
+             {
+              "type": "superscript",
+              "children": [
+               {
+                "type": "text",
+                "value": "10"
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "class": "dropdown answer"
+       }
+      ],
+      "class": "tier-a",
+      "label": "exr-calc-shapes-power",
+      "identifier": "exr-calc-shapes-power",
+      "enumerated": true,
+      "enumerator": "3",
+      "html_id": "exr-calc-shapes-power"
+     },
+     {
+      "type": "exercise",
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "Three parts",
+          "position": {
+           "start": {
+            "line": 41,
+            "column": 1
+           },
+           "end": {
+            "line": 41,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "paragraph",
+        "position": {
+         "start": {
+          "line": 45,
+          "column": 1
+         },
+         "end": {
+          "line": 45,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "text",
+          "value": "Three things.",
+          "position": {
+           "start": {
+            "line": 45,
+            "column": 1
+           },
+           "end": {
+            "line": 45,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "admonition",
+        "children": [
+         {
+          "type": "admonitionTitle",
+          "children": [
+           {
+            "type": "text",
+            "value": "Answer",
+            "position": {
+             "start": {
+              "line": 47,
+              "column": 1
+             },
+             "end": {
+              "line": 47,
+              "column": 1
+             }
+            }
+           }
+          ]
+         },
+         {
+          "type": "paragraph",
+          "position": {
+           "start": {
+            "line": 49,
+            "column": 1
+           },
+           "end": {
+            "line": 49,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "text",
+            "value": "(a) ",
+            "position": {
+             "start": {
+              "line": 49,
+              "column": 1
+             },
+             "end": {
+              "line": 49,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": "-3",
+            "position": {
+             "start": {
+              "line": 49,
+              "column": 1
+             },
+             "end": {
+              "line": 49,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " (b) ",
+            "position": {
+             "start": {
+              "line": 49,
+              "column": 1
+             },
+             "end": {
+              "line": 49,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "span",
+            "position": {
+             "start": {
+              "line": 49,
+              "column": 1
+             },
+             "end": {
+              "line": 49,
+              "column": 1
+             }
+            },
+            "children": [
+             {
+              "type": "text",
+              "value": "10"
+             },
+             {
+              "type": "superscript",
+              "children": [
+               {
+                "type": "text",
+                "value": "-3"
+               }
+              ]
+             }
+            ]
+           },
+           {
+            "type": "text",
+            "value": " (c) ",
+            "position": {
+             "start": {
+              "line": 49,
+              "column": 1
+             },
+             "end": {
+              "line": 49,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "inlineMath",
+            "value": "\\sqrt{2}, \\pi",
+            "position": {
+             "start": {
+              "line": 49,
+              "column": 1
+             },
+             "end": {
+              "line": 49,
+              "column": 1
+             }
+            }
+           }
+          ]
+         }
+        ],
+        "class": "dropdown answer"
+       }
+      ],
+      "class": "tier-b",
+      "label": "exr-calc-shapes-parts",
+      "identifier": "exr-calc-shapes-parts",
+      "enumerated": true,
+      "enumerator": "4",
+      "html_id": "exr-calc-shapes-parts"
+     },
+     {
+      "type": "exercise",
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "A solution set",
+          "position": {
+           "start": {
+            "line": 53,
+            "column": 1
+           },
+           "end": {
+            "line": 53,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "paragraph",
+        "position": {
+         "start": {
+          "line": 57,
+          "column": 1
+         },
+         "end": {
+          "line": 57,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "text",
+          "value": "Solve an inequality.",
+          "position": {
+           "start": {
+            "line": 57,
+            "column": 1
+           },
+           "end": {
+            "line": 57,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "admonition",
+        "children": [
+         {
+          "type": "admonitionTitle",
+          "children": [
+           {
+            "type": "text",
+            "value": "Answer",
+            "position": {
+             "start": {
+              "line": 59,
+              "column": 1
+             },
+             "end": {
+              "line": 59,
+              "column": 1
+             }
+            }
+           }
+          ]
+         },
+         {
+          "type": "paragraph",
+          "position": {
+           "start": {
+            "line": 61,
+            "column": 1
+           },
+           "end": {
+            "line": 61,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "inlineMath",
+            "value": "[0, 1)",
+            "position": {
+             "start": {
+              "line": 61,
+              "column": 1
+             },
+             "end": {
+              "line": 61,
+              "column": 1
+             }
+            }
+           }
+          ]
+         }
+        ],
+        "class": "dropdown answer set"
+       }
+      ],
+      "class": "tier-a",
+      "label": "exr-calc-shapes-set",
+      "identifier": "exr-calc-shapes-set",
+      "enumerated": true,
+      "enumerator": "5",
+      "html_id": "exr-calc-shapes-set"
+     },
+     {
+      "type": "exercise",
+      "children": [
+       {
+        "type": "admonitionTitle",
+        "children": [
+         {
+          "type": "text",
+          "value": "A proof",
+          "position": {
+           "start": {
+            "line": 65,
+            "column": 1
+           },
+           "end": {
+            "line": 65,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "paragraph",
+        "position": {
+         "start": {
+          "line": 69,
+          "column": 1
+         },
+         "end": {
+          "line": 69,
+          "column": 1
+         }
+        },
+        "children": [
+         {
+          "type": "text",
+          "value": "Prove something.",
+          "position": {
+           "start": {
+            "line": 69,
+            "column": 1
+           },
+           "end": {
+            "line": 69,
+            "column": 1
+           }
+          }
+         }
+        ]
+       },
+       {
+        "type": "admonition",
+        "children": [
+         {
+          "type": "admonitionTitle",
+          "children": [
+           {
+            "type": "text",
+            "value": "Answer",
+            "position": {
+             "start": {
+              "line": 71,
+              "column": 1
+             },
+             "end": {
+              "line": 71,
+              "column": 1
+             }
+            }
+           }
+          ]
+         },
+         {
+          "type": "paragraph",
+          "position": {
+           "start": {
+            "line": 73,
+            "column": 1
+           },
+           "end": {
+            "line": 73,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "inlineMath",
+            "value": "\\delta = \\eps / 3",
+            "position": {
+             "start": {
+              "line": 73,
+              "column": 1
+             },
+             "end": {
+              "line": 73,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " works.",
+            "position": {
+             "start": {
+              "line": 73,
+              "column": 1
+             },
+             "end": {
+              "line": 73,
+              "column": 1
+             }
+            }
+           }
+          ]
+         }
+        ],
+        "class": "dropdown answer manual"
+       }
+      ],
+      "class": "tier-c",
+      "label": "exr-calc-shapes-manual",
+      "identifier": "exr-calc-shapes-manual",
+      "enumerated": true,
+      "enumerator": "6",
+      "html_id": "exr-calc-shapes-manual"
+     }
+    ]
+   }
+  ]
+ }
+}

@@ -1,0 +1,26 @@
+# docs/plan/05-tooling-and-build.md §5.7, 06 §6.6: the verified-page edit guard. The one check that
+# reads PR labels, in a workflow of its own so that only it re-runs when a label is added or
+# removed: adding `typo-only` turns it green without a new push. Pull requests only, never main.
+name: Guard
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+permissions:
+  contents: read
+concurrency:
+  group: 'guard-${{ github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+  verified-edits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1          # v7.0.1
+        with: { fetch-depth: 0 }                     # diffs against the base commit
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7        # v10.2.0
+      - run: uv sync --frozen
+      - name: Verified-page edit guard
+        env:                                         # through env, never inlined into the script
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+        run: uv run python scripts/check_verified_edits.py --base "$BASE_SHA" --labels "$PR_LABELS"

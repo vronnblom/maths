@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/vronnblom/maths/schema/page.schema.json",
   "title": "Front matter of a page under content/",
-  "description": "docs/plan/03-content-model.md §3.3. Checked by scripts/check_frontmatter.py, which adds the rules a schema can't express: tags from content/tags.yml, the label's subject prefix, the verify file, the prerequisite-status gate and the kind ↔ path rule.",
+  "description": "docs/plan/03-content-model.md §3.3. Checked by scripts/check_frontmatter.py, which adds the rules a schema can't express: tags from content/tags.yml, the label's subject prefix, the verify file and its path, the prerequisite-status gate, the kind ↔ path rule and the manual_checked notes.",
   "type": "object",
   "additionalProperties": false,
   "required": ["title", "label", "description", "maths"],
@@ -44,6 +44,12 @@
         "widgets": { "type": "array", "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }, "uniqueItems": true },
         "aliases": { "type": "array", "items": { "type": "string", "pattern": "^(/[a-z0-9]+(-[a-z0-9]+)*)+$" }, "uniqueItems": true },
         "reviewed_by": { "type": "array", "items": { "type": "string", "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$" }, "uniqueItems": true },
+        "manual_checked": {
+          "type": "object",
+          "description": "The reviewer's note for exercises whose Answer is manual (docs/plan/06 §6.6): exr- label → the GitHub handle of the reviewer who checked it, who must be in reviewed_by. Added by the reviewer, never by the author.",
+          "propertyNames": { "pattern": "^exr-[a-z0-9]+(-[a-z0-9]+)+$" },
+          "additionalProperties": { "type": "string", "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$" }
+        },
         "sources": { "type": "array", "items": { "type": "string", "minLength": 1 } },
         "depends_on": { "type": "array", "items": { "$ref": "#/$defs/subject" }, "uniqueItems": true }
       },
@@ -52,14 +58,14 @@
           "if": { "properties": { "kind": { "const": "topic" } } },
           "then": {
             "required": ["subject", "level", "difficulty", "est_minutes", "prerequisites", "objectives"],
-            "propertyNames": { "enum": ["kind", "subject", "status", "level", "difficulty", "est_minutes", "prerequisites", "objectives", "verify", "widgets", "aliases", "reviewed_by", "sources"] }
+            "propertyNames": { "enum": ["kind", "subject", "status", "level", "difficulty", "est_minutes", "prerequisites", "objectives", "verify", "widgets", "aliases", "reviewed_by", "manual_checked", "sources"] }
           }
         },
         {
           "if": { "properties": { "kind": { "const": "chapter" } } },
           "then": {
             "required": ["subject", "prerequisites"],
-            "propertyNames": { "enum": ["kind", "subject", "status", "prerequisites", "objectives", "verify", "widgets", "aliases", "reviewed_by", "sources"] }
+            "propertyNames": { "enum": ["kind", "subject", "status", "prerequisites", "objectives", "verify", "widgets", "aliases", "reviewed_by", "manual_checked", "sources"] }
           }
         },
         {
