@@ -1,0 +1,32 @@
+# Stage 1 of Phase 0: the site build only. Stage 2 adds the `checks` and `verify` jobs
+# (docs/plan/05-tooling-and-build.md §5.7). Every job calls the npm scripts, so CI and
+# `npm run all` cannot drift apart.
+name: CI
+on:
+  pull_request:                                 # default types: label changes don't re-run CI
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: 'ci-${{ github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1          # v7.0.1
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7        # v10.2.0
+      - run: uv sync --frozen
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020        # v7.0.0
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - id: theme                                    # the pinned theme commit from myst.yml (§5.5)
+        run: echo "sha=$(grep -oE 'book-theme/archive/[0-9a-f]{40}' content/myst.yml | cut -d/ -f3)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9             # v6.1.0
+        with: { path: content/_build/templates, key: 'theme-${{ steps.theme.outputs.sha }}' }
+      - name: Build site (errors and warnings fail, except the whitelisted one)
+        run: npm run build                           # no BASE_URL: the preview is served from its root
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9   # v7.0.2
+        with: { name: site, path: content/_build/html, retention-days: 7, if-no-files-found: error }

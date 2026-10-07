@@ -88,7 +88,8 @@ maths/
 │   ├── extract_answers.py       # exercise answers from MyST AST → JSON for verify/
 │   ├── generate.py              # generated includes: prerequisite maps, status table
 │   ├── write_redirects.py       # redirect pages for old URLs (§2.3), run by build_site.sh
-│   └── build_site.sh            # the gated site build (05 §5.5)
+│   ├── build_site.sh            # the gated site build (05 §5.5)
+│   └── fetch_theme.sh           # the pinned book-theme via git, for cloud sessions (05 §5.5)
 ├── templates/                   # copy these to start a page; see 03-content-model
 ├── docs/
 │   └── plan/                    # this plan

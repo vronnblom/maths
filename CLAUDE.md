@@ -1,9 +1,14 @@
 # CLAUDE.md
 
-> **Status: v0 (planning stage).** The tooling described here (scripts, CI, plugin, widgets)
-> is specified in `docs/plan/` and gets built in **Phase 0** (`docs/plan/09-roadmap.md`).
-> Until then, only `docs/plan/` and `templates/` exist. Update this file in the PR that lands
-> each piece; it must always describe the repo as it is.
+> **Status: Phase 0, stage 1 done (site skeleton, build, Pages deploy).** What exists now:
+> `content/` (home, about pages, the empty Calculus subject page), `scripts/build_site.sh`,
+> `scripts/fetch_theme.sh`, `ci.yml` (build job) and `deploy.yml`. Everything else below is
+> specified in `docs/plan/` and arrives in the later stages of Phase 0
+> (`docs/plan/09-roadmap.md`): **stage 2** checks, schema, `curriculum.yml`, `graph.py`,
+> `generate.py`, `labels.lock`, codespell; **stage 3** the plugin and the first widget;
+> **stage 4** `verify/`; **stage 5** the SessionStart hook, `CONTRIBUTING.md`, templates for
+> PRs and issues. Items marked *(stage N)* don't exist yet. Update this file in the PR that
+> lands each piece; it must always describe the repo as it is.
 
 ## What this repo is
 
@@ -16,27 +21,41 @@ the details.
 ## Commands
 
 ```bash
-npm ci && uv sync                 # install (Node 22 + mystmd; Python 3.12+ via uv)
+npm ci && uv sync                 # install (Node 22 + mystmd 1.11.0; Python 3.12+ via uv)
 npm run dev                       # live site at http://localhost:3000 (myst start in content/)
-npm run check                     # front matter, labels, graph, toc, notation lint, spelling, checker tests
-npm run verify                    # AST → answers → SymPy tests (pytest verify/) → coverage → KaTeX
-npm run test:widgets              # widget maths (node --test)
 npm run build                     # scripts/build_site.sh: myst build, fails on any error or warning
 npm run all                       # everything CI runs (CI calls these same scripts). Run before every push.
-uv run python scripts/graph.py ready calc   # topics whose prerequisites are done
+```
+
+Both `dev` and `build` first run `scripts/fetch_theme.sh`, which git-fetches the book-theme
+commit pinned in `content/myst.yml` into `content/_build/templates/` (cloud sessions can't
+download github.com archives; see `docs/plan/05-tooling-and-build.md` §5.5). Bump the theme
+only together with mystmd. mystmd renders every formula with KaTeX at build time, so a
+KaTeX error (red text on the page) is a `⛔️` build error and fails `npm run build`.
+
+Coming later (and then part of `npm run all`):
+
+```bash
+npm run check                     # (stage 2) front matter, labels, graph, toc, notation lint, spelling, checker tests
+npm run verify                    # (stage 4) AST → answers → SymPy tests (pytest verify/) → coverage → KaTeX
+npm run test:widgets              # (stage 3) widget maths (node --test)
+uv run python scripts/graph.py ready calc   # (stage 2) topics whose prerequisites are done
 ```
 
 ## Layout
 
 ```
-content/myst.yml                       MyST project (toc, KaTeX macros, plugins)
-content/<subject>/curriculum.yml       planned topics, prerequisites, proof policies
+content/myst.yml                       MyST project (toc, KaTeX macros, theme pin, site options)
+content/index.md, content/about/*.md   home and meta pages (labels site-<slug>)
+content/_static/                       custom.css, favicon.svg
+content/<subject>/index.md             subject landing page (calc-subject)
+content/<subject>/curriculum.yml       (stage 2) planned topics, prerequisites, proof policies
 content/<subject>/<chapter>/<topic>.md one topic page (the unit of work)
-widgets/*.mjs                          interactive widgets (anywidget ES modules, JSON-configured)
-plugins/topic-header.mjs               renders front matter (prerequisites, objectives, status)
-verify/<subject>/<chapter>/test_*.py   SymPy tests, @covers("<label>")
-scripts/                               repository checks
-schema/                                JSON Schemas (front matter, widget configs)
+widgets/*.mjs                          (stage 3) interactive widgets (anywidget ES modules, JSON-configured)
+plugins/topic-header.mjs               (stage 3) renders front matter (prerequisites, objectives, status)
+verify/<subject>/<chapter>/test_*.py   (stage 4) SymPy tests, @covers("<label>")
+scripts/                               build_site.sh, fetch_theme.sh; (stage 2) the checks
+schema/                                (stage 2) JSON Schemas (front matter, widget configs)
 templates/                             copy these to start a page or test
 docs/plan/                             the plan (architecture decisions)
 ```
@@ -49,7 +68,7 @@ docs/plan/                             the plan (architecture decisions)
     `sol-…` mirrors `exr-…`.
   - Kinds: `def thm lem cor prop ax prf eg exr sol rem eq fig sec wdg`.
   - Meta pages (`content/index.md`, `content/about/*`) use `site-<slug>`.
-  - **Never rename or delete a label.** Every label is in `labels.lock`. Details:
+  - **Never rename or delete a label.** Every label is recorded in `labels.lock` *(stage 2)*. Details:
     `docs/plan/02-information-architecture.md` §2.4.
 - **Front matter**: native MyST keys (`title`, `label`, `description`, `tags`) plus our
   `maths:` block (`kind, subject, status, level, difficulty, est_minutes, prerequisites,
@@ -65,7 +84,7 @@ docs/plan/                             the plan (architecture decisions)
 - **Cross-references**: use `[](#label)` on the same page. On other pages always name the
   link: `[the squeeze theorem](#thm-calc-squeeze)`. Numbers restart on every page.
 - **Notation**: follow `content/about/notation.md` (source: `docs/plan/04-notation-and-style.md`).
-  Use the macros: `\R \N \Z \Q \C \dd \dv \abs \norm \vb \eps`. Write `\ln` (never a bare
+  Use the macros: `\R \N \Z \Q \C \dd \dv \dvn \pdv \abs \norm \vb \eps \sgn \arsinh \dom \ran`. Write `\ln` (never a bare
   `\log`), `\arcsin` (not `\sin^{-1}`), `\int_a^b f(x) \dd x`, intervals `[a, b)`, radians.
 - **Exercises**: tier class `tier-a|tier-b|tier-c` (+ `rigor`, `applied`). Hints are
   `:class: dropdown hint`. One `Answer` admonition with `:class: dropdown answer` in the
@@ -76,6 +95,9 @@ docs/plan/                             the plan (architecture decisions)
   `wdg-…`, whose caption is its text description (`templates/blocks.md`).
 
 ## How to add a topic
+
+Not possible yet: steps 1, 5 and 7 need stages 2–4, and `{topic-header}` needs the stage 3
+plugin (the build fails on an unknown directive). The procedure, once they exist:
 
 1. Pick a topic from `uv run python scripts/graph.py ready <subject>` (or as assigned).
    Branch: `topic/<label>`.
@@ -97,6 +119,8 @@ docs/plan/                             the plan (architecture decisions)
 
 ## How to verify mathematics
 
+The harness (`verify/mathcheck/`) arrives in stage 4.
+
 - Every displayed step in a worked example and every exercise answer gets a SymPy check in
   `verify/`, using `mathcheck` helpers (`equal`, `equal_up_to_constant`, `limit_is`,
   `numeric_spot_check`, `answer(label)`).
@@ -110,7 +134,7 @@ docs/plan/                             the plan (architecture decisions)
 ## Don't
 
 - Don't rename, delete or reuse labels. Don't move a page without listing its old path in
-  `maths.aliases` (mystmd has no `aliases:` key; `scripts/write_redirects.py` makes the redirect).
+  `maths.aliases` (mystmd has no `aliases:` key; `scripts/write_redirects.py` *(stage 2)* makes the redirect).
 - Don't set `status: reviewed`/`verified` or add yourself to `reviewed_by`; the owner does that.
 - Don't edit another page's mathematics in a topic PR (open a separate PR).
 - Don't add dependencies, front-matter keys, directive kinds or widget types without a

@@ -1,0 +1,18 @@
+[project]
+name = "maths-tooling"
+version = "0"
+requires-python = ">=3.12"
+dependencies = [
+  "sympy>=1.14,<2",
+  "antlr4-python3-runtime==4.11.*",
+  "pytest>=8",
+  "pyyaml>=6",
+  "jsonschema>=4.23",
+  "codespell>=2.3",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["verify", "tests"]          # verify/: mathematics; tests/: the checkers' fixture tests
+pythonpath = ["verify", "scripts"]       # `import mathcheck`, and the checkers for tests/
+# importlib mode: test files may share a basename (every chapter has a verify/…/test_index.py)
+addopts = "-ra --strict-markers --import-mode=importlib"

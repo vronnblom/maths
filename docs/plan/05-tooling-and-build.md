@@ -73,14 +73,28 @@ A throwaway two-page project was built in the sandbox (not committed). Findings:
 | `{anywidget} ../../../widgets/x.mjs` (outside the project root) + JSON body | ✔ module copied to `public/` with a content hash; the JSON body becomes the widget model. Found in review: **only that one file** is copied (its imports are not followed), and a JSON `"id"` is not a label; see §5.8. |
 | MyST JS plugin directive reading `vfile.path` and emitting `crossReference` nodes | ✔ MyST resolved them to page titles and URLs (so they get hover previews) |
 | `myst build --strict` | the flag exists. Found in review: it exits non-zero only on errors (logged with ⛔️), not on warnings (⚠️), and some errors (an unknown directive) still exit 0. Hence the log filter in `scripts/build_site.sh` (§5.5). |
-| Theme download | blocked in the sandbox. Found in review: `api.mystmd.org` answers; the denied host is github.com, where `book-theme` resolves to `main.zip`. Hence the pinned theme (§5.5). |
+| Theme download | blocked in the sandbox. Found in review: `api.mystmd.org` answers; the denied host is github.com, where `book-theme` resolves to `main.zip`. Hence the pinned theme (§5.5). Resolved in Phase 0 stage 1 with a git fetch of the pinned commit (§5.5). |
 | SymPy 1.14 `parse_latex` | the `lark` backend **fails on `\pi`** → use the `antlr` backend (`antlr4-python3-runtime==4.11.*`). Found in review: it returns `\pi` and `e` as free symbols, drops list items after the first comma, and leaves `\frac{1}{2}` unevaluated, so `parse_answer` post-processes its output (06 §6.1). |
 | Number-only inline math | found in review: mystmd turns `$0.69$`, `$6$`, `$-3$` into plain text nodes in the AST (always on). `extract_answers.py` handles this (06 §6.1). |
 
-**Still to validate in Phase 0** (needs the real HTML build, which runs in GitHub Actions):
-the rendered look of dropdown proofs and exercises, KaTeX macros with arguments, anywidget
-rendering on the built site, search quality on math-heavy pages, and the build time with
-about 100 pages.
+**Validated in Phase 0 stage 1** (2026-10-07, mystmd 1.11.0, book-theme v1.4.1 at the pinned
+commit). The real `myst build --html` ran in a Claude Code cloud session, with the theme
+fetched by git (§5.5), and the pages were inspected with Playwright (Chromium, light and
+dark colour schemes):
+
+| Question | Result |
+|---|---|
+| KaTeX macros with arguments | ✔ every macro of 04 §4.1 renders on `about/notation.md` (114 formulas, 0 `.katex-error` nodes, no console errors), including `\dv`, `\dvn`, `\pdv`, `\abs`, `\norm` and `\vb`, inline, in table cells and in displays (where `\abs` and `\norm` grow with their contents). |
+| How math is rendered | mystmd renders every formula **at build time** with its own bundled KaTeX **0.15.6** (the theme bundles the same 0.15.6 and loads `katex@0.15.2` CSS from jsDelivr; Mermaid has its own 0.16.47). A parse error is logged as `⛔️ <file>:<line> <KaTeX message>` and `--strict` exits 1, so `build_site.sh` already fails on red KaTeX (tested with `$\frac{1}{$`). |
+| Dropdowns | ✔ (on a scratch page, not committed) `{proof:proof} Rigorous track` + `:class: dropdown` renders as a collapsed `<details>` headed "Proof (Rigorous track)"; hint, answer and solution dropdowns inside and after an `{exercise}` collapse and open; custom classes (`tier-b`, `rigor`, `hint`, `answer`) reach the HTML. `custom.css` tier tags and the ∎ after proofs work. |
+| Search | ✔ Ctrl+K opens it; "interval", "arsinh" and "errata" find the right headings and table rows. It indexes the **LaTeX source** of formulas (a hit shows `\int_0^1 x^2 \dd x`), so searching for a symbol works by its command name only. |
+| Equation numbers | Every display `$$ … $$` is numbered, labelled or not (the notation page shows (1)–(4)). |
+| Favicon, actions, licences | ✔ the SVG favicon is served as `/favicon.ico`; "Report an error" sits in the header; the CC BY-SA and MIT badges and the GitHub link show on every page. |
+| Build time | about 10 s for 6 pages, including the one-off `npm ci` of the theme (3 s). |
+
+A `BASE_URL=/maths` build prefixes every link and asset in the HTML, the favicon included.
+**Still to validate**: that the deployed site actually serves them under `/maths/`; anywidget rendering (stage 3, with the first widget); search
+quality on math-heavy topic pages; and the build time with about 100 pages.
 
 ## 5.4 Dependencies (each justified)
 
@@ -90,7 +104,7 @@ about 100 pages.
 | **mystmd** | exact pin (`1.11.0`), lockfile | the site engine | `jupyter-book` 2 on PyPI wraps the same engine but adds a layer; we need npm for the plugin anyway |
 | **yaml** (npm) | caret, lockfile | the plugin parses front matter properly | a hand-rolled regex (fragile) |
 | **book-theme** (site theme, downloaded by mystmd) | commit SHA in `site.template` (§5.5) | the stock MyST web theme | an unpinned `template: book-theme` (follows the theme's `main`) |
-| **katex** (npm, dev) | exact, matching the KaTeX of the pinned theme commit | `scripts/check_katex.mjs` fails CI on math that would render as red error text (mystmd is a single bundled package, so KaTeX isn't otherwise importable) | relying on visual inspection |
+| **katex** (npm, dev) | exact, matching the KaTeX of mystmd and the pinned theme commit: **0.15.6** (§5.3) | `scripts/check_katex.mjs` fails CI on math that would render as red error text (mystmd is a single bundled package, so KaTeX isn't otherwise importable). Found in stage 1: mystmd already renders every formula with KaTeX at build time and logs errors as `⛔️`, so `build_site.sh` catches them; stage 2 decides whether this check still adds anything (it would run in the `verify` job, whose `--site` build is not log-gated) | relying on visual inspection |
 | **JSXGraph** | exact version in the URL that widgets `import()` at render time; vendored copy as a manual fallback | interactive geometry/plots: sliders, gliders, function graphs, keyboard support, small (≈ 300 kB), MIT/LGPL dual licence, maintained since 2008 by a university group | Plotly (heavy, data-viz oriented), D3 (too low-level), Desmos API (licence/API key for production, not version-controlled), GeoGebra (heavy, external) |
 | **Python ≥ 3.12 + uv** | `uv.lock` | reproducible env for verification and checks; uv is fast and handles the lockfile | pip + requirements.txt (no lock), poetry (slower, heavier) |
 | **sympy** | lock | symbolic verification of every computation | – |
@@ -159,7 +173,7 @@ project:
 site:
   # Pinned to a commit (the theme repo has no tags). `template: book-theme` would fetch the
   # theme's `main` branch on every fresh runner, outside the version pin (see below).
-  template: https://github.com/myst-templates/book-theme/archive/<commit-sha>.zip
+  template: https://github.com/myst-templates/book-theme/archive/<commit-sha>.zip   # stage 1: 23f2df5… (v1.4.1)
   options:
     folders: true                      # URLs mirror folders
     logo_text: Maths
@@ -177,12 +191,26 @@ an npm package, so neither the mystmd pin, the lockfile nor Dependabot covers it
 mystmd (with the visual check of the exemplar pages), and `katex` is pinned to the KaTeX
 version of that theme commit. CI and deploy cache `content/_build/templates` keyed on the
 SHA alone, which a step greps from `myst.yml` (keying on a hash of the whole `myst.yml`
-would miss on every toc change, i.e. on almost every topic PR). Claude Code cloud sessions
-cannot download from github.com repositories that are not attached to the session, so Phase
-0 must make the pinned zip reachable there, by allowing it in the cloud environment's
-network settings or, failing that, by vendoring the built theme at that commit (e.g.
-`vendor/book-theme/`, `template: ../vendor/book-theme`). Either way, "`npm run all` is green
-in a cloud session" is part of Phase 0's definition of done.
+would miss on every toc change, i.e. on almost every topic PR).
+
+**The pinned theme (Phase 0 stage 1).** `23f2df5493e23dfb1d9433c8aa64c87beb4232a3` is
+book-theme's `main` on 2026-10-07: the commit "🚀 v1.4.1", published on 2026-09-21 together
+with mystmd 1.11.0. It is a *built* template (`template.yml`, `server.js`, `build/`,
+`public/`), and the site builds with it under mystmd 1.11.0. Its KaTeX is 0.15.6 (§5.3).
+
+**How the theme reaches cloud sessions.** Claude Code cloud sessions get HTTP 403 from
+github.com for the archive zip, but `git fetch` of a public repository works. mystmd 1.11
+resolves a URL template to `content/_build/templates/site/<sha256 of the URL>/` and
+**skips the download when `template.yml` exists there**; it then runs the template's install
+command (`npm ci --ignore-scripts`, from the npm registry) once, if that folder has no
+`node_modules/`. So `scripts/fetch_theme.sh` reads the URL from `myst.yml`, `git fetch`es
+that commit (`--depth 1`) and extracts it with `git archive` into exactly that folder. It is
+a no-op when the folder is already populated (e.g. restored from the CI cache).
+`build_site.sh` and `npm run dev` call it first, so every environment (local, CI, deploy,
+cloud sessions) gets the theme the same way, and the zip URL stays in `myst.yml` as the pin
+and as mystmd's fallback for a bare `myst build`. A fetch by commit SHA is
+content-addressed, so it cannot drift from the pin. Neither a network-settings change nor a
+vendored theme is needed.
 
 If the toc grows unwieldy (more than about 300 lines), split it per subject with MyST's
 `extends:` mechanism. Check first whether `extends` merges `toc` entries; otherwise
@@ -199,7 +227,7 @@ until it's needed.
   "engines": { "node": ">=22" },
   "scripts": {
     "generate": "uv run python scripts/generate.py",
-    "dev": "npm run generate && cd content && myst start",
+    "dev": "npm run generate && bash scripts/fetch_theme.sh && cd content && myst start",
     "check": "uv run python scripts/check_all.py && uv run codespell content docs templates && uv run pytest tests -q",
     "ast": "npm run generate && cd content && myst build --site --ci",
     "verify": "npm run ast && uv run python scripts/extract_answers.py content/_build/site/content -o verify/_answers.json && uv run pytest verify -q && uv run python scripts/check_coverage.py && node scripts/check_katex.mjs content/_build/site/content",
@@ -227,7 +255,8 @@ The npm scripts are the **only** definition of each step: CI calls the same scri
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail            # pipefail: a non-zero myst exit survives the pipe into tee
-cd content
+bash "$(dirname "$0")/fetch_theme.sh"   # the pinned theme, via git (no-op when cached)
+cd "$(dirname "$0")/../content"
 myst build --html --strict --ci 2>&1 | tee build.log
 # --strict exits non-zero only on errors. mystmd 1.11 prints errors with ⛔️ (some, e.g. an
 # unknown directive, even with exit code 0) and warnings with ⚠️. Both fail the build, except
@@ -292,8 +321,8 @@ npm run all
 
 `myst start` rebuilds on save and shows warnings (broken refs, unknown directives) in the
 terminal. Agents in Claude Code cloud sessions get the same environment through a
-SessionStart hook (Phase 0) that runs `npm ci && uv sync`. The hook only works once the
-pinned theme is reachable from the session (see "The theme is a dependency too" in §5.5).
+SessionStart hook (Phase 0) that runs `npm ci && uv sync`; the first build then fetches the
+pinned theme with git (see "How the theme reaches cloud sessions" in §5.5).
 
 ## 5.7 CI and deployment
 

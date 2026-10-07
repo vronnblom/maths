@@ -1,6 +1,7 @@
 # Plan: an open, verified university mathematics repository
 
-**Status:** decision-ready plan, 2026-10-07. Nothing is implemented yet. Next step: Phase 0.
+**Status:** decision-ready plan, 2026-10-07. Phase 0 in progress: stage 1 (site skeleton, build,
+Pages deploy) is in place; next is stage 2 (checks and schema).
 **First subject:** Calculus. **Architecture:** scales to any subject by adding a folder.
 
 ## Decisions at a glance
@@ -56,12 +57,13 @@ block snippets, chapter and subject index pages, and a verification test.
 
 ## Next tasks (first implementation session)
 
-1. **Phase 0 skeleton**: `content/myst.yml` (toc, macros, `folders: true`, the book-theme
+1. **Phase 0 skeleton** (stage 1, built): `content/myst.yml` (toc, macros, `folders: true`, the book-theme
    pinned to a commit), home and about pages, `package.json`/lockfile pinning
    `mystmd@1.11.0`, `pyproject.toml`/`uv.lock`, licence files, `.gitignore`,
    `scripts/build_site.sh`, and `deploy.yml`. Done when the site is live on GitHub Pages and the
    remaining PoC items (rendered dropdowns, KaTeX macros with arguments, anywidget, search)
-   are confirmed.
+   are confirmed. Dropdowns, macros and search are confirmed on the HTML build (05 §5.3);
+   anywidget waits for item 3; the theme reaches cloud sessions via `scripts/fetch_theme.sh`.
 2. **Checks and schema**: `schema/page.schema.json`, `scripts/check_*.py`, `graph.py` (import
    `curriculum.yml` from 08), `labels.lock`, `ci.yml`, plus broken fixtures proving that each
    check fails.
@@ -69,6 +71,5 @@ block snippets, chapter and subject index pages, and a verification test.
    `{where-this-leads}`) and `widgets/function-plot.mjs` with its schema and Node test.
 4. **Verification harness**: `verify/mathcheck/` (`covers`, `answer`, `equal`…, LaTeX
    normalisation with the antlr backend), `scripts/extract_answers.py`, `check_coverage.py`.
-5. **Agent support**: a SessionStart hook (`npm ci && uv sync`), the theme reachable from cloud
-   sessions, `CONTRIBUTING.md`, the PR and issue templates, and `/new-topic` skill. Then start
+5. **Agent support**: a SessionStart hook (`npm ci && uv sync`), `CONTRIBUTING.md`, the PR and issue templates, and `/new-topic` skill. Then start
    Phase 1a: its three Preliminaries prerequisites, then `calc-limit`.
