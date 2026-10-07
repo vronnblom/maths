@@ -3,10 +3,47 @@
 #   uv run python scripts/check_labels.py --update-lock
 # which also updates the page of a moved label. Never delete a line: a label that is removed
 # from the content keeps a tombstone instead, `<label> → <replacement label, or the reason>`.
+ax-calc-completeness  calculus/preliminaries/real-numbers-and-intervals.md
+calc-real-numbers  calculus/preliminaries/real-numbers-and-intervals.md
 calc-subject  calculus/index.md
+def-calc-bounded-above  calculus/preliminaries/real-numbers-and-intervals.md
+def-calc-interval  calculus/preliminaries/real-numbers-and-intervals.md
+def-calc-supremum  calculus/preliminaries/real-numbers-and-intervals.md
+eg-calc-real-numbers-intersection-union  calculus/preliminaries/real-numbers-and-intervals.md
+eg-calc-real-numbers-repeating-decimal  calculus/preliminaries/real-numbers-and-intervals.md
+eg-calc-real-numbers-set-to-interval  calculus/preliminaries/real-numbers-and-intervals.md
+eg-calc-real-numbers-tolerance  calculus/preliminaries/real-numbers-and-intervals.md
+exr-calc-real-numbers-complement  calculus/preliminaries/real-numbers-and-intervals.md
+exr-calc-real-numbers-delayed-repeat  calculus/preliminaries/real-numbers-and-intervals.md
+exr-calc-real-numbers-integers-in-interval  calculus/preliminaries/real-numbers-and-intervals.md
+exr-calc-real-numbers-integers-rational  calculus/preliminaries/real-numbers-and-intervals.md
+exr-calc-real-numbers-intersection  calculus/preliminaries/real-numbers-and-intervals.md
+exr-calc-real-numbers-rational-between  calculus/preliminaries/real-numbers-and-intervals.md
+exr-calc-real-numbers-repeating-decimal  calculus/preliminaries/real-numbers-and-intervals.md
+exr-calc-real-numbers-sqrt3-irrational  calculus/preliminaries/real-numbers-and-intervals.md
+exr-calc-real-numbers-supremum  calculus/preliminaries/real-numbers-and-intervals.md
+exr-calc-real-numbers-to-interval  calculus/preliminaries/real-numbers-and-intervals.md
+exr-calc-real-numbers-union  calculus/preliminaries/real-numbers-and-intervals.md
+fig-calc-real-numbers-diagonal  calculus/preliminaries/real-numbers-and-intervals.md
+fig-calc-real-numbers-intervals  calculus/preliminaries/real-numbers-and-intervals.md
+rem-calc-completeness-origin  calculus/preliminaries/real-numbers-and-intervals.md
+rem-calc-naturals-unbounded  calculus/preliminaries/real-numbers-and-intervals.md
+rem-calc-sqrt4-rational  calculus/preliminaries/real-numbers-and-intervals.md
 site-errata  about/errata.md
 site-home  index.md
 site-how-to-read  about/how-to-read.md
 site-notation  about/notation.md
 site-status  about/status.md
+sol-calc-real-numbers-complement  calculus/preliminaries/real-numbers-and-intervals.md
+sol-calc-real-numbers-delayed-repeat  calculus/preliminaries/real-numbers-and-intervals.md
+sol-calc-real-numbers-integers-in-interval  calculus/preliminaries/real-numbers-and-intervals.md
+sol-calc-real-numbers-integers-rational  calculus/preliminaries/real-numbers-and-intervals.md
+sol-calc-real-numbers-intersection  calculus/preliminaries/real-numbers-and-intervals.md
+sol-calc-real-numbers-rational-between  calculus/preliminaries/real-numbers-and-intervals.md
+sol-calc-real-numbers-repeating-decimal  calculus/preliminaries/real-numbers-and-intervals.md
+sol-calc-real-numbers-sqrt3-irrational  calculus/preliminaries/real-numbers-and-intervals.md
+sol-calc-real-numbers-supremum  calculus/preliminaries/real-numbers-and-intervals.md
+sol-calc-real-numbers-to-interval  calculus/preliminaries/real-numbers-and-intervals.md
+sol-calc-real-numbers-union  calculus/preliminaries/real-numbers-and-intervals.md
+thm-calc-sqrt2-irrational  calculus/preliminaries/real-numbers-and-intervals.md
 wdg-site-transformed-sine  about/how-to-read.md

@@ -64,12 +64,15 @@ Phases 3 and 4 can overlap: they share only the MVT/FTC boundary, and the graph
 - [x] A fresh clone gets to a green `npm run all` by following only `README.md` (stage 5,
       2026-10-07: `git clone` of the branch, `npm ci && uv sync` in 3.6 s, `npm run all` green
       in 1 min 56 s).
-- [ ] …and so does a Claude Code cloud session after its SessionStart hook. Stage 5 ran the
+- [x] …and so does a Claude Code cloud session after its SessionStart hook. Stage 5 ran the
       hook in a fresh clone exactly as Claude Code runs it (the command from
       `.claude/settings.json`, `CLAUDE_CODE_REMOTE=true`, cold npm and uv caches): 6.8 s, then
-      0.25 s on a rerun, and `npm run all` green in 1 min 52 s. Still open until a brand-new
-      cloud session *starts* with the hook, which can only happen once it is on the branch a
-      session starts from: the first Phase 1a session is that test.
+      0.25 s on a rerun, and `npm run all` green in 1 min 52 s. Confirmed 2026-10-07 by the
+      first Phase 1a session (`calc-real-numbers`), a brand-new cloud session started from
+      `main`: at startup the hook reported "node_modules installed, Python environment synced,
+      site theme present (7 s)" (the npm stamp, `.venv` and the theme are all timestamped at
+      session start), and `npm run all` was green in 1 min 43 s with no manual `npm ci` or
+      `uv sync`.
 
 ## Phase 1a: the gold-standard page `calc-limit`
 
