@@ -8,7 +8,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 
 import { checkExpression, compileExpression } from "../_lib/expression.mjs";
-import { METHOD, ceilSignificant, checkDelta, configProblems, floorSignificant, largestDelta, offsets, sideDelta, spread, windowPoints } from "../_lib/epsdelta.mjs";
+import { METHOD, ceilSignificant, checkDelta, configProblems, floorSignificant, largestDelta, largestOnGrid, offsets, sideDelta, spread, windowPoints } from "../_lib/epsdelta.mjs";
 import { JXG, epsilonDelta, epsilonDeltaInvalid } from "./helpers.mjs";
 
 const { tolerance } = epsilonDelta;
@@ -254,5 +254,21 @@ test("ceilSignificant rounds up, for 'at most' bounds", () => {
     const v = Math.exp(30 * Math.random() - 15);
     const r = ceilSignificant(v);
     assert.ok(r >= v && r <= v * (1 + 1e-5), `${v} → ${r}`);
+  }
+});
+
+test("largestOnGrid: the largest k·step ≤ v (F6), or null below the first step", () => {
+  assert.equal(largestOnGrid(0.0248456, 0.0015, 1.5), 16 * 0.0015);
+  assert.ok(largestOnGrid(0.0248456, 0.0015, 1.5) <= 0.0248456);
+  // 17·0.0015 is 0.025500000000000002 in doubles, above 0.0255: one step less.
+  assert.equal(largestOnGrid(0.0255, 0.0015, 1.5), 16 * 0.0015);
+  assert.equal(largestOnGrid(5, 0.0015, 1.5), 1000 * 0.0015, "at most the slider's maximum");
+  assert.equal(largestOnGrid(0.001, 0.0015, 1.5), null);
+  for (let k = 0; k < 2000; k++) {
+    const step = 10 ** (4 * Math.random() - 4);
+    const v = step * 1000 * Math.random();
+    const g = largestOnGrid(v, step, step * 1000);
+    if (g === null) assert.ok(v < step * (1 + 1e-12));
+    else assert.ok(g <= v && g > v - step * (1 + 1e-9), `${v}, step ${step} → ${g}`);
   }
 });

@@ -99,6 +99,16 @@ export function ceilSignificant(v, digits = METHOD.digits) {
   return Number(`${Math.round(down / 10 ** e) + 1}e${e}`);
 }
 
+/**
+ * The largest value of the δ slider's grid (k·step, k ≥ 1, at most max) that is ≤ v, or null
+ * when v is below the first step: the value "Set δ to the largest on the slider" sets.
+ */
+export function largestOnGrid(v, step, max) {
+  let k = Math.min(Math.floor(v / step), Math.round(max / step));
+  while (k >= 1 && k * step > v) k -= 1;
+  return k >= 1 ? k * step : null;
+}
+
 const inBand = (y, L, eps) => Math.abs(y - L) < eps; // false for NaN: undefined fails
 
 /** The distance of x from a on `side` (−1 left, +1 right), measured on the double x: > 0 inside. */
@@ -253,12 +263,18 @@ export function sliderSteps(config) {
   return { eps: config.epsStep ?? (e1 - e0) / 100, delta: Math.min(config.a - config.xRange[0], config.xRange[1] - config.a) / 1000 };
 }
 
-// Whether v is start + k·step for a whole k ≥ 0 (up to rounding): a range input snaps any other
-// value, so the widget would not start where the caption says.
-const onGrid = (v, start, step) => {
-  const k = (v - start) / step;
-  return k > -1e-6 && Math.abs(k - Math.round(k)) <= 1e-6;
-};
+/**
+ * Whether v is start + k·step for a whole k ≥ 0, up to floating-point rounding only: a range
+ * input snaps any other value, so the widget would not start where the caption says. The
+ * tolerance is 4 units in the last place of the numbers involved (review F9: a fixed 10⁻⁶ of a
+ * step let 0.500000005 through, which the slider shows as 0.5). check_widgets.py has the same
+ * rule (_on_grid).
+ */
+export function onGrid(v, start, step) {
+  const k = Math.round((v - start) / step);
+  const tolerance = 4 * Number.EPSILON * (Math.abs(v) + Math.abs(start) + Math.abs(k * step));
+  return k >= 0 && Math.abs(v - (start + k * step)) <= tolerance;
+}
 
 /**
  * The semantic rules that JSON Schema cannot express (scripts/check_widgets.py applies the same

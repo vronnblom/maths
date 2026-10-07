@@ -19,6 +19,11 @@
     { "config": { "f": "t^2", "a": 2, "L": 4, "eps": 0.5, "epsRange": [0.05, 1.5], "epsStep": 0.05, "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "f: unknown name t" },
     { "config": { "f": "2x", "a": 2, "L": 4, "eps": 0.5, "epsRange": [0.05, 1.5], "epsStep": 0.05, "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "f: missing * after 2: write 2*x" },
     { "config": { "f": "log(x)", "a": 2, "L": 4, "eps": 0.5, "epsRange": [0.05, 1.5], "epsStep": 0.05, "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "f: write ln for the natural logarithm, not log" },
-    { "config": { "f": "x^2", "a": 2, "L": 4, "eps": 0.1, "epsRange": [0.05, 1.5], "epsStep": 0.05, "delta": 1.5, "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": null }
+    { "config": { "f": "x^2", "a": 2, "L": 4, "eps": 0.1, "epsRange": [0.05, 1.5], "epsStep": 0.05, "delta": 1.5, "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": null },
+    { "config": { "f": "x", "a": 0, "L": 0, "eps": 0.500000005, "epsRange": [0.1, 1.1], "xRange": [-1, 1], "yRange": [-1, 1] }, "problem": "eps: must be on the ε slider's grid" },
+    { "config": { "f": "x", "a": 0, "L": 0, "eps": 1500000.005, "epsRange": [1000000, 2000000], "epsStep": 10000, "xRange": [-1, 1], "yRange": [-1, 1] }, "problem": "eps: must be on the ε slider's grid" },
+    { "config": { "f": "x", "a": 0, "L": 0, "eps": 0.5, "epsRange": [0.1, 1.1], "xRange": [-1, 1], "yRange": [-1, 1] }, "problem": null },
+    { "config": { "f": "x", "a": 0, "L": 0, "eps": 1500000, "epsRange": [1000000, 2000000], "epsStep": 10000, "xRange": [-1, 1], "yRange": [-1, 1] }, "problem": null },
+    { "config": { "f": "x", "a": 0, "L": 0, "eps": 0.7, "epsRange": [0.1, 1.1], "epsStep": 0.1, "delta": 0.003, "xRange": [-1, 1], "yRange": [-1, 1] }, "problem": null }
   ]
 }

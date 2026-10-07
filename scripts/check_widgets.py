@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import sys
 from pathlib import Path
@@ -144,9 +145,12 @@ def function_plot_problems(config: dict, schema: dict) -> list[str]:
 
 
 def _on_grid(v: float, start: float, step: float) -> bool:
-    """Whether v is start + k·step for a whole k ≥ 0, up to rounding (onGrid in epsdelta.mjs)."""
-    k = (v - start) / step
-    return k > -1e-6 and abs(k - round(k)) <= 1e-6
+    """Whether v is start + k·step for a whole k ≥ 0, up to floating-point rounding only: 4 units
+    in the last place of the numbers involved (onGrid in widgets/_lib/epsdelta.mjs, the same rule;
+    JavaScript's Math.round rounds halves up, hence floor(… + 0.5))."""
+    k = math.floor((v - start) / step + 0.5)
+    tolerance = 4 * sys.float_info.epsilon * (abs(v) + abs(start) + abs(k * step))
+    return k >= 0 and abs(v - (start + k * step)) <= tolerance
 
 
 def epsilon_delta_problems(config: dict, schema: dict) -> list[str]:

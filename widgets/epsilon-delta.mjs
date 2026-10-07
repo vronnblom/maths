@@ -15,7 +15,7 @@
 import { JSXGRAPH_URL } from "./_lib/jsxgraph.mjs";
 import { compileExpression } from "./_lib/expression.mjs";
 import { formatNumber, sample } from "./_lib/plot.mjs";
-import { METHOD, ceilSignificant, checkDelta, configProblems, largestDelta, sliderSteps, spread } from "./_lib/epsdelta.mjs";
+import { METHOD, ceilSignificant, checkDelta, configProblems, largestDelta, largestOnGrid, sliderSteps, spread } from "./_lib/epsdelta.mjs";
 import { PALETTES, currentScheme, watchScheme } from "./_lib/colours.mjs";
 import { STYLES, button, el, slider } from "./_lib/controls.mjs";
 import { createBoard, freeBoard, visibleRange, zoomAbout } from "./_lib/board.mjs";
@@ -73,9 +73,10 @@ export function largestText(result, { eps, a, L }) {
 /**
  * The verdict on the reader's δ (check: checkDelta()). It promises crosses only for failing
  * points where f is defined (the only ones drawn), and says in words where f is undefined.
+ * `note` comes first (what "Set δ to the largest on the slider" did).
  */
-export function verdictText(check, { delta, eps, a, L }) {
-  const head = `Your δ = ${n(delta)}`;
+export function verdictText(check, { delta, eps, a, L, note = "" }) {
+  const head = `${note}Your δ = ${n(delta)}`;
   if (check.works) return `${head} works: every x the widget checked with 0 < |x − ${n(a)}| < ${n(delta)} has |f(x) − ${n(L)}| < ${n(eps)}.`;
   const all = [...check.left, ...check.right];
   const marked = all.filter((p) => Number.isFinite(p.y)).length;
@@ -151,11 +152,13 @@ async function render({ model, el: host }) {
   const verdict = el(doc, "p", { class: "mp-readout", "aria-live": "polite" });
   root.append(boardBox, legend, controls, largest, verdict);
 
+  let note = ""; // what "Set δ to the largest on the slider" did, said before the next verdict
   const showLargest = () => {
     largest.textContent = largestText(result, { eps, a, L });
   };
   const showVerdict = () => {
-    verdict.textContent = verdictText(check, { delta, eps, a, L });
+    verdict.textContent = verdictText(check, { delta, eps, a, L, note });
+    note = "";
   };
 
   const compute = () => {
@@ -265,15 +268,29 @@ async function render({ model, el: host }) {
       board?.update();
     },
   });
-  // The browser snaps a value that is off the slider's grid; start from what it shows.
-  eps = Number(epsSlider.input.value) || eps;
-  epsSlider.set(eps);
-  delta = Number(deltaSlider.input.value) || delta;
-  deltaSlider.set(delta);
-  const useLargest = button(doc, "Set δ to the largest", () => {
+  // The browser snaps a value that is off the slider's grid; use what it shows (set() reads it
+  // back), so the native value, aria-valuetext, the readout and the verdict are one number.
+  eps = epsSlider.set(eps);
+  delta = deltaSlider.set(delta);
+  const useLargest = button(doc, "Set δ to the largest on the slider", () => {
     if (result.status !== "found") return;
-    delta = Math.min(result.delta, maxDelta);
-    deltaSlider.set(delta);
+    const found = result.delta;
+    let target = largestOnGrid(found, steps.delta, maxDelta);
+    let held = target === null ? null : deltaSlider.set(target);
+    if (held !== null && held > found) {
+      // The browser rounded the grid value up: one step down.
+      target = largestOnGrid(target - steps.delta, steps.delta, maxDelta);
+      held = target === null ? null : deltaSlider.set(target);
+    }
+    if (held === null || held > found) {
+      deltaSlider.set(delta); // put the slider back where it was
+      verdict.textContent =
+        `The largest δ the widget found, ${showDelta(found)}, is smaller than the δ slider's first step, ${n(steps.delta)}: ` +
+        "the slider can't show it.";
+      return;
+    }
+    delta = held;
+    note = `δ is now ${n(delta)}, the largest δ on the slider that the widget found to work (the largest δ it found is ${showDelta(found)}). `;
     judge();
     showVerdict();
     board?.update();
