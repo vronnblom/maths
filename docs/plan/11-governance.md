@@ -97,5 +97,5 @@ downgraded unless the error shows systematic review failure on that page.
 - `main` is always deployable and deployed.
 - Subject releases are tagged `calc-1.0`, `linalg-1.0`, … when a subject meets its definition
   of done. A release note lists pages, statuses and errata since the previous release.
-- Labels are permanent across releases, so citing `…/calculus/limits/limit-laws#thm-calc-squeeze`
-  stays valid.
+- Labels are permanent across releases, so citing `…/calculus/limits/squeeze-theorem#thm-calc-squeeze`
+  stays valid. If the page ever moves, its old path gets a redirect (02 §2.3).

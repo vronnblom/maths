@@ -7,9 +7,9 @@ site deployed and CI green on `main`.**
 | Phase | Name | Main output | Rough effort |
 |---|---|---|---|
 | 0 | Skeleton and CI | buildable empty site, all checks, templates, governance files | 2–4 sessions |
-| 1a | Gold-standard page | `calc-limit` finished to the highest standard, templates frozen | 2–3 sessions |
-| 1b | Limits chapter | the remaining 6 Limits pages + chapter index | 3–5 sessions |
-| 2 | Foundations | Preliminaries (12) + Continuity (4) | 5–8 sessions |
+| 1a | Gold-standard page | `calc-limit` finished to the highest standard (+ its 3 Preliminaries prerequisites), templates frozen | 3–4 sessions |
+| 1b | Limits chapter | the remaining 6 Limits pages (+ 2 more Preliminaries prerequisites) + chapter index | 4–6 sessions |
+| 2 | Foundations | the remaining 7 Preliminaries pages + Continuity (4) | 4–7 sessions |
 | 3 | Differential calculus | Derivatives (10) + Applications (10) | 8–12 sessions |
 | 4 | Integral calculus | Integrals (7) + Techniques (6) + Applications (6) + Improper (3) | 8–12 sessions |
 | 5 | Interactive exercises | answer-check widget, practice banks, Python cells; retrofit chapters 2–5 | 4–6 sessions |
@@ -29,13 +29,20 @@ Phases 3 and 4 can overlap: they share only the MVT/FTC boundary, and the graph
   (notation from [04](04-notation-and-style.md)), `content/calculus/index.md`,
   `content/calculus/curriculum.yml` (imported from [08](08-calculus-curriculum.md) by a
   one-off script), `content/_static/custom.css`.
-- `package.json` + lock, `.nvmrc`, `pyproject.toml` + `uv.lock`, `.codespell-ignore`,
-  `.gitignore` (`_build/`, `node_modules/`, `.venv/`, `verify/_answers.json`).
+- `package.json` + lock, `.nvmrc`, `pyproject.toml` + `uv.lock`, `.codespell-ignore`
+  (seeded with `crossreference`), `.codespell-en-gb.txt` (the US→GB list),
+  `.gitignore` (`_build/`, `_generated/`, `build.log`, `node_modules/`, `.venv/`,
+  `verify/_answers.json`, `verify/_coverage.json`).
+- `site.template` pinned to a book-theme commit, and the theme reachable from cloud sessions
+  (05 §5.5).
 - `plugins/topic-header.mjs` (`{topic-header}`, `{where-this-leads}`).
 - `scripts/`: `check_all.py`, `check_frontmatter.py`, `check_labels.py` (+ `labels.lock`),
-  `graph.py`, `check_toc.py`, `check_coverage.py`, `extract_answers.py`, `check_katex.mjs`;
-  `schema/page.schema.json`; `verify/mathcheck/` with its own tests.
-- One widget end-to-end: `widgets/function-plot.mjs` + schema + `_lib/` + a Node test.
+  `graph.py`, `check_toc.py`, `check_coverage.py`, `check_verified_edits.py`,
+  `extract_answers.py`, `check_katex.mjs`, `generate.py`, `write_redirects.py`,
+  `build_site.sh`; `schema/page.schema.json`; `verify/mathcheck/` with its own tests and the
+  runtime coverage plugin.
+- One widget end-to-end: `widgets/function-plot.mjs` + schema + `_lib/` (published with
+  `static_files`, 05 §5.8) + a Node test, rendering on the deployed site.
 - `.github/workflows/{ci,deploy,links}.yml`; branch protection on `main`;
   `.github/{pull_request_template.md,CODEOWNERS,ISSUE_TEMPLATE/*}`; Dependabot config.
 - `README.md`, `CONTRIBUTING.md`, `LICENSE` (MIT), `LICENSE-CONTENT.md` (CC BY-SA 4.0),
@@ -43,17 +50,24 @@ Phases 3 and 4 can overlap: they share only the MVT/FTC boundary, and the graph
 - `.claude/` SessionStart hook (`npm ci && uv sync`) and a `/new-topic` skill wrapping the
   "add a topic" procedure ([10](10-ai-agents.md)).
 - `tests/fixtures/` with deliberately broken pages (bad label, cycle, missing answer, KaTeX
-  error, broken ref) and a pytest that runs each checker on them.
+  error, broken ref, unknown directive, a `@covers` stub on a `verified` page) and a pytest in
+  `tests/` that runs each checker on them (run by `npm run check`).
 
 **Definition of done**
 - [ ] `https://vronnblom.github.io/maths/` serves the site with a home page, the about pages and an empty Calculus subject page showing the Mermaid prerequisite map from `curriculum.yml`.
 - [ ] Each checker has been shown to **fail** on its fixture and pass on the clean tree (fixture tests in CI).
 - [ ] The remaining items in [05 §5.3](05-tooling-and-build.md) are validated on the real HTML build (dropdowns, KaTeX macros with arguments, anywidget rendering, search) and the results are recorded in 05.
-- [ ] A fresh clone gets to a green `npm run all` by following only `README.md`.
+- [ ] A fresh clone gets to a green `npm run all` by following only `README.md`, and so does a
+      Claude Code cloud session after its SessionStart hook.
 
 ## Phase 1a: the gold-standard page `calc-limit`
 
 **Deliverables**
+- The three Preliminaries pages in `calc-limit`'s prerequisite closure, `calc-real-numbers`,
+  `calc-functions` and `calc-absolute-value-inequalities`, to at least `reviewed`. A page may
+  only be `reviewed` or `verified` once all its prerequisites are `reviewed` (CI-enforced,
+  06 §6.4), so the exemplar can't be verified without them. They are short pages, written
+  in the normal one-topic-per-PR flow before the exemplar is marked.
 - `content/calculus/limits/limit-of-a-function.md`, complete per [03 §3.2](03-content-model.md),
   with:
   - motivation from velocity and instantaneous rate (a teaser for derivatives) and a
@@ -70,7 +84,8 @@ Phases 3 and 4 can overlap: they share only the MVT/FTC boundary, and the graph
   `docs/exemplar-review.md`, the rubric the page was judged by (§9.1).
 
 **Definition of done**
-- [ ] `status: verified`, with the proof checklist signed by the owner and the reviewer agent.
+- [ ] `calc-real-numbers`, `calc-functions` and `calc-absolute-value-inequalities` at least `reviewed`.
+- [ ] `calc-limit` at `status: verified`, with the proof checklist signed by the owner and the reviewer agent.
 - [ ] Exemplar rubric (§9.1): every item ✔.
 - [ ] Tested by a real reader (a student or colleague), and their feedback addressed.
 - [ ] Mobile view checked (widgets usable on a phone, dropdowns readable).
@@ -80,22 +95,27 @@ Phases 3 and 4 can overlap: they share only the MVT/FTC boundary, and the graph
 
 **Deliverables**: `calc-one-sided-limits`, `calc-limit-laws`, `calc-computing-limits`,
 `calc-squeeze-theorem`, `calc-infinite-limits`, `calc-limits-at-infinity`, and
-`limits/index.md` with review exercises. **One PR per page**, produced in parallel by agents
-(see [10](10-ai-agents.md)) once Phase 1a is merged.
+`limits/index.md` with review exercises. Also the two remaining Preliminaries pages that the
+chapter needs: `calc-polynomial-rational` (for `calc-computing-limits`) and
+`calc-trig-functions` (for `calc-squeeze-theorem`), to at least `reviewed`. **One PR per
+page**, produced in parallel by agents (see [10](10-ai-agents.md)) once Phase 1a is merged.
 
-**Definition of done**: all 7 pages `verified`; chapter index with ≥ 8 review exercises;
-no forward-reference warnings; a retrospective note on what the template missed, folded
-back into `templates/`.
+**Definition of done**: all 7 Limits pages `verified`, and the 5 Preliminaries pages they
+need at least `reviewed`; chapter index with ≥ 8 review exercises; no forward-reference
+warnings; a retrospective note on what the template missed, folded back into `templates/`.
 
-**Note**: pages in later phases can be *drafted* before their prerequisites are verified, but
-they cannot be marked `reviewed` until all their prerequisites are at least `reviewed`
-(CI-enforced). This keeps quality ordered without blocking drafting.
+**Note**: pages in later phases can be *drafted* before their prerequisites are reviewed, but
+they cannot be marked `reviewed` until all their prerequisites exist and are at least
+`reviewed` (CI-enforced by `check_frontmatter.py`, 06 §6.4). This keeps quality ordered
+without blocking drafting. Every phase plans its pages so that its definition of done can be
+met under this rule.
 
 ## Phase 2: Preliminaries and Continuity
 
-**Deliverables**: 12 Preliminaries pages (short: 15–25 minutes each, exercise-heavy) and 4
-Continuity pages (incl. `bisection` widget mode); 2 chapter indexes.
-**Definition of done**: all 16 pages at least `reviewed`, ≥ 75 % `verified`; Mermaid map for
+**Deliverables**: the remaining 7 Preliminaries pages (short: 15–25 minutes each,
+exercise-heavy; 5 were done in Phases 1a/1b) and 4 Continuity pages (incl. the bisection
+mode of `function-plot`); 2 chapter indexes.
+**Definition of done**: all 16 Preliminaries and Continuity pages at least `reviewed`, ≥ 75 % `verified`; Mermaid map for
 chapters 1–3 correct; the notation page reviewed against the actual usage in chapters 1–3.
 
 ## Phase 3: Derivatives and Applications of Derivatives

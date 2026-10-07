@@ -15,7 +15,7 @@ This document explains the *rules* those templates follow.
 | `subject` | `content/<subject>/index.md` | Landing page: overview, audience, chapter list, prerequisite map, subject-level dependencies |
 | `chapter` | `content/<subject>/<chapter>/index.md` | Chapter overview: why this chapter, topic list with time estimates, chapter objectives, **mixed review exercises** (which cut across topics) |
 | `topic` | `content/<subject>/<chapter>/<topic>.md` | The unit of learning (structure below) |
-| `meta` | `content/about/*.md`, `content/index.md` | Site documentation: notation, how to read, status, errata |
+| `meta` | `content/about/*.md`, `content/index.md` | Site documentation: notation, how to read, status, errata. Labels `site-<slug>`, no `maths.subject` |
 
 ## 3.2 Standard structure of a topic page
 
@@ -44,7 +44,8 @@ and what to notice).
 Front matter has **two layers**:
 
 1. **Native MyST keys**, which MyST understands and renders: `title`, `short_title`,
-   `label`, `description`, `tags`, `aliases`, `numbering`.
+   `label`, `description`, `tags`, `numbering`. (mystmd has no `aliases` key; old URLs go in
+   `maths.aliases`, see below.)
 2. **One namespaced key `maths:`**, our own metadata, which MyST ignores (with exactly one
    predictable warning, `'frontmatter' extra key ignored: maths`, which CI whitelists; see 05).
    It is read by `scripts/*.py` (validation, graph, coverage) and by the
@@ -90,7 +91,7 @@ maths:
 |---|---|---|---|
 | `title` | string | ✔ | Title Case; ≤ 60 chars |
 | `short_title` | string | | sidebar label, ≤ 30 chars |
-| `label` | string | ✔ | `^(calc|linalg|mvc|…)-[a-z0-9]+(-[a-z0-9]+)*$`; equal to the curriculum entry |
+| `label` | string | ✔ | `^(calc\|linalg\|mvc\|…\|site)-[a-z0-9]+(-[a-z0-9]+)*$`. By kind (02 §2.4): topic = its curriculum entry's label; chapter = `<subj>-<chapter-slug>-chapter`; subject = `<subj>-subject`; meta = `site-<slug>` |
 | `description` | string | ✔ | 1–2 sentences; used in hover previews, search and social cards |
 | `tags` | string[] | | from `content/tags.yml` (controlled vocabulary, avoids `limit`/`limits` drift) |
 | `maths.kind` | enum | ✔ | `subject` · `chapter` · `topic` · `meta` |
@@ -99,10 +100,11 @@ maths:
 | `maths.level` | enum | ✔ topic | `core` · `extension` |
 | `maths.difficulty` | int 1–5 | ✔ topic | |
 | `maths.est_minutes` | int 5–90 | ✔ topic | reading + examples, excluding exercises |
-| `maths.prerequisites` | label[] | ✔ topic | may be empty only for the first topic of a subject without dependencies |
-| `maths.objectives` | string[] 2–6 | ✔ topic | each starts with an observable verb: *state, compute, prove, decide, sketch, explain, apply* |
+| `maths.prerequisites` | label[] | ✔ topic, chapter | may be empty only for the first topic of a subject without dependencies. For a chapter, the earlier-chapter topics it builds on; its own topics are added to its closure automatically (02 §2.5) |
+| `maths.objectives` | string[] 2–6 | ✔ topic | each starts with an observable verb (*state, compute, prove, decide, sketch, explain, apply, estimate, recognise, …*); never *understand* or *know* |
 | `maths.verify` | path | ✔ if status ≥ reviewed | must exist |
-| `maths.widgets` | widget id[] | | must exist in `widgets/` |
+| `maths.widgets` | widget id[] | | must exist in `widgets/` (a mode of a widget, e.g. bisection, is configuration, not a separate id) |
+| `maths.aliases` | path[] | | old URL paths of a moved page; `write_redirects.py` turns each into a redirect (02 §2.3) |
 | `maths.reviewed_by` | string[] | ✔ if status ≥ reviewed | |
 | `maths.sources` | string[] | | attribution; required if anything was adapted |
 | `maths.depends_on` | subject code[] | subject pages only | cross-subject dependencies |
@@ -119,16 +121,16 @@ Every block is a MyST directive. Snippets are in [`templates/blocks.md`](../../t
 | Definition | `:::{proof:definition} <Term>` | `def-…` required | the term being defined | the defined term in **bold** inside the body; followed by "In words:" unpacking |
 | Theorem | `:::{proof:theorem} <Name>` | `thm-…` required | conventional name ("Squeeze theorem") or a short descriptive one | hypotheses first ("Let… Suppose…"), then the conclusion; each hypothesis needed |
 | Lemma / Corollary / Proposition | `proof:lemma` / `proof:corollary` / `proof:proposition` | `lem-` / `cor-` / `prop-` | | corollaries reference their parent theorem in the first line |
-| Proof (core) | `:::{proof}` directly after the statement | `prf-…` optional | none | first line names the strategy ("We use the squeeze theorem with…"); ends at the end of the directive (MyST renders the ∎) |
-| Proof (rigorous) | `:::{proof} Rigorous proof` + `:class: dropdown` | `prf-…` | "Rigorous proof" | |
-| Proof sketch | `:::{proof} Proof sketch` | | | must say what is missing and where it is proved (policy D) |
+| Proof (core) | `:::{proof:proof}` + `:enumerated: false`, directly after the statement | `prf-…` optional | none | renders "Proof". First line names the strategy ("We use the squeeze theorem with…"); ends at the end of the directive. The theme draws no ∎; `custom.css` adds one |
+| Proof (rigorous) | `:::{proof:proof} Rigorous track` + `:enumerated: false` + `:class: dropdown` | `prf-…` | "Rigorous track" | renders "Proof (Rigorous track)" |
+| Proof sketch | `:::{proof:proof} Sketch` + `:enumerated: false` | | "Sketch" | says what is missing; under policy D, also where it is proved |
 | Worked example | `:::{proof:example} <Goal>` | `eg-…` required | goal in imperative form ("Find …") | numbered steps; final result in `\boxed{}`; ends with **Check:** |
 | Remark | `:::{proof:remark} <Topic>` | `rem-…` if referenced | | |
 | Common mistake | `:::{warning} <Mistake in a few words>` | `rem-…` if referenced | | three parts: ✗ wrong, why, ✓ right |
 | Rigorous aside | `:::{admonition} <Title>` + `:class: dropdown rigor` | | | for counterexamples and subtleties outside a proof |
 | Exercise | `::::{exercise} <optional short title>` + `:class: tier-a\|tier-b\|tier-c` | `exr-…` required | | contains hint and answer dropdowns; see 07 |
 | Solution | `::::{solution} exr-…` + `:class: dropdown` | `sol-…` required | | full worked solution |
-| Widget | ```` ```{anywidget} ../../../widgets/<w>.mjs ```` + JSON body | `wdg-…` in JSON `"id"` | | JSON validated against `schema/widgets/<w>.schema.json`; followed by **Try this:** |
+| Widget | `::::{figure}` containing only ```` ```{anywidget} ../../../widgets/<w>.mjs ```` + JSON body, then the caption | `wdg-…` on the figure | caption = the text description | JSON validated against `schema/widgets/<w>.schema.json`; followed by **Try this:**. See 05 §5.8 for why the label and description live on the figure |
 | Figure (static) | `:::{figure} ./img/<file>.svg` | `fig-…` | caption | SVG preferred; alt text required |
 | Displayed equation | `$$ … $$ (eq-…)` | `eq-…` if referenced | | |
 
@@ -165,8 +167,10 @@ chapters 1–6; Calculus II: 7–11").
   `crossReference` nodes (MyST resolves them to page titles with hover previews), the
   objectives list, `est_minutes`, the difficulty as dots, and a status badge. A planned
   but unwritten prerequisite is rendered as plain text "(coming soon)".
-- `{where-this-leads}` scans `content/**/*.md` once per build (cached) to compute reverse
-  edges and emits links to pages that list this page as a prerequisite.
+- `{where-this-leads}` reads the front matter of every page in the toc of `content/myst.yml`
+  once per build (cached), computes reverse edges, and emits links to pages that list this
+  page as a prerequisite. It does not glob `content/**/*.md`, which would also match the
+  stale page copies under `content/_build/`.
 
 The PoC proved the key mechanism: a plugin directive reading `vfile.path`, emitting
 `crossReference` nodes that MyST resolved to the target page title and URL.

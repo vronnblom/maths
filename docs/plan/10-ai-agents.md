@@ -61,9 +61,11 @@ graph.py ready ──► [1 Author agent] ──► draft page (status: draft), 
 > `content/about/notation.md`, and the exemplar `content/calculus/limits/limit-of-a-function.md`
 > as the quality bar. Read the pages of the direct prerequisites so you use their labels and
 > don't redefine anything. Cite earlier results only via `[name](#label)`.
-> Output: the page with `status: draft`, and an empty
-> `verify/<subject>/<chapter>/test_<topic>.py` containing only the `@covers` skeleton listing
-> every `eg-` and `exr-` label. Run `npm run check` and `npm run build`, and fix every warning.
+> Output: the page with `status: draft`, the new labels added to `labels.lock`
+> (`check_labels.py --update-lock`), and a
+> `verify/<subject>/<chapter>/test_<topic>.py` containing only the `@covers` skeleton: one
+> `pytest.skip("for the verifier")` stub per `eg-` and `exr-` label (stubs count as uncovered).
+> Run `npm run all` and fix every error and warning.
 > Do **not** compute expected values in the test file.
 
 **Verifier**
@@ -83,20 +85,24 @@ graph.py ready ──► [1 Author agent] ──► draft page (status: draft), 
 
 ## 10.4 Running work in parallel
 
-- **Waves from the graph**: after Phase 1a, `graph.py ready calc` returns e.g.
-  `{calc-one-sided-limits, calc-limit-laws, calc-tangents-rates, calc-real-numbers, …}`.
+- **Waves from the graph**: after Phase 1a (which also brings `calc-limit`'s three
+  Preliminaries prerequisites to `reviewed`), `graph.py ready calc` returns e.g.
+  `{calc-one-sided-limits, calc-limit-laws, calc-tangents-rates, calc-function-operations,
+  calc-polynomial-rational, calc-trig-functions, calc-sigma-notation}`.
   Each is an independent topic PR, run as one agent session per topic (cloud sessions or
   worktrees).
-- **Drafting ahead**: topics whose prerequisites are still `draft` may be drafted (they only
-  need prerequisite *labels* to exist in the curriculum), but they can't move to `reviewed`
-  first. This keeps agents busy without breaking the quality order.
+- **Drafting ahead**: topics whose prerequisites are still `draft` (or not yet written) may be
+  drafted (they only need prerequisite *labels* to exist in the curriculum), but they can't
+  move to `reviewed` until every prerequisite page exists and is `reviewed` (CI-enforced). This keeps agents busy without breaking the quality order.
 - **The owner is the bottleneck**, so pace work to review capacity, about 3–6 topic PRs open
   at a time. Planned mitigations: agent review absorbs the first pass, CI absorbs everything
   mechanical, and PR descriptions follow a fixed template (summary of mathematical content,
   list of theorems with policies, verification coverage, checklist), so review is reading
   mathematics rather than hunting for context.
 - **Conflicts** only arise in shared files: `content/myst.yml` (toc) and `labels.lock`.
-  Both are append-mostly. Agents rebase and re-run `check_all.py` before requesting review.
+  Both are append-mostly (`check_labels.py --update-lock` keeps the lock sorted, so
+  conflicts are usually trivial). Agents rebase, re-run `--update-lock` and `npm run check`
+  before requesting review.
   If toc conflicts become frequent, generate the toc from `curriculum.yml`
   ([05 §5.5](05-tooling-and-build.md)).
 
@@ -117,7 +123,9 @@ graph.py ready ──► [1 Author agent] ──► draft page (status: draft), 
 
 - **`CLAUDE.md`**: conventions, commands, procedures and "don'ts" (draft v0 is in the repo now).
 - **SessionStart hook** (`.claude/settings.json`): runs `npm ci && uv sync` in cloud sessions
-  so `npm run all` works immediately.
+  so `npm run all` works immediately. This also needs the pinned theme to be reachable from
+  the session (allowed in the environment's network settings, or vendored; 05 §5.5);
+  Phase 0's definition of done checks it in a real cloud session.
 - **Skill `/new-topic <label>`** (`.claude/skills/new-topic/SKILL.md`): scaffolds the page and
   verify file from templates and the curriculum entry, then walks the author checklist.
 - **Skill `/verify-topic <path>`**: the verifier role as a reusable skill.

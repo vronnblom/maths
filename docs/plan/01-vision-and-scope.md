@@ -25,7 +25,7 @@ mathematics**, published as a static website. Each subject (Calculus first) is:
 
 ## 1.3 Audience
 
-The site uses **layered rigor**, so one text serves two audiences:
+The site uses **layered rigour**, so one text serves two audiences:
 
 | Reader | What they read | What they skip |
 |---|---|---|
@@ -61,15 +61,15 @@ functions and trigonometry). Anything beyond that is in the *Preliminaries* chap
 8. **Uniformity at scale.** Every subject uses the same folder layout, templates, label
    scheme and checks. Adding Linear Algebra means adding a folder.
 
-## 1.5 Layered rigor model
+## 1.5 Layered rigour model
 
 Each theorem in the curriculum ([08](08-calculus-curriculum.md)) gets a **proof policy**:
 
 | Code | Meaning | Rendering |
 |---|---|---|
-| **F** | Full proof in the core text | `{proof}` directive, expanded |
-| **R** | Proof in the rigorous track | `{proof}` with `:class: dropdown`, titled "Rigorous proof" |
-| **S** | Sketch or idea only | "Proof idea" paragraph or `{proof}` titled "Proof sketch" |
+| **F** | Full proof in the core text | `{proof:proof}` directive, expanded |
+| **R** | Proof in the rigorous track | `{proof:proof}` with `:class: dropdown`, titled "Rigorous track" |
+| **S** | Sketch or idea only | "Proof idea" paragraph or `{proof:proof}` titled "Sketch" |
 | **D** | Deferred to another subject (usually Real Analysis) | Statement + "Proof: see [link]". Until the target exists, a remark explains what is needed (e.g. completeness of ℝ). |
 
 Definitions are layered the same way. The *intuitive* definition of a limit is core, and the

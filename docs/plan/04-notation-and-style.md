@@ -60,7 +60,7 @@ project:
 | Sequences | $(a_n)_{n \ge 1}$ or $(a_n)$; terms $a_n$ | $\{a_n\}$ (set braces) | |
 | Series | $\sum_{k=1}^{\infty} a_k$; partial sums $s_n = \sum_{k=1}^{n} a_k$ | | Summation index $k$, sequence index $n$. |
 | Vectors (later subjects) | $\vb{v}$ (bold upright), components $(v_1, \dots, v_n)$; column vectors in linear algebra | $\vec v$ | Reserved now so `mvc`/`linalg` agree. |
-| Absolute value / norm | $\abs{x}$, $\norm{\vb{v}}$ | `|x|` raw in large displays (sizing) | Raw `|x|` is fine inline. |
+| Absolute value / norm | $\abs{x}$, $\norm{\vb{v}}$ | `\|x\|` raw in large displays (sizing) | Raw `\|x\|` is fine inline. |
 | Logic | "if and only if", "implies" in prose; $\implies$, $\iff$ in displays | "iff" | |
 | Quantifiers | prose ("for every $\eps > 0$ there exists $\delta > 0$") in core; symbols $\forall\,\exists$ only in the rigorous track | | |
 | Decimal mark | point: $3.14$ | comma | Changes in a future Swedish edition. |
@@ -69,14 +69,15 @@ project:
 ## 4.3 Answer LaTeX subset (machine-checked)
 
 Exercise answers are parsed by SymPy (see [06](06-quality-assurance.md)), so answers in
-`Answer` dropdowns must use this subset (all of it passed in the PoC with SymPy 1.14 and the
-`antlr` parser backend):
+`Answer` dropdowns must use this subset. SymPy 1.14's `antlr` backend reads all of it, but
+returns `\pi` and `e` as plain symbols and drops list items after the first comma, so
+`parse_answer` post-processes its output (06 §6.1). Its golden tests cover every item below:
 
 - numbers, `\frac{}{}`, `\sqrt{}`, `\sqrt[n]{}`, `^{}`, `\pi`, `e`, `\infty`, `-\infty`
 - `\sin \cos \tan \arcsin \arccos \arctan \ln \log_{b}`, `\abs{}` / `|x|`
 - `+C` for antiderivatives (the checker differentiates instead of comparing)
-- several answers as a comma-separated list; intervals as `(a, b)` / `[a, b]` with
-  `answer-type` metadata (see 07)
+- several answers as a comma-separated list (each element is checked); intervals as
+  `(a, b)` / `[a, b]` with the `set` answer type (see 07)
 - **not** `\mathrm{e}` and not `\dfrac` (normalised by the checker, but avoid them anyway)
 
 Answers that are not expressions (proofs, sketches, "does not exist") use
@@ -85,7 +86,8 @@ Answers that are not expressions (proofs, sketches, "does not exist") use
 ## 4.4 Writing style
 
 - **Language**: English (international, en-GB spelling: *normalise*, *behaviour*). One
-  spelling only; codespell plus a small allowlist enforce it.
+  spelling only. codespell enforces it with a curated US→GB dictionary
+  (`.codespell-en-gb.txt`, see 05 §5.5), because its built-in dictionaries accept US spellings.
 - **Voice**: "we" for shared reasoning ("we now show"), "you" for instructions to the reader
   ("try dragging ε"). Present tense.
 - **Sentences**: short. One idea per sentence in definitions and theorem statements.
@@ -97,8 +99,10 @@ Answers that are not expressions (proofs, sketches, "does not exist") use
 - **No forward references** in proofs. A "looking ahead" admonition may mention later topics.
 - **Units**: applied examples state units, and the final answer has units.
 - **Accessibility**: every figure has alt text, and every widget has a one-paragraph text
-  description of what it shows (used as a fallback and by screen readers). Colour is never
-  the only carrier of meaning (use colour plus dash style plus labels).
+  description of what it shows, as the caption of its `{figure}` (05 §5.8). Because the
+  caption is static HTML, it is the fallback when JavaScript is off or the widget fails to
+  load, and screen readers always reach it. Colour is never the only carrier of meaning
+  (use colour plus dash style plus labels).
 - **i18n readiness**: no wordplay or idioms in core text; labels and file names never
   depend on English grammar beyond being English nouns; no text baked into images (SVG
   text or captions instead).

@@ -9,7 +9,9 @@ maths:
   kind: chapter
   subject: calc
   status: draft
-  prerequisites:            # chapter-level: the union of what its first topics need, from earlier chapters
+  prerequisites:            # earlier-chapter topics the chapter builds on. The chapter's own topics are
+                            # added to this page's closure automatically (docs/plan/02 §2.5), so review
+                            # solutions may cite any result of the chapter.
     - calc-functions
     - calc-absolute-value-inequalities
   objectives:
@@ -40,6 +42,7 @@ maths:
 
 % 6–12 mixed exercises in which choosing the method is part of the task.
 % Labels: exr-<subj>-<chapter-slug>-review-<slug>, e.g. exr-calc-limits-review-mixed-1
+% Verify file: verify/<subject>/<chapter>/test_index.py (the same basename in every chapter is fine).
 
 ## Chapter summary
 

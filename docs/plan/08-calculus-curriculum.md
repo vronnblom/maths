@@ -155,7 +155,7 @@ pages, many exercises, few proofs.*
 - Prereqs: `calc-continuity`
 - Objectives: apply the IVT to prove existence of roots and solutions; locate roots by bisection; explain why continuity is needed.
 - Results: `thm-calc-ivt` **S** in core (picture), **R** full proof by bisection plus `ax-calc-completeness`; `cor-calc-root-existence` **F**.
-- Widgets: `bisection` (a mode of `function-plot`)
+- Widgets: `function-plot` (bisection mode)
 
 **`calc-evt`** · The Extreme Value Theorem · `extreme-value-theorem.md`
 - Prereqs: `calc-continuity`
@@ -173,7 +173,7 @@ pages, many exercises, few proofs.*
 **`calc-derivative`** · The Derivative · `the-derivative.md`
 - Prereqs: `calc-tangents-rates`, `calc-continuity`
 - Objectives: compute derivatives from the definition; interpret $f'$ as a function and sketch it from the graph of $f$; recognise non-differentiability (corner, cusp, vertical tangent, discontinuity).
-- Results: `def-calc-derivative`, `def-calc-differentiable`; `thm-calc-differentiable-implies-continuous` **F**; `eg-calc-abs-not-differentiable` **F**.
+- Results: `def-calc-derivative`, `def-calc-differentiable`; `thm-calc-differentiable-implies-continuous` **F**; `eg-calc-derivative-abs-not-differentiable` **F**.
 - Widgets: `zoom-to-linear`, `function-plot` (f and f′ linked)
 
 **`calc-differentiation-rules`** · Basic Differentiation Rules · `differentiation-rules.md`
@@ -193,11 +193,11 @@ pages, many exercises, few proofs.*
 
 **`calc-implicit-differentiation`** · Implicit Differentiation · `implicit-differentiation.md`
 - Prereqs: `calc-chain-rule`
-- Objectives: differentiate implicitly defined curves; find tangent lines to curves such as circles and the folium; understand when implicit differentiation is justified (implicit function theorem **D** → `mvc`).
+- Objectives: differentiate implicitly defined curves; find tangent lines to curves such as circles and the folium; explain when implicit differentiation is justified (implicit function theorem **D** → `mvc`).
 - Results: `rem-calc-implicit-function-theorem` (statement **D** → `mvc`).
 
 **`calc-inverse-function-derivatives`** · Derivatives of Inverse Functions · `derivatives-of-inverse-functions.md`
-- Prereqs: `calc-chain-rule`, `calc-continuity-elementary`
+- Prereqs: `calc-chain-rule`, `calc-continuity-elementary`, `calc-derivatives-trig`
 - Objectives: apply $(f^{-1})'(y)=1/f'(f^{-1}(y))$; derive the derivatives of arcsin, arccos and arctan.
 - Results: `thm-calc-inverse-function-derivative` **S** in core (formula from the chain rule *assuming* differentiability), **R** full proof; `cor-calc-derivative-inverse-trig` **F**.
 
@@ -207,7 +207,7 @@ pages, many exercises, few proofs.*
 - Results: `lem-calc-exp-limit` ($\lim_{h\to0}\frac{e^h-1}{h}=1$; stated as a fact characterising $e$, **D** → `calc-ln-integral`); `thm-calc-derivative-exp` **F** (given the lemma); `thm-calc-derivative-ln` **F**; `thm-calc-general-power-rule` **F**.
 
 **`calc-higher-derivatives`** · Higher Derivatives · `higher-derivatives.md`
-- Prereqs: `calc-differentiation-rules`
+- Prereqs: `calc-derivatives-trig`
 - Objectives: compute second and $n$-th derivatives; interpret acceleration; find patterns (e.g. $(\sin x)^{(n)}$).
 - Results: `def-calc-higher-derivative`; `prop-calc-leibniz-product-rule` **R** (by induction).
 
@@ -219,7 +219,7 @@ pages, many exercises, few proofs.*
 ## Chapter 5 — Applications of Derivatives (`derivative-applications/`)
 
 **`calc-extreme-values`** · Extreme Values and Critical Points · `extreme-values.md`
-- Prereqs: `calc-derivative`, `calc-evt`
+- Prereqs: `calc-differentiation-rules`, `calc-evt`
 - Objectives: distinguish local and global extrema; find critical points; apply the closed interval method.
 - Results: `def-calc-local-extremum`, `def-calc-critical-point`; `thm-calc-fermat` **F**.
 
@@ -245,30 +245,30 @@ pages, many exercises, few proofs.*
 - Results: `def-calc-oblique-asymptote`; method page.
 - Widgets: `function-plot` (reveal features step by step)
 
-**`calc-optimization`** · Optimization Problems · `optimization.md`
+**`calc-optimisation`** · Optimisation Problems · `optimisation.md`
 - Prereqs: `calc-monotonicity`
 - Objectives: translate a word problem into an objective function with constraints; justify that a critical point is a global optimum.
 - Results: `prop-calc-single-critical-point` (a unique local extremum on an interval is global) **F**.
 
 **`calc-lhopital`** · Indeterminate Forms and L'Hôpital's Rule · `lhopital.md`
-- Prereqs: `calc-mean-value-theorem`, `calc-derivatives-exp-log`
+- Prereqs: `calc-mean-value-theorem`, `calc-derivatives-exp-log`, `calc-limits-at-infinity`
 - Objectives: identify indeterminate forms; apply L'Hôpital's rule correctly (checking hypotheses); convert $0\cdot\infty$, $\infty-\infty$, $1^\infty$, $0^0$, $\infty^0$.
 - Results: `thm-calc-cauchy-mvt` **R**; `thm-calc-lhopital` (0/0, finite $a$) **R**; ∞/∞ and $a=\pm\infty$ versions **S**; `rem-calc-lhopital-misuse` (examples where it fails or is circular).
 
-**`calc-linearization`** · Linear Approximation and Differentials · `linear-approximation.md`
-- Prereqs: `calc-derivative`
+**`calc-linearisation`** · Linear Approximation and Differentials · `linear-approximation.md`
+- Prereqs: `calc-differentiation-rules`
 - Objectives: build the linearisation; estimate values and errors; use differentials for error propagation.
-- Results: `def-calc-linearization`, `def-calc-differential`; `prop-calc-linearization-error-little-o` **F**.
+- Results: `def-calc-linearisation`, `def-calc-differential`; `prop-calc-linearisation-error-little-o` **F**.
 - Widgets: `zoom-to-linear`
 
 **`calc-newtons-method`** · Newton's Method · `newtons-method.md`
-- Prereqs: `calc-linearization`, `calc-ivt`
+- Prereqs: `calc-linearisation`, `calc-ivt`
 - Objectives: derive and run Newton's iteration; recognise failure modes (bad start, cycles, $f'=0$).
 - Results: `thm-calc-newton-convergence` (quadratic convergence near a simple root) **S**, **D** → numerical analysis.
 - Widgets: `newton-method`
 
 **`calc-taylor-polynomials`** · Taylor Polynomials and Taylor's Theorem · `taylor-polynomials.md`
-- Prereqs: `calc-linearization`, `calc-mean-value-theorem`, `calc-higher-derivatives`
+- Prereqs: `calc-linearisation`, `calc-mean-value-theorem`, `calc-higher-derivatives`
 - Objectives: compute Taylor polynomials; bound the error with the Lagrange remainder; use Taylor polynomials for approximation and limits.
 - Results: `def-calc-taylor-polynomial`; `thm-calc-taylor-lagrange` **R** (repeated Rolle / Cauchy MVT); `cor-calc-taylor-error-bound` **F**; `prop-calc-ordo-arithmetic` (big-O rules) **F**.
 - Widgets: `taylor`
@@ -308,7 +308,7 @@ pages, many exercises, few proofs.*
 - Results: `thm-calc-substitution-rule` **F** (indefinite and definite); `prop-calc-odd-even-integrals` **F**.
 
 **`calc-ln-integral`** · The Logarithm Defined as an Integral *(extension)* · `logarithm-as-integral.md`
-- Prereqs: `calc-ftc`
+- Prereqs: `calc-ftc`, `calc-ivt`
 - Objectives: define $\ln x=\int_1^x \frac{dt}{t}$ and derive all log laws; define $\exp$ as its inverse and $e=\exp(1)$; prove `lem-calc-exp-limit` and the compound-interest limit, closing the loop from chapters 1 and 4.
 - Results: `def-calc-ln-integral`; `thm-calc-ln-integral-properties` **F**; `thm-calc-exp-as-inverse` **R**; `thm-calc-e-compound-interest` **F**; `thm-calc-definitions-agree` **F**.
 
@@ -320,7 +320,7 @@ pages, many exercises, few proofs.*
 - Results: `thm-calc-integration-by-parts` **F** (indefinite and definite).
 
 **`calc-trig-integrals`** · Trigonometric Integrals · `trigonometric-integrals.md`
-- Prereqs: `calc-substitution`, `calc-derivatives-trig`
+- Prereqs: `calc-substitution`
 - Objectives: integrate products of powers of sin/cos and tan/sec; use power-reduction identities.
 - Results: method page; `prop-calc-power-reduction` **F**.
 
@@ -336,7 +336,7 @@ pages, many exercises, few proofs.*
 
 **`calc-integration-strategy`** · Strategy for Integration · `integration-strategy.md`
 - Prereqs: `calc-integration-by-parts`, `calc-trig-substitution`, `calc-partial-fractions`
-- Objectives: choose a method for an unfamiliar integral; use tables and CAS responsibly; know that some integrals (e.g. $\int e^{-x^2}\mathrm{d}x$) are not elementary.
+- Objectives: choose a method for an unfamiliar integral; use tables and CAS responsibly; recognise that some integrals (e.g. $\int e^{-x^2}\mathrm{d}x$) are not elementary.
 - Results: `rem-calc-nonelementary-integrals` (statement, Liouville **D** → beyond scope).
 
 **`calc-numerical-integration`** · Numerical Integration · `numerical-integration.md`
@@ -387,7 +387,7 @@ pages, many exercises, few proofs.*
 
 **`calc-improper-comparison`** · Comparison Tests for Improper Integrals · `comparison-tests-for-integrals.md`
 - Prereqs: `calc-improper-integrals`
-- Objectives: decide convergence without evaluating, using direct and limit comparison.
+- Objectives: decide convergence without evaluating, using direct and limit comparison; choose a comparison function from the dominant behaviour of the integrand.
 - Results: `thm-calc-improper-comparison` **R** (needs monotone bounded ⇒ convergent, from `ax-calc-completeness`); `thm-calc-improper-limit-comparison` **F** (given comparison); `thm-calc-absolute-convergence-integrals` **F**.
 
 **`calc-probability-densities`** · Probability Density Functions *(extension)* · `probability-densities.md`
@@ -398,7 +398,7 @@ pages, many exercises, few proofs.*
 ## Chapter 10 — Sequences and Series (`sequences-series/`)
 
 **`calc-sequences`** · Sequences · `sequences.md`
-- Prereqs: `calc-limits-at-infinity`, `calc-lhopital`
+- Prereqs: `calc-lhopital`
 - Objectives: compute limits of sequences; use the function-limit connection and the squeeze theorem; prove simple limits from the definition (rigorous track).
 - Results: `def-calc-sequence-limit` (precise: ε–N); `thm-calc-sequence-limit-laws` **S**; `thm-calc-sequence-from-function` **F**; `thm-calc-sequence-squeeze` **F**.
 
@@ -415,7 +415,7 @@ pages, many exercises, few proofs.*
 
 **`calc-integral-test`** · The Integral Test and p-Series · `integral-test.md`
 - Prereqs: `calc-series`, `calc-monotone-sequences`, `calc-improper-integrals`
-- Objectives: apply the integral test; know the $p$-series result; estimate remainders.
+- Objectives: apply the integral test; state the $p$-series result; estimate remainders.
 - Results: `thm-calc-integral-test` **F**; `cor-calc-p-series` **F**; `thm-calc-integral-test-remainder` **F**.
 
 **`calc-comparison-tests`** · Comparison Tests for Series · `comparison-tests.md`
@@ -435,7 +435,7 @@ pages, many exercises, few proofs.*
 
 **`calc-power-series`** · Power Series · `power-series.md`
 - Prereqs: `calc-absolute-convergence`
-- Objectives: find the radius and interval of convergence, checking endpoints.
+- Objectives: find the radius of convergence with the ratio or root test; determine the interval of convergence, checking each endpoint separately.
 - Results: `def-calc-power-series`; `thm-calc-radius-of-convergence` **R**.
 
 **`calc-power-series-calculus`** · Calculus with Power Series · `calculus-with-power-series.md`
@@ -444,9 +444,9 @@ pages, many exercises, few proofs.*
 - Results: `thm-calc-term-by-term` (stated) **S**, **D** → `ana` (uniform convergence).
 
 **`calc-taylor-series`** · Taylor and Maclaurin Series · `taylor-series.md`
-- Prereqs: `calc-power-series-calculus`, `calc-taylor-polynomials`
-- Objectives: compute Taylor series; prove convergence to the function via the remainder for $e^x$, $\sin x$ and $\cos x$; know the standard series and that not every smooth function equals its Taylor series.
-- Results: `thm-calc-taylor-series-convergence` **F** (for $e^x$, $\sin$, $\cos$); `eg-calc-smooth-not-analytic` ($e^{-1/x^2}$) **R**; `thm-calc-euler-formula-series` **F** (closes `def-calc-euler-formula`).
+- Prereqs: `calc-power-series-calculus`, `calc-taylor-polynomials`, `calc-complex-numbers`
+- Objectives: compute Taylor series; prove convergence to the function via the remainder for $e^x$, $\sin x$ and $\cos x$; state the standard series; explain why not every smooth function equals its Taylor series.
+- Results: `thm-calc-taylor-series-convergence` **F** (for $e^x$, $\sin$, $\cos$); `eg-calc-taylor-series-smooth-not-analytic` ($e^{-1/x^2}$) **R**; `thm-calc-euler-formula-series` **F** (closes `def-calc-euler-formula`).
 - Widgets: `taylor` (series mode)
 
 **`calc-taylor-applications`** · Applications of Taylor Series *(extension)* · `taylor-series-applications.md`
@@ -461,7 +461,7 @@ pages, many exercises, few proofs.*
 
 **`calc-ode-intro`** · Differential Equations and Slope Fields · `differential-equations-intro.md`
 - Prereqs: `calc-antiderivatives`
-- Objectives: verify solutions; read slope fields; distinguish general and particular solutions; know the meaning of an existence-uniqueness theorem.
+- Objectives: verify solutions; read slope fields; distinguish general and particular solutions; explain what an existence-uniqueness theorem guarantees.
 - Results: `def-calc-ode`, `def-calc-ivp`; `thm-calc-picard-lindelof` (stated) **D** → `ode`.
 - Widgets: `slope-field`
 
@@ -481,13 +481,13 @@ pages, many exercises, few proofs.*
 - Results: `prop-calc-logistic-solution` **F**.
 
 **`calc-eulers-method`** · Euler's Method · `eulers-method.md`
-- Prereqs: `calc-ode-intro`, `calc-linearization`
+- Prereqs: `calc-ode-intro`, `calc-linearisation`
 - Objectives: run Euler's method by hand and in code; observe first-order error behaviour.
 - Results: `thm-calc-euler-error-order` **S**, **D** → `ode`.
 - Widgets: `slope-field` (Euler overlay)
 
 **`calc-second-order-linear`** · Second-Order Linear Equations with Constant Coefficients · `second-order-linear-equations.md`
-- Prereqs: `calc-first-order-linear`, `calc-derivatives-trig`, `calc-complex-numbers`
+- Prereqs: `calc-first-order-linear`, `calc-complex-numbers`
 - Objectives: solve $ay''+by'+cy=0$ in the three root cases; find particular solutions with undetermined coefficients for polynomial, exponential and trigonometric right-hand sides; model oscillators.
 - Results: `thm-calc-superposition` **F**; `thm-calc-characteristic-equation-solutions` **F** (these are solutions) + all solutions **D** → `ode`.
 

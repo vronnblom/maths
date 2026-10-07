@@ -12,7 +12,7 @@ Site
 ```
 
 - **Subject**: a coherent university course area with its own landing page and subject code.
-- **Chapter**: 3–10 topic pages that are taught together. It has an `index.md` overview
+- **Chapter**: 3–12 topic pages that are taught together. It has an `index.md` overview
   (chapter map, objectives, mixed review problems).
 - **Topic page**: the unit of authoring, review, status and prerequisites. It takes roughly
   **20–45 minutes of reading** and holds 1–4 definitions, 1–5 main results, 3–8 worked
@@ -46,10 +46,11 @@ maths/
 │   ├── about/
 │   │   ├── how-to-read.md       # core vs rigorous track, statuses, exercise tiers
 │   │   ├── notation.md          # published notation guide (from 04-notation-and-style)
-│   │   ├── status.md            # dashboard: pages by status (generated table)
+│   │   ├── status.md            # dashboard: pages by status (includes a generated table)
 │   │   └── errata.md            # public log of corrected errors in verified pages
 │   ├── calculus/
 │   │   ├── index.md             # subject landing: overview, chapter list, prerequisite map
+│   │   ├── _generated/          # prereq-map.md, written by scripts/generate.py (git-ignored)
 │   │   ├── preliminaries/
 │   │   │   ├── index.md
 │   │   │   ├── real-numbers-and-intervals.md
@@ -65,7 +66,7 @@ maths/
 ├── widgets/                     # reusable interactive widgets (anywidget ES modules)
 │   ├── function-plot.mjs
 │   ├── epsilon-delta.mjs
-│   ├── _lib/                    # shared helpers (board setup, sliders, a11y text)
+│   ├── _lib/                    # shared helpers + pure maths modules (published via static_files)
 │   └── README.md                # widget catalogue: purpose + JSON config schema per widget
 ├── verify/                      # SymPy/pytest verification, mirrors content/
 │   ├── conftest.py
@@ -82,8 +83,12 @@ maths/
 │   ├── check_labels.py
 │   ├── graph.py                 # prerequisite graph: validate, render Mermaid, list ready topics
 │   ├── check_toc.py
-│   ├── check_coverage.py        # verification coverage vs status
-│   └── extract_answers.py       # exercise answers from MyST AST → JSON for verify/
+│   ├── check_coverage.py        # verification coverage (recorded by the pytest run) vs status
+│   ├── check_verified_edits.py  # PR guard for edits to verified pages (06 §6.6)
+│   ├── extract_answers.py       # exercise answers from MyST AST → JSON for verify/
+│   ├── generate.py              # generated includes: prerequisite maps, status table
+│   ├── write_redirects.py       # redirect pages for old URLs (§2.3), run on deploy
+│   └── build_site.sh            # the gated site build (05 §5.5)
 ├── templates/                   # copy these to start a page; see 03-content-model
 ├── docs/
 │   └── plan/                    # this plan
@@ -103,6 +108,8 @@ The PoC (see [05](05-tooling-and-build.md) §5.3) showed that with
 `myst.yml` in `content/`, the URL is `/calculus/limits/limit-laws`, not
 `/content/calculus/limits/limit-laws`. Widgets outside the project root
 (`../../../widgets/x.mjs`) still resolve and are copied, with a content hash, into the build.
+Only that one file is copied, so the shared `widgets/_lib/` is published separately
+(05 §5.8).
 
 ## 2.3 Naming rules
 
@@ -112,11 +119,15 @@ The PoC (see [05](05-tooling-and-build.md) §5.3) showed that with
 | Chapter folder | kebab-case, **no number prefix** | `limits`, `derivative-applications` |
 | Topic file | kebab-case, describes the concept, **no number prefix** | `limit-of-a-function.md`, `chain-rule.md` |
 | Widget file | kebab-case, describes the widget's function | `epsilon-delta.mjs` |
-| Verify file | `test_<topic_file_with_underscores>.py`, mirroring the path | `verify/calculus/limits/test_limit_laws.py` |
+| Verify file | `test_<topic_file_with_underscores>.py`, mirroring the path (basenames may repeat, e.g. every chapter's `test_index.py`; pytest runs in `importlib` mode, 05 §5.5) | `verify/calculus/limits/test_limit_laws.py` |
 
 **Order is defined only in the `toc` of `content/myst.yml`**, never in file names, so
-reordering chapters never changes a URL. A renamed or moved page keeps its old URL as a
-MyST `aliases:` entry in its front matter, but the page **label** never changes.
+reordering chapters never changes a URL. The page **label** never changes, but moving a page
+to another folder changes its URL. mystmd 1.11 has no redirect feature (an `aliases:`
+front-matter key is ignored with a warning), so a moved page lists its old paths in
+`maths.aliases: [/calculus/limits/limit-laws]`. On deploy, `scripts/write_redirects.py`
+writes a small `index.html` at each old path, with a `<meta http-equiv="refresh">` and a
+canonical link to the new URL; it fails if an old path collides with a live page.
 
 ## 2.4 Stable IDs (labels)
 
@@ -125,9 +136,11 @@ All labels share **one global namespace** across the site, because a MyST projec
 
 - use only `[a-z0-9-]`, which has been tested to round-trip through MyST unchanged;
 - are **semantic, never positional** (`thm-calc-squeeze`, not `thm-2-3-1`);
-- are **permanent**: never renamed or reused once merged to `main`. CI keeps a
-  `labels.lock` file of every label ever published and fails if one disappears. Deleting a
-  block requires an explicit tombstone entry (a redirect note) in the lock file.
+- are **permanent**: never renamed or reused once merged to `main`. The committed
+  `labels.lock` lists every label ever merged. CI fails if a label in the content is missing
+  from the lock (authors add new ones with `check_labels.py --update-lock`) and if a locked
+  label disappears. Deleting a block requires an explicit tombstone entry (a redirect note)
+  in the lock file (06 §6.7).
 
 ### Subject codes
 
@@ -149,8 +162,9 @@ All labels share **one global namespace** across the site, because a MyST projec
 page label   :=  <subj>-<topic-slug>                   calc-limit-laws
               |  <subj>-<chapter-slug>-chapter         calc-limits-chapter   (chapter index.md)
               |  <subj>-subject                        calc-subject          (subject index.md)
+              |  site-<slug>                           site-notation         (meta pages: content/index.md, about/*)
 block label  :=  <kind>-<subj>-<slug>                  thm-calc-squeeze
-                                                       exr-calc-limit-laws-conjugate
+                                                       exr-calc-computing-limits-conjugate
 kind         :=  def | thm | lem | cor | prop | ax     (statements)
               |  prf                                   (a proof, when referenced on its own)
               |  eg                                    (worked example; "ex" is avoided: ambiguous)
@@ -163,7 +177,7 @@ Rules for the slug:
 - Statements are named after the mathematics: `thm-calc-mvt`, `def-calc-continuity`,
   `thm-calc-ftc-1`.
 - Examples and exercises are prefixed by their topic slug, which keeps them unique and
-  self-locating: `eg-calc-limit-laws-rational`, `exr-calc-chain-rule-nested-trig`.
+  self-locating: `eg-calc-computing-limits-factor`, `exr-calc-chain-rule-nested-trig`.
 - Solutions mirror their exercise: `exr-calc-x-y` → `sol-calc-x-y`.
 - Page labels match the file name where possible: `limit-laws.md` → `calc-limit-laws`.
   (Exception: the exemplar `limit-of-a-function.md` uses the shorter `calc-limit`.)
@@ -227,17 +241,27 @@ chapters:
 | Command | Purpose |
 |---|---|
 | `graph.py check` | every prerequisite resolves (to a page or a planned topic); no cycles (stdlib `graphlib.TopologicalSorter`); cross-subject edges respect `depends_on`; warns about redundant transitive edges |
-| `graph.py mermaid calc` | writes `content/calculus/_generated/prereq-map.md`, a Mermaid `flowchart` included on the subject landing page (MyST renders Mermaid natively) |
+| `graph.py mermaid calc` | writes `content/calculus/_generated/prereq-map.md`, a Mermaid `flowchart` included on the subject landing page (MyST renders Mermaid natively). Run before every build by `scripts/generate.py` (05 §5.7). |
 | `graph.py ready calc` | lists planned topics whose prerequisites all have `status ≥ reviewed`. This is the queue for parallel authoring ([10](10-ai-agents.md)). |
 | `graph.py closure calc-mean-value-theorem` | prints all transitive prerequisites; used by the forward-reference check |
 
 ### Forward-reference check (`check_labels.py --forward-refs`)
 
-For every cross-reference on page P to a block on page Q, Q must be P itself, in P's
-transitive prerequisite closure, or the reference must sit inside an admonition with
-class `see-also` / `looking-ahead`. Anything else is a warning, and an error on pages with
-`status: verified`. This is how "no circular reasoning" is enforced mechanically across
-pages.
+For every cross-reference on page P to a block on page Q, one of these must hold:
+- Q is in P's transitive prerequisite closure;
+- Q is P itself, and the reference is **not** inside a proof or a solution;
+- Q is P itself, the reference is inside a proof or a solution, and the target block comes
+  **earlier** on the page. Otherwise a proof could cite a later result whose own proof uses
+  it;
+- the reference sits inside an admonition with class `see-also` / `looking-ahead`.
+
+Anything else is a warning, and an error on pages with `status: verified`. This is how "no
+circular reasoning" is enforced mechanically, across pages and within a page.
+
+**Chapter index pages** are read after the chapter's topics, and their review exercises
+cite those topics' results (07 §7.3). So the closure of a chapter `index.md` is its listed
+prerequisites **plus every topic of the chapter** (from `curriculum.yml`) and their closures.
+The same holds for a subject `index.md` and its chapters.
 
 ### Rendering the graph to readers
 - On each topic page, a **"Before you start"** box lists direct prerequisites as links (with

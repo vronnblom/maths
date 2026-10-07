@@ -11,7 +11,7 @@
 
 ## 7.2 Difficulty tiers
 
-| Tier | Class | Name shown | Purpose | Typical share | Example (limit laws) |
+| Tier | Class | Name shown | Purpose | Typical share | Example (Limits chapter) |
 |---|---|---|---|---|---|
 | A | `tier-a` | **Check** | Direct application of one definition or rule; a 2–5 minute confidence check | ~40 % | $\lim_{x\to 2}(3x^2 - x + 1)$ |
 | B | `tier-b` | **Practice** | Multi-step, combines 2–3 ideas, needs choosing an approach | ~40 % | $\lim_{x\to 0}\frac{\sqrt{x+4}-2}{x}$ |
@@ -29,7 +29,7 @@ The tier is shown as a coloured tag via CSS on the class (`content/_static/custo
 
 ````markdown
 ::::{exercise} Rationalising the numerator
-:label: exr-calc-limit-laws-conjugate
+:label: exr-calc-computing-limits-conjugate
 :class: tier-b
 
 Compute $\displaystyle \lim_{x \to 0} \frac{\sqrt{x+1} - 1}{x}$.
@@ -50,8 +50,8 @@ $\frac{1}{2}$
 :::
 ::::
 
-::::{solution} exr-calc-limit-laws-conjugate
-:label: sol-calc-limit-laws-conjugate
+::::{solution} exr-calc-computing-limits-conjugate
+:label: sol-calc-computing-limits-conjugate
 :class: dropdown
 
 For $x \ne 0$ (and $x \ge -1$),
@@ -60,12 +60,15 @@ $$
 = \frac{(x+1) - 1}{x\,(\sqrt{x+1}+1)}
 = \frac{1}{\sqrt{x+1}+1}.
 $$
-The right-hand side is continuous at $0$, so by the [limit laws](#thm-calc-limit-laws) the
-limit is $\frac{1}{\sqrt{1}+1} = \frac{1}{2}$.
+The two sides agree for every $x \ne 0$ near $0$, so by [](#lem-calc-limit-agree-except-point)
+they have the same limit. By the [limit laws](#thm-calc-limit-laws) (root, sum and quotient
+laws), that limit is $\frac{1}{\sqrt{0+1}+1} = \frac{1}{2}$.
 ::::
 ````
 
-This exact structure was validated in the PoC (see 05 §5.3).
+This exact structure was validated in the PoC (see 05 §5.3). It lives on
+`calc-computing-limits`, where the curriculum puts rationalising and the "agree except at a
+point" lemma (08), so the solution cites only that page and its prerequisite closure.
 
 Rules:
 - **Hints**: 0–3, each a nudge, not a step of the solution. Tier A may have none. Tier C
@@ -77,7 +80,9 @@ Rules:
 - **Answer types** (an extra class on the answer admonition, so the checker knows how to
   compare): `expr` (default), `antiderivative` (compare up to a constant), `set` (solution
   sets/intervals), `bool` (true/false questions), `numeric` (with tolerance, e.g.
-  `numeric-1e-4`), `manual`.
+  `numeric-1e-4`), `manual`. An answer asked "to $n$ decimal places" uses the tolerance
+  $\tfrac12 \cdot 10^{-n}$ (`numeric-5e-3` for two places), and its test compares the
+  printed value with the correctly rounded one, so a wrongly rounded answer fails.
 - **Solution**: complete, at the level of a worked example. It cites earlier results by link
   and uses only methods from the page's prerequisite closure. Solutions live **inline,
   directly after their exercise, collapsed**. Since output is website only, there is no reason

@@ -32,30 +32,54 @@ f'(c) = \frac{f(b) - f(a)}{b - a}.
 $$
 :::
 
-:::{proof}
+:::{proof:proof}
 :label: prf-calc-mvt
+:enumerated: false
 We apply [Rolle's theorem](#thm-calc-rolle) to $f$ minus its secant line. Define …
 :::
 ```
 
+Always `{proof:proof}` with `:enumerated: false`: it renders "Proof". A bare `{proof}` has no
+kind, and the theme heads it with just a number.
+
 ## Proof in the rigorous track (policy R)
 
 ```markdown
-:::{proof} Rigorous proof
+:::{proof:proof} Rigorous track
 :label: prf-calc-squeeze
+:enumerated: false
 :class: dropdown
 Let $\eps > 0$. Since $\lim_{x\to a} g(x) = L$, there is $\delta_1 > 0$ such that …
 :::
 ```
 
-## Proof sketch / deferred proof (policies S and D)
+## Proof sketch (policy S)
+
+A sketch says what it leaves out. If the full proof is on the same page (policy "S in core,
+R in the rigorous track", as for the IVT), point to it.
 
 ```markdown
-:::{proof} Proof sketch
+:::{proof:proof} Sketch
+:enumerated: false
 Bisect $[a,b]$ repeatedly, keeping the half on which $f$ changes sign. The nested intervals
-shrink to a point $c$ by the [completeness axiom](#ax-calc-completeness), and continuity
-forces $f(c) = 0$.
-*A complete proof needs more about the real numbers; it is given in Real Analysis.*
+shrink to a point $c$, and continuity forces $f(c) = 0$.
+*Why the intervals shrink to a point of $[a,b]$ needs the [completeness axiom](#ax-calc-completeness);
+the full proof is in the rigorous track below.*
+:::
+```
+
+## Deferred proof (policy D)
+
+A deferred proof names where the proof lives. Until the target subject exists, say what it
+needs.
+
+```markdown
+:::{proof:proof} Sketch
+:enumerated: false
+A continuous $f$ on $[a,b]$ is bounded, and its supremum is approached by values $f(x_n)$; a
+convergent subsequence of $(x_n)$ gives a point where the supremum is attained.
+*The complete proof needs the Bolzano–Weierstrass theorem; it belongs to Real Analysis
+(`ana`), which does not exist yet.*
 :::
 ```
 
@@ -174,22 +198,33 @@ Tier classes on the exercise: `tier-a` · `tier-b` · `tier-c`, plus optional `r
 ## Widget
 
 ````markdown
+::::{figure}
+:label: wdg-calc-tangents-rates-secant
+
 ```{anywidget} ../../../widgets/secant-tangent.mjs
 {
-  "id": "wdg-calc-tangents-rates-secant",
   "f": "x^3 - x",
   "a": 1,
   "h": 0.5, "hRange": [-1, 1],
-  "xRange": [-2, 2], "yRange": [-2, 3],
-  "description": "Graph of y = x³ − x with a secant line through x = 1 and x = 1 + h. As h approaches 0 the secant approaches the tangent of slope 2."
+  "xRange": [-1.5, 2.5], "yRange": [-2, 7]
 }
 ```
+
+Graph of $y = x^3 - x$ with a secant line through the points at $x = 1$ and $x = 1 + h$. As
+$h$ approaches $0$ the secant approaches the tangent of slope $2$.
+::::
 
 **Try this:** …
 ````
 
-The path is relative to the page (`../../../widgets/` from `content/<subject>/<chapter>/`).
-The JSON must validate against `schema/widgets/<widget>.schema.json`; `description` is required.
+- The widget sits **alone in a `{figure}`**. The figure carries the `wdg-` label (the JSON can't:
+  mystmd ignores ids there), and its **caption is the text description**. The caption is
+  static HTML, so readers get it even when JavaScript is off or the widget fails to load.
+  Required, and checked by CI.
+- The path is relative to the page (`../../../widgets/` from `content/<subject>/<chapter>/`).
+- The JSON must validate against `schema/widgets/<widget>.schema.json`.
+- Choose `xRange`/`yRange` so that every point the sliders can move stays in view. Here
+  $f(1+h)$ ranges over about $[-0.4, 6]$ for $h \in [-1, 1]$.
 
 ## Figure
 
@@ -207,9 +242,9 @@ $x \sin(1/x)$ is squeezed between $-\abs{x}$ and $\abs{x}$.
 ```markdown
 $$
 f(x) \approx f(a) + f'(a)(x - a)
-$$ (eq-calc-linearization)
+$$ (eq-calc-linearisation)
 
-…as in [](#eq-calc-linearization).
+…as in [](#eq-calc-linearisation).
 ```
 
 ## Cross-references

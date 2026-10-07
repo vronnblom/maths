@@ -42,18 +42,25 @@ maths:
 % Example: a ball's position is s(t) = 5t²; what is its speed at exactly t = 1?
 % Average speeds over [1, 1+h] approach a number as h shrinks — that "approach" is a limit.
 
+% A widget sits alone in a {figure}: the figure carries the wdg- label, and its caption is
+% the text description (shown even when the widget can't load). See docs/plan/05 §5.8.
+::::{figure}
+:label: wdg-calc-limit-average-speed
+
 ```{anywidget} ../../../widgets/function-plot.mjs
 {
-  "id": "wdg-calc-limit-average-speed",
   "f": "(5*(1+h)^2 - 5)/h",
   "variable": "h",
   "xRange": [-1, 1],
   "yRange": [5, 15],
   "table": { "points": [0.1, 0.01, 0.001, -0.001, -0.01, -0.1] },
-  "hole": { "x": 0 },
-  "description": "Graph of the average speed (5(1+h)² − 5)/h for h between −1 and 1, with a hole at h = 0. A table lists values for h = ±0.1, ±0.01, ±0.001; they approach 10."
+  "hole": { "x": 0 }
 }
 ```
+
+Graph of the average speed $\frac{5(1+h)^2 - 5}{h}$ for $h$ between $-1$ and $1$, with a hole
+at $h = 0$. A table lists the values for $h = \pm 0.1, \pm 0.01, \pm 0.001$; they approach $10$.
+::::
 
 **Try this:** drag $h$ towards $0$ from both sides. Which number do the average speeds
 approach? Why can't you simply put $h = 0$?
@@ -83,15 +90,21 @@ $$
 window of half-width $\delta$ around $a$ such that every $x$ in that window (other than $a$)
 has $f(x)$ within the tolerance.
 
+::::{figure}
+:label: wdg-calc-limit-eps-delta
+
 ```{anywidget} ../../../widgets/epsilon-delta.mjs
 {
-  "id": "wdg-calc-limit-eps-delta",
   "f": "x^2", "a": 2, "L": 4,
   "eps": 0.5, "epsRange": [0.05, 1.5],
-  "xRange": [0, 3.5], "yRange": [0, 9],
-  "description": "Graph of y = x² near x = 2 with a horizontal band of half-width ε around y = 4 and a vertical band of half-width δ around x = 2. Shrinking ε shrinks the largest admissible δ."
+  "xRange": [0, 3.5], "yRange": [0, 9]
 }
 ```
+
+Graph of $y = x^2$ near $x = 2$ with a horizontal band of half-width $\eps$ around $y = 4$ and a
+vertical band of half-width $\delta$ around $x = 2$. Shrinking $\eps$ shrinks the largest
+admissible $\delta$.
+::::
 
 **Try this:** set $\eps = 0.1$. What is the largest $\delta$ that works? Is it the same on
 both sides of $a = 2$?
@@ -108,8 +121,9 @@ both sides of $a = 2$?
 If $\lim_{x\to a} f(x) = L$ and $\lim_{x\to a} f(x) = M$, then $L = M$.
 :::
 
-:::{proof} Rigorous proof
+:::{proof:proof} Rigorous track
 :label: prf-calc-limit-unique
+:enumerated: false
 :class: dropdown
 % Policy R (docs/plan/08). Strategy sentence first: "Suppose L ≠ M and take ε = |L − M|/2 …"
 :::
@@ -177,7 +191,7 @@ Evaluate on both sides of $0$. Do the values settle as $x$ shrinks?
 :::
 
 :::{admonition} Answer
-:class: dropdown answer numeric-1e-2
+:class: dropdown answer numeric-5e-3
 $0.69$
 :::
 ::::
@@ -185,7 +199,10 @@ $0.69$
 ::::{solution} exr-calc-limit-table-estimate
 :label: sol-calc-limit-table-estimate
 :class: dropdown
-% Full table; note the exact value is ln 2 ≈ 0.6931 (proved in calc-derivatives-exp-log).
+% Full table, then the estimate 0.69. Do not cite the exact value here: it is ln 2, but the
+% pages that show it are outside this page's prerequisite closure. Mention it, if at all,
+% in a looking-ahead admonition (templates/blocks.md), e.g. "The exact value is ln 2; see
+% [Derivatives of Exponential and Logarithmic Functions](#calc-derivatives-exp-log)."
 ::::
 
 ::::{exercise} An ε–δ proof

@@ -24,6 +24,7 @@ maths:
 
 ## Prerequisite map
 
+% Written by scripts/generate.py (graph.py mermaid) before every build; never edit or commit it.
 ```{include} _generated/prereq-map.md
 ```
 
