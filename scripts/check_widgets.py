@@ -6,7 +6,11 @@
   (widgets/*.mjs of this repository) with a schema, schema/widgets/<name>.schema.json;
 - the JSON body is valid JSON and valid against that schema, and passes the rules a schema
   cannot express (function-plot: ranges increasing, values inside ranges, and the names and
-  functions in `f`, mirroring widgets/_lib/plot.mjs and expression.mjs);
+  functions in `f`, mirroring widgets/_lib/plot.mjs and expression.mjs; epsilon-delta: ranges
+  increasing, a strictly inside xRange, L inside yRange, eps inside epsRange, delta and epsStep
+  small enough, eps and delta on their sliders' grids, and `f`, mirroring widgets/_lib/epsdelta.mjs);
+- every expression that passes the allowlist also compiles with JessieCode, the browser's
+  compiler (scripts/compile_expressions.mjs, run with Node: `sin()` and `x+` pass the allowlist);
 - every id in `maths.widgets` is a widget of the catalogue.
 
 The catalogue and the schemas are always this repository's, also for a fixture project under
@@ -17,7 +21,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -106,6 +112,40 @@ def check_expression(src: str, names: list[str], functions: list[str], constants
     return tokens
 
 
+# Every expression that passes the allowlist is also compiled with the browser's compiler,
+# JessieCode, by scripts/compile_expressions.mjs (review of PR 10, F7): the allowlist does not
+# check the grammar (`sin()`, `x+`), and re-implementing JessieCode's in Python would drift.
+COMPILER = REPO / "scripts" / "compile_expressions.mjs"
+_compiled: dict[tuple[str, str, tuple[str, ...]], str | None] = {}
+
+
+def compile_problems(items: list[tuple[str, str, tuple[str, ...]]]) -> list[str | None]:
+    """For each (f, variable, params): None if JessieCode compiles it, else its message. One Node
+    run for everything not already compiled in this process."""
+    todo = [i for i in dict.fromkeys(items) if i not in _compiled]
+    if todo:
+        payload = json.dumps([{"f": f, "variable": v, "params": list(p)} for f, v, p in todo])
+        try:
+            run = subprocess.run(["node", str(COMPILER)], input=payload, capture_output=True, text=True, timeout=120, check=False)
+        except OSError as e:
+            raise RuntimeError(f"cannot run node {COMPILER.relative_to(REPO)} (the widget expression compiler): {e}") from e
+        if run.returncode != 0:
+            raise RuntimeError(f"node {COMPILER.relative_to(REPO)} failed (run npm ci?): {run.stderr.strip()[-500:]}")
+        for item, message in zip(todo, json.loads(run.stdout), strict=True):
+            _compiled[item] = message
+    return [_compiled[i] for i in items]
+
+
+def _expression_problems(src: str, variable: str, params: list[str], schema: dict) -> list[str]:
+    """The allowlist (as widgets/_lib/expression.mjs), then, if it passes, JessieCode itself."""
+    try:
+        check_expression(src, [variable, *params], schema["$defs"]["functions"]["enum"], schema["$defs"]["constants"]["enum"])
+    except ExpressionError as e:
+        return [f"f: {e}"]
+    message, = compile_problems([(src, variable, tuple(params))])
+    return [] if message is None else [f"f: {message}"]
+
+
 def function_plot_problems(config: dict, schema: dict) -> list[str]:
     """The rules of configProblems() in widgets/_lib/plot.mjs, plus the expression rules."""
     problems = []
@@ -133,11 +173,56 @@ def function_plot_problems(config: dict, schema: dict) -> list[str]:
     for key in ("hole", "trace"):
         if key in config and not inside(config[key]["x"]):
             problems.append(f"{key}.x: {_js_number(config[key]['x'])} lies outside xRange")
-    try:
-        check_expression(config["f"], [variable, *params], schema["$defs"]["functions"]["enum"],
-                         schema["$defs"]["constants"]["enum"])
-    except ExpressionError as e:
-        problems.append(f"f: {e}")
+    problems += _expression_problems(config["f"], variable, list(params), schema)
+    return problems
+
+
+def _on_grid(v: float, start: float, step: float) -> bool:
+    """Whether v is start + k·step for a whole k ≥ 0, up to floating-point rounding only: 4 units
+    in the last place of the numbers involved (onGrid in widgets/_lib/epsdelta.mjs, the same rule;
+    JavaScript's Math.round rounds halves up, hence floor(… + 0.5))."""
+    k = math.floor((v - start) / step + 0.5)
+    tolerance = 4 * sys.float_info.epsilon * (abs(v) + abs(start) + abs(k * step))
+    return k >= 0 and abs(v - (start + k * step)) <= tolerance
+
+
+def epsilon_delta_problems(config: dict, schema: dict) -> list[str]:
+    """The rules of configProblems() in widgets/_lib/epsdelta.mjs, plus the expression rules."""
+    problems = []
+
+    def increasing(key):
+        r = config.get(key)
+        ok = not (isinstance(r, list) and len(r) == 2) or r[0] < r[1]
+        if not ok:
+            problems.append(f"{key}: the first number must be smaller than the second")
+        return ok and isinstance(r, list)
+
+    x_ok, y_ok, eps_ok = increasing("xRange"), increasing("yRange"), increasing("epsRange")
+    a = config["a"]
+    if x_ok:
+        x0, x1 = config["xRange"]
+        if not x0 < a < x1:
+            problems.append("a: must lie strictly inside xRange, so that both sides of a show")
+        if "delta" in config and not config["delta"] <= min(a - x0, x1 - a):
+            problems.append("delta: must be at most the distance from a to the nearer end of xRange")
+    if y_ok and not config["yRange"][0] <= config["L"] <= config["yRange"][1]:
+        problems.append("L: must lie inside yRange")
+    if eps_ok:
+        e0, e1 = config["epsRange"]
+        if not e0 <= config["eps"] <= e1:
+            problems.append("eps: must lie inside epsRange")
+        if "epsStep" in config and not config["epsStep"] <= e1 - e0:
+            problems.append("epsStep: must be at most the width of epsRange")
+    if not problems:
+        e0, e1 = config["epsRange"]
+        x0, x1 = config["xRange"]
+        eps_step = config.get("epsStep", (e1 - e0) / 100)
+        delta_step = min(a - x0, x1 - a) / 1000
+        if not _on_grid(config["eps"], e0, eps_step):
+            problems.append("eps: must be on the ε slider's grid, epsRange[0] + k·epsStep (epsStep defaults to a hundredth of epsRange)")
+        if "delta" in config and not (config["delta"] >= delta_step and _on_grid(config["delta"], 0, delta_step)):
+            problems.append("delta: must be on the δ slider's grid, k thousandths of the distance from a to the nearer end of xRange")
+    problems += _expression_problems(config["f"], "x", [], schema)
     return problems
 
 
@@ -146,7 +231,7 @@ def _js_number(x) -> str:
     return str(int(x)) if float(x).is_integer() else repr(float(x))
 
 
-SEMANTIC = {"function-plot": function_plot_problems}
+SEMANTIC = {"function-plot": function_plot_problems, "epsilon-delta": epsilon_delta_problems}
 
 
 # ── The checks ───────────────────────────────────────────────────────────────
