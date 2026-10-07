@@ -232,8 +232,21 @@ EPSILON_DELTA = [
     ("sin(1/x) at 0: no δ for ε < 1, any δ for ε > 1", "sin(1/x)", 0, 0, [-1, 1], [0.5, 0.9, 1.2]),
     ("an unbounded f: no δ", "1/x^2", 0, 1, [-1, 1], [0.5, 5]),
     ("a wrong L (4.5 for x² at 2): no δ while ε < 0.5", "x^2", 2, 4.5, [0, 3.5], [0.1, 0.4, 0.7]),
+    ("a steep f: δ = 5·10⁻⁸, far below the old 'no δ' threshold (review F1)", "1e7*x", 0, 0, [-1, 1], [0.5]),
     ("|x| at 1/2: SymPy 1.14 solves the raw inequality wrongly (review F5)", "abs(x)", 0.5, 0.5, [-1.5, 3], [0.1, 1.3, 2.49]),
 ]
+
+# Every case above again, translated to a large a: f(x − TRANSLATE) at a + TRANSLATE, where
+# the doubles near a are 1.5·10⁻¹¹ apart, so an offset u can round onto a or past the window
+# (review F2). The exact δ is the same; SymPy computes it again from the translated f.
+TRANSLATE = 100000
+
+
+def translated(f: str) -> str:
+    """f(x − TRANSLATE), in the expression language."""
+    return " ".join(f"(x - {TRANSLATE})" if kind == "name" and value == "x" else value
+                    for kind, value, _ in check_widgets.tokenize(f))
+
 
 class OracleRefused(ValueError):
     """SymPy could not certify a case: make_fixtures.py writes nothing rather than a guess."""
@@ -475,6 +488,9 @@ def epsilon_delta_case(source, what, f, a, L, x_range, eps) -> dict:
 def epsilon_delta_cases() -> list[dict]:
     cases = [epsilon_delta_case("make_fixtures.py", what, f, a, L, xr, eps)
              for what, f, a, L, xr, epss in EPSILON_DELTA for eps in epss]
+    shift = [(f"{what}; translated to a + {TRANSLATE}", translated(f), a + TRANSLATE, L,
+              [x0 + TRANSLATE, x1 + TRANSLATE], epss) for what, f, a, L, (x0, x1), epss in EPSILON_DELTA]
+    cases += [epsilon_delta_case("make_fixtures.py", what, f, a, L, xr, eps) for what, f, a, L, xr, epss in shift for eps in epss]
     for where, c in site_configs("epsilon-delta"):
         for eps in dict.fromkeys([c["eps"], *c["epsRange"]]):
             cases.append(epsilon_delta_case(where, "a figure on the site", c["f"], c["a"], c["L"], c["xRange"], eps))

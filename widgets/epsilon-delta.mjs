@@ -1,17 +1,21 @@
 // epsilon-delta: the ε–δ game for lim_{x→a} f(x) = L (docs/plan/05 §5.8; config:
 // schema/widgets/epsilon-delta.schema.json; catalogue entry: widgets/README.md). The graph of f
 // near a, the band |y − L| < ε, the window 0 < |x − a| < δ with x = a itself left out, an ε
-// slider with the largest δ on each side, and a δ slider for the reader's own choice with a
-// verdict. An anywidget module: mystmd publishes this file with a content hash, and `./_lib/`
-// next to it through `project.static_files`.
+// slider with the largest δ the widget finds on each side, and a δ slider for the reader's own
+// choice with a verdict. An anywidget module: mystmd publishes this file with a content hash,
+// and `./_lib/` next to it through `project.static_files`.
 //
-// All the mathematics (the largest δ, the reader's check, the config rules) is in
-// ./_lib/epsdelta.mjs, which widgets/_tests/ checks against SymPy. This file only draws.
+// All the mathematics (the δ search, the reader's check, the config rules) is in
+// ./_lib/epsdelta.mjs, which widgets/_tests/ checks against SymPy. This file draws, and words
+// the results. The rule for every sentence (review of PR 10): it must be true for every config
+// that check_widgets.py accepts, so what the widget only observed numerically is said as what
+// the widget checked, and the mathematics is stated conditionally. The sentences come from
+// largestText() and verdictText(), which widgets/_tests/epsdelta-text.test.mjs checks.
 
 import { JSXGRAPH_URL } from "./_lib/jsxgraph.mjs";
 import { compileExpression } from "./_lib/expression.mjs";
 import { formatNumber, sample } from "./_lib/plot.mjs";
-import { METHOD, checkDelta, configProblems, largestDelta, sliderSteps, spread } from "./_lib/epsdelta.mjs";
+import { METHOD, ceilSignificant, checkDelta, configProblems, largestDelta, sliderSteps, spread } from "./_lib/epsdelta.mjs";
 import { PALETTES, currentScheme, watchScheme } from "./_lib/colours.mjs";
 import { STYLES, button, el, slider } from "./_lib/controls.mjs";
 import { createBoard, freeBoard, visibleRange, zoomAbout } from "./_lib/board.mjs";
@@ -32,9 +36,61 @@ export function readConfig(model) {
 const marksPerSide = (width) => Math.max(8, Math.min(40, Math.round(width / 20)));
 const CROSS_PX = 4; // half the size of a cross, in pixels
 
-// A reported δ is rounded down to METHOD.digits significant digits; show all of them (one more
-// than formatNumber's default could round up).
-const showDelta = (d) => formatNumber(d, METHOD.digits + 1);
+const n = formatNumber;
+// A δ found is rounded down to METHOD.digits significant digits; show all of them (one more
+// than formatNumber's default could round up). An "at most" bound is rounded up.
+const showDelta = (d) => n(d, METHOD.digits + 1);
+const atMost = (d, digits = METHOD.digits) => n(ceilSignificant(d, digits), digits + 1);
+const count = (k) => k.toLocaleString("en-GB");
+
+/** What one side's search found, as a clause (the side is "left" or "right"). */
+export function sideText(side, name, { a }) {
+  const where = (x, undef) => (undef ? `f is undefined at x ≈ ${n(x)}` : `f(x) leaves the band at x ≈ ${n(x)}`);
+  switch (side.status) {
+    case "found":
+      return side.capped
+        ? `on the ${name}, the widget found δ = ${n(side.delta)}: f(x) stayed in the band at all ${count(side.checked)} points it checked, out to the edge of the view`
+        : `on the ${name}, the largest δ the widget found is ${showDelta(side.delta)} (checked at ${count(side.checked)} points)`;
+    case "none":
+      return `on the ${name}, no δ observed: ${side.undefinedAt ? "f is undefined" : "f(x) leaves the band"} at points within ${atMost(side.near, 2)} of ${n(a)}`;
+    default: {
+      const why = side.reason === "resolution" ? "which is too close to a for the widget to check" : "but each smaller δ the widget tried failed its re-check";
+      return `on the ${name}, the widget could not settle the largest δ: ${where(side.at, side.undefinedAt)}, so a δ that works is at most ${atMost(side.bound)}, ${why}`;
+    }
+  }
+}
+
+/** The sentence about the largest δ for this ε (result: largestDelta()). */
+export function largestText(result, { eps, a, L }) {
+  const head = `For ε = ${n(eps)}: ${sideText(result.left, "left", { a })}; ${sideText(result.right, "right", { a })}.`;
+  if (result.status === "found") return `${head} So the largest δ the widget found for both sides is ${showDelta(result.delta)}.`;
+  if (result.status === "none") {
+    return `${head} So the widget observed no δ that works for this ε. If no δ works for this ε, then ${n(L)} is not the limit of f(x) as x → ${n(a)}.`;
+  }
+  return `${head} So the widget could not settle the largest δ for this ε.`;
+}
+
+/**
+ * The verdict on the reader's δ (check: checkDelta()). It promises crosses only for failing
+ * points where f is defined (the only ones drawn), and says in words where f is undefined.
+ */
+export function verdictText(check, { delta, eps, a, L }) {
+  const head = `Your δ = ${n(delta)}`;
+  if (check.works) return `${head} works: every x the widget checked with 0 < |x − ${n(a)}| < ${n(delta)} has |f(x) − ${n(L)}| < ${n(eps)}.`;
+  const all = [...check.left, ...check.right];
+  const marked = all.filter((p) => Number.isFinite(p.y)).length;
+  const undefinedCount = all.length - marked;
+  const w = check.witness;
+  const where = Number.isFinite(w.y)
+    ? `at x ≈ ${n(w.x)}, f(x) ≈ ${n(w.y)}, which is not within ${n(eps)} of ${n(L)}`
+    : `f is undefined at x ≈ ${n(w.x)}, in the window`;
+  const parts = [`${head} fails: ${where}.`];
+  if (marked) parts.push(`${marked === 1 ? "That point of the graph is" : "Points of the graph in the window but outside the band are"} marked with crosses.`);
+  if (undefinedCount) {
+    parts.push(`${Number.isFinite(w.y) ? "f is also undefined at some x in the window. " : ""}A point where f is undefined counts as a failure; the graph has no point there to mark.`);
+  }
+  return parts.join(" ");
+}
 
 async function render({ model, el: host }) {
   const doc = host.ownerDocument;
@@ -73,7 +129,6 @@ async function render({ model, el: host }) {
   const [y0, y1] = config.yRange;
   const reach = [a - x0, x1 - a];
   const maxDelta = Math.min(...reach);
-  const n = formatNumber;
 
   let eps = config.eps;
   let delta = config.delta ?? maxDelta / 2;
@@ -87,41 +142,24 @@ async function render({ model, el: host }) {
     class: "mp-view",
     text:
       `Band (dashed edges): ${n(L)} − ε < y < ${n(L)} + ε. Window (solid edges): 0 < |x − ${n(a)}| < δ; ` +
-      `the dotted line x = ${n(a)} is left out. Dotted ticks: the largest δ on each side. ` +
-      "Crosses: points of the graph in the window but outside the band.",
+      `the dotted line x = ${n(a)} is left out. Dotted ticks: the largest δ the widget found on each side. ` +
+      "Crosses: points of the graph in the window but outside the band. Where f is undefined there is no graph to mark; " +
+      "such a point in the window counts as a failure.",
   });
   const controls = el(doc, "div", { class: "mp-controls" });
   const largest = el(doc, "p", { class: "mp-readout", "aria-live": "polite" });
   const verdict = el(doc, "p", { class: "mp-readout", "aria-live": "polite" });
   root.append(boardBox, legend, controls, largest, verdict);
 
-  const sideText = (side, name) => {
-    if (side.none) return `on the ${name}, no δ works (f(x) leaves the band even within ${n(METHOD.noDelta * (x1 - x0), 2)} of ${n(a)})`;
-    if (side.capped) return `on the ${name}, the largest δ is at least ${n(side.delta)} (the graph stays in the band to the edge of the view)`;
-    return `on the ${name}, the largest δ is ${showDelta(side.delta)}`;
-  };
   const showLargest = () => {
-    const head = `For ε = ${n(eps)}: ${sideText(result.left, "left")}; ${sideText(result.right, "right")}. `;
-    largest.textContent = result.none
-      ? `${head}So no δ works for this ε, which shows that the limit of f(x) as x → ${n(a)} is not ${n(L)}: it is another number, or there is no limit.`
-      : `${head}So δ = ${showDelta(result.delta)}, or any smaller δ, works on both sides.`;
+    largest.textContent = largestText(result, { eps, a, L });
   };
   const showVerdict = () => {
-    const head = `Your δ = ${n(delta)}`;
-    if (check.works) {
-      verdict.textContent = `${head} works: every x the widget checked with 0 < |x − ${n(a)}| < ${n(delta)} has |f(x) − ${n(L)}| < ${n(eps)}.`;
-      return;
-    }
-    const w = check.witness;
-    const where = Number.isFinite(w.y)
-      ? `at x ≈ ${n(w.x)}, f(x) ≈ ${n(w.y)}, which is not within ${n(eps)} of ${n(L)}`
-      : `f is undefined at x ≈ ${n(w.x)}`;
-    const count = check.left.length + check.right.length;
-    verdict.textContent = `${head} fails: ${where}. ${count === 1 ? "That point is" : "Such points are"} marked with crosses.`;
+    verdict.textContent = verdictText(check, { delta, eps, a, L });
   };
 
   const compute = () => {
-    result = largestDelta(f, { a, L, eps, reach, width: x1 - x0 });
+    result = largestDelta(f, { a, L, eps, reach });
   };
   const judge = () => {
     check = checkDelta(f, { a, L, eps, delta });
@@ -172,9 +210,9 @@ async function render({ model, el: host }) {
     vline(() => a - delta, { strokeColor: palette.window, strokeWidth: 1.5 });
     vline(() => a + delta, { strokeColor: palette.window, strokeWidth: 1.5 });
     vline(a, { strokeColor: palette.axis, strokeWidth: 1, dash: 1 });
-    // The largest δ on each side: dotted ticks across the band (hidden when there is none).
+    // The largest δ found on each side: dotted ticks across the band (hidden when none was found).
     for (const [side, key] of [[-1, "left"], [1, "right"]]) {
-      const x = () => (result[key].none ? NaN : a + side * result[key].delta);
+      const x = () => (result[key].status === "found" ? a + side * result[key].delta : NaN);
       board.create("segment", [[x, () => L - eps], [x, () => L + eps]], {
         ...fixed, strokeColor: palette.window, strokeWidth: 3, dash: 1,
       });
@@ -233,7 +271,7 @@ async function render({ model, el: host }) {
   delta = Number(deltaSlider.input.value) || delta;
   deltaSlider.set(delta);
   const useLargest = button(doc, "Set δ to the largest", () => {
-    if (result.none) return;
+    if (result.status !== "found") return;
     delta = Math.min(result.delta, maxDelta);
     deltaSlider.set(delta);
     judge();
@@ -252,7 +290,7 @@ async function render({ model, el: host }) {
     ]),
   );
   const refreshButton = () => {
-    useLargest.disabled = result.none;
+    useLargest.disabled = result.status !== "found";
   };
 
   compute();

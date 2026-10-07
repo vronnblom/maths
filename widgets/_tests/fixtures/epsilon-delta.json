@@ -509,6 +509,30 @@
   },
   {
    "source": "make_fixtures.py",
+   "case": "a steep f: δ = 5·10⁻⁸, far below the old 'no δ' threshold (review F1)",
+   "f": "1e7*x",
+   "a": 0,
+   "L": 0,
+   "xRange": [
+    -1,
+    1
+   ],
+   "eps": 0.5,
+   "left": {
+    "none": false,
+    "delta": 5e-08,
+    "capped": false,
+    "sympy": "1/20000000"
+   },
+   "right": {
+    "none": false,
+    "delta": 5e-08,
+    "capped": false,
+    "sympy": "1/20000000"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
    "case": "|x| at 1/2: SymPy 1.14 solves the raw inequality wrongly (review F5)",
    "f": "abs(x)",
    "a": 0.5,
@@ -564,6 +588,606 @@
    "xRange": [
     -1.5,
     3
+   ],
+   "eps": 2.49,
+   "left": {
+    "none": false,
+    "delta": 2.0,
+    "capped": true,
+    "sympy": "2"
+   },
+   "right": {
+    "none": false,
+    "delta": 2.49,
+    "capped": false,
+    "sympy": "249/100"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "a linear f: δ = ε/2 on both sides; translated to a + 100000",
+   "f": "2 * (x - 100000) - 1",
+   "a": 100003,
+   "L": 5,
+   "xRange": [
+    100000,
+    100006
+   ],
+   "eps": 0.1,
+   "left": {
+    "none": false,
+    "delta": 0.05,
+    "capped": false,
+    "sympy": "1/20"
+   },
+   "right": {
+    "none": false,
+    "delta": 0.05,
+    "capped": false,
+    "sympy": "1/20"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "a linear f: δ = ε/2 on both sides; translated to a + 100000",
+   "f": "2 * (x - 100000) - 1",
+   "a": 100003,
+   "L": 5,
+   "xRange": [
+    100000,
+    100006
+   ],
+   "eps": 0.5,
+   "left": {
+    "none": false,
+    "delta": 0.25,
+    "capped": false,
+    "sympy": "1/4"
+   },
+   "right": {
+    "none": false,
+    "delta": 0.25,
+    "capped": false,
+    "sympy": "1/4"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "x² at a = 2: the two sides differ; translated to a + 100000",
+   "f": "(x - 100000) ^ 2",
+   "a": 100002,
+   "L": 4,
+   "xRange": [
+    100000,
+    100003.5
+   ],
+   "eps": 0.05,
+   "left": {
+    "none": false,
+    "delta": 0.012539308564820948,
+    "capped": false,
+    "sympy": "2 - sqrt(395)/10"
+   },
+   "right": {
+    "none": false,
+    "delta": 0.012461179749810727,
+    "capped": false,
+    "sympy": "-2 + 9*sqrt(5)/10"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "x² at a = 2: the two sides differ; translated to a + 100000",
+   "f": "(x - 100000) ^ 2",
+   "a": 100002,
+   "L": 4,
+   "xRange": [
+    100000,
+    100003.5
+   ],
+   "eps": 0.1,
+   "left": {
+    "none": false,
+    "delta": 0.0251582341868501,
+    "capped": false,
+    "sympy": "2 - sqrt(390)/10"
+   },
+   "right": {
+    "none": false,
+    "delta": 0.024845673131658693,
+    "capped": false,
+    "sympy": "-2 + sqrt(410)/10"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "x² at a = 2: the two sides differ; translated to a + 100000",
+   "f": "(x - 100000) ^ 2",
+   "a": 100002,
+   "L": 4,
+   "xRange": [
+    100000,
+    100003.5
+   ],
+   "eps": 0.5,
+   "left": {
+    "none": false,
+    "delta": 0.1291713066130293,
+    "capped": false,
+    "sympy": "2 - sqrt(14)/2"
+   },
+   "right": {
+    "none": false,
+    "delta": 0.12132034355964258,
+    "capped": false,
+    "sympy": "-2 + 3*sqrt(2)/2"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "x² at a = 2: the two sides differ; translated to a + 100000",
+   "f": "(x - 100000) ^ 2",
+   "a": 100002,
+   "L": 4,
+   "xRange": [
+    100000,
+    100003.5
+   ],
+   "eps": 1.5,
+   "left": {
+    "none": false,
+    "delta": 0.41886116991581035,
+    "capped": false,
+    "sympy": "2 - sqrt(10)/2"
+   },
+   "right": {
+    "none": false,
+    "delta": 0.34520787991171475,
+    "capped": false,
+    "sympy": "-2 + sqrt(22)/2"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "√x at a small a: on the left, f is undefined below 0; translated to a + 100000",
+   "f": "sqrt ( (x - 100000) )",
+   "a": 100000.04,
+   "L": 0.2,
+   "xRange": [
+    99999.9,
+    100000.5
+   ],
+   "eps": 0.1,
+   "left": {
+    "none": false,
+    "delta": 0.03,
+    "capped": false,
+    "sympy": "3/100"
+   },
+   "right": {
+    "none": false,
+    "delta": 0.05,
+    "capped": false,
+    "sympy": "1/20"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "√x at a small a: on the left, f is undefined below 0; translated to a + 100000",
+   "f": "sqrt ( (x - 100000) )",
+   "a": 100000.04,
+   "L": 0.2,
+   "xRange": [
+    99999.9,
+    100000.5
+   ],
+   "eps": 0.3,
+   "left": {
+    "none": false,
+    "delta": 0.04,
+    "capped": false,
+    "sympy": "1/25"
+   },
+   "right": {
+    "none": false,
+    "delta": 0.21,
+    "capped": false,
+    "sympy": "21/100"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "1/x away from 0; translated to a + 100000",
+   "f": "1 / (x - 100000)",
+   "a": 100001,
+   "L": 1,
+   "xRange": [
+    100000.2,
+    100003
+   ],
+   "eps": 0.1,
+   "left": {
+    "none": false,
+    "delta": 0.09090909090909091,
+    "capped": false,
+    "sympy": "1/11"
+   },
+   "right": {
+    "none": false,
+    "delta": 0.1111111111111111,
+    "capped": false,
+    "sympy": "1/9"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "1/x away from 0; translated to a + 100000",
+   "f": "1 / (x - 100000)",
+   "a": 100001,
+   "L": 1,
+   "xRange": [
+    100000.2,
+    100003
+   ],
+   "eps": 0.5,
+   "left": {
+    "none": false,
+    "delta": 0.3333333333333333,
+    "capped": false,
+    "sympy": "1/3"
+   },
+   "right": {
+    "none": false,
+    "delta": 1.0,
+    "capped": false,
+    "sympy": "1"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "a jump: no δ on the left while ε is below the gap; translated to a + 100000",
+   "f": "(x - 100000) + sign ( (x - 100000) )",
+   "a": 100000,
+   "L": 1,
+   "xRange": [
+    99998,
+    100002
+   ],
+   "eps": 0.5,
+   "left": {
+    "none": true,
+    "delta": 0,
+    "capped": false,
+    "sympy": "the failures accumulate at a (inf of the complement is a)"
+   },
+   "right": {
+    "none": false,
+    "delta": 0.5,
+    "capped": false,
+    "sympy": "1/2"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "a jump: no δ on the left while ε is below the gap; translated to a + 100000",
+   "f": "(x - 100000) + sign ( (x - 100000) )",
+   "a": 100000,
+   "L": 1,
+   "xRange": [
+    99998,
+    100002
+   ],
+   "eps": 1.9,
+   "left": {
+    "none": true,
+    "delta": 0,
+    "capped": false,
+    "sympy": "the failures accumulate at a (inf of the complement is a)"
+   },
+   "right": {
+    "none": false,
+    "delta": 1.9,
+    "capped": false,
+    "sympy": "19/10"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "a jump: no δ on the left while ε is below the gap; translated to a + 100000",
+   "f": "(x - 100000) + sign ( (x - 100000) )",
+   "a": 100000,
+   "L": 1,
+   "xRange": [
+    99998,
+    100002
+   ],
+   "eps": 2.5,
+   "left": {
+    "none": false,
+    "delta": 0.5,
+    "capped": false,
+    "sympy": "1/2"
+   },
+   "right": {
+    "none": false,
+    "delta": 2.0,
+    "capped": true,
+    "sympy": "2"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "sin(1/x) at 0: no δ for ε < 1, any δ for ε > 1; translated to a + 100000",
+   "f": "sin ( 1 / (x - 100000) )",
+   "a": 100000,
+   "L": 0,
+   "xRange": [
+    99999,
+    100001
+   ],
+   "eps": 0.5,
+   "left": {
+    "none": true,
+    "delta": 0,
+    "capped": false,
+    "sympy": "f = -1 at points accumulating at a, and |-1 − L| > ε"
+   },
+   "right": {
+    "none": true,
+    "delta": 0,
+    "capped": false,
+    "sympy": "f = -1 at points accumulating at a, and |-1 − L| > ε"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "sin(1/x) at 0: no δ for ε < 1, any δ for ε > 1; translated to a + 100000",
+   "f": "sin ( 1 / (x - 100000) )",
+   "a": 100000,
+   "L": 0,
+   "xRange": [
+    99999,
+    100001
+   ],
+   "eps": 0.9,
+   "left": {
+    "none": true,
+    "delta": 0,
+    "capped": false,
+    "sympy": "f = -1 at points accumulating at a, and |-1 − L| > ε"
+   },
+   "right": {
+    "none": true,
+    "delta": 0,
+    "capped": false,
+    "sympy": "f = -1 at points accumulating at a, and |-1 − L| > ε"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "sin(1/x) at 0: no δ for ε < 1, any δ for ε > 1; translated to a + 100000",
+   "f": "sin ( 1 / (x - 100000) )",
+   "a": 100000,
+   "L": 0,
+   "xRange": [
+    99999,
+    100001
+   ],
+   "eps": 1.2,
+   "left": {
+    "none": false,
+    "delta": 1.0,
+    "capped": true,
+    "sympy": "1"
+   },
+   "right": {
+    "none": false,
+    "delta": 1.0,
+    "capped": true,
+    "sympy": "1"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "an unbounded f: no δ; translated to a + 100000",
+   "f": "1 / (x - 100000) ^ 2",
+   "a": 100000,
+   "L": 1,
+   "xRange": [
+    99999,
+    100001
+   ],
+   "eps": 0.5,
+   "left": {
+    "none": true,
+    "delta": 0,
+    "capped": false,
+    "sympy": "the failures accumulate at a (inf of the complement is a)"
+   },
+   "right": {
+    "none": true,
+    "delta": 0,
+    "capped": false,
+    "sympy": "the failures accumulate at a (inf of the complement is a)"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "an unbounded f: no δ; translated to a + 100000",
+   "f": "1 / (x - 100000) ^ 2",
+   "a": 100000,
+   "L": 1,
+   "xRange": [
+    99999,
+    100001
+   ],
+   "eps": 5,
+   "left": {
+    "none": true,
+    "delta": 0,
+    "capped": false,
+    "sympy": "the failures accumulate at a (inf of the complement is a)"
+   },
+   "right": {
+    "none": true,
+    "delta": 0,
+    "capped": false,
+    "sympy": "the failures accumulate at a (inf of the complement is a)"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "a wrong L (4.5 for x² at 2): no δ while ε < 0.5; translated to a + 100000",
+   "f": "(x - 100000) ^ 2",
+   "a": 100002,
+   "L": 4.5,
+   "xRange": [
+    100000,
+    100003.5
+   ],
+   "eps": 0.1,
+   "left": {
+    "none": true,
+    "delta": 0,
+    "capped": false,
+    "sympy": "the failures accumulate at a (inf of the complement is a)"
+   },
+   "right": {
+    "none": true,
+    "delta": 0,
+    "capped": false,
+    "sympy": "the failures accumulate at a (inf of the complement is a)"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "a wrong L (4.5 for x² at 2): no δ while ε < 0.5; translated to a + 100000",
+   "f": "(x - 100000) ^ 2",
+   "a": 100002,
+   "L": 4.5,
+   "xRange": [
+    100000,
+    100003.5
+   ],
+   "eps": 0.4,
+   "left": {
+    "none": true,
+    "delta": 0,
+    "capped": false,
+    "sympy": "the failures accumulate at a (inf of the complement is a)"
+   },
+   "right": {
+    "none": true,
+    "delta": 0,
+    "capped": false,
+    "sympy": "the failures accumulate at a (inf of the complement is a)"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "a wrong L (4.5 for x² at 2): no δ while ε < 0.5; translated to a + 100000",
+   "f": "(x - 100000) ^ 2",
+   "a": 100002,
+   "L": 4.5,
+   "xRange": [
+    100000,
+    100003.5
+   ],
+   "eps": 0.7,
+   "left": {
+    "none": false,
+    "delta": 0.05064113103820722,
+    "capped": false,
+    "sympy": "2 - sqrt(95)/5"
+   },
+   "right": {
+    "none": false,
+    "delta": 0.28035085019827594,
+    "capped": false,
+    "sympy": "-2 + sqrt(130)/5"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "a steep f: δ = 5·10⁻⁸, far below the old 'no δ' threshold (review F1); translated to a + 100000",
+   "f": "1e7 * (x - 100000)",
+   "a": 100000,
+   "L": 0,
+   "xRange": [
+    99999,
+    100001
+   ],
+   "eps": 0.5,
+   "left": {
+    "none": false,
+    "delta": 5e-08,
+    "capped": false,
+    "sympy": "1/20000000"
+   },
+   "right": {
+    "none": false,
+    "delta": 5e-08,
+    "capped": false,
+    "sympy": "1/20000000"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "|x| at 1/2: SymPy 1.14 solves the raw inequality wrongly (review F5); translated to a + 100000",
+   "f": "abs ( (x - 100000) )",
+   "a": 100000.5,
+   "L": 0.5,
+   "xRange": [
+    99998.5,
+    100003
+   ],
+   "eps": 0.1,
+   "left": {
+    "none": false,
+    "delta": 0.1,
+    "capped": false,
+    "sympy": "1/10"
+   },
+   "right": {
+    "none": false,
+    "delta": 0.1,
+    "capped": false,
+    "sympy": "1/10"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "|x| at 1/2: SymPy 1.14 solves the raw inequality wrongly (review F5); translated to a + 100000",
+   "f": "abs ( (x - 100000) )",
+   "a": 100000.5,
+   "L": 0.5,
+   "xRange": [
+    99998.5,
+    100003
+   ],
+   "eps": 1.3,
+   "left": {
+    "none": false,
+    "delta": 2.0,
+    "capped": true,
+    "sympy": "2"
+   },
+   "right": {
+    "none": false,
+    "delta": 1.3,
+    "capped": false,
+    "sympy": "13/10"
+   }
+  },
+  {
+   "source": "make_fixtures.py",
+   "case": "|x| at 1/2: SymPy 1.14 solves the raw inequality wrongly (review F5); translated to a + 100000",
+   "f": "abs ( (x - 100000) )",
+   "a": 100000.5,
+   "L": 0.5,
+   "xRange": [
+    99998.5,
+    100003
    ],
    "eps": 2.49,
    "left": {
