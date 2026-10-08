@@ -46,11 +46,20 @@ graph.py ready ──► [1 Author agent] ──► draft page (status: draft), 
                   [3 Reviewer agent] ──► adversarial review with the 06 §6.3 checklist + 08 §8.3 circularity table;
                          │               posts findings as PR review comments
                          ▼
-                  [1 Author agent] ──► addresses findings (or argues back in the thread)
-                         │
+                  [1 Author agent] ──► addresses findings (or argues back in the thread), and lists
+                         │               every change to mathematical content for the second pass
                          ▼
-                     Owner review ──► approves; status → reviewed (or verified if 100 % coverage + both checklists)
+                  [4 Second pass] ──► /recheck-topic: verifier and reviewer again, in one session;
+                         │               test changes only; one review: per-finding table, manual verdicts,
+                         │               coverage, verdict (repeat 1 → 4 until "ready for the owner")
+                         ▼
+                     Owner sign-off ──► in a PR, CI green first: manual_checked, reviewed_by, status → reviewed
+                                        (or verified if 100 % coverage + both checklists); CLAUDE.md, "Owner sign-off"
 ```
+
+Phase 1a ran this pipeline four times (vronnblom/maths#7, #8, #9, #11). Step 4 is how the
+second round was actually run there: one session re-verified and re-reviewed, at the owner's
+request; it never wrote the page.
 
 ### The role prompts: the skills in `.claude/skills/`
 
@@ -62,6 +71,7 @@ Phase 0 stage 5; `docs/agents/README.md` is the index):
 | Author | `/new-topic <label>` ([`.claude/skills/new-topic/SKILL.md`](../../.claude/skills/new-topic/SKILL.md)) | scaffolds the page, the verify file (`@covers` stubs only) and the toc entry with `scripts/new_topic.py`, then writes the page and walks the "How to add a topic" checklist; never computes expected values |
 | Verifier | `/verify-topic <path>` ([`.claude/skills/verify-topic/SKILL.md`](../../.claude/skills/verify-topic/SKILL.md)) | writes the SymPy tests from the statements only, reads answers with `answer(label)`, never edits the page, reports disagreements with evidence |
 | Reviewer | `/review-math <path>` ([`.claude/skills/review-math/SKILL.md`](../../.claude/skills/review-math/SKILL.md)) | reviews against the 06 §6.3 checklist and the 08 §8.3 circularity table, tries counterexamples, checks proof policies, ranks findings by severity, never rewrites the page |
+| Second pass | `/recheck-topic <path>` ([`.claude/skills/recheck-topic/SKILL.md`](../../.claude/skills/recheck-topic/SKILL.md)) | after the Author's round: re-tests every changed claim (test changes only), re-reviews against the first review's findings and the new material, and posts one review with a per-finding table, the manual-exercise verdicts, the coverage and a verdict |
 
 A person or an agent without Claude Code reads the same files as prompts. Change a role by
 changing its skill; this section only says which skill holds it.
@@ -85,8 +95,10 @@ changing its skill; this section only says which skill holds it.
   mathematics rather than hunting for context.
 - **Conflicts** only arise in shared files: `content/myst.yml` (toc) and `labels.lock`.
   Both are append-mostly (`check_labels.py --update-lock` keeps the lock sorted, so
-  conflicts are usually trivial). Agents rebase, re-run `--update-lock` and `npm run check`
-  before requesting review.
+  conflicts are usually trivial). Agents merge `main` into their branch (a merge commit, never
+  a rebase, so that reviewers' checkouts stay valid), keep both sides with the toc in
+  `curriculum.yml` order (`tests/test_new_topic.py` checks it), re-run `--update-lock` and
+  `npm run check` before requesting review. Phase 1a resolved every such conflict this way.
   If toc conflicts become frequent, generate the toc from `curriculum.yml`
   ([05 §5.5](05-tooling-and-build.md)).
 
@@ -120,5 +132,7 @@ changing its skill; this section only says which skill holds it.
   labels outside the curriculum and pages that exist; then walks the author checklist.
 - **Skill `/verify-topic <path>`**: the Verifier.
 - **Skill `/review-math <path>`**: the Reviewer.
+- **Skill `/recheck-topic <path>`**: the second pass, Verifier and Reviewer again in one
+  session (added in the Phase 1a template freeze).
 - **`docs/agents/README.md`**: the index of the roles and their skills.
 - **`.github/pull_request_template.md`**: the fixed PR description of §10.4 (11 §11.5).

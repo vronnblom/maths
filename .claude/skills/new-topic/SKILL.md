@@ -28,7 +28,12 @@ runs `check_labels.py --update-lock`. Everything left to write is marked `TODO`.
 **If it refuses** (exit code 2), stop and report its message. Never write the page by hand
 to get round a refusal: a label that isn't in the curriculum needs a `curriculum` PR first,
 and an existing page means the topic is already being written. If it prints "not ready",
-you may draft ahead (10 §10.4), but say so in the PR.
+you may draft ahead (10 §10.4), but say so in the PR: cite each result of an unmerged
+prerequisite in plain text, followed by a `% TODO link: <label> once vronnblom/maths#<n> is
+merged` comment, and list those lines in the PR body (they are the only lines `grep -n TODO`
+may print while the prerequisite is open). When it merges, merge `main` into your branch,
+turn every `% TODO link` into a named link, and check that the target's **merged statement**
+says what your step uses; if it doesn't, ask for it on that page (a separate PR).
 
 ## 2. Read before writing
 
@@ -39,8 +44,8 @@ you may draft ahead (10 §10.4), but say so in the PR.
 - `content/about/notation.md`, and `docs/plan/04-notation-and-style.md` §4.3 for the answer
   LaTeX subset;
 - the pages of the direct prerequisites: reuse their labels, don't redefine anything;
-- the exemplar `content/calculus/limits/limit-of-a-function.md` as the quality bar, once it
-  exists (until then, `templates/topic.md`);
+- the exemplar `content/calculus/limits/limit-of-a-function.md`: the quality bar, and the
+  model for every block (`docs/exemplar-review.md` is the rubric it was judged by);
 - `uv run python scripts/graph.py closure <label>`: the only pages you may cite, except in a
   `looking-ahead` admonition.
 
@@ -54,10 +59,25 @@ Follow CLAUDE.md (Conventions, Don't) and replace every `TODO`:
 - ≥ 3 worked examples, each ending with a **Check**; ≥ 1 common mistake;
 - 6–15 exercises across tiers, each with hints, exactly one Answer in the machine-checkable
   subset (or `answer manual` for a proof) and a collapsed `{solution}`;
-- cite earlier results only as `[name](#label)`; no "clearly", en-GB spelling;
+- cite earlier results only as `[name](#label)`, naming the part or property you use
+  (`[part (b) of the triangle inequality](#thm-calc-triangle-inequality)`), and only what the
+  cited **statement** says; no "clearly", en-GB spelling;
+- every step says what it rests on (a hypothesis, a definition clause, a cited result), and
+  before multiplying or dividing an inequality, state the sign of the factor and name the order
+  rule (`templates/blocks.md`, "Steps that say what they rest on"). These two were the most
+  frequent findings of the Phase 1a reviews;
+- only what the prerequisite closure provides. If the page needs a few school facts from
+  outside it (values of $\sin$, say), ask the owner in the PR: either a `curriculum` PR adds the
+  prerequisite, or the owner rules them allowed and you add the labelled "Facts from school
+  used on this page" box (`templates/blocks.md`). Replace anything the closure can replace;
+- displays that fit a phone: units in the sentence, long chains split with `aligned`, lists of
+  facts as bulleted lists (CLAUDE.md, "Displays on a phone");
 - the `function-plot` widget where the entry plans it (its figure, caption and **Try this:**;
-  after adding a `table`, run `uv run python widgets/_tests/make_fixtures.py`). Planned widgets
-  that aren't built stay out of `maths.widgets`.
+  after adding a `table`, run `uv run python widgets/_tests/make_fixtures.py`, and again after
+  any edit that moves lines on the page: the fixtures record line numbers). Planned widgets
+  that aren't built stay out of `maths.widgets`. Captions and prose report what a widget
+  observed, never "the limit is (not) $L$" or "the largest $\delta$ is" (CLAUDE.md, "Widget
+  wording").
 
 Keep `status: draft`.
 
@@ -83,6 +103,17 @@ npm run all                                           # fix every error and warn
 Then open the PR with `.github/pull_request_template.md` (type `topic`): the summary of the
 mathematics, every result with its policy, and the coverage table that `check_coverage.py`
 printed in `npm run verify` (0 % is expected before the Verifier).
+
+## 6. After a review
+
+Answer every thread: fix it and reply with the commit, or argue back. Then post one comment
+for the Verifier that lists **every** change to mathematical content (answers, displayed steps,
+claims in prose, captions), separately from wording and link changes, so the second pass
+(`/recheck-topic`) knows what to re-test. Never edit the tests.
+
+If `main` has moved, merge it (a merge commit, never a rebase). Conflicts in `content/myst.yml`
+and `labels.lock`: keep both sides, with the toc in `curriculum.yml` order, then run
+`uv run python scripts/check_labels.py --update-lock` and `npm run check`.
 
 ## Never
 

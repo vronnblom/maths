@@ -59,14 +59,14 @@
      },
      {
       "type": "comment",
-      "value": "1–3 paragraphs. Start from a concrete question, not a definition.\n Example: a ball's position is s(t) = 5t²; what is its speed at exactly t = 1?\n Average speeds over [1, 1+h] approach a number as h shrinks — that \"approach\" is a limit.",
+      "value": "1–3 paragraphs. Start from a concrete question, not a definition.\n Example: a ball's position is s(t) = 5t²; what is its speed at exactly t = 1?\n Average speeds over [1, 1+h] approach a number as h shrinks — that \"approach\" is a limit.\n Units go in the prose (\"…, in metres per second.\"), never inside a display: at 375 px a display\n wider than the screen scrolls sideways and hides its end. Split long chains with aligned.\n Facts from outside the prerequisite closure (e.g. values of sin from school): only by the\n owner's ruling, in a labelled \"Facts from school used on this page\" box (templates/blocks.md).",
       "position": {
        "start": {
         "line": 41,
         "column": 1
        },
        "end": {
-        "line": 43,
+        "line": 47,
         "column": 1
        }
       }
@@ -76,11 +76,11 @@
       "value": "A widget sits alone in a {figure}: the figure carries the wdg- label, and its caption is\n the text description (shown even when the widget can't load). See docs/plan/05 §5.8.",
       "position": {
        "start": {
-        "line": 45,
+        "line": 49,
         "column": 1
        },
        "end": {
-        "line": 46,
+        "line": 50,
         "column": 1
        }
       }
@@ -120,7 +120,7 @@
           "x": 0.5
          }
         },
-        "id": "bubDcXToQ4D4F9WSuOH2t"
+        "id": "AwXf_BIlxwb3TCoz2LC0A"
        },
        {
         "type": "caption",
@@ -129,11 +129,11 @@
           "type": "paragraph",
           "position": {
            "start": {
-            "line": 62,
+            "line": 66,
             "column": 1
            },
            "end": {
-            "line": 64,
+            "line": 69,
             "column": 1
            }
           },
@@ -166,11 +166,11 @@
             "value": "Graph of the average speed ",
             "position": {
              "start": {
-              "line": 62,
+              "line": 66,
               "column": 1
              },
              "end": {
-              "line": 62,
+              "line": 66,
               "column": 1
              }
             }
@@ -180,11 +180,11 @@
             "value": "\\frac{5(1+h)^2 - 5}{h}",
             "position": {
              "start": {
-              "line": 62,
+              "line": 66,
               "column": 1
              },
              "end": {
-              "line": 62,
+              "line": 66,
               "column": 1
              }
             }
@@ -194,11 +194,11 @@
             "value": " for ",
             "position": {
              "start": {
-              "line": 62,
+              "line": 66,
               "column": 1
              },
              "end": {
-              "line": 62,
+              "line": 66,
               "column": 1
              }
             }
@@ -208,11 +208,11 @@
             "value": "-1 \\le h \\le 1",
             "position": {
              "start": {
-              "line": 62,
+              "line": 66,
               "column": 1
              },
              "end": {
-              "line": 62,
+              "line": 66,
               "column": 1
              }
             }
@@ -222,11 +222,11 @@
             "value": ", with a hole at\n",
             "position": {
              "start": {
-              "line": 62,
+              "line": 66,
               "column": 1
              },
              "end": {
-              "line": 62,
+              "line": 66,
               "column": 1
              }
             }
@@ -236,25 +236,25 @@
             "value": "h = 0",
             "position": {
              "start": {
-              "line": 62,
+              "line": 66,
               "column": 1
              },
              "end": {
-              "line": 62,
+              "line": 66,
               "column": 1
              }
             }
            },
            {
             "type": "text",
-            "value": ", and a point on the graph that a slider for ",
+            "value": ", where the formula is undefined, and a point on the graph that a slider for ",
             "position": {
              "start": {
-              "line": 62,
+              "line": 66,
               "column": 1
              },
              "end": {
-              "line": 62,
+              "line": 66,
               "column": 1
              }
             }
@@ -264,25 +264,25 @@
             "value": "h",
             "position": {
              "start": {
-              "line": 62,
+              "line": 66,
               "column": 1
              },
              "end": {
-              "line": 62,
+              "line": 66,
               "column": 1
              }
             }
            },
            {
             "type": "text",
-            "value": " moves. A table lists the values for\n",
+            "value": " moves.\nA table lists the values for ",
             "position": {
              "start": {
-              "line": 62,
+              "line": 66,
               "column": 1
              },
              "end": {
-              "line": 62,
+              "line": 66,
               "column": 1
              }
             }
@@ -292,25 +292,193 @@
             "value": "h = \\pm 0.1, \\pm 0.01, \\pm 0.001",
             "position": {
              "start": {
-              "line": 62,
+              "line": 66,
               "column": 1
              },
              "end": {
-              "line": 62,
+              "line": 66,
               "column": 1
              }
             }
            },
            {
             "type": "text",
-            "value": "; they approach ",
+            "value": ": ",
             "position": {
              "start": {
-              "line": 62,
+              "line": 66,
               "column": 1
              },
              "end": {
-              "line": 62,
+              "line": 66,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": "10.5",
+            "position": {
+             "start": {
+              "line": 66,
+              "column": 1
+             },
+             "end": {
+              "line": 66,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": ", ",
+            "position": {
+             "start": {
+              "line": 66,
+              "column": 1
+             },
+             "end": {
+              "line": 66,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": "10.05",
+            "position": {
+             "start": {
+              "line": 66,
+              "column": 1
+             },
+             "end": {
+              "line": 66,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": ", ",
+            "position": {
+             "start": {
+              "line": 66,
+              "column": 1
+             },
+             "end": {
+              "line": 66,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": "10.005",
+            "position": {
+             "start": {
+              "line": 66,
+              "column": 1
+             },
+             "end": {
+              "line": 66,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": " and\n",
+            "position": {
+             "start": {
+              "line": 66,
+              "column": 1
+             },
+             "end": {
+              "line": 66,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": "9.995",
+            "position": {
+             "start": {
+              "line": 66,
+              "column": 1
+             },
+             "end": {
+              "line": 66,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": ", ",
+            "position": {
+             "start": {
+              "line": 66,
+              "column": 1
+             },
+             "end": {
+              "line": 66,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": "9.95",
+            "position": {
+             "start": {
+              "line": 66,
+              "column": 1
+             },
+             "end": {
+              "line": 66,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": ", ",
+            "position": {
+             "start": {
+              "line": 66,
+              "column": 1
+             },
+             "end": {
+              "line": 66,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": "9.5",
+            "position": {
+             "start": {
+              "line": 66,
+              "column": 1
+             },
+             "end": {
+              "line": 66,
+              "column": 1
+             }
+            }
+           },
+           {
+            "type": "text",
+            "value": ". They approach ",
+            "position": {
+             "start": {
+              "line": 66,
+              "column": 1
+             },
+             "end": {
+              "line": 66,
               "column": 1
              }
             }
@@ -320,25 +488,25 @@
             "value": "10",
             "position": {
              "start": {
-              "line": 62,
+              "line": 66,
               "column": 1
              },
              "end": {
-              "line": 62,
+              "line": 66,
               "column": 1
              }
             }
            },
            {
             "type": "text",
-            "value": ".",
+            "value": " from both sides.",
             "position": {
              "start": {
-              "line": 62,
+              "line": 66,
               "column": 1
              },
              "end": {
-              "line": 62,
+              "line": 66,
               "column": 1
              }
             }
@@ -357,11 +525,11 @@
       "type": "paragraph",
       "position": {
        "start": {
-        "line": 67,
+        "line": 72,
         "column": 1
        },
        "end": {
-        "line": 68,
+        "line": 73,
         "column": 1
        }
       },
@@ -370,11 +538,11 @@
         "type": "strong",
         "position": {
          "start": {
-          "line": 67,
+          "line": 72,
           "column": 1
          },
          "end": {
-          "line": 67,
+          "line": 72,
           "column": 1
          }
         },
@@ -384,11 +552,11 @@
           "value": "Try this:",
           "position": {
            "start": {
-            "line": 67,
+            "line": 72,
             "column": 1
            },
            "end": {
-            "line": 67,
+            "line": 72,
             "column": 1
            }
           }
@@ -400,11 +568,11 @@
         "value": " move ",
         "position": {
          "start": {
-          "line": 67,
+          "line": 72,
           "column": 1
          },
          "end": {
-          "line": 67,
+          "line": 72,
           "column": 1
          }
         }
@@ -414,11 +582,11 @@
         "value": "h",
         "position": {
          "start": {
-          "line": 67,
+          "line": 72,
           "column": 1
          },
          "end": {
-          "line": 67,
+          "line": 72,
           "column": 1
          }
         }
@@ -428,11 +596,11 @@
         "value": " towards ",
         "position": {
          "start": {
-          "line": 67,
+          "line": 72,
           "column": 1
          },
          "end": {
-          "line": 67,
+          "line": 72,
           "column": 1
          }
         }
@@ -442,11 +610,11 @@
         "value": "0",
         "position": {
          "start": {
-          "line": 67,
+          "line": 72,
           "column": 1
          },
          "end": {
-          "line": 67,
+          "line": 72,
           "column": 1
          }
         }
@@ -456,11 +624,11 @@
         "value": " from both sides. Which number do the average speeds\napproach? Why can’t you simply put ",
         "position": {
          "start": {
-          "line": 67,
+          "line": 72,
           "column": 1
          },
          "end": {
-          "line": 67,
+          "line": 72,
           "column": 1
          }
         }
@@ -470,11 +638,11 @@
         "value": "h = 0",
         "position": {
          "start": {
-          "line": 67,
+          "line": 72,
           "column": 1
          },
          "end": {
-          "line": 67,
+          "line": 72,
           "column": 1
          }
         }
@@ -484,11 +652,11 @@
         "value": "?",
         "position": {
          "start": {
-          "line": 67,
+          "line": 72,
           "column": 1
          },
          "end": {
-          "line": 67,
+          "line": 72,
           "column": 1
          }
         }
@@ -500,11 +668,11 @@
       "depth": 2,
       "position": {
        "start": {
-        "line": 70,
+        "line": 75,
         "column": 1
        },
        "end": {
-        "line": 70,
+        "line": 75,
         "column": 1
        }
       },
@@ -514,11 +682,11 @@
         "value": "What a limit is",
         "position": {
          "start": {
-          "line": 70,
+          "line": 75,
           "column": 1
          },
          "end": {
-          "line": 70,
+          "line": 75,
           "column": 1
          }
         }
@@ -534,11 +702,11 @@
       "value": "Intuitive description first (no new symbols), then a precise definition.",
       "position": {
        "start": {
-        "line": 72,
+        "line": 77,
         "column": 1
        },
        "end": {
-        "line": 72,
+        "line": 77,
         "column": 1
        }
       }
@@ -547,11 +715,11 @@
       "type": "paragraph",
       "position": {
        "start": {
-        "line": 74,
+        "line": 79,
         "column": 1
        },
        "end": {
-        "line": 75,
+        "line": 80,
         "column": 1
        }
       },
@@ -561,11 +729,11 @@
         "value": "Informally, ",
         "position": {
          "start": {
-          "line": 74,
+          "line": 79,
           "column": 1
          },
          "end": {
-          "line": 74,
+          "line": 79,
           "column": 1
          }
         }
@@ -575,11 +743,11 @@
         "value": "\\lim_{x \\to a} f(x) = L",
         "position": {
          "start": {
-          "line": 74,
+          "line": 79,
           "column": 1
          },
          "end": {
-          "line": 74,
+          "line": 79,
           "column": 1
          }
         }
@@ -589,11 +757,11 @@
         "value": " means that ",
         "position": {
          "start": {
-          "line": 74,
+          "line": 79,
           "column": 1
          },
          "end": {
-          "line": 74,
+          "line": 79,
           "column": 1
          }
         }
@@ -603,11 +771,11 @@
         "value": "f(x)",
         "position": {
          "start": {
-          "line": 74,
+          "line": 79,
           "column": 1
          },
          "end": {
-          "line": 74,
+          "line": 79,
           "column": 1
          }
         }
@@ -617,11 +785,11 @@
         "value": " can be made as close to ",
         "position": {
          "start": {
-          "line": 74,
+          "line": 79,
           "column": 1
          },
          "end": {
-          "line": 74,
+          "line": 79,
           "column": 1
          }
         }
@@ -631,11 +799,11 @@
         "value": "L",
         "position": {
          "start": {
-          "line": 74,
+          "line": 79,
           "column": 1
          },
          "end": {
-          "line": 74,
+          "line": 79,
           "column": 1
          }
         }
@@ -645,11 +813,11 @@
         "value": " as we\nlike by taking ",
         "position": {
          "start": {
-          "line": 74,
+          "line": 79,
           "column": 1
          },
          "end": {
-          "line": 74,
+          "line": 79,
           "column": 1
          }
         }
@@ -659,11 +827,11 @@
         "value": "x",
         "position": {
          "start": {
-          "line": 74,
+          "line": 79,
           "column": 1
          },
          "end": {
-          "line": 74,
+          "line": 79,
           "column": 1
          }
         }
@@ -673,11 +841,11 @@
         "value": " close enough to ",
         "position": {
          "start": {
-          "line": 74,
+          "line": 79,
           "column": 1
          },
          "end": {
-          "line": 74,
+          "line": 79,
           "column": 1
          }
         }
@@ -687,11 +855,11 @@
         "value": "a",
         "position": {
          "start": {
-          "line": 74,
+          "line": 79,
           "column": 1
          },
          "end": {
-          "line": 74,
+          "line": 79,
           "column": 1
          }
         }
@@ -701,11 +869,11 @@
         "value": ", but not equal to ",
         "position": {
          "start": {
-          "line": 74,
+          "line": 79,
           "column": 1
          },
          "end": {
-          "line": 74,
+          "line": 79,
           "column": 1
          }
         }
@@ -715,11 +883,11 @@
         "value": "a",
         "position": {
          "start": {
-          "line": 74,
+          "line": 79,
           "column": 1
          },
          "end": {
-          "line": 74,
+          "line": 79,
           "column": 1
          }
         }
@@ -729,11 +897,11 @@
         "value": ".",
         "position": {
          "start": {
-          "line": 74,
+          "line": 79,
           "column": 1
          },
          "end": {
-          "line": 74,
+          "line": 79,
           "column": 1
          }
         }
@@ -753,11 +921,11 @@
           "value": "Limit of a function",
           "position": {
            "start": {
-            "line": 77,
+            "line": 82,
             "column": 1
            },
            "end": {
-            "line": 77,
+            "line": 82,
             "column": 1
            }
           }
@@ -768,11 +936,11 @@
         "type": "paragraph",
         "position": {
          "start": {
-          "line": 80,
+          "line": 85,
           "column": 1
          },
          "end": {
-          "line": 88,
+          "line": 95,
           "column": 1
          }
         },
@@ -782,11 +950,39 @@
           "value": "Let ",
           "position": {
            "start": {
-            "line": 80,
+            "line": 85,
             "column": 1
            },
            "end": {
-            "line": 80,
+            "line": 85,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "a",
+          "position": {
+           "start": {
+            "line": 85,
+            "column": 1
+           },
+           "end": {
+            "line": 85,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " be a real number, and let ",
+          "position": {
+           "start": {
+            "line": 85,
+            "column": 1
+           },
+           "end": {
+            "line": 85,
             "column": 1
            }
           }
@@ -796,25 +992,25 @@
           "value": "f",
           "position": {
            "start": {
-            "line": 80,
+            "line": 85,
             "column": 1
            },
            "end": {
-            "line": 80,
+            "line": 85,
             "column": 1
            }
           }
          },
          {
           "type": "text",
-          "value": " be defined on an open interval containing ",
+          "value": " be a function that is defined at every point of an open\ninterval containing ",
           "position": {
            "start": {
-            "line": 80,
+            "line": 85,
             "column": 1
            },
            "end": {
-            "line": 80,
+            "line": 85,
             "column": 1
            }
           }
@@ -824,11 +1020,11 @@
           "value": "a",
           "position": {
            "start": {
-            "line": 80,
+            "line": 85,
             "column": 1
            },
            "end": {
-            "line": 80,
+            "line": 85,
             "column": 1
            }
           }
@@ -838,11 +1034,11 @@
           "value": ", except possibly at ",
           "position": {
            "start": {
-            "line": 80,
+            "line": 85,
             "column": 1
            },
            "end": {
-            "line": 80,
+            "line": 85,
             "column": 1
            }
           }
@@ -852,25 +1048,25 @@
           "value": "a",
           "position": {
            "start": {
-            "line": 80,
+            "line": 85,
             "column": 1
            },
            "end": {
-            "line": 80,
+            "line": 85,
             "column": 1
            }
           }
          },
          {
           "type": "text",
-          "value": " itself. We say\nthat ",
+          "value": " itself. We say that ",
           "position": {
            "start": {
-            "line": 80,
+            "line": 85,
             "column": 1
            },
            "end": {
-            "line": 80,
+            "line": 85,
             "column": 1
            }
           }
@@ -879,11 +1075,11 @@
           "type": "strong",
           "position": {
            "start": {
-            "line": 80,
+            "line": 85,
             "column": 1
            },
            "end": {
-            "line": 80,
+            "line": 85,
             "column": 1
            }
           },
@@ -893,11 +1089,11 @@
             "value": "the limit of ",
             "position": {
              "start": {
-              "line": 80,
+              "line": 85,
               "column": 1
              },
              "end": {
-              "line": 80,
+              "line": 85,
               "column": 1
              }
             }
@@ -907,25 +1103,25 @@
             "value": "f(x)",
             "position": {
              "start": {
-              "line": 80,
+              "line": 85,
               "column": 1
              },
              "end": {
-              "line": 80,
+              "line": 85,
               "column": 1
              }
             }
            },
            {
             "type": "text",
-            "value": " as ",
+            "value": " as\n",
             "position": {
              "start": {
-              "line": 80,
+              "line": 85,
               "column": 1
              },
              "end": {
-              "line": 80,
+              "line": 85,
               "column": 1
              }
             }
@@ -935,11 +1131,11 @@
             "value": "x",
             "position": {
              "start": {
-              "line": 80,
+              "line": 85,
               "column": 1
              },
              "end": {
-              "line": 80,
+              "line": 85,
               "column": 1
              }
             }
@@ -949,11 +1145,11 @@
             "value": " approaches ",
             "position": {
              "start": {
-              "line": 80,
+              "line": 85,
               "column": 1
              },
              "end": {
-              "line": 80,
+              "line": 85,
               "column": 1
              }
             }
@@ -963,11 +1159,11 @@
             "value": "a",
             "position": {
              "start": {
-              "line": 80,
+              "line": 85,
               "column": 1
              },
              "end": {
-              "line": 80,
+              "line": 85,
               "column": 1
              }
             }
@@ -977,11 +1173,11 @@
             "value": " is ",
             "position": {
              "start": {
-              "line": 80,
+              "line": 85,
               "column": 1
              },
              "end": {
-              "line": 80,
+              "line": 85,
               "column": 1
              }
             }
@@ -991,11 +1187,11 @@
             "value": "L",
             "position": {
              "start": {
-              "line": 80,
+              "line": 85,
               "column": 1
              },
              "end": {
-              "line": 80,
+              "line": 85,
               "column": 1
              }
             }
@@ -1004,14 +1200,42 @@
          },
          {
           "type": "text",
-          "value": ", and write",
+          "value": ", where ",
           "position": {
            "start": {
-            "line": 80,
+            "line": 85,
             "column": 1
            },
            "end": {
-            "line": 80,
+            "line": 85,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "L",
+          "position": {
+           "start": {
+            "line": 85,
+            "column": 1
+           },
+           "end": {
+            "line": 85,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " is a real number, and write",
+          "position": {
+           "start": {
+            "line": 85,
+            "column": 1
+           },
+           "end": {
+            "line": 85,
             "column": 1
            }
           }
@@ -1023,11 +1247,11 @@
         "value": "\\lim_{x \\to a} f(x) = L,",
         "position": {
          "start": {
-          "line": 80,
+          "line": 85,
           "column": 1
          },
          "end": {
-          "line": 80,
+          "line": 85,
           "column": 1
          }
         },
@@ -1038,11 +1262,11 @@
         "type": "paragraph",
         "position": {
          "start": {
-          "line": 80,
+          "line": 85,
           "column": 1
          },
          "end": {
-          "line": 88,
+          "line": 95,
           "column": 1
          }
         },
@@ -1052,11 +1276,11 @@
           "value": "if for every ",
           "position": {
            "start": {
-            "line": 80,
+            "line": 85,
             "column": 1
            },
            "end": {
-            "line": 80,
+            "line": 85,
             "column": 1
            }
           }
@@ -1066,25 +1290,25 @@
           "value": "\\eps > 0",
           "position": {
            "start": {
-            "line": 80,
+            "line": 85,
             "column": 1
            },
            "end": {
-            "line": 80,
+            "line": 85,
             "column": 1
            }
           }
          },
          {
           "type": "text",
-          "value": " there exists ",
+          "value": " there is a ",
           "position": {
            "start": {
-            "line": 80,
+            "line": 85,
             "column": 1
            },
            "end": {
-            "line": 80,
+            "line": 85,
             "column": 1
            }
           }
@@ -1094,25 +1318,109 @@
           "value": "\\delta > 0",
           "position": {
            "start": {
-            "line": 80,
+            "line": 85,
             "column": 1
            },
            "end": {
-            "line": 80,
+            "line": 85,
             "column": 1
            }
           }
          },
          {
           "type": "text",
-          "value": " such that",
+          "value": " such that ",
           "position": {
            "start": {
-            "line": 80,
+            "line": 85,
             "column": 1
            },
            "end": {
-            "line": 80,
+            "line": 85,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "f",
+          "position": {
+           "start": {
+            "line": 85,
+            "column": 1
+           },
+           "end": {
+            "line": 85,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " is defined at every ",
+          "position": {
+           "start": {
+            "line": 85,
+            "column": 1
+           },
+           "end": {
+            "line": 85,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "x",
+          "position": {
+           "start": {
+            "line": 85,
+            "column": 1
+           },
+           "end": {
+            "line": 85,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " with\n",
+          "position": {
+           "start": {
+            "line": 85,
+            "column": 1
+           },
+           "end": {
+            "line": 85,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "0 < \\abs{x - a} < \\delta",
+          "position": {
+           "start": {
+            "line": 85,
+            "column": 1
+           },
+           "end": {
+            "line": 85,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": ", and",
+          "position": {
+           "start": {
+            "line": 85,
+            "column": 1
+           },
+           "end": {
+            "line": 85,
             "column": 1
            }
           }
@@ -1124,11 +1432,11 @@
         "value": "0 < \\abs{x - a} < \\delta \\quad\\text{implies}\\quad \\abs{f(x) - L} < \\eps .",
         "position": {
          "start": {
-          "line": 80,
+          "line": 85,
           "column": 1
          },
          "end": {
-          "line": 80,
+          "line": 85,
           "column": 1
          }
         },
@@ -1145,11 +1453,11 @@
       "type": "paragraph",
       "position": {
        "start": {
-        "line": 91,
+        "line": 98,
         "column": 1
        },
        "end": {
-        "line": 93,
+        "line": 100,
         "column": 1
        }
       },
@@ -1158,11 +1466,11 @@
         "type": "strong",
         "position": {
          "start": {
-          "line": 91,
+          "line": 98,
           "column": 1
          },
          "end": {
-          "line": 91,
+          "line": 98,
           "column": 1
          }
         },
@@ -1172,11 +1480,11 @@
           "value": "In words.",
           "position": {
            "start": {
-            "line": 91,
+            "line": 98,
             "column": 1
            },
            "end": {
-            "line": 91,
+            "line": 98,
             "column": 1
            }
           }
@@ -1188,11 +1496,11 @@
         "value": " Whatever tolerance ",
         "position": {
          "start": {
-          "line": 91,
+          "line": 98,
           "column": 1
          },
          "end": {
-          "line": 91,
+          "line": 98,
           "column": 1
          }
         }
@@ -1202,11 +1510,11 @@
         "value": "\\eps",
         "position": {
          "start": {
-          "line": 91,
+          "line": 98,
           "column": 1
          },
          "end": {
-          "line": 91,
+          "line": 98,
           "column": 1
          }
         }
@@ -1216,11 +1524,11 @@
         "value": " someone demands around ",
         "position": {
          "start": {
-          "line": 91,
+          "line": 98,
           "column": 1
          },
          "end": {
-          "line": 91,
+          "line": 98,
           "column": 1
          }
         }
@@ -1230,11 +1538,11 @@
         "value": "L",
         "position": {
          "start": {
-          "line": 91,
+          "line": 98,
           "column": 1
          },
          "end": {
-          "line": 91,
+          "line": 98,
           "column": 1
          }
         }
@@ -1244,11 +1552,11 @@
         "value": ", you can answer with a\nwindow of half-width ",
         "position": {
          "start": {
-          "line": 91,
+          "line": 98,
           "column": 1
          },
          "end": {
-          "line": 91,
+          "line": 98,
           "column": 1
          }
         }
@@ -1258,11 +1566,11 @@
         "value": "\\delta",
         "position": {
          "start": {
-          "line": 91,
+          "line": 98,
           "column": 1
          },
          "end": {
-          "line": 91,
+          "line": 98,
           "column": 1
          }
         }
@@ -1272,11 +1580,11 @@
         "value": " around ",
         "position": {
          "start": {
-          "line": 91,
+          "line": 98,
           "column": 1
          },
          "end": {
-          "line": 91,
+          "line": 98,
           "column": 1
          }
         }
@@ -1286,11 +1594,11 @@
         "value": "a",
         "position": {
          "start": {
-          "line": 91,
+          "line": 98,
           "column": 1
          },
          "end": {
-          "line": 91,
+          "line": 98,
           "column": 1
          }
         }
@@ -1300,11 +1608,11 @@
         "value": " such that every ",
         "position": {
          "start": {
-          "line": 91,
+          "line": 98,
           "column": 1
          },
          "end": {
-          "line": 91,
+          "line": 98,
           "column": 1
          }
         }
@@ -1314,11 +1622,11 @@
         "value": "x",
         "position": {
          "start": {
-          "line": 91,
+          "line": 98,
           "column": 1
          },
          "end": {
-          "line": 91,
+          "line": 98,
           "column": 1
          }
         }
@@ -1328,11 +1636,11 @@
         "value": " in that window (other than ",
         "position": {
          "start": {
-          "line": 91,
+          "line": 98,
           "column": 1
          },
          "end": {
-          "line": 91,
+          "line": 98,
           "column": 1
          }
         }
@@ -1342,11 +1650,11 @@
         "value": "a",
         "position": {
          "start": {
-          "line": 91,
+          "line": 98,
           "column": 1
          },
          "end": {
-          "line": 91,
+          "line": 98,
           "column": 1
          }
         }
@@ -1356,11 +1664,11 @@
         "value": ")\nhas ",
         "position": {
          "start": {
-          "line": 91,
+          "line": 98,
           "column": 1
          },
          "end": {
-          "line": 91,
+          "line": 98,
           "column": 1
          }
         }
@@ -1370,11 +1678,11 @@
         "value": "f(x)",
         "position": {
          "start": {
-          "line": 91,
+          "line": 98,
           "column": 1
          },
          "end": {
-          "line": 91,
+          "line": 98,
           "column": 1
          }
         }
@@ -1384,11 +1692,11 @@
         "value": " within the tolerance.",
         "position": {
          "start": {
-          "line": 91,
+          "line": 98,
           "column": 1
          },
          "end": {
-          "line": 91,
+          "line": 98,
           "column": 1
          }
         }
@@ -1397,14 +1705,14 @@
      },
      {
       "type": "comment",
-      "value": "The ε–δ game (widgets/README.md, `epsilon-delta`): the reader sets ε and sees the largest δ on\n each side; then picks their own δ and sees where it fails. The caption is the text description.",
+      "value": "The ε–δ game (widgets/README.md, `epsilon-delta`): the reader sets ε and sees the largest δ the\n widget found on each side; then picks their own δ and sees where it fails. The caption is the\n text description. Widget wording, in the caption and the prose: say what the widget observed\n (\"the largest δ it found\", \"passed the widget's check at the points it tested\"), never \"the\n largest δ is\", and never \"the limit is (not) L\": only a proof on the page settles that.",
       "position": {
        "start": {
-        "line": 95,
+        "line": 102,
         "column": 1
        },
        "end": {
-        "line": 96,
+        "line": 106,
         "column": 1
        }
       }
@@ -1427,15 +1735,15 @@
          ],
          "epsStep": 0.05,
          "xRange": [
-          -0.5,
-          3.5
+          1,
+          3
          ],
          "yRange": [
-          -1,
+          0,
           9
          ]
         },
-        "id": "4U4pDXgG6th96OaN_V2bz"
+        "id": "S0Y8gpLeqWdFUdD0qx2yw"
        },
        {
         "type": "caption",
@@ -1444,11 +1752,11 @@
           "type": "paragraph",
           "position": {
            "start": {
-            "line": 108,
+            "line": 118,
             "column": 1
            },
            "end": {
-            "line": 115,
+            "line": 125,
             "column": 1
            }
           },
@@ -1481,11 +1789,11 @@
             "value": "Graph of ",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1495,39 +1803,39 @@
             "value": "y = x^2",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
            },
            {
             "type": "text",
-            "value": " near ",
+            "value": " for ",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
            },
            {
             "type": "inlineMath",
-            "value": "x = 2",
+            "value": "1 \\le x \\le 3",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1537,11 +1845,11 @@
             "value": ", with a horizontal band of half-width ",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1551,25 +1859,25 @@
             "value": "\\eps",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
            },
            {
             "type": "text",
-            "value": " around ",
+            "value": " around\n",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1579,25 +1887,25 @@
             "value": "y = 4",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
            },
            {
             "type": "text",
-            "value": "\n(dashed edges) and a vertical window ",
+            "value": " (dashed edges) and a vertical window ",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1607,25 +1915,25 @@
             "value": "0 < \\abs{x - 2} < \\delta",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
            },
            {
             "type": "text",
-            "value": " (solid edges; the dotted line\n",
+            "value": " (solid edges; the dotted\nline ",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1635,11 +1943,11 @@
             "value": "x = 2",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1649,11 +1957,11 @@
             "value": " itself is left out). A slider sets ",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1663,11 +1971,11 @@
             "value": "\\eps",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1677,11 +1985,11 @@
             "value": " from ",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1691,11 +1999,11 @@
             "value": "0.05",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1705,11 +2013,11 @@
             "value": " to ",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1719,25 +2027,25 @@
             "value": "1.5",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
            },
            {
             "type": "text",
-            "value": ", and the widget states the\nlargest ",
+            "value": ", and the widget states\nthe largest ",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1747,25 +2055,25 @@
             "value": "\\delta",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
            },
            {
             "type": "text",
-            "value": " it finds on each side of ",
+            "value": " it found on each side of ",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1775,25 +2083,25 @@
             "value": "2",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
            },
            {
             "type": "text",
-            "value": " by checking points of the graph; for ",
+            "value": ", and how many points it checked. For\n",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1803,25 +2111,25 @@
             "value": "\\eps = 0.5",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
            },
            {
             "type": "text",
-            "value": "\nthe exact values are ",
+            "value": " the exact values are ",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1831,39 +2139,39 @@
             "value": "2 - \\sqrt{3.5} \\approx 0.129",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
            },
            {
             "type": "text",
-            "value": " on the left and ",
+            "value": " on the left and\n",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
            },
            {
             "type": "inlineMath",
-            "value": "\\sqrt{4.5} - 2 \\approx\n0.121",
+            "value": "\\sqrt{4.5} - 2 \\approx 0.121",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1873,11 +2181,11 @@
             "value": " on the right. A second slider sets your own ",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1887,25 +2195,25 @@
             "value": "\\delta",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
            },
            {
             "type": "text",
-            "value": "; points of the graph inside the\nwindow but outside the band are marked with crosses, and a sentence says whether your\n",
+            "value": "; points of\nthe graph inside the window but outside the band are marked with crosses, and a sentence says\nwhether your ",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1915,25 +2223,25 @@
             "value": "\\delta",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
            },
            {
             "type": "text",
-            "value": " passes the widget’s check.",
+            "value": " passed the widget’s check at the points it tested.",
             "position": {
              "start": {
-              "line": 108,
+              "line": 118,
               "column": 1
              },
              "end": {
-              "line": 108,
+              "line": 118,
               "column": 1
              }
             }
@@ -1952,11 +2260,11 @@
       "type": "paragraph",
       "position": {
        "start": {
-        "line": 118,
+        "line": 128,
         "column": 1
        },
        "end": {
-        "line": 120,
+        "line": 130,
         "column": 1
        }
       },
@@ -1965,11 +2273,11 @@
         "type": "strong",
         "position": {
          "start": {
-          "line": 118,
+          "line": 128,
           "column": 1
          },
          "end": {
-          "line": 118,
+          "line": 128,
           "column": 1
          }
         },
@@ -1979,11 +2287,11 @@
           "value": "Try this:",
           "position": {
            "start": {
-            "line": 118,
+            "line": 128,
             "column": 1
            },
            "end": {
-            "line": 118,
+            "line": 128,
             "column": 1
            }
           }
@@ -1995,11 +2303,11 @@
         "value": " set ",
         "position": {
          "start": {
-          "line": 118,
+          "line": 128,
           "column": 1
          },
          "end": {
-          "line": 118,
+          "line": 128,
           "column": 1
          }
         }
@@ -2009,11 +2317,11 @@
         "value": "\\eps = 0.1",
         "position": {
          "start": {
-          "line": 118,
+          "line": 128,
           "column": 1
          },
          "end": {
-          "line": 118,
+          "line": 128,
           "column": 1
          }
         }
@@ -2023,11 +2331,11 @@
         "value": ". What is the largest ",
         "position": {
          "start": {
-          "line": 118,
+          "line": 128,
           "column": 1
          },
          "end": {
-          "line": 118,
+          "line": 128,
           "column": 1
          }
         }
@@ -2037,11 +2345,11 @@
         "value": "\\delta",
         "position": {
          "start": {
-          "line": 118,
+          "line": 128,
           "column": 1
          },
          "end": {
-          "line": 118,
+          "line": 128,
           "column": 1
          }
         }
@@ -2051,11 +2359,11 @@
         "value": " the widget finds on each side of\n",
         "position": {
          "start": {
-          "line": 118,
+          "line": 128,
           "column": 1
          },
          "end": {
-          "line": 118,
+          "line": 128,
           "column": 1
          }
         }
@@ -2065,11 +2373,11 @@
         "value": "a = 2",
         "position": {
          "start": {
-          "line": 118,
+          "line": 128,
           "column": 1
          },
          "end": {
-          "line": 118,
+          "line": 128,
           "column": 1
          }
         }
@@ -2079,11 +2387,11 @@
         "value": "? Which one must you take so that ",
         "position": {
          "start": {
-          "line": 118,
+          "line": 128,
           "column": 1
          },
          "end": {
-          "line": 118,
+          "line": 128,
           "column": 1
          }
         }
@@ -2093,11 +2401,11 @@
         "value": "\\delta",
         "position": {
          "start": {
-          "line": 118,
+          "line": 128,
           "column": 1
          },
          "end": {
-          "line": 118,
+          "line": 128,
           "column": 1
          }
         }
@@ -2107,11 +2415,11 @@
         "value": " works on both sides, and why? Then make\n",
         "position": {
          "start": {
-          "line": 118,
+          "line": 128,
           "column": 1
          },
          "end": {
-          "line": 118,
+          "line": 128,
           "column": 1
          }
         }
@@ -2121,11 +2429,11 @@
         "value": "\\delta",
         "position": {
          "start": {
-          "line": 118,
+          "line": 128,
           "column": 1
          },
          "end": {
-          "line": 118,
+          "line": 128,
           "column": 1
          }
         }
@@ -2135,11 +2443,11 @@
         "value": " a little larger and find where it fails.",
         "position": {
          "start": {
-          "line": 118,
+          "line": 128,
           "column": 1
          },
          "end": {
-          "line": 118,
+          "line": 128,
           "column": 1
          }
         }
@@ -2159,11 +2467,11 @@
           "value": "The value at ",
           "position": {
            "start": {
-            "line": 122,
+            "line": 132,
             "column": 1
            },
            "end": {
-            "line": 122,
+            "line": 132,
             "column": 1
            }
           }
@@ -2173,11 +2481,11 @@
           "value": "a",
           "position": {
            "start": {
-            "line": 122,
+            "line": 132,
             "column": 1
            },
            "end": {
-            "line": 122,
+            "line": 132,
             "column": 1
            }
           }
@@ -2187,11 +2495,11 @@
           "value": " does not matter",
           "position": {
            "start": {
-            "line": 122,
+            "line": 132,
             "column": 1
            },
            "end": {
-            "line": 122,
+            "line": 132,
             "column": 1
            }
           }
@@ -2203,11 +2511,11 @@
         "value": "Example and non-example: f(x) = (x²−1)/(x−1) is undefined at 1 but has limit 2.",
         "position": {
          "start": {
-          "line": 124,
+          "line": 134,
           "column": 1
          },
          "end": {
-          "line": 124,
+          "line": 134,
           "column": 1
          }
         }
@@ -2223,11 +2531,11 @@
       "depth": 2,
       "position": {
        "start": {
-        "line": 127,
+        "line": 137,
         "column": 1
        },
        "end": {
-        "line": 127,
+        "line": 137,
         "column": 1
        }
       },
@@ -2237,11 +2545,11 @@
         "value": "Main results",
         "position": {
          "start": {
-          "line": 127,
+          "line": 137,
           "column": 1
          },
          "end": {
-          "line": 127,
+          "line": 137,
           "column": 1
          }
         }
@@ -2265,11 +2573,11 @@
           "value": "Uniqueness of limits",
           "position": {
            "start": {
-            "line": 129,
+            "line": 139,
             "column": 1
            },
            "end": {
-            "line": 129,
+            "line": 139,
             "column": 1
            }
           }
@@ -2280,39 +2588,39 @@
         "type": "paragraph",
         "position": {
          "start": {
-          "line": 131,
+          "line": 141,
           "column": 1
          },
          "end": {
-          "line": 131,
+          "line": 142,
           "column": 1
          }
         },
         "children": [
          {
           "type": "text",
-          "value": "If ",
+          "value": "Let ",
           "position": {
            "start": {
-            "line": 131,
+            "line": 141,
             "column": 1
            },
            "end": {
-            "line": 131,
+            "line": 141,
             "column": 1
            }
           }
          },
          {
           "type": "inlineMath",
-          "value": "\\lim_{x\\to a} f(x) = L",
+          "value": "f",
           "position": {
            "start": {
-            "line": 131,
+            "line": 141,
             "column": 1
            },
            "end": {
-            "line": 131,
+            "line": 141,
             "column": 1
            }
           }
@@ -2322,11 +2630,111 @@
           "value": " and ",
           "position": {
            "start": {
-            "line": 131,
+            "line": 141,
             "column": 1
            },
            "end": {
-            "line": 131,
+            "line": 141,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "a",
+          "position": {
+           "start": {
+            "line": 141,
+            "column": 1
+           },
+           "end": {
+            "line": 141,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " be as in ",
+          "position": {
+           "start": {
+            "line": 141,
+            "column": 1
+           },
+           "end": {
+            "line": 141,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "crossReference",
+          "position": {
+           "start": {
+            "line": 141,
+            "column": 1
+           },
+           "end": {
+            "line": 141,
+            "column": 1
+           }
+          },
+          "children": [
+           {
+            "type": "text",
+            "value": "Definition "
+           },
+           {
+            "type": "text",
+            "value": "1"
+           }
+          ],
+          "identifier": "def-calc-limit",
+          "label": "def-calc-limit",
+          "kind": "proof:definition",
+          "template": "Definition %s",
+          "enumerator": "1",
+          "resolved": true,
+          "html_id": "def-calc-limit"
+         },
+         {
+          "type": "text",
+          "value": ". If ",
+          "position": {
+           "start": {
+            "line": 141,
+            "column": 1
+           },
+           "end": {
+            "line": 141,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "\\lim_{x\\to a} f(x) = L",
+          "position": {
+           "start": {
+            "line": 141,
+            "column": 1
+           },
+           "end": {
+            "line": 141,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " and\n",
+          "position": {
+           "start": {
+            "line": 141,
+            "column": 1
+           },
+           "end": {
+            "line": 141,
             "column": 1
            }
           }
@@ -2336,11 +2744,11 @@
           "value": "\\lim_{x\\to a} f(x) = M",
           "position": {
            "start": {
-            "line": 131,
+            "line": 141,
             "column": 1
            },
            "end": {
-            "line": 131,
+            "line": 141,
             "column": 1
            }
           }
@@ -2350,11 +2758,11 @@
           "value": ", then ",
           "position": {
            "start": {
-            "line": 131,
+            "line": 141,
             "column": 1
            },
            "end": {
-            "line": 131,
+            "line": 141,
             "column": 1
            }
           }
@@ -2364,11 +2772,11 @@
           "value": "L = M",
           "position": {
            "start": {
-            "line": 131,
+            "line": 141,
             "column": 1
            },
            "end": {
-            "line": 131,
+            "line": 141,
             "column": 1
            }
           }
@@ -2378,11 +2786,11 @@
           "value": ".",
           "position": {
            "start": {
-            "line": 131,
+            "line": 141,
             "column": 1
            },
            "end": {
-            "line": 131,
+            "line": 141,
             "column": 1
            }
           }
@@ -2408,11 +2816,11 @@
           "value": "Rigorous track",
           "position": {
            "start": {
-            "line": 134,
+            "line": 145,
             "column": 1
            },
            "end": {
-            "line": 134,
+            "line": 145,
             "column": 1
            }
           }
@@ -2421,14 +2829,14 @@
        },
        {
         "type": "comment",
-        "value": "Policy R (docs/plan/08). Strategy sentence first: \"Suppose L ≠ M and take ε = |L − M|/2 …\"",
+        "value": "Policy R (docs/plan/08). Strategy sentence first: \"Suppose L ≠ M and take ε = |L − M|/2 …\"\n Each step names what it rests on: the domain clause of the definition (so f(x) is defined),\n property 2 of the absolute value for |L − f(x)| = |f(x) − L|, and part (b) of the triangle\n inequality, with the letters matched (u = L, v = M, w = f(x)). Cite parts and properties by\n their number or letter, and only what the cited statement says.",
         "position": {
          "start": {
-          "line": 138,
+          "line": 149,
           "column": 1
          },
          "end": {
-          "line": 138,
+          "line": 153,
           "column": 1
          }
         }
@@ -2444,11 +2852,11 @@
       "depth": 2,
       "position": {
        "start": {
-        "line": 141,
+        "line": 156,
         "column": 1
        },
        "end": {
-        "line": 141,
+        "line": 156,
         "column": 1
        }
       },
@@ -2458,11 +2866,11 @@
         "value": "Worked examples",
         "position": {
          "start": {
-          "line": 141,
+          "line": 156,
           "column": 1
          },
          "end": {
-          "line": 141,
+          "line": 156,
           "column": 1
          }
         }
@@ -2486,11 +2894,11 @@
           "value": "Prove ",
           "position": {
            "start": {
-            "line": 143,
+            "line": 158,
             "column": 1
            },
            "end": {
-            "line": 143,
+            "line": 158,
             "column": 1
            }
           }
@@ -2500,11 +2908,11 @@
           "value": "\\lim_{x \\to 3} (2x - 1) = 5",
           "position": {
            "start": {
-            "line": 143,
+            "line": 158,
             "column": 1
            },
            "end": {
-            "line": 143,
+            "line": 158,
             "column": 1
            }
           }
@@ -2514,11 +2922,11 @@
           "value": " from the definition",
           "position": {
            "start": {
-            "line": 143,
+            "line": 158,
             "column": 1
            },
            "end": {
-            "line": 143,
+            "line": 158,
             "column": 1
            }
           }
@@ -2529,11 +2937,11 @@
         "type": "paragraph",
         "position": {
          "start": {
-          "line": 146,
+          "line": 161,
           "column": 1
          },
          "end": {
-          "line": 146,
+          "line": 163,
           "column": 1
          }
         },
@@ -2542,11 +2950,11 @@
           "type": "strong",
           "position": {
            "start": {
-            "line": 146,
+            "line": 161,
             "column": 1
            },
            "end": {
-            "line": 146,
+            "line": 161,
             "column": 1
            }
           },
@@ -2556,11 +2964,11 @@
             "value": "Goal.",
             "position": {
              "start": {
-              "line": 146,
+              "line": 161,
               "column": 1
              },
              "end": {
-              "line": 146,
+              "line": 161,
               "column": 1
              }
             }
@@ -2572,11 +2980,11 @@
           "value": " Given ",
           "position": {
            "start": {
-            "line": 146,
+            "line": 161,
             "column": 1
            },
            "end": {
-            "line": 146,
+            "line": 161,
             "column": 1
            }
           }
@@ -2586,11 +2994,11 @@
           "value": "\\eps > 0",
           "position": {
            "start": {
-            "line": 146,
+            "line": 161,
             "column": 1
            },
            "end": {
-            "line": 146,
+            "line": 161,
             "column": 1
            }
           }
@@ -2600,11 +3008,11 @@
           "value": ", find ",
           "position": {
            "start": {
-            "line": 146,
+            "line": 161,
             "column": 1
            },
            "end": {
-            "line": 146,
+            "line": 161,
             "column": 1
            }
           }
@@ -2614,53 +3022,137 @@
           "value": "\\delta > 0",
           "position": {
            "start": {
-            "line": 146,
+            "line": 161,
             "column": 1
            },
            "end": {
-            "line": 146,
+            "line": 161,
             "column": 1
            }
           }
          },
          {
           "type": "text",
-          "value": " with ",
+          "value": " such that ",
           "position": {
            "start": {
-            "line": 146,
+            "line": 161,
             "column": 1
            },
            "end": {
-            "line": 146,
+            "line": 161,
             "column": 1
            }
           }
          },
          {
           "type": "inlineMath",
-          "value": "0 < \\abs{x-3} < \\delta \\implies \\abs{(2x-1) - 5} < \\eps",
+          "value": "0 < \\abs{x - 3} < \\delta",
           "position": {
            "start": {
-            "line": 146,
+            "line": 161,
             "column": 1
            },
            "end": {
-            "line": 146,
+            "line": 161,
             "column": 1
            }
           }
          },
          {
           "type": "text",
-          "value": ".",
+          "value": " implies\n",
           "position": {
            "start": {
-            "line": 146,
+            "line": 161,
             "column": 1
            },
            "end": {
-            "line": 146,
+            "line": 161,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "\\abs{(2x - 1) - 5} < \\eps",
+          "position": {
+           "start": {
+            "line": 161,
+            "column": 1
+           },
+           "end": {
+            "line": 161,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": ". The function ",
+          "position": {
+           "start": {
+            "line": 161,
+            "column": 1
+           },
+           "end": {
+            "line": 161,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "2x - 1",
+          "position": {
+           "start": {
+            "line": 161,
+            "column": 1
+           },
+           "end": {
+            "line": 161,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": " is defined for every ",
+          "position": {
+           "start": {
+            "line": 161,
+            "column": 1
+           },
+           "end": {
+            "line": 161,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "inlineMath",
+          "value": "x",
+          "position": {
+           "start": {
+            "line": 161,
+            "column": 1
+           },
+           "end": {
+            "line": 161,
+            "column": 1
+           }
+          }
+         },
+         {
+          "type": "text",
+          "value": ", so every window\nlies in its domain.",
+          "position": {
+           "start": {
+            "line": 161,
+            "column": 1
+           },
+           "end": {
+            "line": 161,
             "column": 1
            }
           }
@@ -2674,11 +3166,11 @@
         "spread": false,
         "position": {
          "start": {
-          "line": 148,
+          "line": 165,
           "column": 1
          },
          "end": {
-          "line": 152,
+          "line": 173,
           "column": 1
          }
         },
@@ -2688,11 +3180,11 @@
           "spread": true,
           "position": {
            "start": {
-            "line": 148,
+            "line": 165,
             "column": 1
            },
            "end": {
-            "line": 148,
+            "line": 165,
             "column": 1
            }
           },
@@ -2704,11 +3196,11 @@
               "type": "strong",
               "position": {
                "start": {
-                "line": 148,
+                "line": 165,
                 "column": 1
                },
                "end": {
-                "line": 148,
+                "line": 165,
                 "column": 1
                }
               },
@@ -2718,11 +3210,11 @@
                 "value": "Scratch work.",
                 "position": {
                  "start": {
-                  "line": 148,
+                  "line": 165,
                   "column": 1
                  },
                  "end": {
-                  "line": 148,
+                  "line": 165,
                   "column": 1
                  }
                 }
@@ -2734,11 +3226,11 @@
               "value": " ",
               "position": {
                "start": {
-                "line": 148,
+                "line": 165,
                 "column": 1
                },
                "end": {
-                "line": 148,
+                "line": 165,
                 "column": 1
                }
               }
@@ -2748,11 +3240,11 @@
               "value": "\\abs{(2x - 1) - 5} = \\abs{2x - 6} = 2\\abs{x - 3}",
               "position": {
                "start": {
-                "line": 148,
+                "line": 165,
                 "column": 1
                },
                "end": {
-                "line": 148,
+                "line": 165,
                 "column": 1
                }
               }
@@ -2762,11 +3254,11 @@
               "value": ".",
               "position": {
                "start": {
-                "line": 148,
+                "line": 165,
                 "column": 1
                },
                "end": {
-                "line": 148,
+                "line": 165,
                 "column": 1
                }
               }
@@ -2780,11 +3272,11 @@
           "spread": true,
           "position": {
            "start": {
-            "line": 149,
+            "line": 166,
             "column": 1
            },
            "end": {
-            "line": 149,
+            "line": 167,
             "column": 1
            }
           },
@@ -2796,11 +3288,11 @@
               "type": "strong",
               "position": {
                "start": {
-                "line": 149,
+                "line": 166,
                 "column": 1
                },
                "end": {
-                "line": 149,
+                "line": 166,
                 "column": 1
                }
               },
@@ -2810,11 +3302,11 @@
                 "value": "Choose ",
                 "position": {
                  "start": {
-                  "line": 149,
+                  "line": 166,
                   "column": 1
                  },
                  "end": {
-                  "line": 149,
+                  "line": 166,
                   "column": 1
                  }
                 }
@@ -2824,11 +3316,11 @@
                 "value": "\\delta",
                 "position": {
                  "start": {
-                  "line": 149,
+                  "line": 166,
                   "column": 1
                  },
                  "end": {
-                  "line": 149,
+                  "line": 166,
                   "column": 1
                  }
                 }
@@ -2838,11 +3330,11 @@
                 "value": ".",
                 "position": {
                  "start": {
-                  "line": 149,
+                  "line": 166,
                   "column": 1
                  },
                  "end": {
-                  "line": 149,
+                  "line": 166,
                   "column": 1
                  }
                 }
@@ -2854,53 +3346,137 @@
               "value": " We need ",
               "position": {
                "start": {
-                "line": 149,
+                "line": 166,
                 "column": 1
                },
                "end": {
-                "line": 149,
+                "line": 166,
                 "column": 1
                }
               }
              },
              {
               "type": "inlineMath",
-              "value": "2\\abs{x-3} < \\eps",
+              "value": "2\\abs{x - 3} < \\eps",
               "position": {
                "start": {
-                "line": 149,
+                "line": 166,
                 "column": 1
                },
                "end": {
-                "line": 149,
+                "line": 166,
                 "column": 1
                }
               }
              },
              {
               "type": "text",
-              "value": ", so take ",
+              "value": ", that is, ",
               "position": {
                "start": {
-                "line": 149,
+                "line": 166,
                 "column": 1
                },
                "end": {
-                "line": 149,
+                "line": 166,
                 "column": 1
                }
               }
              },
              {
               "type": "inlineMath",
-              "value": "\\delta = \\eps/2",
+              "value": "\\abs{x - 3} < \\frac{\\eps}{2}",
               "position": {
                "start": {
-                "line": 149,
+                "line": 166,
                 "column": 1
                },
                "end": {
-                "line": 149,
+                "line": 166,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "text",
+              "value": ".\nSo take ",
+              "position": {
+               "start": {
+                "line": 166,
+                "column": 1
+               },
+               "end": {
+                "line": 166,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "inlineMath",
+              "value": "\\delta = \\frac{\\eps}{2}",
+              "position": {
+               "start": {
+                "line": 166,
+                "column": 1
+               },
+               "end": {
+                "line": 166,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "text",
+              "value": ". It depends on ",
+              "position": {
+               "start": {
+                "line": 166,
+                "column": 1
+               },
+               "end": {
+                "line": 166,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "inlineMath",
+              "value": "\\eps",
+              "position": {
+               "start": {
+                "line": 166,
+                "column": 1
+               },
+               "end": {
+                "line": 166,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "text",
+              "value": " only, not on ",
+              "position": {
+               "start": {
+                "line": 166,
+                "column": 1
+               },
+               "end": {
+                "line": 166,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "inlineMath",
+              "value": "x",
+              "position": {
+               "start": {
+                "line": 166,
+                "column": 1
+               },
+               "end": {
+                "line": 166,
                 "column": 1
                }
               }
@@ -2910,11 +3486,11 @@
               "value": ".",
               "position": {
                "start": {
-                "line": 149,
+                "line": 166,
                 "column": 1
                },
                "end": {
-                "line": 149,
+                "line": 166,
                 "column": 1
                }
               }
@@ -2928,11 +3504,11 @@
           "spread": true,
           "position": {
            "start": {
-            "line": 150,
+            "line": 168,
             "column": 1
            },
            "end": {
-            "line": 152,
+            "line": 173,
             "column": 1
            }
           },
@@ -2944,11 +3520,11 @@
               "type": "strong",
               "position": {
                "start": {
-                "line": 150,
+                "line": 168,
                 "column": 1
                },
                "end": {
-                "line": 150,
+                "line": 168,
                 "column": 1
                }
               },
@@ -2958,11 +3534,11 @@
                 "value": "Proof.",
                 "position": {
                  "start": {
-                  "line": 150,
+                  "line": 168,
                   "column": 1
                  },
                  "end": {
-                  "line": 150,
+                  "line": 168,
                   "column": 1
                  }
                 }
@@ -2971,75 +3547,174 @@
              },
              {
               "type": "text",
-              "value": " If ",
+              "value": " Let ",
               "position": {
                "start": {
-                "line": 150,
+                "line": 168,
                 "column": 1
                },
                "end": {
-                "line": 150,
+                "line": 168,
                 "column": 1
                }
               }
              },
              {
               "type": "inlineMath",
-              "value": "0 < \\abs{x - 3} < \\delta = \\eps/2",
+              "value": "\\eps > 0",
               "position": {
                "start": {
-                "line": 150,
+                "line": 168,
                 "column": 1
                },
                "end": {
-                "line": 150,
+                "line": 168,
                 "column": 1
                }
               }
              },
              {
               "type": "text",
-              "value": ", then\n",
+              "value": " and ",
               "position": {
                "start": {
-                "line": 150,
+                "line": 168,
                 "column": 1
                },
                "end": {
-                "line": 150,
+                "line": 168,
                 "column": 1
                }
               }
              },
              {
               "type": "inlineMath",
-              "value": "\\abs{(2x-1) - 5} = 2\\abs{x-3} < 2 \\cdot \\tfrac{\\eps}{2} = \\eps",
+              "value": "\\delta = \\frac{\\eps}{2}",
               "position": {
                "start": {
-                "line": 150,
+                "line": 168,
                 "column": 1
                },
                "end": {
-                "line": 150,
+                "line": 168,
                 "column": 1
                }
               }
              },
              {
               "type": "text",
-              "value": ".",
+              "value": ". If ",
               "position": {
                "start": {
-                "line": 150,
+                "line": 168,
                 "column": 1
                },
                "end": {
-                "line": 150,
+                "line": 168,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "inlineMath",
+              "value": "0 < \\abs{x - 3} < \\delta",
+              "position": {
+               "start": {
+                "line": 168,
+                "column": 1
+               },
+               "end": {
+                "line": 168,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "text",
+              "value": ", then\nmultiplying ",
+              "position": {
+               "start": {
+                "line": 168,
+                "column": 1
+               },
+               "end": {
+                "line": 168,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "inlineMath",
+              "value": "\\abs{x - 3} < \\frac{\\eps}{2}",
+              "position": {
+               "start": {
+                "line": 168,
+                "column": 1
+               },
+               "end": {
+                "line": 168,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "text",
+              "value": " by the positive number ",
+              "position": {
+               "start": {
+                "line": 168,
+                "column": 1
+               },
+               "end": {
+                "line": 168,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "text",
+              "value": "2",
+              "position": {
+               "start": {
+                "line": 168,
+                "column": 1
+               },
+               "end": {
+                "line": 168,
+                "column": 1
+               }
+              }
+             },
+             {
+              "type": "text",
+              "value": " keeps the inequality:\n",
+              "position": {
+               "start": {
+                "line": 168,
+                "column": 1
+               },
+               "end": {
+                "line": 168,
                 "column": 1
                }
               }
              }
             ]
+           },
+           {
+            "type": "math",
+            "value": "\\abs{(2x - 1) - 5} = 2\\abs{x - 3} < 2 \\cdot \\frac{\\eps}{2} = \\eps .",
+            "position": {
+             "start": {
+              "line": 168,
+              "column": 1
+             },
+             "end": {
+              "line": 168,
+              "column": 1
+             }
+            },
+            "enumerator": "3"
            }
           ]
          }
@@ -3050,25 +3725,25 @@
         "value": "\\boxed{\\delta = \\tfrac{\\eps}{2}}",
         "position": {
          "start": {
-          "line": 153,
+          "line": 174,
           "column": 1
          },
          "end": {
-          "line": 155,
+          "line": 176,
           "column": 1
          }
         },
-        "enumerator": "3"
+        "enumerator": "4"
        },
        {
         "type": "paragraph",
         "position": {
          "start": {
-          "line": 157,
+          "line": 178,
           "column": 1
          },
          "end": {
-          "line": 157,
+          "line": 178,
           "column": 1
          }
         },
@@ -3077,11 +3752,11 @@
           "type": "strong",
           "position": {
            "start": {
-            "line": 157,
+            "line": 178,
             "column": 1
            },
            "end": {
-            "line": 157,
+            "line": 178,
             "column": 1
            }
           },
@@ -3091,11 +3766,11 @@
             "value": "Check.",
             "position": {
              "start": {
-              "line": 157,
+              "line": 178,
               "column": 1
              },
              "end": {
-              "line": 157,
+              "line": 178,
               "column": 1
              }
             }
@@ -3107,11 +3782,11 @@
           "value": " For ",
           "position": {
            "start": {
-            "line": 157,
+            "line": 178,
             "column": 1
            },
            "end": {
-            "line": 157,
+            "line": 178,
             "column": 1
            }
           }
@@ -3121,11 +3796,11 @@
           "value": "\\eps = 0.1",
           "position": {
            "start": {
-            "line": 157,
+            "line": 178,
             "column": 1
            },
            "end": {
-            "line": 157,
+            "line": 178,
             "column": 1
            }
           }
@@ -3135,11 +3810,11 @@
           "value": ": ",
           "position": {
            "start": {
-            "line": 157,
+            "line": 178,
             "column": 1
            },
            "end": {
-            "line": 157,
+            "line": 178,
             "column": 1
            }
           }
@@ -3149,11 +3824,11 @@
           "value": "\\delta = 0.05",
           "position": {
            "start": {
-            "line": 157,
+            "line": 178,
             "column": 1
            },
            "end": {
-            "line": 157,
+            "line": 178,
             "column": 1
            }
           }
@@ -3163,11 +3838,11 @@
           "value": ", and ",
           "position": {
            "start": {
-            "line": 157,
+            "line": 178,
             "column": 1
            },
            "end": {
-            "line": 157,
+            "line": 178,
             "column": 1
            }
           }
@@ -3177,11 +3852,11 @@
           "value": "x = 3.04",
           "position": {
            "start": {
-            "line": 157,
+            "line": 178,
             "column": 1
            },
            "end": {
-            "line": 157,
+            "line": 178,
             "column": 1
            }
           }
@@ -3191,11 +3866,11 @@
           "value": " gives ",
           "position": {
            "start": {
-            "line": 157,
+            "line": 178,
             "column": 1
            },
            "end": {
-            "line": 157,
+            "line": 178,
             "column": 1
            }
           }
@@ -3205,11 +3880,11 @@
           "value": "\\abs{2(3.04) - 1 - 5} = 0.08 < 0.1",
           "position": {
            "start": {
-            "line": 157,
+            "line": 178,
             "column": 1
            },
            "end": {
-            "line": 157,
+            "line": 178,
             "column": 1
            }
           }
@@ -3219,11 +3894,11 @@
           "value": ". ✓",
           "position": {
            "start": {
-            "line": 157,
+            "line": 178,
             "column": 1
            },
            "end": {
-            "line": 157,
+            "line": 178,
             "column": 1
            }
           }
@@ -3238,14 +3913,14 @@
      },
      {
       "type": "comment",
-      "value": "Add 2–6 more examples: the typical, the edge case, an applied one; non-existence examples.",
+      "value": "Add 2–6 more examples: the typical, the edge case, an applied one; non-existence examples.\n In every proof, example and solution: before multiplying or dividing an inequality, state the\n sign of the factor and name the order rule (\"multiplying by the positive number |x − 2| keeps\n the strict inequality\"; a factor that may be 0 gives only ≤). Each step says which hypothesis,\n definition clause or cited result it rests on. A displayed chain that is wider than a phone\n screen is split over lines with aligned.",
       "position": {
        "start": {
-        "line": 160,
+        "line": 181,
         "column": 1
        },
        "end": {
-        "line": 160,
+        "line": 186,
         "column": 1
        }
       }
@@ -3255,11 +3930,11 @@
       "depth": 2,
       "position": {
        "start": {
-        "line": 162,
+        "line": 188,
         "column": 1
        },
        "end": {
-        "line": 162,
+        "line": 188,
         "column": 1
        }
       },
@@ -3269,11 +3944,11 @@
         "value": "Common mistakes",
         "position": {
          "start": {
-          "line": 162,
+          "line": 188,
           "column": 1
          },
          "end": {
-          "line": 162,
+          "line": 188,
           "column": 1
          }
         }
@@ -3296,11 +3971,11 @@
           "value": "“The limit is just ",
           "position": {
            "start": {
-            "line": 164,
+            "line": 190,
             "column": 1
            },
            "end": {
-            "line": 164,
+            "line": 190,
             "column": 1
            }
           }
@@ -3310,11 +3985,11 @@
           "value": "f(a)",
           "position": {
            "start": {
-            "line": 164,
+            "line": 190,
             "column": 1
            },
            "end": {
-            "line": 164,
+            "line": 190,
             "column": 1
            }
           }
@@ -3324,11 +3999,11 @@
           "value": "”",
           "position": {
            "start": {
-            "line": 164,
+            "line": 190,
             "column": 1
            },
            "end": {
-            "line": 164,
+            "line": 190,
             "column": 1
            }
           }
@@ -3340,11 +4015,11 @@
         "value": "✗ wrong — why — ✓ right. Use the (x²−1)/(x−1) example: f(1) is undefined, the limit is 2.",
         "position": {
          "start": {
-          "line": 165,
+          "line": 191,
           "column": 1
          },
          "end": {
-          "line": 165,
+          "line": 191,
           "column": 1
          }
         }
@@ -3363,11 +4038,11 @@
           "value": "Letting ",
           "position": {
            "start": {
-            "line": 168,
+            "line": 194,
             "column": 1
            },
            "end": {
-            "line": 168,
+            "line": 194,
             "column": 1
            }
           }
@@ -3377,11 +4052,11 @@
           "value": "\\delta",
           "position": {
            "start": {
-            "line": 168,
+            "line": 194,
             "column": 1
            },
            "end": {
-            "line": 168,
+            "line": 194,
             "column": 1
            }
           }
@@ -3391,11 +4066,11 @@
           "value": " depend on ",
           "position": {
            "start": {
-            "line": 168,
+            "line": 194,
             "column": 1
            },
            "end": {
-            "line": 168,
+            "line": 194,
             "column": 1
            }
           }
@@ -3405,11 +4080,11 @@
           "value": "x",
           "position": {
            "start": {
-            "line": 168,
+            "line": 194,
             "column": 1
            },
            "end": {
-            "line": 168,
+            "line": 194,
             "column": 1
            }
           }
@@ -3421,11 +4096,11 @@
         "value": "✗ \"take δ = |x − 3|\" — δ must depend only on ε (and a), chosen before x.",
         "position": {
          "start": {
-          "line": 169,
+          "line": 195,
           "column": 1
          },
          "end": {
-          "line": 169,
+          "line": 195,
           "column": 1
          }
         }
@@ -3437,11 +4112,11 @@
       "depth": 2,
       "position": {
        "start": {
-        "line": 172,
+        "line": 198,
         "column": 1
        },
        "end": {
-        "line": 172,
+        "line": 198,
         "column": 1
        }
       },
@@ -3451,11 +4126,11 @@
         "value": "Rigorous track",
         "position": {
          "start": {
-          "line": 172,
+          "line": 198,
           "column": 1
          },
          "end": {
-          "line": 172,
+          "line": 198,
           "column": 1
          }
         }
@@ -3477,11 +4152,11 @@
           "value": "Why “",
           "position": {
            "start": {
-            "line": 174,
+            "line": 200,
             "column": 1
            },
            "end": {
-            "line": 174,
+            "line": 200,
             "column": 1
            }
           }
@@ -3491,11 +4166,11 @@
           "value": "0 < \\abs{x - a}",
           "position": {
            "start": {
-            "line": 174,
+            "line": 200,
             "column": 1
            },
            "end": {
-            "line": 174,
+            "line": 200,
             "column": 1
            }
           }
@@ -3505,11 +4180,11 @@
           "value": "”?",
           "position": {
            "start": {
-            "line": 174,
+            "line": 200,
             "column": 1
            },
            "end": {
-            "line": 174,
+            "line": 200,
             "column": 1
            }
           }
@@ -3521,11 +4196,11 @@
         "value": "Explain that excluding x = a is what makes limits useful for derivatives (0/0).",
         "position": {
          "start": {
-          "line": 176,
+          "line": 202,
           "column": 1
          },
          "end": {
-          "line": 176,
+          "line": 202,
           "column": 1
          }
         }
@@ -3538,11 +4213,11 @@
       "depth": 2,
       "position": {
        "start": {
-        "line": 179,
+        "line": 205,
         "column": 1
        },
        "end": {
-        "line": 179,
+        "line": 205,
         "column": 1
        }
       },
@@ -3552,11 +4227,11 @@
         "value": "Summary",
         "position": {
          "start": {
-          "line": 179,
+          "line": 205,
           "column": 1
          },
          "end": {
-          "line": 179,
+          "line": 205,
           "column": 1
          }
         }
@@ -3573,11 +4248,11 @@
       "spread": false,
       "position": {
        "start": {
-        "line": 181,
+        "line": 207,
         "column": 1
        },
        "end": {
-        "line": 185,
+        "line": 211,
         "column": 1
        }
       },
@@ -3587,11 +4262,11 @@
         "spread": true,
         "position": {
          "start": {
-          "line": 181,
+          "line": 207,
           "column": 1
          },
          "end": {
-          "line": 181,
+          "line": 207,
           "column": 1
          }
         },
@@ -3604,11 +4279,11 @@
             "value": "\\lim_{x\\to a} f(x) = L",
             "position": {
              "start": {
-              "line": 181,
+              "line": 207,
               "column": 1
              },
              "end": {
-              "line": 181,
+              "line": 207,
               "column": 1
              }
             }
@@ -3618,11 +4293,11 @@
             "value": " is about values of ",
             "position": {
              "start": {
-              "line": 181,
+              "line": 207,
               "column": 1
              },
              "end": {
-              "line": 181,
+              "line": 207,
               "column": 1
              }
             }
@@ -3632,11 +4307,11 @@
             "value": "f",
             "position": {
              "start": {
-              "line": 181,
+              "line": 207,
               "column": 1
              },
              "end": {
-              "line": 181,
+              "line": 207,
               "column": 1
              }
             }
@@ -3646,11 +4321,11 @@
             "value": " ",
             "position": {
              "start": {
-              "line": 181,
+              "line": 207,
               "column": 1
              },
              "end": {
-              "line": 181,
+              "line": 207,
               "column": 1
              }
             }
@@ -3659,11 +4334,11 @@
             "type": "strong",
             "position": {
              "start": {
-              "line": 181,
+              "line": 207,
               "column": 1
              },
              "end": {
-              "line": 181,
+              "line": 207,
               "column": 1
              }
             },
@@ -3673,11 +4348,11 @@
               "value": "near",
               "position": {
                "start": {
-                "line": 181,
+                "line": 207,
                 "column": 1
                },
                "end": {
-                "line": 181,
+                "line": 207,
                 "column": 1
                }
               }
@@ -3689,11 +4364,11 @@
             "value": " ",
             "position": {
              "start": {
-              "line": 181,
+              "line": 207,
               "column": 1
              },
              "end": {
-              "line": 181,
+              "line": 207,
               "column": 1
              }
             }
@@ -3703,11 +4378,11 @@
             "value": "a",
             "position": {
              "start": {
-              "line": 181,
+              "line": 207,
               "column": 1
              },
              "end": {
-              "line": 181,
+              "line": 207,
               "column": 1
              }
             }
@@ -3717,11 +4392,11 @@
             "value": ", never ",
             "position": {
              "start": {
-              "line": 181,
+              "line": 207,
               "column": 1
              },
              "end": {
-              "line": 181,
+              "line": 207,
               "column": 1
              }
             }
@@ -3730,11 +4405,11 @@
             "type": "strong",
             "position": {
              "start": {
-              "line": 181,
+              "line": 207,
               "column": 1
              },
              "end": {
-              "line": 181,
+              "line": 207,
               "column": 1
              }
             },
@@ -3744,11 +4419,11 @@
               "value": "at",
               "position": {
                "start": {
-                "line": 181,
+                "line": 207,
                 "column": 1
                },
                "end": {
-                "line": 181,
+                "line": 207,
                 "column": 1
                }
               }
@@ -3760,11 +4435,11 @@
             "value": " ",
             "position": {
              "start": {
-              "line": 181,
+              "line": 207,
               "column": 1
              },
              "end": {
-              "line": 181,
+              "line": 207,
               "column": 1
              }
             }
@@ -3774,11 +4449,11 @@
             "value": "a",
             "position": {
              "start": {
-              "line": 181,
+              "line": 207,
               "column": 1
              },
              "end": {
-              "line": 181,
+              "line": 207,
               "column": 1
              }
             }
@@ -3788,11 +4463,11 @@
             "value": ".",
             "position": {
              "start": {
-              "line": 181,
+              "line": 207,
               "column": 1
              },
              "end": {
-              "line": 181,
+              "line": 207,
               "column": 1
              }
             }
@@ -3806,11 +4481,11 @@
         "spread": true,
         "position": {
          "start": {
-          "line": 182,
+          "line": 208,
           "column": 1
          },
          "end": {
-          "line": 182,
+          "line": 208,
           "column": 1
          }
         },
@@ -3823,11 +4498,11 @@
             "value": "Precisely: for every ",
             "position": {
              "start": {
-              "line": 182,
+              "line": 208,
               "column": 1
              },
              "end": {
-              "line": 182,
+              "line": 208,
               "column": 1
              }
             }
@@ -3837,11 +4512,11 @@
             "value": "\\eps > 0",
             "position": {
              "start": {
-              "line": 182,
+              "line": 208,
               "column": 1
              },
              "end": {
-              "line": 182,
+              "line": 208,
               "column": 1
              }
             }
@@ -3851,11 +4526,11 @@
             "value": " there is ",
             "position": {
              "start": {
-              "line": 182,
+              "line": 208,
               "column": 1
              },
              "end": {
-              "line": 182,
+              "line": 208,
               "column": 1
              }
             }
@@ -3865,11 +4540,11 @@
             "value": "\\delta > 0",
             "position": {
              "start": {
-              "line": 182,
+              "line": 208,
               "column": 1
              },
              "end": {
-              "line": 182,
+              "line": 208,
               "column": 1
              }
             }
@@ -3879,11 +4554,11 @@
             "value": " such that ",
             "position": {
              "start": {
-              "line": 182,
+              "line": 208,
               "column": 1
              },
              "end": {
-              "line": 182,
+              "line": 208,
               "column": 1
              }
             }
@@ -3893,11 +4568,11 @@
             "value": "0<\\abs{x-a}<\\delta \\implies \\abs{f(x)-L}<\\eps",
             "position": {
              "start": {
-              "line": 182,
+              "line": 208,
               "column": 1
              },
              "end": {
-              "line": 182,
+              "line": 208,
               "column": 1
              }
             }
@@ -3907,11 +4582,11 @@
             "value": ".",
             "position": {
              "start": {
-              "line": 182,
+              "line": 208,
               "column": 1
              },
              "end": {
-              "line": 182,
+              "line": 208,
               "column": 1
              }
             }
@@ -3925,11 +4600,11 @@
         "spread": true,
         "position": {
          "start": {
-          "line": 183,
+          "line": 209,
           "column": 1
          },
          "end": {
-          "line": 183,
+          "line": 209,
           "column": 1
          }
         },
@@ -3942,11 +4617,11 @@
             "value": "Tables and graphs suggest limits but cannot prove them.",
             "position": {
              "start": {
-              "line": 183,
+              "line": 209,
               "column": 1
              },
              "end": {
-              "line": 183,
+              "line": 209,
               "column": 1
              }
             }
@@ -3960,11 +4635,11 @@
         "spread": true,
         "position": {
          "start": {
-          "line": 184,
+          "line": 210,
           "column": 1
          },
          "end": {
-          "line": 185,
+          "line": 211,
           "column": 1
          }
         },
@@ -3977,11 +4652,11 @@
             "value": "A limit, if it exists, is unique (",
             "position": {
              "start": {
-              "line": 184,
+              "line": 210,
               "column": 1
              },
              "end": {
-              "line": 184,
+              "line": 210,
               "column": 1
              }
             }
@@ -3990,11 +4665,11 @@
             "type": "crossReference",
             "position": {
              "start": {
-              "line": 184,
+              "line": 210,
               "column": 1
              },
              "end": {
-              "line": 184,
+              "line": 210,
               "column": 1
              }
             },
@@ -4021,11 +4696,11 @@
             "value": ").",
             "position": {
              "start": {
-              "line": 184,
+              "line": 210,
               "column": 1
              },
              "end": {
-              "line": 184,
+              "line": 210,
               "column": 1
              }
             }
@@ -4041,11 +4716,11 @@
       "depth": 2,
       "position": {
        "start": {
-        "line": 186,
+        "line": 212,
         "column": 1
        },
        "end": {
-        "line": 186,
+        "line": 212,
         "column": 1
        }
       },
@@ -4055,11 +4730,11 @@
         "value": "Exercises",
         "position": {
          "start": {
-          "line": 186,
+          "line": 212,
           "column": 1
          },
          "end": {
-          "line": 186,
+          "line": 212,
           "column": 1
          }
         }
@@ -4075,11 +4750,11 @@
       "value": "Tiers: A (check) ~40 %, B (practice) ~40 %, C (challenge) ~20 %. See docs/plan/07-exercises.md.\n Every exercise: label, tier class, optional hints, an Answer (machine-checkable LaTeX), and a solution.",
       "position": {
        "start": {
-        "line": 188,
+        "line": 214,
         "column": 1
        },
        "end": {
-        "line": 189,
+        "line": 215,
         "column": 1
        }
       }
@@ -4095,11 +4770,11 @@
           "value": "Reading a limit from a table",
           "position": {
            "start": {
-            "line": 191,
+            "line": 217,
             "column": 1
            },
            "end": {
-            "line": 191,
+            "line": 217,
             "column": 1
            }
           }
@@ -4110,11 +4785,11 @@
         "type": "paragraph",
         "position": {
          "start": {
-          "line": 195,
+          "line": 221,
           "column": 1
          },
          "end": {
-          "line": 196,
+          "line": 222,
           "column": 1
          }
         },
@@ -4124,11 +4799,11 @@
           "value": "Use a table of values with ",
           "position": {
            "start": {
-            "line": 195,
+            "line": 221,
             "column": 1
            },
            "end": {
-            "line": 195,
+            "line": 221,
             "column": 1
            }
           }
@@ -4138,11 +4813,11 @@
           "value": "x = 0.1, 0.01, 0.001",
           "position": {
            "start": {
-            "line": 195,
+            "line": 221,
             "column": 1
            },
            "end": {
-            "line": 195,
+            "line": 221,
             "column": 1
            }
           }
@@ -4152,25 +4827,25 @@
           "value": " (and the negatives) to estimate\n",
           "position": {
            "start": {
-            "line": 195,
+            "line": 221,
             "column": 1
            },
            "end": {
-            "line": 195,
+            "line": 221,
             "column": 1
            }
           }
          },
          {
           "type": "inlineMath",
-          "value": "\\displaystyle \\lim_{x \\to 0} \\frac{2^x - 1}{x}",
+          "value": "\\displaystyle \\lim_{x \\to 0} \\frac{\\sqrt{1 + x} - 1}{x}",
           "position": {
            "start": {
-            "line": 195,
+            "line": 221,
             "column": 1
            },
            "end": {
-            "line": 195,
+            "line": 221,
             "column": 1
            }
           }
@@ -4180,11 +4855,11 @@
           "value": " to two decimal places.",
           "position": {
            "start": {
-            "line": 195,
+            "line": 221,
             "column": 1
            },
            "end": {
-            "line": 195,
+            "line": 221,
             "column": 1
            }
           }
@@ -4202,11 +4877,11 @@
             "value": "Hint 1",
             "position": {
              "start": {
-              "line": 198,
+              "line": 224,
               "column": 1
              },
              "end": {
-              "line": 198,
+              "line": 224,
               "column": 1
              }
             }
@@ -4217,11 +4892,11 @@
           "type": "paragraph",
           "position": {
            "start": {
-            "line": 200,
+            "line": 226,
             "column": 1
            },
            "end": {
-            "line": 200,
+            "line": 226,
             "column": 1
            }
           },
@@ -4231,11 +4906,11 @@
             "value": "Evaluate on both sides of ",
             "position": {
              "start": {
-              "line": 200,
+              "line": 226,
               "column": 1
              },
              "end": {
-              "line": 200,
+              "line": 226,
               "column": 1
              }
             }
@@ -4245,11 +4920,11 @@
             "value": "0",
             "position": {
              "start": {
-              "line": 200,
+              "line": 226,
               "column": 1
              },
              "end": {
-              "line": 200,
+              "line": 226,
               "column": 1
              }
             }
@@ -4259,11 +4934,11 @@
             "value": ". Do the values settle as ",
             "position": {
              "start": {
-              "line": 200,
+              "line": 226,
               "column": 1
              },
              "end": {
-              "line": 200,
+              "line": 226,
               "column": 1
              }
             }
@@ -4273,11 +4948,11 @@
             "value": "x",
             "position": {
              "start": {
-              "line": 200,
+              "line": 226,
               "column": 1
              },
              "end": {
-              "line": 200,
+              "line": 226,
               "column": 1
              }
             }
@@ -4287,11 +4962,11 @@
             "value": " shrinks?",
             "position": {
              "start": {
-              "line": 200,
+              "line": 226,
               "column": 1
              },
              "end": {
-              "line": 200,
+              "line": 226,
               "column": 1
              }
             }
@@ -4312,11 +4987,11 @@
             "value": "Answer",
             "position": {
              "start": {
-              "line": 203,
+              "line": 229,
               "column": 1
              },
              "end": {
-              "line": 203,
+              "line": 229,
               "column": 1
              }
             }
@@ -4327,25 +5002,25 @@
           "type": "paragraph",
           "position": {
            "start": {
-            "line": 205,
+            "line": 231,
             "column": 1
            },
            "end": {
-            "line": 205,
+            "line": 231,
             "column": 1
            }
           },
           "children": [
            {
             "type": "text",
-            "value": "0.69",
+            "value": "0.50",
             "position": {
              "start": {
-              "line": 205,
+              "line": 231,
               "column": 1
              },
              "end": {
-              "line": 205,
+              "line": 231,
               "column": 1
              }
             }
@@ -4397,14 +5072,14 @@
        },
        {
         "type": "comment",
-        "value": "Full table, then the estimate 0.69. Do not cite the exact value here: it is ln 2, but the\n pages that show it are outside this page's prerequisite closure. Mention it, if at all,\n in a looking-ahead admonition (templates/blocks.md), e.g. \"The exact value is ln 2; see\n [Derivatives of Exponential and Logarithmic Functions](#calc-derivatives-exp-log).\"",
+        "value": "Full table, then the estimate 0.50, called an estimate, not a proof. Only functions in this\n page's prerequisite closure: the exemplar replaced (2^x − 1)/x, whose 2^x is defined on a\n later page, by this one. The exact value 1/2 (rationalise the numerator) belongs in a\n looking-ahead admonition (templates/blocks.md), because Computing Limits Algebraically is\n the page that shows why such a step gives the limit.",
         "position": {
          "start": {
-          "line": 212,
+          "line": 238,
           "column": 1
          },
          "end": {
-          "line": 215,
+          "line": 242,
           "column": 1
          }
         }
@@ -4426,11 +5101,11 @@
           "value": "An ε–δ proof",
           "position": {
            "start": {
-            "line": 218,
+            "line": 245,
             "column": 1
            },
            "end": {
-            "line": 218,
+            "line": 245,
             "column": 1
            }
           }
@@ -4441,11 +5116,11 @@
         "type": "paragraph",
         "position": {
          "start": {
-          "line": 222,
+          "line": 249,
           "column": 1
          },
          "end": {
-          "line": 222,
+          "line": 249,
           "column": 1
          }
         },
@@ -4455,11 +5130,11 @@
           "value": "Prove from ",
           "position": {
            "start": {
-            "line": 222,
+            "line": 249,
             "column": 1
            },
            "end": {
-            "line": 222,
+            "line": 249,
             "column": 1
            }
           }
@@ -4468,11 +5143,11 @@
           "type": "crossReference",
           "position": {
            "start": {
-            "line": 222,
+            "line": 249,
             "column": 1
            },
            "end": {
-            "line": 222,
+            "line": 249,
             "column": 1
            }
           },
@@ -4482,11 +5157,11 @@
             "value": "the definition",
             "position": {
              "start": {
-              "line": 222,
+              "line": 249,
               "column": 1
              },
              "end": {
-              "line": 222,
+              "line": 249,
               "column": 1
              }
             }
@@ -4505,11 +5180,11 @@
           "value": " that ",
           "position": {
            "start": {
-            "line": 222,
+            "line": 249,
             "column": 1
            },
            "end": {
-            "line": 222,
+            "line": 249,
             "column": 1
            }
           }
@@ -4519,11 +5194,11 @@
           "value": "\\lim_{x \\to -1} (4 - 3x) = 7",
           "position": {
            "start": {
-            "line": 222,
+            "line": 249,
             "column": 1
            },
            "end": {
-            "line": 222,
+            "line": 249,
             "column": 1
            }
           }
@@ -4533,11 +5208,11 @@
           "value": ".",
           "position": {
            "start": {
-            "line": 222,
+            "line": 249,
             "column": 1
            },
            "end": {
-            "line": 222,
+            "line": 249,
             "column": 1
            }
           }
@@ -4555,11 +5230,11 @@
             "value": "Hint 1",
             "position": {
              "start": {
-              "line": 224,
+              "line": 251,
               "column": 1
              },
              "end": {
-              "line": 224,
+              "line": 251,
               "column": 1
              }
             }
@@ -4570,11 +5245,11 @@
           "type": "paragraph",
           "position": {
            "start": {
-            "line": 226,
+            "line": 253,
             "column": 1
            },
            "end": {
-            "line": 226,
+            "line": 253,
             "column": 1
            }
           },
@@ -4584,11 +5259,11 @@
             "value": "Start from ",
             "position": {
              "start": {
-              "line": 226,
+              "line": 253,
               "column": 1
              },
              "end": {
-              "line": 226,
+              "line": 253,
               "column": 1
              }
             }
@@ -4598,11 +5273,11 @@
             "value": "\\abs{(4 - 3x) - 7}",
             "position": {
              "start": {
-              "line": 226,
+              "line": 253,
               "column": 1
              },
              "end": {
-              "line": 226,
+              "line": 253,
               "column": 1
              }
             }
@@ -4612,11 +5287,11 @@
             "value": " and factor out a constant.",
             "position": {
              "start": {
-              "line": 226,
+              "line": 253,
               "column": 1
              },
              "end": {
-              "line": 226,
+              "line": 253,
               "column": 1
              }
             }
@@ -4637,11 +5312,11 @@
             "value": "Answer",
             "position": {
              "start": {
-              "line": 229,
+              "line": 256,
               "column": 1
              },
              "end": {
-              "line": 229,
+              "line": 256,
               "column": 1
              }
             }
@@ -4652,11 +5327,11 @@
           "type": "paragraph",
           "position": {
            "start": {
-            "line": 231,
+            "line": 258,
             "column": 1
            },
            "end": {
-            "line": 231,
+            "line": 258,
             "column": 1
            }
           },
@@ -4666,11 +5341,11 @@
             "value": "\\delta = \\eps / 3",
             "position": {
              "start": {
-              "line": 231,
+              "line": 258,
               "column": 1
              },
              "end": {
-              "line": 231,
+              "line": 258,
               "column": 1
              }
             }
@@ -4680,11 +5355,11 @@
             "value": " works.",
             "position": {
              "start": {
-              "line": 231,
+              "line": 258,
               "column": 1
              },
              "end": {
-              "line": 231,
+              "line": 258,
               "column": 1
              }
             }
@@ -4736,14 +5411,14 @@
        },
        {
         "type": "comment",
-        "value": "Mirror the structure of the worked example: scratch work, choice of δ, proof.",
+        "value": "Mirror the structure of the worked example: scratch work, choice of δ, proof. Say that the\n function is defined on every window, and state the sign of the factor you multiply by.",
         "position": {
          "start": {
-          "line": 238,
+          "line": 265,
           "column": 1
          },
          "end": {
-          "line": 238,
+          "line": 266,
           "column": 1
          }
         }
@@ -4759,11 +5434,11 @@
       "depth": 2,
       "position": {
        "start": {
-        "line": 241,
+        "line": 269,
         "column": 1
        },
        "end": {
-        "line": 241,
+        "line": 269,
         "column": 1
        }
       },
@@ -4773,11 +5448,11 @@
         "value": "Where this leads",
         "position": {
          "start": {
-          "line": 241,
+          "line": 269,
           "column": 1
          },
          "end": {
-          "line": 241,
+          "line": 269,
           "column": 1
          }
         }
@@ -4793,11 +5468,11 @@
       "name": "where-this-leads",
       "position": {
        "start": {
-        "line": 243,
+        "line": 271,
         "column": 1
        },
        "end": {
-        "line": 244,
+        "line": 272,
         "column": 1
        }
       }
@@ -4807,11 +5482,11 @@
       "value": "Optional, hand-written:\n - See also: …\n - Further reading: Active Calculus 2.0 §1.7 (CC BY-SA 4.0)",
       "position": {
        "start": {
-        "line": 246,
+        "line": 274,
         "column": 1
        },
        "end": {
-        "line": 248,
+        "line": 276,
         "column": 1
        }
       }

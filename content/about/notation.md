@@ -93,6 +93,7 @@ $$
 | Infinite limits | "$\lim_{x \to a} f(x) = \infty$", with the remark that the limit *does not exist* as a real number | | |
 | Functions | $f\colon A \to B$, $x \mapsto x^2$; "the function $f$" and "the value $f(x)$" | "the function $f(x)$" in definitions | Allowed informally in examples. |
 | Composition and inverse | $f \circ g$; $f^{-1}$ for the inverse function; $1/f$ or $f(x)^{-1}$ for the reciprocal | | |
+| Monotone functions | increasing: $x_1 < x_2$ implies $f(x_1) \le f(x_2)$; strictly increasing: $x_1 < x_2$ implies $f(x_1) < f(x_2)$; likewise decreasing ($\ge$) and strictly decreasing ($>$) | "non-decreasing" for increasing, or "increasing" when strictly increasing is meant | "Increasing" allows the function to stay level; a result that needs $<$ says "strictly". Defined in [Functions and Their Graphs](#def-calc-monotone). |
 | Definitions | $:=$ when defining in a display; "is called" in prose | $\equiv$ | |
 | Approximation | $\approx$, with the precision stated ("to 4 decimal places") | | |
 | Sequences | $(a_n)_{n \ge 1}$ or $(a_n)$; terms $a_n$ | $\{a_n\}$ | Set braces would suggest a set, which forgets order and repetition. |

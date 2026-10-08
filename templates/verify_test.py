@@ -55,10 +55,10 @@ def test_linear_eps_delta_example():
 
 @covers("exr-calc-limit-table-estimate")
 def test_table_estimate():
-    exact = sp.limit((2**x - 1) / x, x, 0)          # = ln 2, derived independently
-    assert equal(exact, sp.log(2))
+    exact = sp.limit((sp.sqrt(1 + x) - 1) / x, x, 0)    # = 1/2, derived independently
+    assert equal(exact, sp.Rational(1, 2))
     # "to two decimal places": the printed value must be the correctly rounded one
-    # (0.69), so a wrongly rounded 0.70 fails. A tolerance of 1e-2 would accept it.
+    # (0.50), so a wrongly rounded 0.51 fails. A tolerance of 1e-2 would accept it.
     printed = float(answer("exr-calc-limit-table-estimate"))
     assert abs(printed - round(float(exact), 2)) < 1e-9
 

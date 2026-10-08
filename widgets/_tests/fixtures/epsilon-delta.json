@@ -1204,7 +1204,7 @@
    }
   },
   {
-   "source": "calculus/limits/limit-of-a-function.md:192",
+   "source": "calculus/limits/limit-of-a-function.md:196",
    "case": "a figure on the site",
    "f": "x^2",
    "a": 2,
@@ -1228,7 +1228,7 @@
    }
   },
   {
-   "source": "calculus/limits/limit-of-a-function.md:192",
+   "source": "calculus/limits/limit-of-a-function.md:196",
    "case": "a figure on the site",
    "f": "x^2",
    "a": 2,
@@ -1252,7 +1252,7 @@
    }
   },
   {
-   "source": "calculus/limits/limit-of-a-function.md:192",
+   "source": "calculus/limits/limit-of-a-function.md:196",
    "case": "a figure on the site",
    "f": "x^2",
    "a": 2,
@@ -1276,14 +1276,14 @@
    }
   },
   {
-   "source": "templates/topic.md:100",
+   "source": "templates/topic.md:110",
    "case": "a figure on the site",
    "f": "x^2",
    "a": 2,
    "L": 4,
    "xRange": [
-    -0.5,
-    3.5
+    1,
+    3
    ],
    "eps": 0.5,
    "left": {
@@ -1300,14 +1300,14 @@
    }
   },
   {
-   "source": "templates/topic.md:100",
+   "source": "templates/topic.md:110",
    "case": "a figure on the site",
    "f": "x^2",
    "a": 2,
    "L": 4,
    "xRange": [
-    -0.5,
-    3.5
+    1,
+    3
    ],
    "eps": 0.05,
    "left": {
@@ -1324,14 +1324,14 @@
    }
   },
   {
-   "source": "templates/topic.md:100",
+   "source": "templates/topic.md:110",
    "case": "a figure on the site",
    "f": "x^2",
    "a": 2,
    "L": 4,
    "xRange": [
-    -0.5,
-    3.5
+    1,
+    3
    ],
    "eps": 1.5,
    "left": {

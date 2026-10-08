@@ -73,6 +73,9 @@ Phases 3 and 4 can overlap: they share only the MVT/FTC boundary, and the graph
       site theme present (7 s)" (the npm stamp, `.venv` and the theme are all timestamped at
       session start), and `npm run all` was green in 1 min 43 s with no manual `npm ci` or
       `uv sync`.
+      Confirmed again 2026-10-08 by the template-freeze session, also brand-new from `main`:
+      "node_modules installed, Python environment synced, site theme present (12 s)", and
+      `npm run all` ran with no manual setup.
 
 ## Phase 1a: the gold-standard page `calc-limit`
 
@@ -97,13 +100,36 @@ Phases 3 and 4 can overlap: they share only the MVT/FTC boundary, and the graph
 - **Template freeze**: update `templates/` and `CLAUDE.md` with everything learnt; write
   `docs/exemplar-review.md`, the rubric the page was judged by (§9.1).
 
-**Definition of done**
-- [ ] `calc-real-numbers`, `calc-functions` and `calc-absolute-value-inequalities` at least `reviewed`.
+**Definition of done** (the template freeze, 2026-10-08, ticked what is met; the evidence for
+the exemplar is in [`docs/exemplar-review.md`](../exemplar-review.md))
+- [x] `calc-real-numbers`, `calc-functions` and `calc-absolute-value-inequalities` at least `reviewed`.
+      All three are `reviewed` with 100 % coverage (15/15, 19/19 and 20/20 in
+      `check_coverage.py`, the `manual` exercises through the owner's notes): signed off in
+      vronnblom/maths#12, in `e256537` on `main`, and inside vronnblom/maths#7.
 - [ ] `calc-limit` at `status: verified`, with the proof checklist signed by the owner and the reviewer agent.
-- [ ] Exemplar rubric (§9.1): every item ✔.
+      **Not yet**: the page is `reviewed` (vronnblom/maths#11) and already meets every machine
+      precondition of `verified` (17/17, 100 %; every prerequisite `reviewed`; no
+      forward-reference warnings). The reviewer sessions' checklists are in its two reviews;
+      it waits for the reader test below and the owner's signature on the checklist.
+- [x] Exemplar rubric (§9.1): every item ✔. Item by item, with links, in
+      [`docs/exemplar-review.md`](../exemplar-review.md). Item 10 has one dead anchor (the
+      "Facts from school" box is an admonition, which the theme gives no `id`): a follow-up,
+      and a rule in `templates/blocks.md`.
 - [ ] Tested by a real reader (a student or colleague), and their feedback addressed.
-- [ ] Mobile view checked (widgets usable on a phone, dropdowns readable).
-- [ ] Lighthouse accessibility score ≥ 95 for the page.
+      **Not yet**: the owner's step; `docs/exemplar-review.md` has the placeholder for it.
+- [x] Mobile view checked (widgets usable on a phone, dropdowns readable). Playwright at
+      375 px, light and dark: no horizontal page scroll, 42/42 dropdowns open, both widget
+      types work by keyboard
+      ([#11 comment](https://github.com/vronnblom/maths/pull/11#issuecomment-6060490139)).
+      Seventeen wide displays scroll inside their own box; `CLAUDE.md` now has the rule that
+      prevents them ("Displays on a phone").
+- [x] Lighthouse accessibility score ≥ 95 for the page: **95 on mobile, 100 on desktop**
+      (Lighthouse 12.8.2, after the contrast fix `aa287ee`, same comment). The remaining audit
+      (the search button's name) is in the theme.
+
+The template freeze itself (the deliverable above) is the `tooling` PR that added
+`docs/exemplar-review.md`: what the reviews of vronnblom/maths#7–#14 kept finding is now in
+`CLAUDE.md`, `templates/` and the skills, with `/recheck-topic` for the second pass.
 
 ## Phase 1b: the rest of the Limits chapter
 

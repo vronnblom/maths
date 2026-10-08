@@ -1,9 +1,12 @@
 # CLAUDE.md
 
-> **v1, Phase 0 done** (2026-10-07). Phase 1a is under way: `calc-real-numbers` (the first
-> topic page, a draft), then `calc-functions` and `calc-absolute-value-inequalities`, then the
-> exemplar `calc-limit` (`docs/plan/09-roadmap.md`). This file must always describe the repo as it is: update it in
-> the PR that changes what it says.
+> **v1.1, Phase 1a template freeze** (2026-10-08). The exemplar `calc-limit`
+> (`content/calculus/limits/limit-of-a-function.md`) and its three Preliminaries prerequisites
+> are `reviewed`; `calc-limit` goes to `verified` after the owner's reader test. What the reviews
+> of Phase 1a kept finding is folded into this file, `templates/` and the skills; the rubric the
+> exemplar was judged by is `docs/exemplar-review.md`. **Next: Phase 1b**, the rest of the Limits
+> chapter (`docs/plan/09-roadmap.md`). This file must always describe the repo as it is: update
+> it in the PR that changes what it says.
 
 ## What this repo is
 
@@ -90,9 +93,11 @@ labels.lock                            every label ever merged (06 §6.7)
 tests/                                 the checkers' tests; tests/fixtures/ has one broken project per check
 templates/                             the page and test templates (new_topic.py builds on topic.md)
 docs/plan/                             the plan (ADR 0000); docs/decisions/ holds later ADRs (11 §11.3)
+docs/exemplar-review.md                the 09 §9.1 rubric applied to calc-limit, with the evidence
 docs/agents/README.md                  index of the agent roles and their skills
 .claude/settings.json, .claude/hooks/  the SessionStart hook (cloud sessions only)
-.claude/skills/                        /new-topic, /verify-topic, /review-math: the role prompts (their only copy)
+.claude/skills/                        /new-topic, /verify-topic, /review-math, /recheck-topic: the role prompts
+                                       (their only copy)
 .github/workflows/                     ci.yml (checks, verify, build), guard.yml (verified-edits, PRs only),
                                        deploy.yml (Pages), links.yml (weekly external links → one issue)
 .github/                               pull_request_template.md, ISSUE_TEMPLATE/ (erratum, new-topic, widget),
@@ -125,6 +130,27 @@ CONTRIBUTING.md, CODE_OF_CONDUCT.md    for people; agents read this file
   **D** deferred (name the target).
 - **Cross-references**: use `[](#label)` on the same page. On other pages always name the
   link: `[the squeeze theorem](#thm-calc-squeeze)`. Numbers restart on every page.
+- **Steps say what they rest on** (the findings every Phase 1a review repeated; patterns in
+  `templates/blocks.md`, "Steps that say what they rest on"):
+  - before multiplying or dividing an inequality, state the sign of the factor and name the
+    order rule ("Working with inequalities" in `calc-absolute-value-inequalities`): positive
+    keeps it, negative reverses it, a factor that may be $0$ gives only $\le$. The same for
+    squaring: compare squares only of non-negative numbers, and say so;
+  - each step names the hypothesis, the definition clause or the result it uses (e.g. "the
+    domain clause of [](#def-calc-limit)", "since $\delta \le 1$");
+  - cite theorem parts and remark properties exactly: `[part (b) of the triangle
+    inequality](#thm-calc-triangle-inequality)`, `[property 2 of the absolute
+    value](#rem-calc-absolute-value-properties)`, and only what the cited **statement** says. A
+    fact inside another page's proof, an unlabelled dropdown or an example is not citable: ask
+    for it to be stated (a separate PR on that page).
+- **Facts from school**: a page may use elementary facts proved outside its prerequisite
+  closure only by the owner's ruling in the PR (otherwise a `curriculum` PR adds the
+  prerequisite). Then a `{proof:remark}` "Facts from school used on this page", labelled
+  `rem-<subj>-<topic slug>-school-facts` (not an admonition: the theme gives a labelled
+  admonition no anchor), sits before the first use and lists exactly the facts
+  used, as a bulleted list; the sentence before it names every place that uses them; the
+  proving page is named in plain text; and that page's `curriculum.yml` entry must list each
+  fact as a result (a `curriculum` PR). Form and rules: `templates/blocks.md`.
 - **Notation**: follow `content/about/notation.md` (source: `docs/plan/04-notation-and-style.md`).
   Use the macros: `\R \N \Z \Q \C \dd \dv \dvn \pdv \abs \norm \vb \eps \sgn \arsinh \dom \ran`. Write `\ln` (never a bare
   `\log`), `\arcsin` (not `\sin^{-1}`), `\int_a^b f(x) \dd x`, intervals `[a, b)`, radians.
@@ -139,7 +165,12 @@ CONTRIBUTING.md, CODE_OF_CONDUCT.md    for people; agents read this file
   False), `numeric-<tol>` (`numeric-5e-3` for two decimal places). A `{solution}` follows
   each exercise, collapsed.
 - **Writing**: en-GB spelling, "we" for reasoning, "you" for instructions. No "clearly" or
-  "obviously". Alt text on every figure.
+  "obviously". Alt text on every figure; static SVGs get a white background, so they read in
+  dark mode.
+- **Displays on a phone**: no display may hide its meaning behind a sideways scroll at 375 px.
+  Units and words go in the sentence, not inside a display ("…, in metres per second."); split
+  a long chain over lines with `aligned`; a list of facts is a bulleted list, not a display. A
+  lone negative number inline is `${-1}$` (`$-1$` renders a hyphen).
 - **Widgets**: every widget sits alone in a `{figure}` labelled `wdg-…`, whose caption is its
   text description (shown when the widget can't load), followed by **Try this:**. Its JSON
   must validate against `schema/widgets/<name>.schema.json`, and its id goes in
@@ -147,7 +178,13 @@ CONTRIBUTING.md, CODE_OF_CONDUCT.md    for people; agents read this file
   (`2*x`, `ln`, `pi`, `e`) are in `widgets/README.md`. Only built widgets may be used: today
   `function-plot` and `epsilon-delta`. After adding or changing a `function-plot` with a
   `table`, or any `epsilon-delta` figure, run `widgets/_tests/make_fixtures.py` (a test fails
-  otherwise).
+  otherwise). The fixtures record each figure's **page line number**, so run it after *any*
+  edit that moves lines on a page with such a figure, front matter included.
+- **Widget wording**: a widget, its caption and the prose about it report what the widget
+  observed ("the largest $\delta$ it found", "passed the widget's check at the points it
+  tested"), never "the largest $\delta$ is", never that every smaller $\delta$ works, and never
+  "the limit is (not) $L$". Only a proof on the page settles the mathematics. Don't promise more
+  than the widget's catalogue entry in `widgets/README.md` does.
 
 ## Roles
 
@@ -160,9 +197,28 @@ Every topic goes through three roles, each a different session (`docs/plan/10-ai
   to the topic branch, and reports disagreements. Never edits the page.
 - **Reviewer**: `/review-math <path>` reviews against the 06 §6.3 checklist and the 08 §8.3
   circularity table and posts findings ranked by severity. Never rewrites the page.
+- **Second pass**: `/recheck-topic <path>`, after the Author has answered the first review,
+  plays Verifier and Reviewer again in one session: it updates the tests (test changes only)
+  and posts one review with a per-finding table, the manual-exercise verdicts, the coverage and
+  a verdict. Never the session that wrote the page.
 
 None of them sets a status, `reviewed_by` or `maths.manual_checked`: the owner does, when
 approving. A session that wrote a page doesn't verify or review it.
+
+## Owner sign-off
+
+The owner approves a page, always **in a PR, so that CI runs first** (in the topic PR, or a
+small PR of its own; never a direct push to `main`), and merges only when CI is green:
+
+1. add `<exr label>: <handle>` under `maths.manual_checked` for each `manual` exercise that a
+   review found correct and complete;
+2. add the handle to `maths.reviewed_by`;
+3. set `maths.status` (`reviewed`, or `verified` at 100 % coverage with both checklists);
+4. if the page has a `function-plot` table or an `epsilon-delta` figure, run
+   `uv run python widgets/_tests/make_fixtures.py` and commit the result (the new front-matter
+   lines move the figures; vronnblom/maths#11 merged red on exactly this);
+5. wait for every CI job, then merge. A page leaving `draft` turns on checks that never ran on
+   it (vronnblom/maths#12 found one), so a green draft is no evidence.
 
 ## How to add a topic
 
@@ -178,14 +234,22 @@ approving. A session that wrote a page doesn't verify or review it.
    chapter group until the chapter index exists), then runs `check_labels.py --update-lock`.
    It refuses a label that is in no curriculum and a page that exists. Keep `status: draft`.
 3. Read the direct prerequisite pages, reuse their labels, and don't redefine anything.
-   Read the exemplar `content/calculus/limits/limit-of-a-function.md` (once it exists) for the
-   quality bar.
+   Read the exemplar `content/calculus/limits/limit-of-a-function.md` for the quality bar, and
+   `docs/exemplar-review.md` for the rubric it was judged by (09 §9.1).
 4. Write the page, replacing every `TODO`: ≥ 3 worked examples, ≥ 1 common mistake, 6–15
    exercises across tiers, each with an answer and a solution.
 5. `uv run python scripts/new_topic.py --stubs <label>` adds an `@covers` stub
    (`pytest.skip("for the verifier")`) for every `eg-`/`exr-` label. Stubs count as uncovered.
    **If you are the author, leave the expected values to the verifier.**
 6. Run `uv run python scripts/check_labels.py --update-lock` and commit `labels.lock`.
+   **Drafting ahead** of an unmerged prerequisite (10 §10.4): cite its results in plain text
+   with a `% TODO link: <label> once vronnblom/maths#<n> is merged` comment, and list them in
+   the PR. When it merges, merge `main` in, replace each with a named link, and check that the
+   target's merged statement says what the step uses.
+   **Conflicts** in `content/myst.yml` and `labels.lock` (the shared files): merge `main` (a
+   merge commit, never a rebase) and keep both sides, with the toc in `curriculum.yml` order
+   (`tests/test_new_topic.py` checks it); then `uv run python scripts/check_labels.py
+   --update-lock` re-sorts the lock, and `npm run check` must pass.
 7. `grep -n TODO <page>` prints nothing; `npm run all` passes with no errors or warnings.
    `check_coverage.py` (in `npm run verify`) prints the page's coverage; copy it into the PR.
 8. Open the PR with `.github/pull_request_template.md`: type, summary of the mathematics,

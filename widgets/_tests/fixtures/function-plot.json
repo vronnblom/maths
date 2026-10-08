@@ -828,7 +828,7 @@
    ]
   },
   {
-   "source": "calculus/limits/limit-of-a-function.md:50",
+   "source": "calculus/limits/limit-of-a-function.md:54",
    "setting": "defaults",
    "f": "(5*(1+h)^2 - 5)/h",
    "variable": "h",
@@ -852,7 +852,7 @@
    ]
   },
   {
-   "source": "calculus/limits/limit-of-a-function.md:94",
+   "source": "calculus/limits/limit-of-a-function.md:98",
    "setting": "defaults",
    "f": "sin(pi/x)",
    "variable": "x",
@@ -876,7 +876,7 @@
    ]
   },
   {
-   "source": "templates/topic.md:50",
+   "source": "templates/topic.md:54",
    "setting": "defaults",
    "f": "(5*(1+h)^2 - 5)/h",
    "variable": "h",

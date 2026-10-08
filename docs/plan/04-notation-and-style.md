@@ -55,6 +55,7 @@ project:
 | Infinite limits | "$\lim f = \infty$" with the remark that the limit *does not exist* as a real number | | Stated explicitly in `calc-infinite-limits`. |
 | Functions | $f\colon A \to B$, $x \mapsto x^2$; "the function $f$" vs "the value $f(x)$" | "the function $f(x)$" in definitions | Allowed informally in examples. |
 | Composition / inverse | $f \circ g$; $f^{-1}$ (inverse function); $1/f$ or $f(x)^{-1}$ for reciprocal | | |
+| Monotone | increasing: $x_1 < x_2 \implies f(x_1) \le f(x_2)$; strictly increasing: $x_1 < x_2 \implies f(x_1) < f(x_2)$ (decreasing likewise, $\ge$ / $>$) | "non-decreasing"; "increasing" meaning strictly | "Increasing" allows level stretches; say "strictly" when $<$ is needed. Defined in `calc-functions` (`def-calc-monotone`). |
 | Definitions | $:=$ when defining in a display; "is called" in prose | $\equiv$ | |
 | Approximately | $\approx$ with stated precision ("to 4 decimals") | | |
 | Sequences | $(a_n)_{n \ge 1}$ or $(a_n)$; terms $a_n$ | $\{a_n\}$ (set braces) | |
