@@ -70,10 +70,14 @@ approach? What happens when you try to put $h = 0$ in the formula?
 
 The average speeds approach $10$, so the stone's speed at $t = 1$ should be $10$ metres per
 second. This page makes "approach" precise. That matters, because tables and pictures can
-mislead. The next figure, one worked example and one exercise use the sine function, and only
-the facts about it in the box below.
+mislead. The sine function appears in the next figure and the paragraph after it, the worked
+example on $\sin(1/x)$, the common mistake "Checking one $\eps$, or a few points", and the
+exercise on $\sin(\pi/x)$ (its statement, hints and solution). They use only the facts about it
+in the box below.
 
 :::{admonition} Facts from school used on this page
+:label: rem-calc-limit-school-facts
+
 With $t$ in radians:
 
 - $\sin(k\pi) = 0$ for every integer $k$;
@@ -406,8 +410,8 @@ still $2$ apart. ✓ The proof never used $f(0)$, which is undefined. ✓
 
 Let $f(x) = \sin(1/x)$ for $x \ne 0$. As $x$ decreases to $0$, $1/x$ increases without bound,
 so it passes again and again through multiples of $\pi$, where $\sin$ is $0$, and through
-numbers $\frac{\pi}{2} + 2k\pi$, where $\sin$ is $1$, by the facts from school in
-[Why this matters](#wdg-calc-limit-misleading-table).
+numbers $\frac{\pi}{2} + 2k\pi$, where $\sin$ is $1$, by
+[the facts from school](#rem-calc-limit-school-facts).
 
 1. **Strategy.** In every window around $0$ we find a point where $\sin(1/x) = 0$ and a point
    where $\sin(1/x) = 1$. No number is within $\frac12$ of both.
@@ -675,8 +679,9 @@ To six decimal places:
 |---|---|---|---|---|---|---|
 | $\frac{\sqrt{1 + x} - 1}{x}$ | $0.488088$ | $0.498756$ | $0.499875$ | $0.500125$ | $0.501256$ | $0.513167$ |
 
-The values from the right increase and those from the left decrease, and at $x = \pm 0.001$
-they agree to two decimal places, $0.50$. So we estimate the limit as $0.50$. This is an
+As $x$ approaches $0$, the values seem to approach $\frac12$: those from the right increase
+towards it and those from the left decrease towards it. At $x = \pm 0.001$ they agree to two
+decimal places, $0.50$. So we estimate the limit as $0.50$. This is an
 estimate, not a proof: a table checks only finitely many points
 ([Why this matters](#wdg-calc-limit-misleading-table)).
 
