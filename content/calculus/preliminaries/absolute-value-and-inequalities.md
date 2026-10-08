@@ -40,8 +40,8 @@ definition of a limit, in the Limits chapter, is written entirely in this langua
 
 ## Absolute value as distance
 
-% TODO link: calc-real-numbers once calc-real-numbers is merged
-We use the interval notation of the page Real Numbers and Intervals throughout.
+We use [the interval notation](#def-calc-interval) of
+[Real Numbers and Intervals](#calc-real-numbers) throughout.
 
 :::{proof:definition} Absolute value
 :label: def-calc-absolute-value
@@ -88,21 +88,19 @@ $x \ge 0$ and $x < 0$ (for 4, the four combinations of signs of $x$ and $y$). Fo
 $x \ge 0$ then $\abs{x} = x \ge -x$, and if $x < 0$ then $\abs{x} = -x > x$. In both cases
 $\abs{x}$ is the larger of the two numbers.
 
-% TODO link: rem-calc-square-roots once vronnblom/maths#8 is merged
-Properties 5 and 6 rest on the remark on square roots in Real Numbers and Intervals: every
-$y \ge 0$ has exactly one square root $\sqrt{y} \ge 0$, and the proof of that uniqueness shows
-that for $0 \le s < t$ we have $s^2 < t^2$. For 5: $\abs{x} \ge 0$ and $\abs{x}^2 = x^2$, so
-$\abs{x}$ is the one non-negative square root of $x^2$. For 6: if $x < y$ then $x^2 < y^2$ by
-that fact. If instead $x \ge y$, then $x^2 \ge y^2$ (by the same fact when $x > y$), so
-$x^2 < y^2$ fails. The second half of 6 is the uniqueness itself: $x$ and $y$ are both
-non-negative square roots of $x^2 = y^2$.
+Properties 5 and 6 rest on [the square-root remark](#rem-calc-square-roots) in
+[Real Numbers and Intervals](#calc-real-numbers). It states that every $y \ge 0$ has exactly
+one square root $\sqrt{y} \ge 0$, and that for $s, t \ge 0$ we have $s < t \iff s^2 < t^2$ and
+$s = t \iff s^2 = t^2$. For 5: $\abs{x} \ge 0$ and $\abs{x}^2 = x^2$, so $\abs{x}$ is the one
+non-negative square root of $x^2$. Property 6 is the second statement of that remark, with
+$s = x$ and $t = y$.
 :::
 
 ### Working with inequalities
 
-% TODO link: calc-real-numbers once calc-real-numbers is merged
-We use the order properties of the real numbers from Real Numbers and Intervals, in this form.
-For all real numbers $u$, $v$, $w$, $s$, $t$ and $c$:
+[Real Numbers and Intervals](#calc-real-numbers) states trichotomy and the meaning of $\le$.
+We use these order properties of the real numbers. For all real numbers $u$, $v$, $w$, $s$,
+$t$ and $c$:
 
 - **trichotomy:** exactly one of $u < v$, $u = v$ and $u > v$ holds; so "$u \le v$" fails
   exactly when $u > v$, and "$u < v$" fails exactly when $u \ge v$;
@@ -122,8 +120,9 @@ For all real numbers $u$, $v$, $w$, $s$, $t$ and $c$:
 - **signs:** a product or a quotient of two non-zero numbers is positive when they have the
   same sign, and negative when their signs differ.
 
-Every rule stated with $<$ also holds with $\le$ in place of $<$ (and $\ge$ in place of $>$);
-for example, $u \le v$ and $c < 0$ give $cu \ge cv$.
+The rules for adding and multiplying also hold when the inequality being transformed is
+$\le$: the conclusion is then $\le$ (or $\ge$ when $c < 0$). For example, $u \le v$ and
+$c < 0$ give $cu \ge cv$.
 
 To solve a quadratic or rational inequality, we factor it and make a **sign table**. A factor
 $x - r$ is negative for $x < r$ and positive for $x > r$, so it changes sign only at $r$. The
@@ -148,8 +147,8 @@ $$
 &\text{(e)} && 0 < \abs{x - a} < \delta && \iff\quad a - \delta < x < a \ \text{ or } \ a < x < a + \delta.
 \end{aligned}
 $$
-% TODO link: def-calc-interval once calc-real-numbers is merged
-In particular, when $\delta > 0$, (a) says that $x$ lies in the open interval
+In particular, when $\delta > 0$, (a) says that $x$ lies in the
+[open interval](#def-calc-interval)
 $(a - \delta, a + \delta)$, (b) that $x$ lies in the closed interval
 $[a - \delta, a + \delta]$, and (e) that $x$ lies in the set
 $$
@@ -184,9 +183,10 @@ Part (c) is the negation of (b): by trichotomy, $\abs{x - a} > \delta$ says exac
 $\abs{x - a} \le \delta$ fails, and "$a - \delta \le x \le a + \delta$" fails exactly when
 $x < a - \delta$ or $x > a + \delta$. In the same way, (d) is the negation of (a).
 
-For (e), the condition $0 < \abs{x - a}$ says that $x \ne a$: by property 1 of
+For (e), the condition $0 < \abs{x - a}$ says that $x \ne a$. By property 1 of
 [](#rem-calc-absolute-value-properties), $\abs{x - a}$ is never negative and is $0$ only when
-$x - a = 0$. So by (a), $0 < \abs{x - a} < \delta$ holds if and only if
+$x - a = 0$; conversely, if $x = a$ then $\abs{x - a} = \abs{0} = 0$ by
+[](#def-calc-absolute-value). So by (a), $0 < \abs{x - a} < \delta$ holds if and only if
 $a - \delta < x < a + \delta$ and $x \ne a$. By trichotomy, $x \ne a$ means $x < a$ or $x > a$,
 which splits the double inequality into $a - \delta < x < a$ or $a < x < a + \delta$.
 :::
@@ -857,7 +857,10 @@ $\delta \le 2 - \sqrt{3}$ and $\delta \le \sqrt{5} - 2$.
 The second bound is the smaller one: $\sqrt{5} - 2 < 2 - \sqrt{3}$ is equivalent to
 $\sqrt{5} + \sqrt{3} < 4$. By property 6 of [](#rem-calc-absolute-value-properties), applied to
 non-negative numbers, it is enough to compare squares: $\sqrt{15} < 4$ because $15 < 16 = 4^2$,
-so $(\sqrt{5} + \sqrt{3})^2 = 8 + 2\sqrt{15} < 8 + 2 \cdot 4 = 16 = 4^2$. So every
+so $(\sqrt{5} + \sqrt{3})^2 = 8 + 2\sqrt{15} < 8 + 2 \cdot 4 = 16 = 4^2$. Here
+$\sqrt{5}\,\sqrt{3} = \sqrt{15}$: both sides are non-negative and both square to $15$, as
+$(\sqrt{5}\,\sqrt{3})^2 = 5 \cdot 3$, so they are equal by the uniqueness in
+[the square-root remark](#rem-calc-square-roots). So every
 $\delta \le \sqrt{5} - 2$ works. If $\delta > \sqrt{5} - 2$, then $2 + \delta > \sqrt{5}$, and
 any $x$ with $\sqrt{5} \le x < 2 + \delta$ satisfies $\abs{x - 2} < \delta$ but $x^2 \ge 5$
 (property 6 again),
