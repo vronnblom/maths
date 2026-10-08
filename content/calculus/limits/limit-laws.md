@@ -576,7 +576,7 @@ stay away from $0$.
 :label: prf-calc-limit-laws
 :enumerated: false
 :class: dropdown
-This proves parts (c) and (d) of [](#thm-calc-limit-laws). For the product we split
+This proves parts (c) and (d) of the limit laws, stated in Main results. For the product we split
 $f(x)\,g(x) - LM$ into two terms, each a small error times a bounded factor; for the quotient we
 first show that $\frac{1}{g(x)}$ approaches $\frac{1}{M}$ and then use the product law. Every
 multiplication of an inequality below names the sign of the factor, by the order rules of
@@ -675,7 +675,7 @@ $\lim_{x \to a} c\,f(x) = cL$.
    $$
    So $\lim_{x \to a} \frac{1}{g(x)} = \frac{1}{M}$.
 3. *The quotient.* By step 1, $\frac{1}{g}$ satisfies the hypothesis on the domain in
-   [](#thm-calc-limit-laws), and so does $f$. By step 2 and part (c), applied to $f$ and
+   the theorem, and so does $f$. By step 2 and part (c), applied to $f$ and
    $\frac{1}{g}$,
    $$
    \lim_{x \to a} f(x) \cdot \frac{1}{g(x)} = L \cdot \frac{1}{M} = \frac{L}{M} .
