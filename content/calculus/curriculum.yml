@@ -143,6 +143,9 @@ chapters:
           - {label: def-calc-sin-cos}
           - {label: def-calc-tan-sec-csc-cot}
           - {label: thm-calc-pythagorean-identity, policy: F}
+          - {label: prop-calc-sin-bounded, policy: F, note: "$-1\\le\\sin t\\le 1$ for real $t$, from the Pythagorean identity; used by calc-limit"}
+          - {label: prop-calc-sin-multiples-of-pi, policy: F, note: "$\\sin(k\\pi)=0$ for every integer $k$, from the unit circle; used by calc-limit"}
+          - {label: prop-calc-sin-maxima, policy: F, note: "$\\sin(\\pi/2+2k\\pi)=1$ for every integer $k$, from the unit circle; used by calc-limit"}
           - {label: thm-calc-addition-formulas, policy: R, note: geometric proof}
           - {label: lem-calc-sin-bounds, policy: F, note: "$\\sin\\theta<\\theta<\\tan\\theta$ for $0<\\theta<\\pi/2$, by comparing areas"}
         notes:

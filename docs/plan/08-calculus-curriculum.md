@@ -85,7 +85,7 @@ pages, many exercises, few proofs.*
 **`calc-trig-functions`** · Trigonometric Functions · `trigonometric-functions.md`
 - Prereqs: `calc-functions`
 - Objectives: work in radians; define sin and cos on the unit circle; use the core identities; graph trigonometric functions with amplitude, period and phase.
-- Results: `def-calc-radian`, `def-calc-sin-cos`, `def-calc-tan-sec-csc-cot`; `thm-calc-pythagorean-identity` **F**; `thm-calc-addition-formulas` **R** (geometric proof); `lem-calc-sin-bounds` ($\sin\theta<\theta<\tan\theta$ for $0<\theta<\pi/2$, by comparing areas) **F**.
+- Results: `def-calc-radian`, `def-calc-sin-cos`, `def-calc-tan-sec-csc-cot`; `thm-calc-pythagorean-identity` **F**; `prop-calc-sin-bounded` ($-1\le\sin t\le 1$ for real $t$, from the Pythagorean identity) **F**; `prop-calc-sin-multiples-of-pi` ($\sin(k\pi)=0$ for every integer $k$) **F**; `prop-calc-sin-maxima` ($\sin(\pi/2+2k\pi)=1$ for every integer $k$) **F**, the three facts `calc-limit` takes from school; `thm-calc-addition-formulas` **R** (geometric proof); `lem-calc-sin-bounds` ($\sin\theta<\theta<\tan\theta$ for $0<\theta<\pi/2$, by comparing areas) **F**.
 - Widgets: `function-plot` (unit circle ↔ graph)
 
 **`calc-inverse-trig`** · Inverse Trigonometric Functions · `inverse-trigonometric-functions.md`
