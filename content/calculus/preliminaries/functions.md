@@ -102,8 +102,9 @@ If a function is given only by a formula, its domain is understood to be its **n
 domain**: the set of all real numbers $x$ for which the formula defines a real number.
 :::
 
-% TODO link: calc-real-numbers (set-builder notation) once calc-real-numbers is merged
-% TODO link: def-calc-interval once calc-real-numbers is merged
+The set $\{f(x) : x \in \dom f\}$ is written in set-builder notation, and most domains and
+ranges below are [intervals](#def-calc-interval) or unions of intervals; both are introduced in
+[Real Numbers and Intervals](#calc-real-numbers).
 
 **In words.** The domain is what you may put in; the range is what actually comes out. The
 codomain is only a set that is promised to contain every value, and it may be larger than
@@ -119,9 +120,8 @@ call the codomain. On this site the range is always the set of values $\ran f$ o
 
 **Example.** For $f(x) = \sqrt{x - 1}$, the square root needs $x - 1 \ge 0$, so
 $\dom f = [1, \infty)$. Every square root is $\ge 0$, and each $y \ge 0$ is the value at
-$x = y^2 + 1$, because $\sqrt{y^2} = y$ for $y \ge 0$. So $\ran f = [0, \infty)$.
-
-% TODO link: rem-calc-square-roots once vronnblom/maths#8 is merged
+$x = y^2 + 1$, because $\sqrt{y^2} = y$ for $y \ge 0$
+(see [the remark on square roots](#rem-calc-square-roots)). So $\ran f = [0, \infty)$.
 
 **Non-example.** For $g\colon \R \to \R$, $g(x) = x^2$, the codomain is $\R$, but the range is
 not: $-1$ is not in $\ran g$, because no real $x$ has $x^2 = -1$. Here $\ran g = [0, \infty)$.
@@ -275,15 +275,14 @@ Find the range of $f(x) = x^2 - 4x + 5$, whose domain is $\R$.
 2. **Every value is at least $1$.** A square is never negative, so
    $f(x) = (x-2)^2 + 1 \ge 1$ for every $x$. Hence $\ran f \subseteq [1, \infty)$.
 3. **Every $y \ge 1$ is a value.** Given $y \ge 1$, the number $y - 1 \ge 0$ has a square
-   root. Put $x = 2 + \sqrt{y - 1}$; then $f(x) = \bigl(\sqrt{y-1}\bigr)^2 + 1 = y$. Hence
+   root ([the remark on square roots](#rem-calc-square-roots)). Put $x = 2 + \sqrt{y - 1}$;
+   then $f(x) = \bigl(\sqrt{y-1}\bigr)^2 + 1 = y$. Hence
    $[1, \infty) \subseteq \ran f$.
 4. The two inclusions together give
 
 $$
 \boxed{\ran f = [1, \infty)}
 $$
-
-% TODO link: rem-calc-square-roots once vronnblom/maths#8 is merged
 
 **Check.** For $y = 10$, step 3 gives $x = 2 + 3 = 5$, and indeed $f(5) = 25 - 20 + 5 = 10$.
 The smallest value is $f(2) = 4 - 8 + 5 = 1$. ✓
@@ -350,17 +349,19 @@ the wall, and find the domain and the range of that function.
    $$
 2. **Domain from the context.** The formula makes sense for every real $x$, but a pen needs
    $x > 0$ and $40 - 2x > 0$, that is, $x < 20$. So $\dom A = (0, 20)$.
-3. **Range.** Completing the square, $A(x) = 40x - 2x^2 = 200 - 2(x - 10)^2$. For
-   $0 < x < 20$ we have $-10 < x - 10 < 10$, so $0 \le (x - 10)^2 < 100$ and
-   $0 < A(x) \le 200$. Conversely, for $0 < a \le 200$ the number
-   $x = 10 - \sqrt{(200 - a)/2}$ lies in $(0, 10]$ and has $A(x) = a$. So
-   $\ran A = (0, 200]$.
+3. **Range.** Completing the square, $A(x) = 40x - 2x^2 = 200 - 2(x - 10)^2$. Let
+   $0 < x < 20$. A square is never negative, so $(x - 10)^2 \ge 0$. Also
+   $(x - 10)^2 - 100 = x^2 - 20x = x(x - 20) < 0$, because $x > 0$ and $x - 20 < 0$. So
+   $0 \le (x - 10)^2 < 100$, and $0 < A(x) \le 200$. Conversely, let $0 < a \le 200$. Then
+   $0 \le \frac{200 - a}{2} < 100$, so $s = \sqrt{(200 - a)/2}$ is a real number with
+   $s \ge 0$ and $s^2 < 100 = 10^2$. Squaring keeps the order of non-negative numbers
+   ([the remark on square roots](#rem-calc-square-roots)), so $s < 10$. Hence
+   $x = 10 - s$ lies in $(0, 10]$, and $A(x) = 200 - 2s^2 = 200 - (200 - a) = a$.
+   So $\ran A = (0, 200]$.
 
 $$
 \boxed{A(x) = x(40 - 2x) \text{ m}^2, \quad \dom A = (0, 20), \quad \ran A = (0, 200]}
 $$
-
-% TODO link: rem-calc-square-roots once vronnblom/maths#8 is merged
 
 So the largest possible pen has area $200$ m², when $x = 10$ m. Notice that the domain came
 from the situation, not from the formula: the natural domain of $x(40 - 2x)$ is all of $\R$.
@@ -641,10 +642,9 @@ The denominator is never zero, so $\dom f = \R$.
 positive reciprocal, and a number $\ge 1$ has a reciprocal $\le 1$, so $0 < f(x) \le 1$.
 
 *Every $y \in (0, 1]$ is a value.* Given $0 < y \le 1$, we have $\frac{1}{y} \ge 1$, so
-$x = \sqrt{\frac{1}{y} - 1}$ is a real number, and
+$x = \sqrt{\frac{1}{y} - 1}$ is a real number
+([the remark on square roots](#rem-calc-square-roots)), and
 $f(x) = \frac{1}{\left(\frac{1}{y} - 1\right) + 1} = \frac{1}{1/y} = y$.
-
-% TODO link: rem-calc-square-roots once vronnblom/maths#8 is merged
 
 So $\ran f = (0, 1]$. The value $1$ is taken at $x = 0$; the value $0$ is never taken.
 ::::
@@ -763,11 +763,10 @@ term by term, because $x - 1$ may be negative; we split into two cases.
   gives $-(x - 1) \le 1$, so $(x - 1)^2 \le 1 \le 4$.
 
 In both cases $0 \le (x - 1)^2 \le 4$, so $-1 \le f(x) \le 3$. Conversely, let
-$y \in [-1, 3]$. Then $y + 1 \ge 0$ has a square root $s = \sqrt{y + 1} \ge 0$, and
+$y \in [-1, 3]$. Then $y + 1 \ge 0$ has a square root $s = \sqrt{y + 1} \ge 0$
+([the remark on square roots](#rem-calc-square-roots)), and
 $s \le 2$: if $s > 2$, then $s^2 > 2s > 4$, but $s^2 = y + 1 \le 4$. So $x = 1 + s$ lies in
 $[1, 3]$, and $f(x) = s^2 - 1 = y$. So this piece contributes $[-1, 3]$.
-
-% TODO link: rem-calc-square-roots once vronnblom/maths#8 is merged
 
 **Together.** $\ran f = [-1, 3] \cup (0, \infty) = [-1, \infty)$, with the smallest value
 $f(1) = -1$.
@@ -797,9 +796,8 @@ For $0 \le x_1 < x_2$, $\sqrt{x_2} - \sqrt{x_1} = \dfrac{x_2 - x_1}{\sqrt{x_2} +
 :class: dropdown
 We show that $\sqrt{x_2} - \sqrt{x_1} > 0$ by rationalising: multiplying and dividing by
 $\sqrt{x_2} + \sqrt{x_1}$ turns the difference of the roots into $x_2 - x_1$. Recall that each
-$x \ge 0$ has exactly one square root $\sqrt{x} \ge 0$, and $\bigl(\sqrt{x}\bigr)^2 = x$.
-
-% TODO link: rem-calc-square-roots once vronnblom/maths#8 is merged
+$x \ge 0$ has exactly one square root $\sqrt{x} \ge 0$, and $\bigl(\sqrt{x}\bigr)^2 = x$
+([the remark on square roots](#rem-calc-square-roots)).
 
 Let $0 \le x_1 < x_2$. Then $x_2 > 0$, so $\sqrt{x_2} > 0$ (since $\sqrt{x_2} = 0$ would give
 $x_2 = 0^2 = 0$), and $\sqrt{x_1} \ge 0$; hence $\sqrt{x_2} + \sqrt{x_1} > 0$. Using $(a - b)(a + b) = a^2 - b^2$,
