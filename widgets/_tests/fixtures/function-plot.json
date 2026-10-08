@@ -900,7 +900,7 @@
    ]
   },
   {
-   "source": "calculus/limits/limit-laws.md:330",
+   "source": "calculus/limits/limit-laws.md:376",
    "setting": "defaults",
    "f": "(x^2 + c*x)/x",
    "variable": "x",
@@ -926,7 +926,7 @@
    ]
   },
   {
-   "source": "calculus/limits/limit-laws.md:330",
+   "source": "calculus/limits/limit-laws.md:376",
    "setting": "c one step up",
    "f": "(x^2 + c*x)/x",
    "variable": "x",

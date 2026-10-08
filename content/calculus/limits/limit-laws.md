@@ -78,9 +78,11 @@ results is about such cases.
 
 Let $f$ and $g$ be functions. Their **sum** $f + g$, **difference** $f - g$ and **product**
 $fg$ are the functions with
-$$
-(f + g)(x) = f(x) + g(x), \quad (f - g)(x) = f(x) - g(x), \quad (fg)(x) = f(x)\,g(x),
-$$
+
+- $(f + g)(x) = f(x) + g(x)$,
+- $(f - g)(x) = f(x) - g(x)$,
+- $(fg)(x) = f(x)\,g(x)$,
+
 defined at every $x$ at which both $f(x)$ and $g(x)$ are defined. Their **quotient** $f/g$,
 with $(f/g)(x) = \frac{f(x)}{g(x)}$, is defined at every such $x$ at which, in addition,
 $g(x) \ne 0$. For a real number $c$, the function $cf$ has $(cf)(x) = c\,f(x)$, and
@@ -207,17 +209,26 @@ $$
 \bigl(\sqrt{f(x)} - \sqrt{L}\bigr)\bigl(\sqrt{f(x)} + \sqrt{L}\bigr) = f(x) - L,
 $$
 because $\bigl(\sqrt{y}\bigr)^2 = y$ for every $y \ge 0$
-([the square-root remark](#rem-calc-square-roots)). The second factor is at least $\sqrt{L}$,
-which is positive: $\sqrt{L} \ge 0$, and $\sqrt{L} \ne 0$ because $0^2 = 0 \ne L$. Dividing by
-the positive second factor, and using
-[property 4 of the absolute value](#rem-calc-absolute-value-properties),
+([the square-root remark](#rem-calc-square-roots)). The second factor is at least $\sqrt{L}$
+(add $\sqrt{L}$ to both sides of $\sqrt{f(x)} \ge 0$), and $\sqrt{L}$ is positive:
+$\sqrt{L} \ge 0$, and $\sqrt{L} \ne 0$ because $0^2 = 0 \ne L$. Dividing by the positive second
+factor, and using [property 4 of the absolute value](#rem-calc-absolute-value-properties) and,
+since the second factor is positive, [the definition](#def-calc-absolute-value) to drop the bars
+around it,
 $$
 \abs{\sqrt{f(x)} - \sqrt{L}} = \frac{\abs{f(x) - L}}{\sqrt{f(x)} + \sqrt{L}}
 \le \frac{\abs{f(x) - L}}{\sqrt{L}} .
 $$
-So a window in which $\abs{f(x) - L} < \eps\sqrt{L}$ also has
-$\abs{\sqrt{f(x)} - \sqrt{L}} < \eps$. *What this leaves out:* that $\sqrt{f(x)}$ is defined
-in the window at all, that is, $f(x) \ge 0$ there. The tolerance $L$ in the definition of
+The inequality uses two of the order rules of
+[Absolute Value and Inequalities](#calc-absolute-value-inequalities) ("Working with
+inequalities"). Multiplying $\sqrt{L} \le \sqrt{f(x)} + \sqrt{L}$ by the positive number
+$\frac{1}{\sqrt{L}\,(\sqrt{f(x)} + \sqrt{L})}$ keeps it, and gives
+$\frac{1}{\sqrt{f(x)} + \sqrt{L}} \le \frac{1}{\sqrt{L}}$. Multiplying this by
+$\abs{f(x) - L}$, which is $\ge 0$ and may be $0$, gives only $\le$. So a window in which
+$\abs{f(x) - L} < \eps\sqrt{L}$ also has $\abs{\sqrt{f(x)} - \sqrt{L}} < \eps$: multiplying
+$\abs{f(x) - L} < \eps\sqrt{L}$ by the positive number $\frac{1}{\sqrt{L}}$ keeps the strict
+inequality, and $\le$ followed by $<$ gives $<$ (transitivity). *What this leaves out:* that
+$\sqrt{f(x)}$ is defined in the window at all, that is, $f(x) \ge 0$ there. The tolerance $L$ in the definition of
 $\lim_{x \to a} f(x) = L$ gives a window in which $\abs{f(x) - L} < L$, so $f(x) > 0$ by
 [part (a) of the proposition on distance inequalities](#prop-calc-abs-interval); a full proof
 takes the smaller of the two windows.
@@ -252,9 +263,12 @@ substitution.
 Let $a$ be a real number.
 
 - **(a) Polynomials.** If $p$ is a polynomial, then $\lim_{x \to a} p(x) = p(a)$.
-- **(b) Rational functions.** If $p$ and $q$ are polynomials with $q(a) \ne 0$, and
-  $r(x) = \frac{p(x)}{q(x)}$ at every $x$ with $q(x) \ne 0$, then
-  $\lim_{x \to a} r(x) = r(a) = \frac{p(a)}{q(a)}$.
+- **(b) Rational functions.** If $r = \frac{p}{q}$ is a rational function, with polynomials
+  $p$ and $q$ such that $q(a) \ne 0$, then $\lim_{x \to a} r(x) = r(a) = \frac{p(a)}{q(a)}$.
+- **(c) Restrictions.** Let $r$ be as in (b), and let $I$ be an open interval containing $a$.
+  If $s$ is the restriction of $r$ to $I$, that is, the function defined at the points of $I$ at
+  which $r$ is defined, with $s(x) = r(x)$ there, then
+  $\lim_{x \to a} s(x) = s(a) = \frac{p(a)}{q(a)}$.
 :::
 
 :::{proof:proof}
@@ -276,15 +290,45 @@ $$
 (b) By (a), $\lim_{x \to a} p(x) = p(a)$ and $\lim_{x \to a} q(x) = q(a)$, and both
 polynomials are defined for every real $x$. Since $q(a) \ne 0$, part (d) of
 [](#thm-calc-limit-laws) applies, with $f = p$, $g = q$, $L = p(a)$ and $M = q(a)$, and gives
-$\lim_{x \to a} \frac{p(x)}{q(x)} = \frac{p(a)}{q(a)}$. Since $q(a) \ne 0$, $r$ is defined at
-$a$, and this number is $r(a)$.
+$\lim_{x \to a} \frac{p(x)}{q(x)} = \frac{p(a)}{q(a)}$. Since $r = \frac{p}{q}$, this is
+$\lim_{x \to a} r(x)$; and since $q(a) \ne 0$, $r$ is defined at $a$, with
+$r(a) = \frac{p(a)}{q(a)}$.
+
+(c) Since $a$ is in $I$ and $r$ is defined at $a$, so is $s$, and $s(a) = r(a)$. We find a
+window around $a$ that lies inside $I$. By [the definition of an interval](#def-calc-interval),
+$I$ is $(\alpha, \beta)$, $(\alpha, \infty)$, $(-\infty, \beta)$ or $\R$. Since $a$ is in $I$,
+$\alpha < a$ when $I$ has the left endpoint $\alpha$, and $a < \beta$ when it has the right
+endpoint $\beta$. Let $\rho$ be the smaller of $a - \alpha$ and
+$\beta - a$, or $a - \alpha$, or $\beta - a$, or $1$, in these four cases. Then $\rho > 0$,
+$\rho \le a - \alpha$ when $I$ has the left endpoint $\alpha$, and $\rho \le \beta - a$ when it
+has the right endpoint $\beta$.
+
+Let $\eps > 0$. By (b), there is a $\delta_0 > 0$ such that $r$ is defined and
+$\abs{r(x) - r(a)} < \eps$ at every $x$ with $0 < \abs{x - a} < \delta_0$. Let
+$\delta = \min(\delta_0, \rho)$, which is positive, and let $0 < \abs{x - a} < \delta$. By
+[part (a) of the proposition on distance inequalities](#prop-calc-abs-interval),
+$a - \delta < x < a + \delta$. If $I$ has the left endpoint $\alpha$, then adding
+$\alpha - \rho$ to both sides of $\rho \le a - \alpha$ gives $\alpha \le a - \rho$, and
+$a - \rho \le a - \delta$ since $\delta \le \rho$, so $\alpha < x$. In the same way, if $I$ has
+the right endpoint $\beta$, then $x < \beta$. So $x$ is in $I$. Since also
+$\abs{x - a} < \delta_0$, $r$ is defined at $x$, so $s$ is defined there, and
+$$
+\abs{s(x) - s(a)} = \abs{r(x) - r(a)} < \eps .
+$$
+So $s$ is defined at every $x$ with $0 < \abs{x - a} < \delta$, which by part (e) of the
+proposition on distance inequalities is the open interval $(a - \delta, a + \delta)$ with $a$
+removed; [the definition of a limit](#def-calc-limit) applies to $s$, and $\delta$ wins the
+round $\eps$. Since $\eps > 0$ was arbitrary, $\lim_{x \to a} s(x) = s(a)$.
 :::
 
 **In words.** For a polynomial, the limit at any point is the value there. For a rational
-function, the same holds at every point where the denominator is not $0$. This is a property of
-these particular functions, proved from the laws. It is not true of every function given by a
-formula: the function $h$ of [the remark on the value at $a$](#rem-calc-limit-value-irrelevant),
-with $h(x) = x + 1$ for $x \ne 1$ and $h(1) = 5$, has the limit $2$ at $1$, not $h(1) = 5$.
+function, the same holds at every point where the denominator is not $0$, and part (c) says
+that it still holds when the function is used only on an open interval around the point, as in
+an application where only some inputs make sense ([](#eg-calc-limit-laws-resistors)). This is a
+property of these particular functions, proved from the laws. It is not true of every function
+given by a formula: the function $h$ of
+[the remark on the value at $a$](#rem-calc-limit-value-irrelevant), with $h(x) = x + 1$ for
+$x \ne 1$ and $h(1) = 5$, has the limit $2$ at $1$, not $h(1) = 5$.
 
 Together with (e) and (f), the corollary handles many functions built from polynomials and
 square roots: apply it to the parts, check each law's hypotheses, and combine
@@ -314,9 +358,11 @@ not. Each of the following shows a hypothesis failing.
   not a number. Such a limit may be any number, or not exist. In the next figure, the numerator
   $x^2 + cx$ and the denominator $x$ both have the limit $0$ at $0$
   ([](#cor-calc-direct-substitution)), for every value of $c$.
-- **The power law for $n \le 0$.** For $n = -1$, $\bigl(f(x)\bigr)^{-1} = \frac{1}{f(x)}$, and
-  the quotient law, with numerator $1$, needs $L \ne 0$: for $f(x) = x$ at $0$ there is no
-  limit.
+- **Negative powers when $L = 0$.** Part (e) is stated for $n \ge 1$. For $n = -1$,
+  $\bigl(f(x)\bigr)^{-1} = \frac{1}{f(x)}$ is a quotient with numerator $1$, and when $L \ne 0$
+  the quotient law gives it the limit $\frac{1}{L}$. What fails when $L = 0$ is the quotient
+  law's hypothesis $M \ne 0$, here with $M = L$, not anything about $n$: for $f(x) = x$ at $0$
+  there is no limit.
 - **The square-root law without its sign condition.** If $L < 0$: $f(x) = x - 1$ has the limit
   ${-1}$ at $0$, and $\sqrt{x - 1}$ is undefined at every $x < 1$, so it is not defined on any
   open interval around $0$, and [the definition of a limit](#def-calc-limit) does not apply.
@@ -379,28 +425,32 @@ and compare it with the largest $\delta$ that works.
    $\abs{f(x) - 5} < \frac{\eps}{2}$ exactly when $\abs{x - 3} < \frac{\eps}{4}$ (dividing by
    the positive number $2$ keeps the inequality). Take $\delta_1 = \frac{\eps}{4}$.
 2. **Tolerance $\frac{\eps}{2}$ for $g$.** $\abs{g(x) - 12} = \abs{4x - 12} = 4\abs{x - 3}$, so
-   $\abs{g(x) - 12} < \frac{\eps}{2}$ exactly when $\abs{x - 3} < \frac{\eps}{8}$. Take
-   $\delta_2 = \frac{\eps}{8}$.
+   $\abs{g(x) - 12} < \frac{\eps}{2}$ exactly when $\abs{x - 3} < \frac{\eps}{8}$ (dividing by
+   the positive number $4$). Take $\delta_2 = \frac{\eps}{8}$.
 3. **The proof's $\delta$.** $\delta = \min\bigl(\frac{\eps}{4}, \frac{\eps}{8}\bigr) =
    \frac{\eps}{8}$, since $\frac{\eps}{8} < \frac{\eps}{4}$ for $\eps > 0$.
 4. **Directly.** $f(x) + g(x) = 6x - 1$, and $\abs{(6x - 1) - 17} = 6\abs{x - 3}$, which is
-   less than $\eps$ exactly when $\abs{x - 3} < \frac{\eps}{6}$. So $\frac{\eps}{6}$ is the
-   largest $\delta$ that works: a larger window contains $x = 3 + \frac{\eps}{6}$, where the
-   distance is exactly $\eps$.
+   less than $\eps$ exactly when $\abs{x - 3} < \frac{\eps}{6}$ (dividing by the positive
+   number $6$). So $\frac{\eps}{6}$ is the largest $\delta$ that works: a larger window
+   contains $x = 3 + \frac{\eps}{6}$, where the distance is exactly $\eps$.
 
 The proof gives
 $$
 \boxed{\delta = \frac{\eps}{8}},
 $$
-and the largest $\delta$ that works is $\frac{\eps}{6}$. The proof's $\delta$ is smaller than the largest one, because the proof gives each function
-half of the tolerance, and $g$ needs less than half. A proof only needs *some* $\delta$ that
-works.
+and the largest $\delta$ that works is $\frac{\eps}{6}$. The proof's $\delta$ is smaller than
+the largest one because the proof gives each function half of the tolerance, and $g$ needs more
+than half. On the largest window, $\abs{x - 3} < \frac{\eps}{6}$, the error
+$\abs{g(x) - 12} = 4\abs{x - 3}$ comes as close as we like to $\frac{2\eps}{3}$, while
+$\abs{f(x) - 5} = 2\abs{x - 3}$ stays below $\frac{\eps}{3}$. Held to half of the tolerance,
+$g$ allows only the smaller window $\delta_2 = \frac{\eps}{8}$. A proof only needs *some*
+$\delta$ that works.
 
 **Check.** For $\eps = 0.6$: $\delta = 0.075$, and $x = 3.07$ gives
 $\abs{6(3.07) - 1 - 17} = 0.42 < 0.6$. ✓
 :::
 
-:::{proof:example} The limit of Why this matters
+:::{proof:example} The limit from Why this matters
 :label: eg-calc-limit-laws-rational
 
 Find $\displaystyle \lim_{x \to 2} \frac{x^3 - 1}{x^2 + 3}$ with the laws of
@@ -463,10 +513,12 @@ $$
 ohms, for $t > 0$. The second resistor warms up, and its resistance $t$ approaches $6$ ohms.
 What does the combined resistance approach?
 
-1. **The function.** $R$ is a rational function, with numerator $3t$ and denominator $3 + t$.
-   It is defined at every $t > 0$, so on the open interval $(0, \infty)$ around $6$.
+1. **The function.** Only $t > 0$ makes sense here, so $R$ is not itself a rational function: it
+   is the restriction of the rational function $r(t) = \frac{3t}{3 + t}$, defined at every
+   $t \ne -3$, to the open interval $(0, \infty)$. That interval contains $6$, and $R$ is
+   defined at every point of it.
 2. **The hypothesis.** The denominator at $t = 6$ is $3 + 6 = 9 \ne 0$.
-3. **Substitute.** By part (b) of [](#cor-calc-direct-substitution),
+3. **Substitute.** By part (c) of [](#cor-calc-direct-substitution), with $I = (0, \infty)$,
    $\lim_{t \to 6} R(t) = R(6) = \frac{18}{9} = 2$.
 
 $$
@@ -546,7 +598,10 @@ Computing Limits Algebraically, rewrites such a function first.
 $x \ne 1$ and $h(1) = 5$: "by direct substitution, $\lim_{x \to 1} h(x) = h(1) = 5$."
 
 **Why:** [](#cor-calc-direct-substitution) is about polynomials and rational functions. The
-function $h$ is neither: it agrees with the polynomial $x + 1$ only at $x \ne 1$.
+function $h$ is neither. By the ✓ part below, its limit at $1$ is $2$. If $h$ were a
+polynomial, or a rational function (whose denominator is not $0$ at $1$, since $h(1)$ is
+defined), the corollary would give the limit $h(1) = 5$, and two different limits contradict
+[uniqueness of limits](#thm-calc-limit-unique).
 
 ✓ **Right:** $h$ is the polynomial $x + 1$ with its value at $1$ changed, and by
 [the remark on the value at $a$](#rem-calc-limit-value-irrelevant) that does not change the
@@ -710,7 +765,8 @@ once for each term of the polynomial.
 - The quotient law needs $M \ne 0$; the square-root law needs $L > 0$, or $L = 0$ and
   $f(x) \ge 0$ near $a$.
 - For a polynomial, and for a rational function at a point where its denominator is not $0$,
-  the limit is the value at the point ([](#cor-calc-direct-substitution)).
+  the limit is the value at the point ([](#cor-calc-direct-substitution)); this still holds
+  when the rational function is restricted to an open interval around the point.
 - When a hypothesis fails, the law says nothing: "$\frac{0}{0}$" is a signal to do more work,
   not an answer, and "the laws do not apply" is not "the limit does not exist".
 
@@ -897,7 +953,8 @@ $\lim_{u \to 15} v(u)$, in cm.
 
 :::{admonition} Hint 1
 :class: dropdown hint
-$v$ is a rational function of $u$. Is its denominator $0$ at $u = 15$?
+$v$ is a rational function of $u$, used only for $u > 5$. Which part of
+[](#cor-calc-direct-substitution) covers that? Is the denominator $0$ at $u = 15$?
 :::
 
 :::{admonition} Answer
@@ -910,8 +967,10 @@ $\frac{15}{2}$
 :label: sol-calc-limit-laws-lens
 :class: dropdown
 
-$v$ is a rational function with the denominator $u - 5$, which is $10 \ne 0$ at $u = 15$. By
-part (b) of [](#cor-calc-direct-substitution),
+Since $v$ is used only for $u > 5$, it is the restriction of the rational function
+$\frac{5u}{u - 5}$, defined at every $u \ne 5$, to the open interval $(5, \infty)$, which
+contains $15$. The denominator $u - 5$ is $10 \ne 0$ at $u = 15$. By part (c) of
+[](#cor-calc-direct-substitution), with $I = (5, \infty)$,
 $$
 \lim_{u \to 15} v(u) = v(15) = \frac{75}{10} = \frac{15}{2} .
 $$
@@ -1060,8 +1119,9 @@ $0$
 
 By [](#cor-calc-direct-substitution), $\lim_{x \to 0} (x^2 + x^4) = 0$. The square-root law
 with $L = 0$ needs $x^2 + x^4 \ge 0$ near $0$. For every real $x$,
-$x^2 + x^4 = x^2(1 + x^2)$, and both factors are non-negative ($x^2 \ge 0$, and
-$1 + x^2 \ge 1$), so their product is non-negative. So the hypothesis holds with any $r > 0$, and
+$x^2 + x^4 = x^2(1 + x^2)$, with $x^2 \ge 0$ and $1 + x^2 \ge 1 > 0$. Multiplying
+$0 \le x^2$ by the positive number $1 + x^2$ keeps the inequality, so
+$0 \le x^2(1 + x^2)$. So the hypothesis holds with any $r > 0$, and
 part (f) of [](#thm-calc-limit-laws) gives
 $$
 \lim_{x \to 0} \sqrt{x^2 + x^4} = 0 .
@@ -1073,8 +1133,8 @@ $$
 :class: tier-c
 
 For which real numbers $c$ is $\sqrt{cx - x^2}$ defined at every point of some open interval
-containing $2$, except possibly at $2$? Give the set of all such $c$, and for those $c$ find
-$\lim_{x \to 2} \sqrt{cx - x^2}$.
+containing $2$, except possibly at $2$? Give the set of all such $c$, and show that for each
+of them $\lim_{x \to 2} \sqrt{cx - x^2} = \sqrt{2c - 4}$.
 
 :::{admonition} Hint 1
 :class: dropdown hint
@@ -1108,7 +1168,8 @@ $\lim_{x \to 2} \sqrt{cx - x^2} = \sqrt{2c - 4}$.
 **If $c \le 2$.** Every open interval containing $2$ contains numbers $x$ with $2 < x < 3$:
 by [the definition of an interval](#def-calc-interval), it contains every number between $2$
 and its right endpoint, or every number greater than $2$ if it has no right endpoint; take $x$
-halfway between $2$ and the smaller of $3$ and that endpoint. At such an $x$, $x > 0$ and $c - x < c - 2 \le 0$, so
+halfway between $2$ and the smaller of $3$ and that endpoint, or $x = \frac{5}{2}$ if there is
+none. At such an $x$, $x > 0$ and $c - x < c - 2 \le 0$, so
 $x(c - x) < 0$ (a product of a positive and a negative number), and the square root is
 undefined. So no open interval containing $2$ works.
 
