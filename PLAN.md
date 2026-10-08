@@ -5,7 +5,11 @@ build, Pages deploy), 2 (checks, schema, curriculum and prerequisite graph), 3 (
 widget), 4 (verification harness, coverage gate, verified-page guard) and 5 (agent support and
 governance) are in place, and the site is live at <https://vronnblom.github.io/maths/>. The
 first Phase 1a session confirmed the last item of its definition of done: a brand-new cloud
-session starts with the SessionStart hook (09). **Phase 1a** is under way: the three Preliminaries prerequisites of `calc-limit`, then `calc-limit` itself.
+session starts with the SessionStart hook (09). **Phase 1a is done but for the owner's reader
+test** (2026-10-08): the three Preliminaries prerequisites of `calc-limit` and `calc-limit` itself
+are `reviewed`, the exemplar meets the 09 §9.1 rubric ([`docs/exemplar-review.md`](docs/exemplar-review.md)),
+and the templates are frozen. `calc-limit` goes to `verified` after the reader test.
+**Next is Phase 1b**: the rest of the Limits chapter.
 **First subject:** Calculus. **Architecture:** scales to any subject by adding a folder.
 
 ## Decisions at a glance
@@ -94,7 +98,14 @@ block snippets, chapter and subject index pages, and a verification test.
    `CODE_OF_CONDUCT.md`, `CODEOWNERS`, the PR template and issue forms, the pre-filled erratum
    link on every topic and chapter page, `docs/decisions/` (ADRs), Dependabot and `links.yml`.
    `CLAUDE.md` is v1.
-6. **Phase 1a** (next): `calc-real-numbers`, then `calc-functions` and
-   `calc-absolute-value-inequalities`, each `/new-topic <label>` in its own session and PR,
-   verified and reviewed by other sessions; then `calc-limit` with the `epsilon-delta` widget
-   (09).
+6. **Phase 1a** (done, but for the reader test): `calc-real-numbers`, `calc-functions` and
+   `calc-absolute-value-inequalities` (vronnblom/maths#8, #9, #7), the `epsilon-delta` widget
+   (#10) and the exemplar `calc-limit` (#11), each written, verified, reviewed and re-checked
+   by different sessions and signed off by the owner; then the **template freeze**: what the
+   reviews kept finding is in `CLAUDE.md`, `templates/` and the skills (with `/recheck-topic`
+   for the second pass), and `docs/exemplar-review.md` applies the 09 §9.1 rubric. Left: the
+   owner's reader test, then `calc-limit` to `verified`.
+7. **Phase 1b** (next): `calc-one-sided-limits`, `calc-limit-laws`, `calc-computing-limits`,
+   `calc-squeeze-theorem`, `calc-infinite-limits`, `calc-limits-at-infinity` and the two
+   Preliminaries pages they need, `calc-polynomial-rational` and `calc-trig-functions`, one
+   topic per PR in parallel waves from `graph.py ready calc`; then `limits/index.md` (09).

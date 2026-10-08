@@ -38,7 +38,7 @@ EG_ASSERTION = "    assert equal(sp.Abs((2 * x - 1) - 5), 2 * sp.Abs(x - 3))\n"
 EG_DEF = "def test_linear_eps_delta_example():\n"
 EXR_DEF = "def test_table_estimate():\n"
 ANSWER_CALL = '    printed = float(answer("exr-calc-limit-table-estimate"))\n'
-TABLE_ANSWER = ":::{admonition} Answer\n:class: dropdown answer numeric-5e-3\n$0.69$\n:::\n"
+TABLE_ANSWER = ":::{admonition} Answer\n:class: dropdown answer numeric-5e-3\n$0.50$\n:::\n"
 
 
 class Run:
@@ -163,7 +163,7 @@ DEFECTS = {
         "coverage", "eg-calc-limit-linear-eps-delta: verify/calculus/limits/test_limit_of_a_function.py::test_linear_eps_delta_example: "
                     "passed, but made no mathcheck assertion (equal, limit_is, …)"),
     "exr-test-that-never-calls-answer": (
-        [(TEST, ANSWER_CALL, "    printed = 0.69\n")], [],
+        [(TEST, ANSWER_CALL, "    printed = 0.50\n")], [],
         "coverage", 'exr-calc-limit-table-estimate: verify/calculus/limits/test_limit_of_a_function.py::test_table_estimate: '
                     'passed, but never called answer("exr-calc-limit-table-estimate")'),
     "failing-test": (
@@ -174,11 +174,11 @@ DEFECTS = {
          (TEST, "import random\n", "import random\n\nimport pytest\n")], [],
         "coverage", "status reviewed needs at least 50% of the examples and exercises verified, but 1 of 3 are (33%)"),
     "answer-outside-the-subset": (
-        [(PAGE, "\n$0.69$\n", "\n$\\approx 0.69$\n")], [],
-        "pytest", "cannot read the answer '\\\\approx 0.69': \\approx is not in the answer subset. Rewrite the answer in the "
+        [(PAGE, "\n$0.50$\n", "\n$\\approx 0.50$\n")], [],
+        "pytest", "cannot read the answer '\\\\approx 0.50': \\approx is not in the answer subset. Rewrite the answer in the "
                   "answer LaTeX subset (docs/plan/04 §4.3), or mark it `:class: dropdown answer manual`"),
     "wrongly-rounded-numeric-answer": (
-        [(PAGE, "\n$0.69$\n", "\n$0.70$\n")], [],
+        [(PAGE, "\n$0.50$\n", "\n$0.51$\n")], [],
         "pytest", "FAILED verify/calculus/limits/test_limit_of_a_function.py::test_table_estimate"),
     "exercise-without-an-answer": (
         [(PAGE, TABLE_ANSWER + "::::\n", "::::\n")], [],
@@ -201,7 +201,7 @@ DEFECTS = {
         [(TEST, '@covers("exr-calc-limit-eps-delta-linear")\n', '@covers("exr-calc-limit-eps-delta-linear", "eg-calc-limit-typo")\n')], [],
         "coverage", 'test_eps_delta_exercise_key_claim declares @covers("eg-calc-limit-typo"), but no page in the toc has that label'),
     "stale-ast": (
-        [], [(PAGE, "\n$0.69$\n", "\n$0.70$\n")],
+        [], [(PAGE, "\n$0.50$\n", "\n$0.51$\n")],
         "extract", "was built from an older version of this page: rebuild it (npm run ast, or npm run verify)"),
 }
 
@@ -219,7 +219,7 @@ def test_stale_answers_stop_pytest(tmp_path):
     build(tmp_path)
     run = Run(tmp_path)
     assert extract(run)
-    edit(tmp_path, [(PAGE, "\n$0.69$\n", "\n$0.70$\n")])  # after the answers were extracted
+    edit(tmp_path, [(PAGE, "\n$0.50$\n", "\n$0.51$\n")])  # after the answers were extracted
     assert not pytest_verify(run)
     assert ("verify/_answers.json is stale (content/calculus/limits/limit-of-a-function.md changed): run `npm run verify`"
             in run.output("pytest"))
@@ -238,7 +238,7 @@ def test_failed_extraction_deletes_old_answers(tmp_path):
     build(tmp_path)
     run = Run(tmp_path)
     assert extract(run)
-    edit(tmp_path, [(PAGE, "\n$0.69$\n", "\n$0.70$\n")])  # now the AST is stale
+    edit(tmp_path, [(PAGE, "\n$0.50$\n", "\n$0.51$\n")])  # now the AST is stale
     assert not extract(run)
     assert not (tmp_path / "verify" / "_answers.json").exists()
 

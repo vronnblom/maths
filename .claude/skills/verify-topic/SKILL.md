@@ -37,6 +37,18 @@ How:
 - never weaken a test to make it pass (a looser tolerance, a skipped case, a hand-copied
   answer).
 
+What the Phase 1a verifications needed:
+- an ε–δ choice is checked symbolically on each branch of a `min`, and the implication on exact
+  rational (ε, x) pairs right up to the edge of the window (floats hide a failure there);
+  `verify/calculus/limits/test_limit_of_a_function.py` is the pattern;
+- a "Facts from school used on this page" box: test each fact, and each use on the page as an
+  instance of one;
+- the numbers in figure captions, tables and **Try this** steps are claims too: test them;
+- a comment in a test says only what the test checks (a sampled check is not "for every");
+- SymPy can be wrong: `sp.limit` on a `Piecewise`, `solveset` with `abs`, `is_increasing` on a
+  disconnected domain. Cross-check by a second route, and say which in a comment;
+- if a test of yours was wrong, say so in the report.
+
 Run, while you work and at the end:
 
 ```bash
@@ -46,7 +58,8 @@ uv run pytest verify/<subject>/<chapter>/test_<topic>.py -q   # rerun one file (
 
 Push the test file to the topic's branch (10 §10.2), and put the coverage table that
 `check_coverage.py` printed in the PR. Report every disagreement as above, with the failing
-assertion's output.
+assertion's output, and list the `manual` exercises whose key claims you tested, for the
+reviewer's verdict.
 
 ## Never
 

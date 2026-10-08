@@ -159,6 +159,117 @@ This fact is proved in [The Logarithm Defined as an Integral](#calc-ln-integral)
 :::
 ```
 
+## Facts from school (only by the owner's ruling)
+
+A page may use a few elementary facts that are proved on a page **outside its prerequisite
+closure** only when the owner has ruled so in the PR (the other way out is a `curriculum` PR
+that adds the prerequisite). A `looking-ahead` admonition is not enough when a proof rests on
+the facts. The box:
+
+- sits just before the first use, and the sentence before it names **every** place on the page
+  that uses the facts (figures, examples, common mistakes, exercises with their hints and
+  solutions);
+- lists **exactly** the facts used, as a bulleted list (a display would scroll sideways on a
+  phone), and nothing that goes beyond them: check each use against the list, and reword any
+  sentence that needs more (for example "runs through all values between −1 and 1" needs more
+  than $-1 \le \sin t \le 1$);
+- is a `{proof:remark}` with the label `rem-<subj>-<topic slug>-school-facts`, so that later
+  uses link to it. Not an `{admonition}`: the theme renders no anchor for a labelled
+  admonition, so a link to one goes nowhere (found on `calc-limit`'s box after it merged);
+- names the page that proves the facts in plain text (it is outside the closure, so no link).
+  That page's `curriculum.yml` entry must list each fact as a result (a `curriculum` PR, as
+  vronnblom/maths#14 did for `calc-trig-functions`), so that the promise rests on the plan.
+
+The verifier tests each fact, and each use as an instance of one. A function that the closure
+could replace is replaced instead: `calc-limit` swapped $(2^x - 1)/x$ for
+$(\sqrt{1 + x} - 1)/x$.
+
+```markdown
+The sine function appears in the next figure, the worked example on $\sin(1/x)$, the common
+mistake "Checking one $\eps$, or a few points", and the exercise on $\sin(\pi/x)$ (its
+statement, hints and solution). They use only the facts about it in the box below.
+
+:::{proof:remark} Facts from school used on this page
+:label: rem-calc-limit-school-facts
+
+With $t$ in radians:
+
+- $\sin(k\pi) = 0$ for every integer $k$;
+- $\sin\bigl(\frac{\pi}{2} + 2k\pi\bigr) = 1$ for every integer $k$;
+- $-1 \le \sin t \le 1$ for every real number $t$.
+
+These are the only facts about $\sin$ that this page uses. The page Trigonometric Functions, in
+the Preliminaries chapter, defines $\sin$ and proves them.
+:::
+```
+
+Later uses cite it: `by [the facts from school](#rem-calc-limit-school-facts)`.
+
+## Steps that say what they rest on
+
+Every step of a proof, an example or a solution names the hypothesis, the definition clause or
+the result it uses, and cites parts and properties exactly: the letter of a theorem's part, the
+number of a remark's property, and only what that statement says (a fact inside another page's
+proof or an unlabelled dropdown is not citable; ask for it to be stated). Before multiplying or
+dividing an inequality, state the sign of the factor and name the order rule
+([Absolute Value and Inequalities](#calc-absolute-value-inequalities), "Working with
+inequalities"): a positive factor keeps a strict inequality, a negative one reverses it, and
+one that may be $0$ gives only $\le$.
+
+```markdown
+Since $\delta \le 1$, step 2 gives $\abs{x + 2} < 5$. Multiplying this by the positive number
+$\abs{x - 2}$ (positive because $0 < \abs{x - 2}$) keeps the strict inequality, and
+$\abs{x - 2} < \delta \le \frac{\eps}{5}$:
+$$
+\abs{x^2 - 4} = \abs{x - 2}\,\abs{x + 2} < 5\abs{x - 2} < 5 \cdot \frac{\eps}{5} = \eps .
+$$
+The first of these says also that $\abs{L - f(x)} < \eps$, because
+$\abs{L - f(x)} = \abs{f(x) - L}$ by
+[property 2 of the absolute value](#rem-calc-absolute-value-properties). By
+[part (b) of the triangle inequality](#thm-calc-triangle-inequality), with $u = L$, $v = M$
+and $w = f(x)$, …
+```
+
+## Displays on a phone
+
+At 375 px a display wider than the screen scrolls sideways inside its box, and the reader may
+not see that it goes on. Keep units and words in the sentence, not inside the display, and split
+a long chain over lines with `aligned`, one relation per line:
+
+```markdown
+Its average speed is
+$$
+\frac{s(1 + h) - s(1)}{h} = \frac{5(1+h)^2 - 5}{h},
+$$
+in metres per second.
+
+$$
+\begin{aligned}
+\bigl(\sqrt{4.1} + \sqrt{3.9}\bigr)^2
+  &= 4.1 + 2\sqrt{4.1}\,\sqrt{3.9} + 3.9 \\
+  &< 8 + 2 \cdot 4 = 16 = 4^2 .
+\end{aligned}
+$$
+```
+
+In inline maths, a negative number alone is written `${-1}$`: mystmd turns number-only inline
+maths into plain text, and `$-1$` then shows a hyphen instead of a minus sign.
+
+## Drafting ahead: `% TODO link`
+
+A page drafted before a prerequisite is merged (10 §10.4) names the result in plain text and
+leaves a MyST comment, which the PR body lists (`grep -n TODO` prints exactly these lines):
+
+```markdown
+By the Archimedean property, there is an integer $n \ge 1$ with $n > \frac{1}{2\pi\delta}$.
+% TODO link: rem-calc-naturals-unbounded once vronnblom/maths#8 is merged
+```
+
+After the prerequisite merges: merge `main` into the branch, replace every `% TODO link` with a
+named link (`By [the Archimedean property](#rem-calc-naturals-unbounded), …`), and check that
+the target's **statement**, as merged, says what the step uses (not its proof, nor an example
+on that page). `grep -n TODO <page>` prints nothing before the page leaves draft.
+
 ## Exercise with hints, answer and solution
 
 ```markdown

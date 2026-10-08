@@ -80,7 +80,7 @@ def test_edited_verified_page_fails(repo):
 
 
 def test_edited_answer_fails(repo):
-    replace(repo, PAGE, "\n$0.69$\n", "\n$0.70$\n")
+    replace(repo, PAGE, "\n$0.50$\n", "\n$0.51$\n")
     commit(repo)
     rep, _ = check(repo)
     assert [e.message.split(" on a verified page")[0] for e in rep.errors] == ["exr-calc-limit-table-estimate changed"]
@@ -153,7 +153,7 @@ def test_labels_from_guard_yml():
 
 
 def test_cli(repo, capsys):
-    replace(repo, PAGE, "\n$0.69$\n", "\n$0.70$\n")
+    replace(repo, PAGE, "\n$0.50$\n", "\n$0.51$\n")
     commit(repo)
     base = sh(repo, "rev-parse", "HEAD~1")
     root = str(repo / "content")

@@ -1,7 +1,7 @@
 ---
 # ─────────────────────────────────────────────────────────────────────────────
 # TEMPLATE: topic page.  Copy to content/<subject>/<chapter>/<topic>.md
-# This sample is the skeleton of the gold-standard page `calc-limit`.
+# The skeleton of calc-limit; the finished exemplar is content/calculus/limits/limit-of-a-function.md.
 # Lines starting with `%` are MyST comments (not rendered) — delete them when done.
 # Rules: docs/plan/03-content-model.md · Notation: content/about/notation.md
 # ─────────────────────────────────────────────────────────────────────────────
@@ -41,6 +41,10 @@ maths:
 % 1–3 paragraphs. Start from a concrete question, not a definition.
 % Example: a ball's position is s(t) = 5t²; what is its speed at exactly t = 1?
 % Average speeds over [1, 1+h] approach a number as h shrinks — that "approach" is a limit.
+% Units go in the prose ("…, in metres per second."), never inside a display: at 375 px a display
+% wider than the screen scrolls sideways and hides its end. Split long chains with aligned.
+% Facts from outside the prerequisite closure (e.g. values of sin from school): only by the
+% owner's ruling, in a labelled "Facts from school used on this page" box (templates/blocks.md).
 
 % A widget sits alone in a {figure}: the figure carries the wdg- label, and its caption is
 % the text description (shown even when the widget can't load). See docs/plan/05 §5.8.
@@ -60,8 +64,9 @@ maths:
 ```
 
 Graph of the average speed $\frac{5(1+h)^2 - 5}{h}$ for $-1 \le h \le 1$, with a hole at
-$h = 0$, and a point on the graph that a slider for $h$ moves. A table lists the values for
-$h = \pm 0.1, \pm 0.01, \pm 0.001$; they approach $10$.
+$h = 0$, where the formula is undefined, and a point on the graph that a slider for $h$ moves.
+A table lists the values for $h = \pm 0.1, \pm 0.01, \pm 0.001$: $10.5$, $10.05$, $10.005$ and
+$9.995$, $9.95$, $9.5$. They approach $10$ from both sides.
 ::::
 
 **Try this:** move $h$ towards $0$ from both sides. Which number do the average speeds
@@ -77,12 +82,14 @@ like by taking $x$ close enough to $a$, but not equal to $a$.
 :::{proof:definition} Limit of a function
 :label: def-calc-limit
 
-Let $f$ be defined on an open interval containing $a$, except possibly at $a$ itself. We say
-that **the limit of $f(x)$ as $x$ approaches $a$ is $L$**, and write
+Let $a$ be a real number, and let $f$ be a function that is defined at every point of an open
+interval containing $a$, except possibly at $a$ itself. We say that **the limit of $f(x)$ as
+$x$ approaches $a$ is $L$**, where $L$ is a real number, and write
 $$
 \lim_{x \to a} f(x) = L,
 $$
-if for every $\eps > 0$ there exists $\delta > 0$ such that
+if for every $\eps > 0$ there is a $\delta > 0$ such that $f$ is defined at every $x$ with
+$0 < \abs{x - a} < \delta$, and
 $$
 0 < \abs{x - a} < \delta \quad\text{implies}\quad \abs{f(x) - L} < \eps .
 $$
@@ -92,8 +99,11 @@ $$
 window of half-width $\delta$ around $a$ such that every $x$ in that window (other than $a$)
 has $f(x)$ within the tolerance.
 
-% The ε–δ game (widgets/README.md, `epsilon-delta`): the reader sets ε and sees the largest δ on
-% each side; then picks their own δ and sees where it fails. The caption is the text description.
+% The ε–δ game (widgets/README.md, `epsilon-delta`): the reader sets ε and sees the largest δ the
+% widget found on each side; then picks their own δ and sees where it fails. The caption is the
+% text description. Widget wording, in the caption and the prose: say what the widget observed
+% ("the largest δ it found", "passed the widget's check at the points it tested"), never "the
+% largest δ is", and never "the limit is (not) L": only a proof on the page settles that.
 ::::{figure}
 :label: wdg-calc-limit-eps-delta
 
@@ -101,18 +111,18 @@ has $f(x)$ within the tolerance.
 {
   "f": "x^2", "a": 2, "L": 4,
   "eps": 0.5, "epsRange": [0.05, 1.5], "epsStep": 0.05,
-  "xRange": [-0.5, 3.5], "yRange": [-1, 9]
+  "xRange": [1, 3], "yRange": [0, 9]
 }
 ```
 
-Graph of $y = x^2$ near $x = 2$, with a horizontal band of half-width $\eps$ around $y = 4$
-(dashed edges) and a vertical window $0 < \abs{x - 2} < \delta$ (solid edges; the dotted line
-$x = 2$ itself is left out). A slider sets $\eps$ from $0.05$ to $1.5$, and the widget states the
-largest $\delta$ it finds on each side of $2$ by checking points of the graph; for $\eps = 0.5$
-the exact values are $2 - \sqrt{3.5} \approx 0.129$ on the left and $\sqrt{4.5} - 2 \approx
-0.121$ on the right. A second slider sets your own $\delta$; points of the graph inside the
-window but outside the band are marked with crosses, and a sentence says whether your
-$\delta$ passes the widget's check.
+Graph of $y = x^2$ for $1 \le x \le 3$, with a horizontal band of half-width $\eps$ around
+$y = 4$ (dashed edges) and a vertical window $0 < \abs{x - 2} < \delta$ (solid edges; the dotted
+line $x = 2$ itself is left out). A slider sets $\eps$ from $0.05$ to $1.5$, and the widget states
+the largest $\delta$ it found on each side of $2$, and how many points it checked. For
+$\eps = 0.5$ the exact values are $2 - \sqrt{3.5} \approx 0.129$ on the left and
+$\sqrt{4.5} - 2 \approx 0.121$ on the right. A second slider sets your own $\delta$; points of
+the graph inside the window but outside the band are marked with crosses, and a sentence says
+whether your $\delta$ passed the widget's check at the points it tested.
 ::::
 
 **Try this:** set $\eps = 0.1$. What is the largest $\delta$ the widget finds on each side of
@@ -128,7 +138,8 @@ $\delta$ a little larger and find where it fails.
 
 :::{proof:theorem} Uniqueness of limits
 :label: thm-calc-limit-unique
-If $\lim_{x\to a} f(x) = L$ and $\lim_{x\to a} f(x) = M$, then $L = M$.
+Let $f$ and $a$ be as in [](#def-calc-limit). If $\lim_{x\to a} f(x) = L$ and
+$\lim_{x\to a} f(x) = M$, then $L = M$.
 :::
 
 :::{proof:proof} Rigorous track
@@ -136,6 +147,10 @@ If $\lim_{x\to a} f(x) = L$ and $\lim_{x\to a} f(x) = M$, then $L = M$.
 :enumerated: false
 :class: dropdown
 % Policy R (docs/plan/08). Strategy sentence first: "Suppose L ≠ M and take ε = |L − M|/2 …"
+% Each step names what it rests on: the domain clause of the definition (so f(x) is defined),
+% property 2 of the absolute value for |L − f(x)| = |f(x) − L|, and part (b) of the triangle
+% inequality, with the letters matched (u = L, v = M, w = f(x)). Cite parts and properties by
+% their number or letter, and only what the cited statement says.
 :::
 
 ## Worked examples
@@ -143,12 +158,18 @@ If $\lim_{x\to a} f(x) = L$ and $\lim_{x\to a} f(x) = M$, then $L = M$.
 :::{proof:example} Prove $\lim_{x \to 3} (2x - 1) = 5$ from the definition
 :label: eg-calc-limit-linear-eps-delta
 
-**Goal.** Given $\eps > 0$, find $\delta > 0$ with $0 < \abs{x-3} < \delta \implies \abs{(2x-1) - 5} < \eps$.
+**Goal.** Given $\eps > 0$, find $\delta > 0$ such that $0 < \abs{x - 3} < \delta$ implies
+$\abs{(2x - 1) - 5} < \eps$. The function $2x - 1$ is defined for every $x$, so every window
+lies in its domain.
 
 1. **Scratch work.** $\abs{(2x - 1) - 5} = \abs{2x - 6} = 2\abs{x - 3}$.
-2. **Choose $\delta$.** We need $2\abs{x-3} < \eps$, so take $\delta = \eps/2$.
-3. **Proof.** If $0 < \abs{x - 3} < \delta = \eps/2$, then
-   $\abs{(2x-1) - 5} = 2\abs{x-3} < 2 \cdot \tfrac{\eps}{2} = \eps$.
+2. **Choose $\delta$.** We need $2\abs{x - 3} < \eps$, that is, $\abs{x - 3} < \frac{\eps}{2}$.
+   So take $\delta = \frac{\eps}{2}$. It depends on $\eps$ only, not on $x$.
+3. **Proof.** Let $\eps > 0$ and $\delta = \frac{\eps}{2}$. If $0 < \abs{x - 3} < \delta$, then
+   multiplying $\abs{x - 3} < \frac{\eps}{2}$ by the positive number $2$ keeps the inequality:
+   $$
+   \abs{(2x - 1) - 5} = 2\abs{x - 3} < 2 \cdot \frac{\eps}{2} = \eps .
+   $$
 
 $$
 \boxed{\delta = \tfrac{\eps}{2}}
@@ -158,6 +179,11 @@ $$
 :::
 
 % Add 2–6 more examples: the typical, the edge case, an applied one; non-existence examples.
+% In every proof, example and solution: before multiplying or dividing an inequality, state the
+% sign of the factor and name the order rule ("multiplying by the positive number |x − 2| keeps
+% the strict inequality"; a factor that may be 0 gives only ≤). Each step says which hypothesis,
+% definition clause or cited result it rests on. A displayed chain that is wider than a phone
+% screen is split over lines with aligned.
 
 ## Common mistakes
 
@@ -193,7 +219,7 @@ $$
 :class: tier-a
 
 Use a table of values with $x = 0.1, 0.01, 0.001$ (and the negatives) to estimate
-$\displaystyle \lim_{x \to 0} \frac{2^x - 1}{x}$ to two decimal places.
+$\displaystyle \lim_{x \to 0} \frac{\sqrt{1 + x} - 1}{x}$ to two decimal places.
 
 :::{admonition} Hint 1
 :class: dropdown hint
@@ -202,17 +228,18 @@ Evaluate on both sides of $0$. Do the values settle as $x$ shrinks?
 
 :::{admonition} Answer
 :class: dropdown answer numeric-5e-3
-$0.69$
+$0.50$
 :::
 ::::
 
 ::::{solution} exr-calc-limit-table-estimate
 :label: sol-calc-limit-table-estimate
 :class: dropdown
-% Full table, then the estimate 0.69. Do not cite the exact value here: it is ln 2, but the
-% pages that show it are outside this page's prerequisite closure. Mention it, if at all,
-% in a looking-ahead admonition (templates/blocks.md), e.g. "The exact value is ln 2; see
-% [Derivatives of Exponential and Logarithmic Functions](#calc-derivatives-exp-log)."
+% Full table, then the estimate 0.50, called an estimate, not a proof. Only functions in this
+% page's prerequisite closure: the exemplar replaced (2^x − 1)/x, whose 2^x is defined on a
+% later page, by this one. The exact value 1/2 (rationalise the numerator) belongs in a
+% looking-ahead admonition (templates/blocks.md), because Computing Limits Algebraically is
+% the page that shows why such a step gives the limit.
 ::::
 
 ::::{exercise} An ε–δ proof
@@ -235,7 +262,8 @@ $\delta = \eps / 3$ works.
 ::::{solution} exr-calc-limit-eps-delta-linear
 :label: sol-calc-limit-eps-delta-linear
 :class: dropdown
-% Mirror the structure of the worked example: scratch work, choice of δ, proof.
+% Mirror the structure of the worked example: scratch work, choice of δ, proof. Say that the
+% function is defined on every window, and state the sign of the factor you multiply by.
 ::::
 
 ## Where this leads

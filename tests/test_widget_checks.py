@@ -40,33 +40,33 @@ def test_clean_template_passes(tmp_path):
 
 @pytest.mark.parametrize("old, new, line, message", [
     # not in a figure at all
-    (FIGURE_START, "::::{admonition} A box\n", 49, "{anywidget} must be the only content of a {figure} labelled wdg-…"),
+    (FIGURE_START, "::::{admonition} A box\n", 53, "{anywidget} must be the only content of a {figure} labelled wdg-…"),
     # something else in the figure before the widget
-    (FIGURE_START, FIGURE_START + "\nAn intro paragraph.\n", 47, "a widget figure holds only the {anywidget}, then its caption"),
+    (FIGURE_START, FIGURE_START + "\nAn intro paragraph.\n", 51, "a widget figure holds only the {anywidget}, then its caption"),
     # a figure label that is not wdg-
-    (":label: wdg-calc-limit-average-speed\n", ":label: fig-calc-limit-average-speed\n", 48, "a widget figure needs a wdg- label, not fig-calc-limit-average-speed"),
+    (":label: wdg-calc-limit-average-speed\n", ":label: fig-calc-limit-average-speed\n", 52, "a widget figure needs a wdg- label, not fig-calc-limit-average-speed"),
     # the path does not point into widgets/
-    ("../../../widgets/function-plot.mjs", "../../widgets/function-plot.mjs", 50, "point it at widgets/<name>.mjs; from this page, ../../../widgets/<name>.mjs"),
-    ("../../../widgets/function-plot.mjs", "../../../widgets/_lib/plot.mjs", 50, "point it at widgets/<name>.mjs"),
+    ("../../../widgets/function-plot.mjs", "../../widgets/function-plot.mjs", 54, "point it at widgets/<name>.mjs; from this page, ../../../widgets/<name>.mjs"),
+    ("../../../widgets/function-plot.mjs", "../../../widgets/_lib/plot.mjs", 54, "point it at widgets/<name>.mjs"),
     # the body is not JSON
-    ('  "variable": "h",', "  'variable': 'h',", 53, "the body is not valid JSON"),
+    ('  "variable": "h",', "  'variable': 'h',", 57, "the body is not valid JSON"),
     # a typo inside a nested object is rejected too
-    ('"hole": { "x": 0 }', '"hole": { "x": 0, "radius": 2 }', 57, "hole: Additional properties are not allowed ('radius' was unexpected)"),
-    ('"trace": { "x": 0.5 }', '"trace": { "x": "0.5" }', 58, "trace.x: '0.5' is not of type 'number'"),
+    ('"hole": { "x": 0 }', '"hole": { "x": 0, "radius": 2 }', 61, "hole: Additional properties are not allowed ('radius' was unexpected)"),
+    ('"trace": { "x": 0.5 }', '"trace": { "x": "0.5" }', 62, "trace.x: '0.5' is not of type 'number'"),
     # a rule JSON Schema cannot express
-    ('"xRange": [-1, 1]', '"xRange": [1, -1]', 54, "widget function-plot: xRange: the first number must be smaller than the second"),
-    ('"f": "(5*(1+h)^2 - 5)/h"', '"f": "(5(1+h)^2 - 5)/h"', 52, "widget function-plot: f: missing * after 5: write 5*( (at position 2)"),
+    ('"xRange": [-1, 1]', '"xRange": [1, -1]', 58, "widget function-plot: xRange: the first number must be smaller than the second"),
+    ('"f": "(5*(1+h)^2 - 5)/h"', '"f": "(5(1+h)^2 - 5)/h"', 56, "widget function-plot: f: missing * after 5: write 5*( (at position 2)"),
     # epsilon-delta: its schema, and the rules it cannot express
-    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "a": 2, "L": 4, "limit": 4,', 102, "widget epsilon-delta: config: Additional properties are not allowed ('limit' was unexpected)"),
-    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "L": 4,', 101, "widget epsilon-delta: config: 'a' is a required property"),
-    ('"eps": 0.5, "epsRange": [0.05, 1.5]', '"eps": 0.5, "epsRange": [0, 1.5]', 103, "widget epsilon-delta: epsRange.0: 0 is less than or equal to the minimum of 0"),
-    ('"eps": 0.5, "epsRange": [0.05, 1.5]', '"eps": 0.01, "epsRange": [0.05, 1.5]', 103, "widget epsilon-delta: eps: must lie inside epsRange"),
-    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "a": 3.5, "L": 4,', 102, "widget epsilon-delta: a: must lie strictly inside xRange"),
-    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "a": 2, "L": 12,', 102, "widget epsilon-delta: L: must lie inside yRange"),
-    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x*x(1)", "a": 2, "L": 4,', 102, "widget epsilon-delta: f: x is not a function"),
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "a": 2, "L": 4, "limit": 4,', 112, "widget epsilon-delta: config: Additional properties are not allowed ('limit' was unexpected)"),
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "L": 4,', 111, "widget epsilon-delta: config: 'a' is a required property"),
+    ('"eps": 0.5, "epsRange": [0.05, 1.5]', '"eps": 0.5, "epsRange": [0, 1.5]', 113, "widget epsilon-delta: epsRange.0: 0 is less than or equal to the minimum of 0"),
+    ('"eps": 0.5, "epsRange": [0.05, 1.5]', '"eps": 0.01, "epsRange": [0.05, 1.5]', 113, "widget epsilon-delta: eps: must lie inside epsRange"),
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "a": 3.5, "L": 4,', 112, "widget epsilon-delta: a: must lie strictly inside xRange"),
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x^2", "a": 2, "L": 12,', 112, "widget epsilon-delta: L: must lie inside yRange"),
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "x*x(1)", "a": 2, "L": 4,', 112, "widget epsilon-delta: f: x is not a function"),
     # the allowlist passes these, the browser's compiler does not (review F7)
-    ('"f": "x^2", "a": 2, "L": 4,', '"f": "sin()", "a": 2, "L": 4,', 102, 'widget epsilon-delta: f: JessieCode cannot parse "sin()"'),
-    ('"f": "(5*(1+h)^2 - 5)/h"', '"f": "(5*(1+h)^2 - 5)/h +"', 52, 'widget function-plot: f: JessieCode cannot parse "(5*(1+h)^2 - 5)/h +"'),
+    ('"f": "x^2", "a": 2, "L": 4,', '"f": "sin()", "a": 2, "L": 4,', 112, 'widget epsilon-delta: f: JessieCode cannot parse "sin()"'),
+    ('"f": "(5*(1+h)^2 - 5)/h"', '"f": "(5*(1+h)^2 - 5)/h +"', 56, 'widget function-plot: f: JessieCode cannot parse "(5*(1+h)^2 - 5)/h +"'),
 ])
 def test_figure_and_config_rules(tmp_path, old, new, line, message):
     errors = check(tmp_path, old, new)

@@ -70,7 +70,8 @@ tests/            the checkers' tests, with one broken fixture project per check
 docs/plan/        the plan; docs/decisions/ for later architecture decisions
 docs/agents/      the agent roles (Author, Verifier, Reviewer) and their skills
 templates/        page and test templates
-.claude/          the SessionStart hook and the skills /new-topic, /verify-topic, /review-math
+.claude/          the SessionStart hook and the skills /new-topic, /verify-topic, /review-math,
+                  /recheck-topic
 .github/          workflows: ci.yml (checks, verify, build), guard.yml (the verified-page edit
                   guard on pull requests), deploy.yml (GitHub Pages), links.yml (weekly
                   external-link check); the PR template, issue forms, CODEOWNERS, Dependabot
