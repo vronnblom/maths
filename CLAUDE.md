@@ -1,9 +1,8 @@
 # CLAUDE.md
 
-> **v1, Phase 0 done** (2026-10-07; the first Phase 1a session also checks that a new cloud
-> session starts with the SessionStart hook, 09). Next is Phase 1a: `calc-real-numbers`,
-> `calc-functions` and `calc-absolute-value-inequalities`, then the exemplar `calc-limit`
-> (`docs/plan/09-roadmap.md`). This file must always describe the repo as it is: update it in
+> **v1, Phase 0 done** (2026-10-07). Phase 1a is under way: `calc-real-numbers` (the first
+> topic page, a draft), then `calc-functions` and `calc-absolute-value-inequalities`, then the
+> exemplar `calc-limit` (`docs/plan/09-roadmap.md`). This file must always describe the repo as it is: update it in
 > the PR that changes what it says.
 
 ## What this repo is
@@ -29,12 +28,13 @@ uv run python scripts/graph.py closure calc-mean-value-theorem   # every transit
 uv run python scripts/new_topic.py calc-real-numbers              # scaffold a topic: page, verify stubs, toc, labels.lock (/new-topic)
 uv run python scripts/new_topic.py --stubs calc-real-numbers      # add @covers stubs for the page's new eg-/exr- labels
 uv run python scripts/check_labels.py --update-lock               # add your new labels to labels.lock
-uv run python widgets/_tests/make_fixtures.py                     # after adding a function-plot table: SymPy's expected values
+uv run python widgets/_tests/make_fixtures.py                     # after adding a function-plot table or an epsilon-delta figure: SymPy's values
 uv run pytest verify/calculus/limits -q          # after npm run verify: rerun one chapter's tests while you work
 ```
 
 `npm run check` = `scripts/check_all.py` (`check_toc`, `check_frontmatter`, `check_labels
---forward-refs`, `graph.py check`, the notation lint, `check_widgets`; errors fail, warnings
+--forward-refs`, `graph.py check`, the notation lint, `check_widgets`, which compiles every widget
+expression with Node through `scripts/compile_expressions.mjs`; errors fail, warnings
 don't) + codespell + `pytest tests`. Every check prints `file:line: error: message`. Each script also runs alone
 (`uv run python scripts/check_labels.py`) and takes `--root` (default `content/`).
 
@@ -145,8 +145,9 @@ CONTRIBUTING.md, CODE_OF_CONDUCT.md    for people; agents read this file
   must validate against `schema/widgets/<name>.schema.json`, and its id goes in
   `maths.widgets`; `check_widgets.py` checks all of it. Keys and the expression language
   (`2*x`, `ln`, `pi`, `e`) are in `widgets/README.md`. Only built widgets may be used: today
-  `function-plot`. After adding or changing a `function-plot` with a `table`, run
-  `widgets/_tests/make_fixtures.py` (a test fails otherwise).
+  `function-plot` and `epsilon-delta`. After adding or changing a `function-plot` with a
+  `table`, or any `epsilon-delta` figure, run `widgets/_tests/make_fixtures.py` (a test fails
+  otherwise).
 
 ## Roles
 
@@ -223,9 +224,9 @@ Details: `docs/plan/06-quality-assurance.md` §6.1. The harness is `verify/mathc
 - Don't set `status: reviewed`/`verified`, add yourself to `reviewed_by`, or add
   `maths.manual_checked` entries; the owner (or a human reviewer) does that.
 - Don't edit another page's mathematics in a topic PR (open a separate PR).
-- Don't add dependencies, front-matter keys, directive kinds or widget types without a
-  `tooling` PR (the checks' parser, `scripts/myst_source.py`, fails on directives it doesn't
-  know).
+- Don't add dependencies, front-matter keys or directive kinds without a `tooling` PR (the
+  checks' parser, `scripts/myst_source.py`, fails on directives it doesn't know), or a widget
+  type without a `widget` PR (docs/plan/10 §10.2).
 - Don't prove a result with a tool that depends on it (e.g. L'Hôpital or $(\sin x)'$ for
   $\lim \frac{\sin x}{x}$; Taylor series for Taylor's theorem).
 - Don't cite results outside the page's prerequisite closure, except in a `looking-ahead`

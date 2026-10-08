@@ -195,7 +195,11 @@ as JSON fixtures: `uv run python widgets/_tests/make_fixtures.py` writes them, a
 `tests/test_widget_checks.py` fails if the committed JSON differs from what the script writes
 now, so nobody types an expected value. The
 fixtures include the table of values of every `function-plot` figure on the site, so a new
-figure's table is checked automatically. `npm run test:widgets` runs them locally and in CI
+figure's table is checked automatically. **The oracle must certify its own answers**: SymPy is
+sometimes wrong (1.14 solves $\big||x| - \tfrac12\big| < 2.49$ on $(\tfrac12, 3)$ as the whole
+interval), so `make_fixtures.py` computes each `epsilon-delta` δ by two routes (the complement of
+the band, and the band inequality without `abs`), checks the boundary symbolically and probes a
+capped δ near its end, and refuses to write a case it cannot certify. `npm run test:widgets` runs them locally and in CI
 (in the `verify` job).
 
 ## 6.3 Proof review checklist
@@ -259,7 +263,7 @@ Each check runs in the CI job (and npm script) shown, so local and CI runs match
 | Graph | `graph.py check` (`checks` / `check`) | `curriculum.yml` schema, unknown prerequisites, cycles, cross-subject edges violating `depends_on`, mismatch with `curriculum.yml`, deferred proofs whose target comes earlier; redundant transitive edges (warning) |
 | Forward references | `check_labels.py --forward-refs` (`checks` / `check`) | citations outside the prerequisite closure; inside proofs and solutions, also citations of a block that comes *later* on the same page (warning; error on verified pages) |
 | ToC | `check_toc.py` (`checks` / `check`) | `.md` files missing from the toc, toc entries without files |
-| Widgets | `check_widgets.py`, run by `check_all.py` (`checks` / `check`) | every `{anywidget}` alone in a `{figure}` labelled `wdg-…` with a non-empty caption (the text description); the widget file exists; its JSON valid against `schema/widgets/<name>.schema.json` (typos rejected) and the rules a schema cannot express; every `maths.widgets` id is a widget |
+| Widgets | `check_widgets.py`, run by `check_all.py` (`checks` / `check`) | every `{anywidget}` alone in a `{figure}` labelled `wdg-…` with a non-empty caption (the text description); the widget file exists; its JSON valid against `schema/widgets/<name>.schema.json` (typos rejected) and the rules a schema cannot express; every expression compiles with JessieCode (`scripts/compile_expressions.mjs`, Node); every `maths.widgets` id is a widget |
 | Notation lint | `check_all.py` (`notation_lint.py`; `checks` / `check`) | bare `\log`, `\sin^{-1}`, raw `dx`, `]a,b[`, `\mathrm{e}`, degrees in calculus pages, "clearly"/"obviously"/"trivially" in prose (04 §4.4) |
 | Spelling | `codespell` with the en-GB dictionary (`checks` / `check`) | typos and US spellings |
 | Checker tests | `pytest tests` (`checks` / `check`) | a checker that stops detecting its fixture's error; the build gate (`scripts/myst_gate.sh`) on a broken reference, an unknown directive and four kinds of KaTeX error; the verification pipeline end to end on the template page and its test, with one fixture per defect; the edit guard on temporary git repositories |

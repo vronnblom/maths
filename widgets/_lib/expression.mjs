@@ -6,8 +6,14 @@
 // (`sec(x)` is x), an unknown name is undefined, `2x` compiles to a no-op, and it accepts `;`,
 // `==`, `?:` and property access. So every expression first passes a strict tokenizer with an
 // allowlist (the same lists as `$defs` in schema/widgets/function-plot.schema.json, which
-// scripts/check_widgets.py applies in CI); only then is it handed to JessieCode. Nothing here
-// calls eval or new Function on config strings.
+// scripts/check_widgets.py applies in CI): numbers, the variable and parameters, + - * / ^,
+// parentheses, pi, e and 17 functions, so no statement, property access or string reaches
+// JessieCode (expression.test.mjs tests the injections). Only then is it handed to JessieCode,
+// which parses it and builds a JavaScript function from the code it generates **with eval**:
+// this module calls neither eval nor new Function itself, but the allowlisted expression is
+// compiled through JessieCode's eval. The allowlist does not check the grammar (`sin()`, `x+`
+// pass it); JessieCode rejects those, and scripts/compile_expressions.mjs runs this compiler on
+// every expression in the content for `npm run check` (check_widgets.py).
 
 // Function names an expression may call, and the constants it may use. `e` and `pi` are
 // written as in the answer subset (docs/plan/04 §4.3) and translated for JessieCode. `log` is
@@ -118,7 +124,8 @@ export function compileExpression(JXG, src, variable = "x", paramNames = []) {
   try {
     fn = parser(JXG).snippet(code, true, names.join(", "), false);
   } catch (err) {
-    throw new ExpressionError(`JessieCode cannot parse ${JSON.stringify(src)}: ${String(err.message).split("\n")[0]}`);
+    // Its own message names its internal grammar ('NULL', 'MAP'), so say what to look for.
+    throw new ExpressionError(`JessieCode cannot parse ${JSON.stringify(src)}: is an operand missing, as in "x+" or "sin()"?`);
   }
   const f = (x, params = {}) => {
     const y = fn(x, ...paramNames.map((p) => params[p]));

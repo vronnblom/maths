@@ -85,7 +85,7 @@ function allProblems(config) {
   const params = Object.keys(config.parameters ?? {});
   const problems = configProblems(config);
   try {
-    checkExpression(config.f, [config.variable ?? "x", ...params]);
+    compileExpression(JXG, config.f, config.variable ?? "x", params); // the allowlist, then JessieCode (F7)
   } catch (e) {
     problems.push(`f: ${e.message}`);
   }

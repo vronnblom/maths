@@ -13,7 +13,7 @@ const read = (rel) => readFileSync(new URL(rel, import.meta.url), "utf8");
 const strip = (src) => src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/.*$/gm, "$1");
 const modules = (dir) => readdirSync(new URL(dir, import.meta.url)).filter((f) => f.endsWith(".mjs")).map((f) => dir + f);
 const ALL = [...modules("../"), ...modules("../_lib/"), ...modules("../../plugins/"), ...modules("../../plugins/_lib/")];
-const PURE = ["../_lib/expression.mjs", "../_lib/plot.mjs", "../_lib/jsxgraph.mjs"];
+const PURE = ["../_lib/expression.mjs", "../_lib/plot.mjs", "../_lib/epsdelta.mjs", "../_lib/jsxgraph.mjs"];
 const widgets = modules("../").map((f) => f.slice(3, -4));
 
 test("no module imports an https: URL statically", () => {
@@ -66,10 +66,21 @@ for (const w of widgets) {
   });
 }
 
-test("function-plot reads every key of its schema from the model", async () => {
-  const { KEYS, readConfig } = await import("../function-plot.mjs");
-  const schema = JSON.parse(read("../../schema/widgets/function-plot.schema.json"));
-  assert.deepEqual([...KEYS].sort(), Object.keys(schema.properties).sort());
-  const model = { get: (k) => ({ f: "x", xRange: [0, 1], yRange: [0, 1] })[k] };
-  assert.deepEqual(readConfig(model), { f: "x", xRange: [0, 1], yRange: [0, 1] });
+for (const w of widgets) {
+  test(`${w} reads every key of its schema from the model`, async () => {
+    const { KEYS, readConfig } = await import(`../${w}.mjs`);
+    const schema = JSON.parse(read(`../../schema/widgets/${w}.schema.json`));
+    assert.deepEqual([...KEYS].sort(), Object.keys(schema.properties).sort());
+    const config = { f: "x", xRange: [0, 1], yRange: [0, 1] };
+    const model = { get: (k) => config[k] };
+    assert.deepEqual(readConfig(model), config);
+  });
+}
+
+test("every widget schema allows the same functions and constants (expression.mjs has one list)", () => {
+  const defs = (w) => JSON.parse(read(`../../schema/widgets/${w}.schema.json`)).$defs;
+  for (const w of widgets) {
+    assert.deepEqual(defs(w).functions.enum, defs("function-plot").functions.enum, w);
+    assert.deepEqual(defs(w).constants.enum, defs("function-plot").constants.enum, w);
+  }
 });

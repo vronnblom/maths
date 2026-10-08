@@ -1,0 +1,31 @@
+{
+  "_comment": "Configs that are valid against schema/widgets/epsilon-delta.schema.json but break a rule it cannot express. Both widgets/_lib/epsdelta.mjs (epsdelta.test.mjs) and scripts/check_widgets.py (tests/test_widget_checks.py) must report `problem` for each, so the two implementations stay in step.",
+  "cases": [
+    { "config": { "f": "x^2", "a": 2, "L": 4, "eps": 0.5, "epsRange": [0.05, 1.5], "xRange": [3.5, 0], "yRange": [0, 9] }, "problem": "xRange: the first number must be smaller than the second" },
+    { "config": { "f": "x^2", "a": 2, "L": 4, "eps": 0.5, "epsRange": [0.05, 1.5], "xRange": [0, 3.5], "yRange": [9, 9] }, "problem": "yRange: the first number must be smaller than the second" },
+    { "config": { "f": "x^2", "a": 2, "L": 4, "eps": 0.5, "epsRange": [1.5, 0.05], "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "epsRange: the first number must be smaller than the second" },
+    { "config": { "f": "x^2", "a": 3.5, "L": 4, "eps": 0.5, "epsRange": [0.05, 1.5], "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "a: must lie strictly inside xRange" },
+    { "config": { "f": "x^2", "a": -1, "L": 4, "eps": 0.5, "epsRange": [0.05, 1.5], "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "a: must lie strictly inside xRange" },
+    { "config": { "f": "x^2", "a": 2, "L": 10, "eps": 0.5, "epsRange": [0.05, 1.5], "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "L: must lie inside yRange" },
+    { "config": { "f": "x^2", "a": 2, "L": 4, "eps": 2, "epsRange": [0.05, 1.5], "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "eps: must lie inside epsRange" },
+    { "config": { "f": "x^2", "a": 2, "L": 4, "eps": 0.01, "epsRange": [0.05, 1.5], "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "eps: must lie inside epsRange" },
+    { "config": { "f": "x^2", "a": 2, "L": 4, "eps": 0.5, "epsRange": [0.05, 1.5], "epsStep": 2, "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "epsStep: must be at most the width of epsRange" },
+    { "config": { "f": "x^2", "a": 2, "L": 4, "eps": 0.5, "epsRange": [0.05, 1.5], "delta": 1.6, "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "delta: must be at most the distance from a to the nearer end of xRange" },
+    { "config": { "f": "x^2", "a": 2, "L": 4, "eps": 0.5, "epsRange": [0.1, 1.5], "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "eps: must be on the ε slider's grid" },
+    { "config": { "f": "x^2", "a": 2, "L": 4, "eps": 0.12, "epsRange": [0.05, 1.5], "epsStep": 0.05, "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "eps: must be on the ε slider's grid" },
+    { "config": { "f": "x^2", "a": 2, "L": 4, "eps": 0.5, "epsRange": [0.05, 1.5], "epsStep": 0.05, "delta": 0.7777, "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "delta: must be on the δ slider's grid" },
+    { "config": { "f": "x^2", "a": 2, "L": 4, "eps": 0.5, "epsRange": [0.05, 1.5], "epsStep": 0.05, "delta": 0.001, "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "delta: must be on the δ slider's grid" },
+    { "config": { "f": "x^2", "a": 2, "L": 4, "eps": 0.5, "epsRange": [0.1, 1.1], "delta": 0.3, "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": null },
+    { "config": { "f": "t^2", "a": 2, "L": 4, "eps": 0.5, "epsRange": [0.05, 1.5], "epsStep": 0.05, "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "f: unknown name t" },
+    { "config": { "f": "2x", "a": 2, "L": 4, "eps": 0.5, "epsRange": [0.05, 1.5], "epsStep": 0.05, "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "f: missing * after 2: write 2*x" },
+    { "config": { "f": "sin()", "a": 0, "L": 0, "eps": 0.5, "epsRange": [0.1, 1.1], "xRange": [-1, 1], "yRange": [-1, 1] }, "problem": "f: JessieCode cannot parse \"sin()\"" },
+    { "config": { "f": "x+", "a": 0, "L": 0, "eps": 0.5, "epsRange": [0.1, 1.1], "xRange": [-1, 1], "yRange": [-1, 1] }, "problem": "f: JessieCode cannot parse \"x+\"" },
+    { "config": { "f": "log(x)", "a": 2, "L": 4, "eps": 0.5, "epsRange": [0.05, 1.5], "epsStep": 0.05, "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": "f: write ln for the natural logarithm, not log" },
+    { "config": { "f": "x^2", "a": 2, "L": 4, "eps": 0.1, "epsRange": [0.05, 1.5], "epsStep": 0.05, "delta": 1.5, "xRange": [0, 3.5], "yRange": [0, 9] }, "problem": null },
+    { "config": { "f": "x", "a": 0, "L": 0, "eps": 0.500000005, "epsRange": [0.1, 1.1], "xRange": [-1, 1], "yRange": [-1, 1] }, "problem": "eps: must be on the ε slider's grid" },
+    { "config": { "f": "x", "a": 0, "L": 0, "eps": 1500000.005, "epsRange": [1000000, 2000000], "epsStep": 10000, "xRange": [-1, 1], "yRange": [-1, 1] }, "problem": "eps: must be on the ε slider's grid" },
+    { "config": { "f": "x", "a": 0, "L": 0, "eps": 0.5, "epsRange": [0.1, 1.1], "xRange": [-1, 1], "yRange": [-1, 1] }, "problem": null },
+    { "config": { "f": "x", "a": 0, "L": 0, "eps": 1500000, "epsRange": [1000000, 2000000], "epsStep": 10000, "xRange": [-1, 1], "yRange": [-1, 1] }, "problem": null },
+    { "config": { "f": "x", "a": 0, "L": 0, "eps": 0.7, "epsRange": [0.1, 1.1], "epsStep": 0.1, "delta": 0.003, "xRange": [-1, 1], "yRange": [-1, 1] }, "problem": null }
+  ]
+}
