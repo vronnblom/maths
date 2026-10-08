@@ -170,6 +170,9 @@ For every real number $y \ge 0$ there is exactly one real number $s \ge 0$ with 
 called the **square root** of $y$ and written $\sqrt{y}$. For example $\sqrt{9} = 3$ (and not
 ${-3}$, although $(-3)^2 = 9$ too), $\sqrt{0} = 0$ and $\sqrt{2} = 1.41421\ldots$. A negative
 number has no real square root, because $s^2 \ge 0$ for every real number $s$.
+
+Squaring keeps the order of non-negative numbers: for $s, t \ge 0$,
+$s < t \iff s^2 < t^2$ (and $s = t \iff s^2 = t^2$, by the uniqueness above).
 :::
 
 The proof below uses two facts about whole numbers:
@@ -399,7 +402,7 @@ definitions of the arithmetic operations on cuts and the proofs of their rules; 
 Real Analysis (`ana`), which does not exist yet.
 :::
 
-Two first consequences of completeness. The first, that $\N$ is not bounded above, is the
+Three first consequences of completeness. The first, that $\N$ is not bounded above, is the
 **Archimedean property** of $\R$; later pages cite it by that name.
 
 :::{proof:remark} The Archimedean property: $\N$ is not bounded above
@@ -427,7 +430,8 @@ $s$, and $1 \le s \le 2$. We show that $s^2 = 2$ by ruling out the other two cas
   although $s + h > s$: this contradicts $s$ being an upper bound.
 - **If $s^2 > 2$:** let $h = \frac{s^2 - 2}{2s}$. Then $h > 0$, $s - h = \frac{s^2 + 2}{2s} > 0$
   and $(s - h)^2 = s^2 - 2sh + h^2 = 2 + h^2 > 2$. Every $x \in S$ has $x^2 < 2 < (s - h)^2$,
-  so $x < s - h$ (both are non-negative). So $s - h$ is an upper bound of $S$ smaller than $s$:
+  so $x < s - h$ (if $x \ge s - h > 0$, then multiplying by $x \ge 0$ and by $s - h > 0$ would
+  give $x^2 \ge x(s - h) \ge (s - h)^2$). So $s - h$ is an upper bound of $S$ smaller than $s$:
   this contradicts condition 2 of [](#def-calc-supremum).
 
 Hence $s^2 = 2$: the supremum $s$ is the positive square root of $2$.
@@ -445,12 +449,17 @@ first step: there, the supremum need not exist.
 :::{admonition} Completeness gives every square root
 :class: dropdown rigor
 
-We prove [](#rem-calc-square-roots): every $y \ge 0$ has exactly one non-negative square root.
+We prove [](#rem-calc-square-roots): every $y \ge 0$ has exactly one non-negative square root,
+and for $s, t \ge 0$, $s < t \iff s^2 < t^2$.
 
-*Uniqueness.* If $0 \le s < t$, then $s^2 < t^2$: multiplying $s < t$ by $s \ge 0$ gives
-$s^2 \le st$, and multiplying it by $t > 0$ gives $st < t^2$. So two different non-negative
+*Order and uniqueness.* If $0 \le s < t$, then $s^2 < t^2$: multiplying $s < t$ by $s \ge 0$
+gives $s^2 \le st$, and multiplying it by $t > 0$ gives $st < t^2$. So two different non-negative
 numbers have different squares, and $y$ has at most one non-negative square root. In the same
-way, if $0 \le s \le t$ then $s^2 \le t^2$.
+way, if $0 \le s \le t$ then $s^2 \le t^2$. Conversely, let $s, t \ge 0$ with $s^2 < t^2$. By
+trichotomy (the order rule above: exactly one of $s < t$, $s = t$ and $t < s$ holds), it is
+enough to rule out the other two. If $s = t$, then $s^2 = t^2$; if $t < s$, then $t^2 < s^2$
+by what we just proved, with $s$ and $t$ swapped. Neither is compatible with $s^2 < t^2$, so
+$s < t$.
 
 *Existence (sketch).* For $y = 0$, take $s = 0$. For $y > 0$, we repeat the argument for
 $\sqrt{2}$ with $y$ in place of $2$. The set $S_y = \{x \in \R : x \ge 0 \text{ and } x^2 < y\}$
@@ -463,7 +472,7 @@ $x^2 \ge x > y$). By [](#ax-calc-completeness) it has a supremum $s \ge 0$.
 - **If $s^2 > y$:** then $s > 0$ (as $s \ge 0$ and $s^2 > 0$); let $h = \frac{s^2 - y}{2s}$.
   As for $\sqrt{2}$, $h > 0$, $s - h = \frac{s^2 + y}{2s} > 0$ and $(s - h)^2 = y + h^2 > y$.
   Every $x \in S_y$ has $x^2 < y < (s - h)^2$, so $x < s - h$ (if $x \ge s - h \ge 0$, the
-  uniqueness step would give $x^2 \ge (s - h)^2$). So $s - h$ is an upper bound of $S_y$ smaller
+  order step would give $x^2 \ge (s - h)^2$). So $s - h$ is an upper bound of $S_y$ smaller
   than $s$.
 
 Both cases contradict $s = \sup S_y$, so $s^2 = y$.
