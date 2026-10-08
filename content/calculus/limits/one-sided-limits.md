@@ -134,15 +134,21 @@ $g(x) = x + 1$, so $\abs{g(x) - 1} = \abs{x} = x < \eps$, where $\abs{x} = x$ be
 ([the definition of the absolute value](#def-calc-absolute-value)).
 
 **Non-example.** $\lim_{x \to 0^{+}} g(x)$ is not $0$, although $g(0) = 0$. Take
-$\eps = \frac12$. Whatever $\delta > 0$ is offered, the half-window $0 < x < \delta$ contains
-$x = d$ with $d = \frac12 \min\bigl(\delta, 1\bigr)$, which is positive, and there
-$\abs{g(d) - 0} = d + 1 > 1 > \frac12$. So no $\delta$ wins the round $\eps = \frac12$. (From
+$\eps = \frac12$. Whatever $\delta > 0$ is offered, let $d = \frac12 \min\bigl(\delta, 1\bigr)$,
+which is positive. Since $\min(\delta, 1) \le \delta$, multiplying by the positive number
+$\frac12$ keeps the inequality, so $d \le \frac{\delta}{2} < \delta$, and the half-window
+$0 < x < \delta$ contains $x = d$. There $g(d) = d + 1$, and adding $1$ to $d > 0$ keeps the
+inequality, $d + 1 > 1$; so $d + 1$ is positive, and
+$\abs{g(d) - 0} = d + 1 > 1 > \frac12$ by
+[the definition of the absolute value](#def-calc-absolute-value). So no $\delta$ wins the round
+$\eps = \frac12$. (From
 the left, $g(x) = x$, and $\lim_{x \to 0^{-}} g(x) = 0$, with $\delta = \eps$ as in the
 example.)
 
-The figure plays the game for the parcel price of Why this matters, with
-the claim $\lim_{w \to 2^{+}} P(w) = 5$. The widget treats the two sides of $2$ separately,
-which is exactly what a one-sided limit does.
+The figure plays the game of [the definition of the limit](#def-calc-limit) for the parcel
+price of Why this matters, with the two-sided claim $\lim_{w \to 2} P(w) = 5$. It reports on
+the two sides of $2$ separately, the left half-window and the right half-window, which is
+exactly what the one-sided limits do.
 
 ::::{figure}
 :label: wdg-calc-one-sided-limits-parcel
@@ -155,11 +161,13 @@ which is exactly what a one-sided limit does.
 }
 ```
 
-Graph of the parcel price for weights from 1 kg to 3 kg: height $3$ to the left of $2$ and
-height $5$ to the right, with a horizontal band of half-width $\eps$ around $y = 5$
-(translucent, dashed edges) and a vertical window $0 < \abs{x - 2} < \delta$ (translucent, solid
-edges; the dotted line $x = 2$ itself is left out, so the widget never uses the price at
-exactly 2 kg). A slider sets $\eps$ from $0.1$ to $2.5$ in steps of $0.1$, starting at $0.5$.
+The ε–δ game for the claim that the parcel price has the limit $5$ at 2 kg. Graph of the
+price for weights from 1 kg to 3 kg: height $3$ to the left of $2$ and height $5$ to the
+right, with an open circle at $(2, 5)$, the claimed limit. Around it are a horizontal band of
+half-width $\eps$ around $y = 5$ (translucent, dashed edges) and a vertical window
+$0 < \abs{x - 2} < \delta$ (translucent, solid edges; the dotted line $x = 2$ itself is left
+out, so the widget never uses the price at exactly 2 kg). A slider sets $\eps$ from $0.1$ to
+$2.5$ in steps of $0.1$, starting at $0.5$.
 For each $\eps$ the widget states, separately for the left and the right of $2$, the largest
 $\delta$ it found or that it observed none. For $\eps = 0.5$ it reports on the right that the
 values stayed in the band at every point it checked, out to the edge of the view ($\delta = 1$),
@@ -180,11 +188,13 @@ the widget's check at the points it tested, or names a point where it fails.
 
 The widget checks finitely many points, so what it reports are observations. The proofs are
 on this page: [](#eg-calc-one-sided-limits-parcel) proves that the right-hand limit is $5$ and
-the left-hand limit is $3$, and exercise [](#exr-calc-one-sided-limits-widget-eps) finds
-exactly the $\eps$ for which some $\delta$ works on the left.
+the left-hand limit is $3$, so that $\lim_{w \to 2} P(w)$ does not exist, and exercise
+[](#exr-calc-one-sided-limits-widget-eps) finds exactly the $\eps$ for which some $\delta$
+works on the left.
 
 Could a function have two different right-hand limits at the same point? No, by the argument
-that shows that a limit is unique, now with a point taken in the half-window.
+of [the uniqueness of limits](#thm-calc-limit-unique), now with a point taken in the
+half-window.
 
 :::{proof:remark} One-sided limits are unique
 :label: rem-calc-one-sided-limit-unique
@@ -198,9 +208,12 @@ for left-hand limits, with $f$ and $a$ as in part (b).
 By part (a) of the definition, applied to $L$ and to $M$, there are $\delta_1 > 0$ and
 $\delta_2 > 0$ such that $f$ is defined at every $x$ with $a < x < a + \delta_1$ and has
 $\abs{f(x) - L} < \eps$ there, and is defined at every $x$ with $a < x < a + \delta_2$ and has
-$\abs{f(x) - M} < \eps$ there. Let $\delta = \min(\delta_1, \delta_2)$ and
-$x = a + \frac{\delta}{2}$. Then $a < x < a + \delta$, so $x$ lies in both half-windows:
-$f(x)$ is defined, $\abs{f(x) - L} < \eps$ and $\abs{f(x) - M} < \eps$. By
+$\abs{f(x) - M} < \eps$ there. Let $\delta = \min(\delta_1, \delta_2)$, which is positive, and
+$x = a + \frac{\delta}{2}$. Since $0 < \frac{\delta}{2} < \delta$, adding $a$ keeps both
+inequalities: $a < x < a + \delta$. Since $\delta \le \delta_1$, adding $a$ gives
+$a + \delta \le a + \delta_1$, so $a < x < a + \delta_1$ by transitivity; in the same way
+$a < x < a + \delta_2$. So $x$ lies in both half-windows: $f(x)$ is defined,
+$\abs{f(x) - L} < \eps$ and $\abs{f(x) - M} < \eps$. By
 [property 2 of the absolute value](#rem-calc-absolute-value-properties),
 $\abs{L - f(x)} = \abs{f(x) - L}$. By
 [part (b) of the triangle inequality](#thm-calc-triangle-inequality),
@@ -213,7 +226,11 @@ $$
 \end{aligned}
 $$
 which is impossible. So $L = M$. For left-hand limits, take $x = a - \frac{\delta}{2}$
-instead, which satisfies $a - \delta < x < a$.
+instead. Multiplying $0 < \frac{\delta}{2} < \delta$ by the negative number ${-1}$ reverses
+both inequalities, $-\delta < -\frac{\delta}{2} < 0$, and adding $a$ keeps them:
+$a - \delta < x < a$. Multiplying $\delta \le \delta_1$ by ${-1}$ reverses it and adding $a$
+keeps it, $a - \delta_1 \le a - \delta$, so $x$ lies in the half-window of $\delta_1$, and in
+the same way in that of $\delta_2$.
 :::
 
 So we may speak of *the* right-hand limit and *the* left-hand limit, when they exist.
@@ -249,10 +266,12 @@ interval $I$ containing $a$, except possibly at $a$. By
 $(-\infty, d)$ or $\R$, and since $a \in I$, we have $c < a$ whenever $I$ has a left endpoint
 $c$, and $a < d$ whenever it has a right endpoint $d$. Let $r$ be the smaller of the numbers
 $a - c$ and $d - a$ that occur (one of them, if $I$ has only one endpoint), and $r = 1$ if
-$I = \R$. Then $r > 0$, and every $x$ with $a - r < x < a + r$ lies in $I$: $r \le a - c$ gives
-$c \le a - r < x$, and $r \le d - a$ gives $x < a + r \le d$. So $f$ is defined at every point
-of $(a - r, a)$ and of $(a, a + r)$, as parts (b) and (a) of [](#def-calc-one-sided-limit)
-require.
+$I = \R$. Then $r > 0$: adding $-c$ to $c < a$ keeps the inequality, $0 < a - c$, and adding
+$-a$ to $a < d$ gives $0 < d - a$. Every $x$ with $a - r < x < a + r$ lies in $I$. Adding
+$c - r$ to $r \le a - c$ keeps the inequality, $c \le a - r$, so $c < x$ by transitivity; and
+adding $a$ to $r \le d - a$ gives $a + r \le d$, so $x < d$ by transitivity. So $f$ is
+defined at every point of $(a - r, a)$ and of $(a, a + r)$, as parts (b) and (a) of
+[](#def-calc-one-sided-limit) require.
 
 **If the limit is $L$, so are both one-sided limits.** Let $\eps > 0$. Since
 $\lim_{x \to a} f(x) = L$, there is a $\delta > 0$ such that $f$ is defined at every $x$ with
@@ -280,19 +299,57 @@ Either way, $f(x)$ is defined and $\abs{f(x) - L} < \eps$. So $\delta$ wins the 
 for the limit; since $\eps > 0$ was arbitrary, $\lim_{x \to a} f(x) = L$.
 :::
 
-**How to use it.** Let $f$ and $a$ be as in [the definition of the limit](#def-calc-limit).
+The theorem gives the limit when the two one-sided limits agree. Read the other way, it is the
+usual way to show that a limit does **not** exist.
 
-1. If both one-sided limits exist and are equal, the limit exists and has that value: this is
-   the "if" part of [](#thm-calc-limit-iff-one-sided).
-2. If both one-sided limits exist but are different, say $L \ne M$, the limit does not exist.
-   For if $\lim_{x \to a} f(x) = N$ for some real number $N$, the "only if" part of the theorem
-   gives $\lim_{x \to a^{-}} f(x) = N$ and $\lim_{x \to a^{+}} f(x) = N$, and then
-   [](#rem-calc-one-sided-limit-unique) gives $N = L$ and $N = M$, so $L = M$, which is false.
-3. If one of the one-sided limits does not exist, the limit does not exist: by the "only if"
-   part, a limit $N$ would be a one-sided limit on both sides.
+:::{proof:corollary} When the one-sided limits differ
+:label: cor-calc-one-sided-limits-differ
 
-The **jump** of $f$ at $a$ is then the difference $\lim_{x \to a^{+}} f(x) - \lim_{x \to a^{-}} f(x)$,
-when both exist: it is $0$ exactly when they are equal.
+Let $f$ and $a$ be as in [the definition of the limit](#def-calc-limit).
+
+(a) If $\lim_{x \to a^{-}} f(x) = L$ and $\lim_{x \to a^{+}} f(x) = M$ with $L \ne M$, then
+$\lim_{x \to a} f(x)$ does not exist.
+
+(b) If one of the one-sided limits $\lim_{x \to a^{-}} f(x)$ and $\lim_{x \to a^{+}} f(x)$
+does not exist, then $\lim_{x \to a} f(x)$ does not exist.
+:::
+
+:::{proof:proof}
+:enumerated: false
+Both parts argue by contradiction from the "only if" part of
+[](#thm-calc-limit-iff-one-sided). Suppose that $\lim_{x \to a} f(x) = N$ for some real number
+$N$. By that part of the theorem, $\lim_{x \to a^{-}} f(x) = N$ and
+$\lim_{x \to a^{+}} f(x) = N$.
+
+(a) From the left, $f$ has the left-hand limits $N$ and $L$, so $N = L$ by
+[](#rem-calc-one-sided-limit-unique). From the right, it has the right-hand limits $N$ and $M$,
+so $N = M$ by the same remark. Then $L = N = M$, which contradicts $L \ne M$.
+
+(b) Both one-sided limits exist, since both are $N$; this contradicts the hypothesis that one
+of them does not exist.
+
+In both cases no such $N$ exists, so $\lim_{x \to a} f(x)$ does not exist.
+:::
+
+**How to use them.** To decide whether $\lim_{x \to a} f(x)$ exists, find both one-sided limits
+and compare them. If they are equal, the limit is their common value, by
+[](#thm-calc-limit-iff-one-sided). If they are different, or one of them does not exist,
+there is no limit, by part (a) or part (b) of [](#cor-calc-one-sided-limits-differ).
+
+:::{proof:remark} The jump
+:label: rem-calc-one-sided-limits-jump
+
+Let $f$ be defined at every point of $(a - r, a)$ and of $(a, a + r)$, for some $r > 0$, and
+suppose that both one-sided limits of $f$ at $a$ exist. The **jump** of $f$ at $a$ is the
+difference
+$$
+\lim_{x \to a^{+}} f(x) - \lim_{x \to a^{-}} f(x) .
+$$
+It is $0$ exactly when the two one-sided limits are equal (add the left-hand limit to both
+sides). So, with $f$ and $a$ as in [the definition of the limit](#def-calc-limit), a jump of
+$0$ means that the limit exists, by [](#thm-calc-limit-iff-one-sided), and a jump other than
+$0$ means that it does not, by part (a) of [](#cor-calc-one-sided-limits-differ).
+:::
 
 ## Worked examples
 
@@ -386,10 +443,11 @@ $w = 2$, decide whether $\lim_{w \to 2} P(w)$ exists, and find the jump in price
 3. **From the right.** For $2 < w < 3$, $P(w) = 5$ (second line). Let $\eps > 0$ and
    $\delta = 1$. If $2 < w < 2 + \delta$, then $\abs{P(w) - 5} = 0 < \eps$. So
    $\lim_{w \to 2^{+}} P(w) = 5$.
-4. **The limit.** The one-sided limits exist and are different, $3 \ne 5$. By point 2 of "How
-   to use it" (after [](#thm-calc-limit-iff-one-sided)), $\lim_{w \to 2} P(w)$ does not exist.
-5. **The jump.** $\lim_{w \to 2^{+}} P(w) - \lim_{w \to 2^{-}} P(w) = 5 - 3 = 2$: the price
-   jumps by £2 at 2 kg.
+4. **The limit.** The one-sided limits exist and are different, $3 \ne 5$. By part (a) of
+   [](#cor-calc-one-sided-limits-differ), $\lim_{w \to 2} P(w)$ does not exist.
+5. **The jump.** By [](#rem-calc-one-sided-limits-jump), the jump is
+   $\lim_{w \to 2^{+}} P(w) - \lim_{w \to 2^{-}} P(w) = 5 - 3 = 2$: the price jumps by £2 at
+   2 kg.
 
 $$
 \boxed{
@@ -406,6 +464,12 @@ apart however close to 2 kg the weights are. ✓ The widget in
 [the figure](#wdg-calc-one-sided-limits-parcel) found a $\delta$ on the right for $\eps = 0.5$, and observed none on the left, where every value
 is $3$, at distance $2$ from $5$. ✓ Units: pounds throughout. ✓
 :::
+
+The jump of $\frac{\abs{x}}{x}$ at $0$, the first of the three ways a limit can fail to exist
+in [The Limit of a Function](#calc-limit), fits the same pattern: its one-sided limits are
+${-1}$ and $1$ (exercise [](#exr-calc-one-sided-limits-abs-over-x)), so part (a) of
+[](#cor-calc-one-sided-limits-differ) gives again what
+[the jump example](#eg-calc-limit-jump) proved there with the triangle inequality.
 
 ### An endpoint
 
@@ -444,12 +508,6 @@ The point $x = 0.01$, just outside the half-window, gives exactly $0.1$: no larg
 works, because every larger half-window contains $x = \eps^2$, where $\sqrt{x} = \eps$. ✓
 :::
 
-The jump of $\frac{\abs{x}}{x}$ at $0$, the first of the three ways a limit can fail to exist
-in [The Limit of a Function](#calc-limit), fits the same pattern: its one-sided limits are
-${-1}$ and $1$ (exercise [](#exr-calc-one-sided-limits-abs-over-x)), so point 2 of "How to use
-it" gives again what [the jump example](#eg-calc-limit-jump) proved there with the triangle
-inequality.
-
 ## Common mistakes
 
 :::{warning} "The one-sided limit is the value at $a$"
@@ -468,7 +526,8 @@ function, find the formula that holds on the half-window, and ignore the value a
 $\lim_{w \to 2} P(w)$ exists", for the parcel price.
 
 **Why:** [](#thm-calc-limit-iff-one-sided) asks for the two one-sided limits to be **equal**.
-When they differ, the limit does not exist ([](#eg-calc-one-sided-limits-parcel)).
+When they differ, the limit does not exist, by part (a) of
+[](#cor-calc-one-sided-limits-differ) ([](#eg-calc-one-sided-limits-parcel)).
 
 ✓ **Right:** first find both one-sided limits, then compare them. Equal: the limit is their
 common value. Different, or one missing: there is no limit.
@@ -499,8 +558,10 @@ $$
 $$
 Here $\dom f$ is [the domain](#def-calc-domain-range) of $f$. To negate, each $\forall$
 becomes $\exists$ and each $\exists$ becomes $\forall$, the implication $P \implies Q$ becomes
-"$P$ and not $Q$", and "not ($A$ and $B$)" becomes "(not $A$) or (not $B$)". So $L$ is **not**
-the right-hand limit when
+"$P$ and not $Q$", "not ($A$ and $B$)" becomes "(not $A$) or (not $B$)", and "not
+($u < v$)" becomes "$u \ge v$", by trichotomy (the order rules of
+[Absolute Value and Inequalities](#calc-absolute-value-inequalities), "Working with
+inequalities"). So $L$ is **not** the right-hand limit when
 $$
 \begin{aligned}
 &\exists \eps > 0 \ \ \forall \delta > 0 \ \ \exists x \colon \\
@@ -547,7 +608,9 @@ of [](#eg-calc-one-sided-limits-sqrt) with $-x$ in place of $x$.
 - One-sided limits are unique ([](#rem-calc-one-sided-limit-unique)).
 - $\lim_{x \to a} f(x) = L$ exactly when both one-sided limits are $L$
   ([](#thm-calc-limit-iff-one-sided)). If they differ, or one does not exist, the limit does
-  not exist.
+  not exist ([](#cor-calc-one-sided-limits-differ)).
+- The jump of $f$ at $a$ is the right-hand limit minus the left-hand limit
+  ([](#rem-calc-one-sided-limits-jump)); it is $0$ exactly when they are equal.
 - For a piecewise function, each half-window sees one formula; the value at $a$ never matters.
 - At an endpoint of the domain, such as $0$ for $\sqrt{x}$, only one one-sided limit is
   defined: $\lim_{x \to 0^{+}} \sqrt{x} = 0$.
@@ -586,9 +649,9 @@ $\abs{f(x) - (-1)} = 0 < \eps$. So $\lim_{x \to 0^{-}} f(x) = -1$.
 (b) For $x > 0$, $\abs{x} = x$, so $f(x) = \frac{x}{x} = 1$, and $\delta = 1$ works in the same
 way: $\lim_{x \to 0^{+}} f(x) = 1$.
 
-The two one-sided limits differ, so by point 2 of "How to use it" (after
-[](#thm-calc-limit-iff-one-sided)), $\lim_{x \to 0} f(x)$ does not exist, as
-[the jump example](#eg-calc-limit-jump) proved directly from the definition. The jump is
+The two one-sided limits differ, so by part (a) of [](#cor-calc-one-sided-limits-differ),
+$\lim_{x \to 0} f(x)$ does not exist, as [the jump example](#eg-calc-limit-jump) proved
+directly from the definition. The jump ([](#rem-calc-one-sided-limits-jump)) is
 $1 - (-1) = 2$.
 ::::
 
@@ -624,15 +687,19 @@ For (d), compare (a) and (b), and use [](#thm-calc-limit-iff-one-sided).
 $f$ is defined at every real number, and $f(1) = 0$ plays no part in (a), (b) or (d), because
 no window contains $1$.
 
-(a) For $x < 1$, $\abs{(2x + 1) - 3} = \abs{2x - 2} = 2\abs{x - 1}$. Given $\eps > 0$, let
-$\delta = \frac{\eps}{2}$. If $1 - \delta < x < 1$, then $0 < \abs{x - 1} = 1 - x < \frac{\eps}{2}$,
-and multiplying by the positive number $2$ keeps the inequality: $\abs{f(x) - 3} < \eps$. So
-$\lim_{x \to 1^{-}} f(x) = 3$.
+(a) For $x < 1$, $\abs{(2x + 1) - 3} = \abs{2(x - 1)} = 2\abs{x - 1}$, by
+[property 4 of the absolute value](#rem-calc-absolute-value-properties) and $\abs{2} = 2$.
+Given $\eps > 0$, let $\delta = \frac{\eps}{2}$, and let $1 - \delta < x < 1$. Since
+$x - 1 < 0$, $\abs{x - 1} = -(x - 1) = 1 - x$ by
+[the definition of the absolute value](#def-calc-absolute-value). Adding $\delta - x$ to
+$1 - \delta < x$ keeps the inequality, $1 - x < \delta$, and adding $-x$ to $x < 1$ gives
+$0 < 1 - x$. So $0 < \abs{x - 1} < \frac{\eps}{2}$, and multiplying by the positive number $2$
+keeps the inequality: $\abs{f(x) - 3} < \eps$. So $\lim_{x \to 1^{-}} f(x) = 3$.
 
 (b) For $x > 1$, $\abs{(4 - x) - 3} = \abs{1 - x} = \abs{x - 1} = x - 1$, by
-[property 2 of the absolute value](#rem-calc-absolute-value-properties) and because $x - 1 > 0$. Given $\eps > 0$, let
-$\delta = \eps$: if $1 < x < 1 + \eps$, then $\abs{f(x) - 3} = x - 1 < \eps$. So
-$\lim_{x \to 1^{+}} f(x) = 3$.
+[property 2 of the absolute value](#rem-calc-absolute-value-properties) and because $x - 1 > 0$.
+Given $\eps > 0$, let $\delta = \eps$: if $1 < x < 1 + \eps$, then
+$\abs{f(x) - 3} = x - 1 < \eps$. So $\lim_{x \to 1^{+}} f(x) = 3$.
 
 (c) $f(1) = 0$, by the definition of $f$.
 
@@ -701,9 +768,49 @@ defined at every real number and $H(0) = 1$.
 
 For $x > 0$, $H(x) = 1$, so $\abs{H(x) - 1} = 0 < \eps$ for every $\eps > 0$ (with $\delta = 1$,
 say): $\lim_{x \to 0^{+}} H(x) = 1 = H(0)$. For $x < 0$, $H(x) = 0$, and in the same way
-$\lim_{x \to 0^{-}} H(x) = 0$. The one-sided limits differ, so by point 2 of "How to use it"
-(after [](#thm-calc-limit-iff-one-sided)), $\lim_{x \to 0} H(x)$ does not exist; in particular it
+$\lim_{x \to 0^{-}} H(x) = 0$. The one-sided limits differ, so by part (a) of
+[](#cor-calc-one-sided-limits-differ), $\lim_{x \to 0} H(x)$ does not exist; in particular it
 is not $H(0)$. A right-hand limit says nothing about the left of $a$.
+::::
+
+::::{exercise} The price of parking
+:label: exr-calc-one-sided-limits-parking
+:class: tier-a applied
+
+A car park charges £2 for each hour or part of an hour. For a stay of $t$ hours, with
+$0 < t \le 3$, the charge in pounds is $C(t) = 2$ for $0 < t \le 1$, $C(t) = 4$ for
+$1 < t \le 2$, and $C(t) = 6$ for $2 < t \le 3$. Find (a) $\displaystyle \lim_{t \to 1^{-}} C(t)$,
+(b) $\displaystyle \lim_{t \to 1^{+}} C(t)$, and (c) the jump in the charge at one hour, in
+pounds.
+
+:::{admonition} Hint 1
+:class: dropdown hint
+On a short enough half-window on each side of $1$, $C$ is constant. Which constant?
+:::
+
+:::{admonition} Answer
+:class: dropdown answer
+(a) $2$ (b) $4$ (c) $2$
+:::
+::::
+
+::::{solution} exr-calc-one-sided-limits-parking
+:label: sol-calc-one-sided-limits-parking
+:class: dropdown
+
+$C$ is defined at every point of $(0, 3)$, an open interval containing $1$. The value
+$C(1) = 2$, from the first line, plays no part in either one-sided limit, because neither
+half-window contains $1$.
+
+(a) For $0 < t < 1$, $C(t) = 2$. Given $\eps > 0$, $\delta = 1$ works: if $0 < t < 1$, then
+$\abs{C(t) - 2} = 0 < \eps$. So $\lim_{t \to 1^{-}} C(t) = 2$.
+
+(b) For $1 < t < 2$, $C(t) = 4$, and $\delta = 1$ works in the same way:
+$\lim_{t \to 1^{+}} C(t) = 4$.
+
+(c) By [](#rem-calc-one-sided-limits-jump), the jump is $4 - 2 = 2$: a stay just over an
+hour costs £2 more than one just under. Since the one-sided limits differ,
+$\lim_{t \to 1} C(t)$ does not exist, by part (a) of [](#cor-calc-one-sided-limits-differ).
 ::::
 
 ::::{exercise} The largest δ on each side
@@ -735,58 +842,28 @@ For (c), the window $0 < \abs{x - 2} < \delta$ is made of the two half-windows o
 :label: sol-calc-one-sided-limits-largest-delta
 :class: dropdown
 
-(a) For $x > 2$, $\abs{g(x) - 5} = \abs{3x - 6} = 3(x - 2)$, because $x - 2 > 0$. Dividing by
-the positive number $3$ keeps the inequality, so $3(x - 2) < 0.03$ exactly when $x - 2 < 0.01$.
+The value $g(2) = 3 \cdot 2 - 1 = 5$, from the second formula, plays no part: none of the three
+windows contains $x = 2$, so that $g(2)$ equals $5$ helps no $\delta$.
+
+(a) For $x > 2$, $\abs{g(x) - 5} = \abs{3(x - 2)} = 3\abs{x - 2}$ by
+[property 4 of the absolute value](#rem-calc-absolute-value-properties), and
+$\abs{x - 2} = x - 2$ because $x - 2 > 0$
+([the definition of the absolute value](#def-calc-absolute-value)). Dividing by the positive
+number $3$ keeps the inequality, so $3(x - 2) < 0.03$ exactly when $x - 2 < 0.01$.
 So every $\delta \le 0.01$ works, and a larger one does not: its half-window contains
 $x = 2.01$, where $\abs{g(x) - 5} = 0.03$. The largest is $0.01 = \frac{1}{100}$.
 
-(b) For $x < 2$, $\abs{g(x) - 5} = \abs{x - 2} = 2 - x$, which is less than $0.03$ exactly when
-$x > 1.97$. So every $\delta \le 0.03$ works, and a larger one does not: its half-window
-contains $x = 1.97$, where $\abs{g(x) - 5} = 0.03$. The largest is $0.03 = \frac{3}{100}$.
+(b) For $x < 2$, $\abs{g(x) - 5} = \abs{x - 2} = -(x - 2) = 2 - x$, because $x - 2 < 0$
+([the definition of the absolute value](#def-calc-absolute-value)). Adding $x - 0.03$ to both
+sides keeps an inequality, so $2 - x < 0.03$ exactly when $x > 1.97$. So every
+$\delta \le 0.03$ works, and a larger one does not: its half-window contains $x = 1.97$,
+where $\abs{g(x) - 5} = 0.03$. The largest is $0.03 = \frac{3}{100}$.
 
 (c) By [part (e) of the proposition on distance inequalities](#prop-calc-abs-interval),
 $0 < \abs{x - 2} < \delta$ means $2 - \delta < x < 2$ or $2 < x < 2 + \delta$. So $\delta$ works
 for the window exactly when it works for both half-windows, that is, when $\delta \le 0.01$ and
 $\delta \le 0.03$. The largest is the smaller number, $\frac{1}{100}$: the choice
 $\delta = \min(\delta_1, \delta_2)$ of the proof of [](#thm-calc-limit-iff-one-sided).
-::::
-
-::::{exercise} The price of parking
-:label: exr-calc-one-sided-limits-parking
-:class: tier-b applied
-
-A car park charges £2 for each hour or part of an hour. For a stay of $t$ hours, with
-$0 < t \le 3$, the charge in pounds is $C(t) = 2$ for $0 < t \le 1$, $C(t) = 4$ for
-$1 < t \le 2$, and $C(t) = 6$ for $2 < t \le 3$. Find (a) $\displaystyle \lim_{t \to 1^{-}} C(t)$,
-(b) $\displaystyle \lim_{t \to 1^{+}} C(t)$, and (c) the jump in the charge at one hour, in
-pounds.
-
-:::{admonition} Hint 1
-:class: dropdown hint
-On a short enough half-window on each side of $1$, $C$ is constant. Which constant?
-:::
-
-:::{admonition} Answer
-:class: dropdown answer
-(a) $2$ (b) $4$ (c) $2$
-:::
-::::
-
-::::{solution} exr-calc-one-sided-limits-parking
-:label: sol-calc-one-sided-limits-parking
-:class: dropdown
-
-$C(1) = 2$, from the first line, but it plays no part in either one-sided limit.
-
-(a) For $0 < t < 1$, $C(t) = 2$. Given $\eps > 0$, $\delta = 1$ works: if $0 < t < 1$, then
-$\abs{C(t) - 2} = 0 < \eps$. So $\lim_{t \to 1^{-}} C(t) = 2$.
-
-(b) For $1 < t < 2$, $C(t) = 4$, and $\delta = 1$ works in the same way:
-$\lim_{t \to 1^{+}} C(t) = 4$.
-
-(c) The jump is $4 - 2 = 2$: a stay just over an hour costs £2 more than one just under. Since
-the one-sided limits differ, $\lim_{t \to 1} C(t)$ does not exist, by point 2 of "How to use
-it" (after [](#thm-calc-limit-iff-one-sided)).
 ::::
 
 ::::{exercise} Making the two sides meet
@@ -816,9 +893,11 @@ $2$
 :label: sol-calc-one-sided-limits-parameter
 :class: dropdown
 
-$f$ is defined at every real number; $f(1) = 7$ plays no part.
+$f$ is defined at every real number. The value $f(1) = 7$ plays no part, because neither
+half-window contains $1$.
 
-**From the right.** For $x > 1$, $\abs{(5 - 2x) - 3} = \abs{2 - 2x} = 2\abs{x - 1}$. Given
+**From the right.** For $x > 1$, $\abs{(5 - 2x) - 3} = \abs{-2(x - 1)} = 2\abs{x - 1}$, by
+[property 4 of the absolute value](#rem-calc-absolute-value-properties) and $\abs{-2} = 2$. Given
 $\eps > 0$, let $\delta = \frac{\eps}{2}$: if $1 < x < 1 + \delta$, then
 $0 < \abs{x - 1} < \frac{\eps}{2}$, and multiplying by the positive number $2$ keeps the
 inequality, so $\abs{f(x) - 3} < \eps$. So $\lim_{x \to 1^{+}} f(x) = 3$.
@@ -832,7 +911,8 @@ way, $\lim_{x \to 1^{-}} f(x) = c + 1$.
 
 **The limit.** If $c + 1 = 3$, that is, $c = 2$, both one-sided limits are $3$, and
 $\lim_{x \to 1} f(x) = 3$ by [](#thm-calc-limit-iff-one-sided). If $c \ne 2$, the one-sided
-limits $c + 1$ and $3$ differ, and the limit does not exist, by point 2 of "How to use it". So
+limits $c + 1$ and $3$ differ, and the limit does not exist, by part (a) of
+[](#cor-calc-one-sided-limits-differ). So
 the limit exists exactly when $c = 2$.
 ::::
 
@@ -981,5 +1061,5 @@ grows without bound ([](#exr-calc-one-sided-limits-reciprocal)).
 :::{where-this-leads}
 :::
 
-The theorem of this page is the usual way to show that a limit does not exist: find the two
-one-sided limits and compare them.
+The theorem of this page and its corollary are the usual way to decide whether a limit exists:
+find the two one-sided limits and compare them.
