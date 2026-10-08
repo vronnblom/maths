@@ -492,7 +492,7 @@ where:
 - $K \ne 0$ is a constant;
 - $N(x) = (x - r_1) \cdots (x - r_k)$ and $D(x) = (x - s_1) \cdots (x - s_m)$ are products of
   linear factors, with $k, m \in \N$ and real numbers $r_1, \dots, r_k$, $s_1, \dots, s_m$, not
-  necessarily different (for $k = 0$ we read $N(x)$ as $1$, and for $m = 0$, $D(x)$);
+  necessarily different (for $k = 0$ or $m = 0$ the empty product is read as $1$);
 - $P$ and $Q$ are polynomials with $P(x) > 0$ and $Q(x) > 0$ for every real $x$ (either may be
   the constant $1$).
 
@@ -511,8 +511,8 @@ On $I$ each factor keeps one sign, and then [part (e) of the sign rules](#prop-c
 decides the sign of $f$.
 
 Let $t$ be one of the numbers $r_i$ or $s_j$. We show that $x - t$ is non-zero and has the same
-sign at every $x \in I$. By [](#def-calc-interval), the open interval $I$ is one of $(\alpha,
-\beta)$, $(\alpha, \infty)$, $(-\infty, \beta)$ and $\R$, for real numbers $\alpha < \beta$. It
+sign at every $x \in I$. By [](#def-calc-interval), the open interval $I$ is one of
+$(\alpha, \beta)$, $(\alpha, \infty)$, $(-\infty, \beta)$ and $\R$, for real $\alpha < \beta$. It
 is not $\R$, which contains $t$.
 
 - If $I = (\alpha, \beta) = \{x \in \R : \alpha < x < \beta\}$, then $t \notin I$ means that
