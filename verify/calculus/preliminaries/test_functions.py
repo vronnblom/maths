@@ -3,8 +3,11 @@
 Rules: docs/plan/06-quality-assurance.md §6.1 and templates/verify_test.py. Every expected value
 is derived here from the statements (natural domains with `continuous_domain` and, independently,
 from the conditions "radicand ≥ 0" and "denominator ≠ 0"; ranges with `function_range`; even/odd
-from f(−x) against ±f(x); monotonicity from the definition, i.e. the sign of f(x₂) − f(x₁)).
-Answers are read with answer(label).
+by def-calc-even-odd, which (since e7202c0) asks for a symmetric domain as part of both
+definitions: S = −S is checked with `imageset`, separately from and before the identity
+f(−x) = ±f(x); monotonicity from the definition, i.e. the sign of f(x₂) − f(x₁)).
+Answers are read with answer(label). The tests at the end, without @covers, check claims in the
+prose (definitions, figures, common mistakes, Summary) that no eg-/exr- label owns.
 
 Monotonicity: the page proves every claim from the definition (def-calc-monotone), and derivatives
 come later in the course (its "Looking ahead" admonition). The tests check the definition directly;
@@ -45,6 +48,37 @@ def is_symmetric(S):
     return equal(S, reflect(S))
 
 
+def parity(f, dom):
+    """def-calc-even-odd: the subset of {"even", "odd"} that f, on dom, satisfies. The domain is
+    checked first: if it is not symmetric about 0, f is neither, whatever its formula does."""
+    if not is_symmetric(dom):
+        return set()
+    kinds = set()
+    if equal(f.subs(x, -x), f):
+        kinds.add("even")
+    if equal(f.subs(x, -x), -f):
+        kinds.add("odd")
+    return kinds
+
+
+def monotone_kinds(f, S):
+    """def-calc-monotone on a finite set S, pair by pair: which of the four properties hold."""
+    pairs = [(a, b) for a in S for b in S if a < b]
+    return {
+        name
+        for name, ok in (
+            ("increasing", lambda u, v: u <= v),
+            ("strictly increasing", lambda u, v: u < v),
+            ("decreasing", lambda u, v: u >= v),
+            ("strictly decreasing", lambda u, v: u > v),
+        )
+        if all(bool(ok(f(a), f(b))) for a, b in pairs)
+    }
+
+
+ALL_FOUR = {"increasing", "strictly increasing", "decreasing", "strictly decreasing"}
+
+
 @covers("eg-calc-functions-natural-domain")
 def test_eg_calc_functions_natural_domain():
     f = sp.sqrt(x + 2) / (x - 3)
@@ -81,27 +115,41 @@ def test_eg_calc_functions_range_quadratic():
 
 @covers("eg-calc-functions-even-odd")
 def test_eg_calc_functions_even_odd():
-    # 1. f(x) = x³ − x: domain ℝ, f(−x) = −x³ + x = −f(x): odd.
+    # 1. f(x) = x³ − x: domain ℝ (symmetric), f(−x) = −x³ + x = −f(x): odd.
     f = x**3 - x
+    dom_f = continuous_domain(f, x, R)
+    assert equal(dom_f, R) and is_symmetric(dom_f)
     assert equal(f.subs(x, -x), -x**3 + x)
     assert equal(f.subs(x, -x), -f)
     assert not equal(f.subs(x, -x), f)  # and not even (so the answer "odd" is the only one)
+    assert parity(f, dom_f) == {"odd"}
     # 2. g(x) = 1/(x² − 1): domain ℝ \ {±1}, symmetric; g(−x) = g(x): even.
     g = 1 / (x**2 - 1)
     dom_g = continuous_domain(g, x, R)
     assert equal(dom_g, R - sp.FiniteSet(-1, 1))
     assert is_symmetric(dom_g)
     assert equal(g.subs(x, -x), g)
-    # 3. h(x) = x² + x: h(1) = 2, h(−1) = 0, so neither even nor odd.
+    assert parity(g, dom_g) == {"even"}
+    # 3. h(x) = x² + x: domain ℝ (symmetric), but h(1) = 2, h(−1) = 0, so neither.
     h = x**2 + x
+    assert is_symmetric(continuous_domain(h, x, R))
     assert equal(h.subs(x, 1), 2)
     assert equal(h.subs(x, -1), 0)
     assert not equal(h.subs(x, -1), h.subs(x, 1))
     assert not equal(h.subs(x, -1), -h.subs(x, 1))
-    # 4. k = x² on [−1, 2]: 2 ∈ dom k but −2 ∉ dom k, so the domain is not symmetric.
+    assert parity(h, R) == set()
+    # 4. k = x² on [−1, 2]. The formula alone passes the even test (k(−x) = k(x) as formulas),
+    # but 2 ∈ dom k and −2 ∉ dom k, so the domain is not symmetric, and the definition (which
+    # asks for a symmetric domain for both) makes k neither even nor odd.
+    k = x**2
     dom_k = sp.Interval(-1, 2)
+    assert equal(k.subs(x, -x), k)
     assert dom_k.contains(2) is sp.true and dom_k.contains(-2) is sp.false
     assert not is_symmetric(dom_k)
+    assert equal(reflect(dom_k), sp.Interval(-2, 1))  # −[−1, 2] = [−2, 1] ≠ [−1, 2]
+    assert parity(k, dom_k) == set()
+    # Restricted to a symmetric part of the domain the same formula is even: the domain decides.
+    assert parity(k, sp.Interval(-1, 1)) == {"even"}
     # Check line: f(2) = 6, f(−2) = −6; g(3) = 1/8 = g(−3).
     assert equal(f.subs(x, 2), 6)
     assert equal(f.subs(x, -2), -6)
@@ -297,6 +345,24 @@ def test_exr_calc_functions_sqrt_increasing():
     assert (sp.sqrt(x2) + sp.sqrt(x1)).is_positive
     assert rhs.is_positive
     assert equal(lhs, rhs)
+    # The recalled fact: each u ≥ 0 has exactly one square root s ≥ 0, and (√u)² = u.
+    u = sp.Symbol("u", nonnegative=True)
+    s = sp.Symbol("s", real=True)
+    # The real solutions of s² = u are ±√u; −√u ≤ 0, and −√u ≥ 0 only when u = 0 (where the two
+    # coincide), so √u is the only one ≥ 0.
+    assert equal(sp.solveset(sp.Eq(s**2, u), s, R), sp.FiniteSet(-sp.sqrt(u), sp.sqrt(u)))
+    assert sp.sqrt(u).is_nonnegative and (-sp.sqrt(u)).is_nonpositive
+    assert equal(sp.solveset(sp.Eq(sp.sqrt(u), 0), u, sp.Interval(0, oo)), sp.FiniteSet(0))
+    assert equal(sp.sqrt(u) ** 2, u)
+    # The new step: x₂ > 0 gives √x₂ > 0, because √x₂ = 0 would give x₂ = 0² = 0. The only
+    # u ≥ 0 with √u = 0 is u = 0, and x₂ = x₁ + d > 0.
+    assert x2.is_positive
+    assert equal(sp.solveset(sp.Eq(sp.sqrt(u), 0), u, sp.Interval(0, oo)), sp.FiniteSet(0))
+    assert sp.sqrt(x2).is_positive
+    assert sp.sqrt(x1).is_nonnegative
+    # The edge case x₁ = 0 (where √x₁ = 0 and only √x₂ keeps the denominator positive).
+    assert equal(lhs.subs(x1, 0), sp.sqrt(d)) and sp.sqrt(d).is_positive
+    assert (sp.sqrt(x2) + sp.sqrt(x1)).subs(x1, 0).is_positive
 
 
 @covers("exr-calc-functions-odd-at-zero")
@@ -304,11 +370,22 @@ def test_exr_calc_functions_odd_at_zero():
     # Manual answer (a proof): no answer() call; a reviewer's note covers it. Its key claims:
     # f(0) = −f(0) forces f(0) = 0, and x³ + 1 is 1 ≠ 0 at 0 (so it is not odd).
     v = sp.Symbol("v", real=True)  # v = f(0)
+    assert equal(-sp.S.Zero, 0)  # −0 = 0, so the condition at x = 0 reads f(0) = −f(0)
     assert equal(sp.solveset(sp.Eq(v, -v), v, R), sp.FiniteSet(0))
+    # The hypothesis 0 ∈ dom f is needed: 1/x is odd on its symmetric domain ℝ \ {0}, which
+    # does not contain 0.
+    recip_dom = continuous_domain(1 / x, x, R)
+    assert equal(recip_dom, R - sp.FiniteSet(0))
+    assert parity(1 / x, recip_dom) == {"odd"}
+    assert recip_dom.contains(0) is sp.false
+    # Second part: x³ + 1 has domain ℝ, symmetric and containing 0, and its value there is 1 ≠ 0.
     g = x**3 + 1
+    dom_g = continuous_domain(g, x, R)
+    assert equal(dom_g, R) and is_symmetric(dom_g) and dom_g.contains(0) is sp.true
     assert equal(g.subs(x, 0), 1)
     assert not equal(g.subs(x, 0), 0)
     assert not equal(g.subs(x, -x), -g)
+    assert "odd" not in parity(g, dom_g)
 
 
 @covers("exr-calc-functions-piecewise-range")
@@ -326,6 +403,47 @@ def test_exr_calc_functions_piecewise_range():
     assert equal(sp.limit(left, x, 0, "-"), right.subs(x, 0))
     assert equal(right.subs(x, 1), -1)
     assert equal(right.subs(x, 3), 3)
+
+    # Left piece: for x < 0, −x > 0, and each y > 0 is taken at x = −y < 0.
+    pos = sp.Symbol("pos", positive=True)
+    assert (-x).subs(x, -pos).is_positive and (-pos).is_negative
+    assert equal(function_range(left, x, dom_left), sp.Interval.open(0, oo))
+
+    # Right piece, with t = x − 1. From 0 ≤ x ≤ 3: −1 ≤ t ≤ 2.
+    t = sp.Symbol("t", real=True)
+    assert equal(sp.imageset(sp.Lambda(x, x - 1), dom_right), sp.Interval(-1, 2))
+    assert equal(right, (x - 1) ** 2 - 1)
+    # Why term-by-term squaring fails: it would give 1 ≤ t², false at t = 0 (x = 1).
+    assert not equal(sp.solveset(t**2 < 1, t, sp.Interval(-1, 2)), sp.S.EmptySet)
+    # Case t ≥ 0: t ≤ 2 times t ≥ 0 gives t² ≤ 2t; t ≤ 2 times 2 gives 2t ≤ 4. No t in [0, 2]
+    # breaks either step.
+    case1 = sp.Interval(0, 2)
+    assert equal(sp.solveset(t**2 > 2 * t, t, case1), sp.S.EmptySet)
+    assert equal(sp.solveset(2 * t > 4, t, case1), sp.S.EmptySet)
+    # Case t < 0: −1 ≤ t times the negative t reverses to t² ≤ −t; −1 ≤ t times −1 gives
+    # −t ≤ 1. No t in [−1, 0) breaks either step, so t² ≤ 1 ≤ 4.
+    case2 = sp.Interval.Ropen(-1, 0)
+    assert equal(sp.solveset(t**2 > -t, t, case2), sp.S.EmptySet)
+    assert equal(sp.solveset(-t > 1, t, case2), sp.S.EmptySet)
+    assert equal(sp.Union(case1, case2), sp.Interval(-1, 2))  # the two cases cover every t
+    # In both cases 0 ≤ t² ≤ 4, so −1 ≤ f(x) = t² − 1 ≤ 3 (and these bounds are attained).
+    assert equal(function_range(t**2, t, sp.Interval(-1, 2)), sp.Interval(0, 4))
+    assert equal(function_range(right, x, dom_right), sp.Interval(-1, 3))
+
+    # Converse: for y ∈ [−1, 3], s = √(y + 1) ≥ 0 and s ≤ 2.
+    Y = sp.Interval(-1, 3)
+    s = sp.sqrt(y + 1)
+    assert equal(function_range(s, y, Y), sp.Interval(0, 2))
+    # The page's argument for s ≤ 2: if s > 2 then s² > 2s > 4 (write s = 2 + e, e > 0).
+    e = sp.Symbol("e", positive=True)
+    big = 2 + e
+    assert equal(big**2 - 2 * big, e * (e + 2))  # s² − 2s = s(s − 2), with s > 0 and s − 2 > 0
+    assert sp.factor(big**2 - 2 * big).is_positive  # s² > 2s
+    assert sp.factor(2 * big - 4).is_positive  # 2s > 4
+    assert equal(sp.solveset(y + 1 > 4, y, Y), sp.S.EmptySet)  # but s² = y + 1 ≤ 4 on [−1, 3]
+    # x = 1 + s lies in [1, 3] ⊆ [0, 3] and f(1 + s) = s² − 1 = y.
+    assert equal(function_range(1 + s, y, Y), sp.Interval(1, 3))
+    assert equal_on_domain(right.subs(x, 1 + s), y, y, Y)
 
 
 @covers("exr-calc-functions-cube-increasing")
@@ -361,6 +479,9 @@ def test_exr_calc_functions_even_odd_decomposition():
     assert equal(g.subs(x, -x), g)
     assert equal(h.subs(x, -x), -h)
     assert equal(g + h, F(x))
+    # The new definition also asks for a symmetric domain: the common domain ℝ is one (this is
+    # also what lets the uniqueness part evaluate f, g, h at −x for every x).
+    assert is_symmetric(R)
     # The example f(x) = x² + x + 1: g(x) = x² + 1 and h(x) = x, derived from the formulas.
     f = x**2 + x + 1
     ge = (f + f.subs(x, -x)) / 2
@@ -368,5 +489,99 @@ def test_exr_calc_functions_even_odd_decomposition():
     assert equal(ge.subs(x, -x), ge)
     assert equal(he.subs(x, -x), -he)
     assert equal(ge + he, f)
+    assert parity(ge, R) == {"even"} and parity(he, R) == {"odd"}
     assert equal(ge, x**2 + 1)
     assert equal(he, x)
+
+
+# ---------------------------------------------------------------------------------------------
+# Claims in the prose that no eg-/exr- label owns (not counted for coverage).
+
+
+def test_def_calc_monotone_constant_functions():
+    """A constant function on a set with at least two points is increasing and decreasing but
+    neither strictly; on a one-point set every function is all four (vacuously)."""
+    const = lambda v: 7  # noqa: E731
+    # Two points.
+    assert monotone_kinds(const, [0, 1]) == {"increasing", "decreasing"}
+    # Any S with at least two points: some x₁ < x₂ = x₁ + d, and f(x₂) − f(x₁) = 0, which is
+    # ≤ 0 and ≥ 0 but neither < 0 nor > 0.
+    c, x1 = sp.symbols("c x1", real=True)
+    diff = sp.Lambda(x, c)(x1 + d) - sp.Lambda(x, c)(x1)
+    assert equal(diff, 0)
+    assert diff.is_nonnegative and diff.is_nonpositive
+    assert diff.is_positive is False and diff.is_negative is False
+    # One point: there are no x₁ < x₂ to compare, so all four hold, for any function there.
+    assert monotone_kinds(const, [5]) == ALL_FOUR
+    assert monotone_kinds(lambda v: v**3 - v, [sp.Rational(1, 2)]) == ALL_FOUR
+    # (and with three points a constant is still only weakly monotone)
+    assert monotone_kinds(const, [-1, 0, 2]) == {"increasing", "decreasing"}
+
+
+def test_increasing_not_strictly_example_and_figure():
+    """g = 0 on x < 0, x on x ≥ 0 is increasing on ℝ but not strictly (g(−2) = g(−1) = 0); the
+    example and the left half of fig-calc-functions-increasing-vs-strictly."""
+    g = sp.Piecewise((0, x < 0), (x, True))
+    assert equal(g.subs(x, -2), 0) and equal(g.subs(x, -1), 0)
+    # From the definition, by where x₁ < x₂ lie (p, d > 0 and q ≥ 0):
+    q = sp.Symbol("q", nonnegative=True)
+    # both < 0 (x₁ = −p − d < x₂ = −p): both values are 0;
+    assert equal(g.subs(x, -p) - g.subs(x, -p - d), 0)
+    # x₁ = −p < 0 ≤ x₂ = q: g(x₂) − g(x₁) = q ≥ 0;
+    assert equal(g.subs(x, q) - g.subs(x, -p), q) and q.is_nonnegative
+    # 0 ≤ x₁ = q < x₂ = q + d: g(x₂) − g(x₁) = d > 0.
+    assert equal(g.subs(x, q + d) - g.subs(x, q), d)
+    assert monotone_kinds(lambda v: g.subs(x, v), [-3, -2, -1, 0, 1, 2, 3]) == {"increasing"}
+
+
+def test_def_calc_domain_range_example_and_shadows_figure():
+    """f(x) = √(x − 1): dom f = [1, ∞), ran f = [0, ∞), each y ≥ 0 is the value at y² + 1;
+    the figure's point (5, 2)."""
+    f = sp.sqrt(x - 1)
+    assert equal(natural_domain([x - 1]), sp.Interval(1, oo))
+    assert equal(continuous_domain(f, x, R), sp.Interval(1, oo))
+    assert equal(function_range(f, x, sp.Interval(1, oo)), sp.Interval(0, oo))
+    assert equal_on_domain(f.subs(x, y**2 + 1), y, y, sp.Interval(0, oo))
+    assert equal(f.subs(x, 5), 2)
+    # Non-example: x² on ℝ has range [0, ∞), and −1 is not a value.
+    assert equal(function_range(x**2, x, R), sp.Interval(0, oo))
+    assert equal(sp.solveset(sp.Eq(x**2, -1), x, R), sp.S.EmptySet)
+
+
+def test_vertical_line_test_figure_and_sketching_example():
+    """x = 1.5 meets y = x² once; x = 2.5 meets y² = x twice. The step function's heights at 0
+    differ (0 from the left formula, 1 from the right), so no segment joins (−1, 0) to (0, 1)."""
+    assert equal(sp.solveset(sp.Eq(y, sp.Rational(3, 2) ** 2), y, R), sp.FiniteSet(sp.Rational(9, 4)))
+    two = sp.solveset(sp.Eq(y**2, sp.Rational(5, 2)), y, R)
+    assert equal(two, sp.FiniteSet(-sp.sqrt(sp.Rational(5, 2)), sp.sqrt(sp.Rational(5, 2))))
+    step_left, step_right = sp.S.Zero, sp.S.One
+    assert not equal(step_left, step_right)
+
+
+def test_def_calc_even_odd_examples_mistake_and_summary():
+    """Under def-calc-even-odd (symmetric domain + identity): the examples, the non-example,
+    the third common mistake and the Summary's "a function whose domain is not symmetric is
+    neither"."""
+    # Examples and non-example (domain ℝ).
+    assert parity(x**4 - 3 * x**2, R) == {"even"}
+    assert parity(x**3, R) == {"odd"}
+    nonex = x**2 + x
+    assert equal(nonex.subs(x, 1), 2) and equal(nonex.subs(x, -1), 0)
+    assert parity(nonex, R) == set()
+    # The third common mistake: x³ + 1 on ℝ. The domain is symmetric, f(−1) = 0, −f(1) = −2,
+    # f(1) = 2: not odd and not even.
+    f = x**3 + 1
+    assert is_symmetric(continuous_domain(f, x, R))
+    assert equal(f.subs(x, -1), 0) and equal(-f.subs(x, 1), -2) and equal(f.subs(x, 1), 2)
+    assert parity(f, R) == set()
+    # Summary: a non-symmetric domain makes a function neither, even when its formula is even
+    # or odd elsewhere.
+    for formula, dom in [
+        (x**2, sp.Interval(-1, 2)),
+        (x**3, sp.Interval.Ropen(-1, 1)),
+        (sp.sqrt(x), continuous_domain(sp.sqrt(x), x, R)),
+        (x**2 - x**2, sp.Interval(0, 1)),  # the zero function: both on ℝ, neither on [0, 1]
+    ]:
+        assert not is_symmetric(dom)
+        assert parity(formula, dom) == set()
+    assert parity(sp.S.Zero * x, R) == {"even", "odd"}
