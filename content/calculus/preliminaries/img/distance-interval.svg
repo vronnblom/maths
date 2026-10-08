@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 180" width="380" height="180" role="img">
+  <rect x="0" y="0" width="380" height="180" rx="8" fill="#ffffff"/>
+  <g font-family="serif" font-size="15" fill="#24292f" text-anchor="middle" stroke-linecap="round">
+    <!-- a - delta at x = 80, a at 190, a + delta at 300; the point x at 250 -->
+    <!-- top line: the open interval (a - delta, a + delta) and the distance |x - a| -->
+    <line x1="20" y1="75" x2="352" y2="75" stroke="#24292f" stroke-width="1.2"/>
+    <path d="M352,71 L360,75 L352,79 Z" fill="#24292f"/>
+    <g stroke="#24292f" stroke-width="1.2">
+      <line x1="80" y1="70" x2="80" y2="80"/><line x1="190" y1="70" x2="190" y2="80"/>
+      <line x1="300" y1="70" x2="300" y2="80"/>
+    </g>
+    <line x1="80" y1="75" x2="300" y2="75" stroke="#0b5cad" stroke-width="5"/>
+    <circle cx="80" cy="75" r="6" fill="#ffffff" stroke="#0b5cad" stroke-width="2.5"/>
+    <circle cx="300" cy="75" r="6" fill="#ffffff" stroke="#0b5cad" stroke-width="2.5"/>
+    <circle cx="250" cy="75" r="4" fill="#c2410c"/>
+    <path d="M190,58 V50 H250 V58" fill="none" stroke="#c2410c" stroke-width="1.8"/>
+    <text x="220" y="42" font-style="italic" fill="#c2410c">|x − a|</text>
+    <text x="80" y="102" font-style="italic">a − δ</text>
+    <text x="190" y="102" font-style="italic">a</text>
+    <text x="300" y="102" font-style="italic">a + δ</text>
+    <text x="250" y="102" font-style="italic" fill="#c2410c">x</text>
+    <!-- bottom line: the punctured neighbourhood (a - delta, a) U (a, a + delta) -->
+    <line x1="20" y1="140" x2="352" y2="140" stroke="#24292f" stroke-width="1.2"/>
+    <path d="M352,136 L360,140 L352,144 Z" fill="#24292f"/>
+    <g stroke="#24292f" stroke-width="1.2">
+      <line x1="80" y1="135" x2="80" y2="145"/><line x1="190" y1="135" x2="190" y2="145"/>
+      <line x1="300" y1="135" x2="300" y2="145"/>
+    </g>
+    <line x1="80" y1="140" x2="300" y2="140" stroke="#0b5cad" stroke-width="5"/>
+    <circle cx="80" cy="140" r="6" fill="#ffffff" stroke="#0b5cad" stroke-width="2.5"/>
+    <circle cx="190" cy="140" r="6" fill="#ffffff" stroke="#0b5cad" stroke-width="2.5"/>
+    <circle cx="300" cy="140" r="6" fill="#ffffff" stroke="#0b5cad" stroke-width="2.5"/>
+    <text x="80" y="167" font-style="italic">a − δ</text>
+    <text x="190" y="167" font-style="italic">a</text>
+    <text x="300" y="167" font-style="italic">a + δ</text>
+  </g>
+</svg>
