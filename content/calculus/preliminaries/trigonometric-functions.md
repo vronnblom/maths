@@ -56,15 +56,24 @@ derivatives of sine and cosine on the page Derivatives of Trigonometric Function
 ## Angles in radians
 
 Everything on this page rests on a few facts of plane geometry that you know from school: they
-are the starting point, not something this course proves. They are used by the definitions of
-the radian and of sine and cosine, the properties in
-[](#rem-calc-trig-functions-circle-properties) (with their reasons), the proofs of
-[](#thm-calc-addition-formulas) and [](#lem-calc-sin-bounds), and so by every example and
-exercise. The facts on circles of other radii and on areas are also used directly in the
-worked examples on a wheel ([](#eg-calc-trig-functions-radians)) and on the Ferris wheel
-([](#eg-calc-trig-functions-ferris-wheel)), and in the exercises on a pendulum
-([](#exr-calc-trig-functions-arc-length)) and on the Ferris wheel
-([](#exr-calc-trig-functions-ferris-times)). They use only the facts in the box below.
+are the starting point, not something this course proves. They are used directly in these
+places, and through them by every example and exercise:
+
+- the definitions of the radian ([](#def-calc-radian)) and of sine and cosine
+  ([](#def-calc-sin-cos)), and the arc $r\theta$ and the sector $\frac12 r^2\theta$ on a circle
+  of radius $r$ after them;
+- the reasons for the properties in [](#rem-calc-trig-functions-circle-properties), and the
+  "In words" of [](#def-calc-tan-sec-csc-cot) (the line through $O$ and $P(t)$);
+- the proofs of [](#thm-calc-pythagorean-identity), [](#thm-calc-addition-formulas) and
+  [](#lem-calc-sin-bounds), and the figure of the lemma;
+- the Values bullet of Graphs: period, amplitude and phase;
+- the worked examples on a wheel ([](#eg-calc-trig-functions-radians)) and on the Ferris wheel
+  ([](#eg-calc-trig-functions-ferris-wheel));
+- the exercises on a pendulum ([](#exr-calc-trig-functions-arc-length)), on solving
+  $\sin t = -\frac12$ ([](#exr-calc-trig-functions-solve-sine), its hint and solution) and on
+  the Ferris wheel ([](#exr-calc-trig-functions-ferris-times), its solution).
+
+They use only the facts in the box below.
 
 :::{proof:remark} Facts from school used on this page
 :label: rem-calc-trig-functions-school-facts
@@ -84,18 +93,31 @@ We write $O = (0, 0)$ for the origin and $A = (1, 0)$.
   distances as negative, a journey of $s$ followed by a journey of $t$ ends where a journey of
   $s + t$ does. Every point of the circle is reached from $A$ by an anticlockwise journey of
   exactly one length in $[0, 2\pi)$.
-- **Rotations and reflections.** A rotation about $O$, and a reflection in a line through
+- **Journeys and arcs.** An anticlockwise journey of length $d$, where $0 < d \le 2\pi$, runs
+  along an arc of the circle from its starting point to its end point, and that arc has length
+  $d$. (For $d = 2\pi$ the arc is the whole circle.)
+- **Rotations and reflections.** For every point $Q$ of the unit circle there is a rotation
+  about $O$ that maps $A$ to $Q$. A rotation about $O$, and a reflection in a line through
   $O$, map the unit circle onto itself and keep the distances between points and the lengths
   of arcs. So they map a journey along the circle to a journey of the same length; a rotation
   keeps its direction, and a reflection reverses it.
 - **Circles of other radii.** A circle of radius $r > 0$ is the unit circle scaled by $r$
   (and moved): lengths of arcs are multiplied by $r$, and areas by $r^2$.
-- **Area.** A triangle with base $b$ and height $h$ has area $\frac12 bh$. A **sector** of the
-  unit circle is the part of the unit disc between two radii; if its arc has length $\theta$,
-  where $0 < \theta \le 2\pi$, its area is $\frac{\theta}{2}$. A region that lies inside
-  another has at most the other's area.
+- **Sectors.** Take an arc of the unit circle of length $\theta$, where $0 < \theta \le 2\pi$.
+  The **region between the radii** at its ends is the set of points $\lambda X$ with
+  $\lambda \ge 0$ and $X$ on the arc, and the **sector** of the arc is the part of this region
+  that lies in the unit disc. If $\theta < \pi$, the region contains, with any two of its
+  points, the segment between them; and if $Q$ and $R$ are points other than $O$ on the two rays
+  from $O$ through the ends of the arc, the triangle $OQR$ is the part of the region that lies
+  on the same side of the line $QR$ as $O$, or on that line.
+- **Area.** A triangle with base $b$ and height $h$ has area $\frac12 bh$. A sector whose arc
+  has length $\theta$, where $0 < \theta \le 2\pi$, has area $\frac{\theta}{2}$. For
+  $\theta = 2\pi$ this says that the unit disc has area $\pi$: that is Archimedes' theorem, not
+  the definition of $\pi$, which is the length of the circle. A region that lies inside another
+  has at most the other's area.
 
-No page of this course proves these facts: they are where plane geometry starts.
+No page of this course proves these facts. They are proved in Real Analysis (`ana`), outside
+this course.
 :::
 
 :::{admonition} Looking ahead
@@ -106,19 +128,21 @@ Riemann Sums and The Definite Integral), and the page Arc Length and Surface Are
 length of a curve. Those pages may not
 recover the arc length of the circle or the area of a sector with the derivatives of sine and
 cosine: the derivatives rest on [](#lem-calc-sin-bounds) of this page, so that would argue in
-a circle. A construction of sine and cosine that uses no geometry at all, from power series or
-from an integral, belongs to Real Analysis (`ana`), which does not exist yet.
+a circle. Real Analysis (`ana`), which does not exist yet, constructs sine and cosine without
+any geometry, from power series or from an integral, and proves the facts in the box.
 :::
 
-To measure an angle at the centre of the unit circle, walk along the circle from one arm of
-the angle to the other and measure how far you went. The larger the angle, the longer the
+To measure an angle at the centre of the unit circle, walk along the circle, inside the angle,
+from one arm to the other and measure how far you went. The larger the angle, the longer the
 walk.
 
 :::{proof:definition} Radian
 :label: def-calc-radian
 
-Let an angle have its vertex at the centre $O$ of the unit circle. Its **measure in radians**
-is the length of the arc of the unit circle that lies between its two arms.
+Let an angle have its vertex at the centre $O$ of the unit circle. Its two arms meet the circle
+at two points, which cut the circle into two arcs. The angle's **measure in radians** is the
+length of the one of these arcs that lies inside the angle. (For an angle smaller than a
+straight angle, this is the shorter arc.)
 :::
 
 **In words.** An angle of $\theta$ radians is the angle you turn through while you walk a
@@ -162,7 +186,7 @@ $(\sin t)^2$, and likewise for other powers.
 
 :::{figure} ./img/unit-circle.svg
 :label: fig-calc-trig-functions-unit-circle
-:alt: The unit circle about the origin O, with the x- and y-axes and the marks 1 and −1 on both. A thick arc runs anticlockwise along the circle from the point A = (1, 0) to a point P(t) = (cos t, sin t) in the first quadrant and is labelled "arc length t". A radius joins O to P(t). A thick segment on the x-axis from O to the foot of P(t) is labelled cos t, and a dashed vertical segment from there up to P(t) is labelled sin t.
+:alt: The unit circle about the origin O, with the x- and y-axes. The x-axis is marked −1 on the left, where the circle crosses it, and A on the right; the y-axis is marked 1 and −1. A thick arc runs anticlockwise along the circle from the point A = (1, 0) to a point P(t) = (cos t, sin t) in the first quadrant and is labelled "arc length t". A radius joins O to P(t). A thick segment on the x-axis from O to the foot of P(t) is labelled cos t, and a dashed vertical segment from there up to P(t) is labelled sin t.
 
 The point $P(t)$ is reached from $A = (1, 0)$ by walking a distance $t$ along the unit circle.
 Its $x$-coordinate is $\cos t$ and its $y$-coordinate is $\sin t$.
@@ -218,9 +242,12 @@ Let $t$ and $\alpha$ be real numbers and $k$ an integer.
    $\alpha$, the image is reached from $A$ by a journey of $\alpha + t$: it is $P(t + \alpha)$.
 3. A journey of $2\pi$ goes once round the circle and ends where it started, so
    $P(t + 2\pi) = P(t)$; repeating this $k$ times (with $t - 2\pi$ in place of $t$ when
-   $k < 0$) gives $P(t + 2k\pi) = P(t)$. Conversely, let $P(s) = P(t)$, let $k$ be the integer
-   with $k \le \frac{s - t}{2\pi} < k + 1$, and let $u = s - t - 2k\pi$, so that
-   $0 \le u < 2\pi$. Then $P(s) = P(t + u + 2k\pi) = P(t + u)$. The rotation that maps $A$ to
+   $k < 0$) gives $P(t + 2k\pi) = P(t)$. Conversely, let $P(s) = P(t)$. By the remark on the
+   integer part of a real number in Real Numbers and Intervals, there is an integer $k$ with
+   $k \le \frac{s - t}{2\pi} < k + 1$. Multiplying by the positive number $2\pi$ keeps both
+   inequalities, and subtracting $2k\pi$ keeps them too (the order rules of Real Numbers and
+   Intervals), so $u = s - t - 2k\pi$ satisfies $0 \le u < 2\pi$. Then
+   $P(s) = P(t + u + 2k\pi) = P(t + u)$. The rotation that maps $A$ to
    $P(-t)$ maps $P(t)$ to $P(0) = A$ and $P(t + u)$ to $P(u)$, by property 2. As
    $P(t + u) = P(t)$, it follows that $P(u) = A = P(0)$. Only one length in $[0, 2\pi)$ leads
    from $A$ to $A$, so $u = 0$ and $s - t = 2k\pi$.
@@ -240,6 +267,9 @@ Let $t$ and $\alpha$ be real numbers and $k$ an integer.
    neither of its ends $(1, 0)$ and $(0, 1)$, by 1; there $x > 0$ and $y > 0$. A journey of $t$
    with $0 < t < \pi$ ends on the upper half of the circle, from $(1, 0)$ to $({-1}, 0)$, at
    neither end; there $y > 0$.
+
+% TODO link: rem-calc-integer-part once P1 (the calc-real-numbers PR that adds it) is merged
+% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 :::
 
 Property 4 says that $\cos$ is [even](#def-calc-even-odd) and $\sin$ is odd: their common
@@ -267,8 +297,8 @@ for those $t$, its natural domain.
 divided by the run $\cos t$. When $\cos t \ne 0$, that line meets the vertical line $x = 1$ at
 the point $(1, \tan t)$, which is $P(t)$ with both coordinates multiplied by
 $\frac{1}{\cos t}$. The other three are reciprocals: $\sec t = \frac{1}{\cos t}$,
-$\csc t = \frac{1}{\sin t}$, and $\cot t = \frac{1}{\tan t}$ wherever both are defined and
-$\tan t \ne 0$. [](#rem-calc-trig-functions-zeros) finds the $t$ where $\cos t$ or $\sin t$ is
+$\csc t = \frac{1}{\sin t}$, and $\cot t = \frac{1}{\tan t}$ wherever both are defined.
+[](#rem-calc-trig-functions-zeros) finds the $t$ where $\cos t$ or $\sin t$ is
 $0$.
 
 **Example.** $P(0) = (1, 0)$ gives $\tan 0 = \frac{0}{1} = 0$ and $\sec 0 = 1$.
@@ -322,12 +352,17 @@ For every real number $t$:
 We show that $\sin^2 t \le 1$, and then that a number whose square is at most $1$ lies between
 $-1$ and $1$.
 
-(a) A square is never negative, so $\cos^2 t \ge 0$, and by [](#thm-calc-pythagorean-identity)
-$\sin^2 t = 1 - \cos^2 t \le 1$. Suppose $\sin t > 1$. Both $\sin t$ and $1$ are then
-non-negative, and by the order part of [the square-root remark](#rem-calc-square-roots) (for
-non-negative $u$ and $v$, $u < v$ exactly when $u^2 < v^2$), $1 < \sin t$ gives
-$1 < \sin^2 t$, which is impossible. Suppose $\sin t < -1$. Then $-\sin t > 1$, and in the
-same way $1 < (-\sin t)^2 = \sin^2 t$, which is impossible. So $-1 \le \sin t \le 1$.
+(a) A square is never negative, so $\cos^2 t \ge 0$. Adding $1 - \cos^2 t$ to both sides keeps
+the inequality (the order rules of Real Numbers and Intervals), so, by
+[](#thm-calc-pythagorean-identity), $\sin^2 t = 1 - \cos^2 t \le 1$. Suppose $\sin t > 1$.
+Both $\sin t$ and $1$ are then non-negative, and by the order part of
+[the square-root remark](#rem-calc-square-roots) (for non-negative $u$ and $v$, $u < v$ exactly
+when $u^2 < v^2$), $1 < \sin t$ gives $1 < \sin^2 t$, which is impossible. Suppose
+$\sin t < -1$. Multiplying by the negative number ${-1}$ reverses the inequality (the order
+rules), so $-\sin t > 1$, and in the same way $1 < (-\sin t)^2 = \sin^2 t$, which is
+impossible. So $-1 \le \sin t \le 1$.
+
+% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 
 (b) The same argument with $\cos$ and $\sin$ exchanged, using
 $\cos^2 t = 1 - \sin^2 t \le 1$.
@@ -386,14 +421,18 @@ except $k\pi$, $k \in \Z$.
 *Reason.* 1. If $t = k\pi$, then $\sin t = 0$ by [](#prop-calc-sin-multiples-of-pi).
 Conversely, let $\sin t = 0$. Then $\cos^2 t = 1$ by [](#thm-calc-pythagorean-identity). If
 $\cos t \ge 0$, then $\cos t$ is the non-negative square root of $1$, which is $1$
-([the square-root remark](#rem-calc-square-roots)); if $\cos t < 0$, then in the same way
-$-\cos t = 1$. So $P(t) = (1, 0) = P(0)$ or $P(t) = ({-1}, 0) = P(\pi)$, by property 1 of
+([the square-root remark](#rem-calc-square-roots)); if $\cos t < 0$, then $-\cos t > 0$
+(multiplying by the negative number ${-1}$ reverses the inequality, by the order rules of Real
+Numbers and Intervals), and in the same way $-\cos t = 1$. So $P(t) = (1, 0) = P(0)$ or
+$P(t) = ({-1}, 0) = P(\pi)$, by property 1 of
 [](#rem-calc-trig-functions-circle-properties). By the converse in property 3, $t = 2m\pi$ or
 $t = \pi + 2m\pi$ for an integer $m$: in both cases $t$ is an integer multiple of $\pi$.
 
 2. By property 6, $\cos t = \sin\bigl(\frac{\pi}{2} - t\bigr)$. By 1, this is $0$ exactly when
 $\frac{\pi}{2} - t = j\pi$ for an integer $j$, that is, when $t = \frac{\pi}{2} + k\pi$ with
 $k = -j$.
+
+% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 :::
 
 ### The addition formulas
@@ -517,8 +556,10 @@ $\tan\theta = \frac{\sin\theta}{\cos\theta}$ is defined and positive
 
 - The **triangle $OAP$** has base $OA$ of length $1$ on the $x$-axis and height $\sin\theta$,
   the height of $P$ above that axis. Its area is $\frac12\sin\theta$.
-- The **sector $OAP$** is the part of the unit disc between the radii $OA$ and $OP$. Its arc
-  goes from $A$ to $P(\theta)$ and has length $\theta$, so its area is $\frac{\theta}{2}$.
+- The **sector $OAP$** is the sector of the arc traced by the anticlockwise journey of length
+  $\theta$ from $A$, which ends at $P(\theta)$; that arc has length $\theta$ (journeys and arcs,
+  in the facts from school). So the sector is the part of the unit disc between the radii $OA$
+  and $OP$, and its area is $\frac{\theta}{2}$.
 - The **triangle $OAT$** has base $OA$ of length $1$ and height $\tan\theta$, because $T$ lies
   directly above $A$ at height $\tan\theta > 0$. Its area is $\frac12\tan\theta$.
 
@@ -526,41 +567,56 @@ They lie inside one another.
 
 - *The triangle $OAP$ lies in the sector.* Every point of the triangle lies on a segment from
   $O$ to a point $Q$ of its side $AP$. The disc contains $A$ and $P$, so it contains the segment
-  $AP$ and with it $Q$, and then the whole segment $OQ$ (the facts from school). That segment
-  also lies between the radii $OA$ and $OP$, because $Q$ does.
+  $AP$ and with it $Q$, and then the whole segment $OQ$ (the facts from school, distance). The
+  region between the radii $OA$ and $OP$ contains $O$, $A$ and $P$ (take $\lambda = 0$ or
+  $\lambda = 1$), and, since $\theta < \frac{\pi}{2} < \pi$, with any two of its points the
+  segment between them (the facts from school, sectors); so it contains $Q$ and then the
+  segment $OQ$. That segment therefore lies in the part of the region in the disc, which is
+  the sector.
 - *The sector lies in the triangle $OAT$.* The point $T = \frac{1}{\cos\theta}\,P$ lies on the
   ray from $O$ through $P$, because $\frac{1}{\cos\theta} > 0$. So the triangle $OAT$ is the part
-  of the region between the radii $OA$ and $OP$ (and their extensions beyond the circle) that lies
-  to the left of the line $x = 1$, or on it. Every point $(x, y)$ of the disc has $x \le 1$:
-  otherwise $x > 1 \ge 0$, and the order part of [the square-root remark](#rem-calc-square-roots)
-  would give $x^2 > 1$, although $x^2 \le x^2 + y^2 \le 1$. So the sector lies in the triangle
-  $OAT$.
+  of the region between the radii $OA$ and $OP$ that lies on the same side of the line $AT$
+  (the line $x = 1$) as $O$, or on it: the part with $x \le 1$ (the facts from school,
+  sectors). Every point $(x, y)$ of the disc has $x \le 1$. Indeed, $y^2 \ge 0$, so adding
+  $x^2$ keeps the inequality and $x^2 \le x^2 + y^2 \le 1$ (the order rules of Real Numbers and
+  Intervals).
+  If $x > 1$, then $x > 1 \ge 0$, and the order part of
+  [the square-root remark](#rem-calc-square-roots) would give $x^2 > 1$, which is impossible. So
+  the sector, the part of that region in the disc, lies in the triangle $OAT$.
 
 A region that lies inside another has at most its area (the facts from school), so
 $\frac12\sin\theta \le \frac{\theta}{2} \le \frac12\tan\theta$. Multiplying by the positive
-number $2$ keeps both inequalities. So, for every $\theta$ with $0 < \theta < \frac{\pi}{2}$,
+number $2$ keeps both inequalities (the order rules). So, for every $\theta$ with
+$0 < \theta < \frac{\pi}{2}$,
 $$
 \sin\theta \le \theta \le \tan\theta .
 $$
 
 **Step 2: the inequalities are strict.** Let $0 < \theta < \frac{\pi}{2}$ again, and let
-$s = \sin\frac{\theta}{2}$ and $c = \cos\frac{\theta}{2}$. Since
-$0 < \frac{\theta}{2} < \frac{\pi}{4} < \frac{\pi}{2}$, property 8 gives $s > 0$ and $c > 0$, and
-step 1, applied to $\frac{\theta}{2}$, gives $s \le \frac{\theta}{2}$ and
+$s = \sin\frac{\theta}{2}$ and $c = \cos\frac{\theta}{2}$. Multiplying
+$0 < \theta < \frac{\pi}{2}$ by the positive number $\frac12$ keeps both inequalities (the order
+rules of Real Numbers and Intervals), so
+$0 < \frac{\theta}{2} < \frac{\pi}{4} < \frac{\pi}{2}$. Property 8 then gives $s > 0$ and
+$c > 0$, and step 1, applied to $\frac{\theta}{2}$, gives $s \le \frac{\theta}{2}$ and
 $\frac{\theta}{2} \le \tan\frac{\theta}{2} = \frac{s}{c}$.
-Also $c < 1$: by [](#thm-calc-pythagorean-identity), $c^2 = 1 - s^2 < 1$, because $s^2 > 0$;
-and $c \ge 1$ would give $c^2 \ge 1$, by the order part of
+Also $c < 1$: $s^2 > 0$, and adding $1 - s^2$ to both sides of $0 < s^2$ gives
+$1 - s^2 < 1$ (the order rules), so $c^2 = 1 - s^2 < 1$ by
+[](#thm-calc-pythagorean-identity); and $c \ge 1$ would give $c^2 \ge 1$, by the order part of
 [the square-root remark](#rem-calc-square-roots).
 
 - *Sine.* By part (e) of [](#thm-calc-addition-formulas), $\sin\theta = 2sc$. Multiplying
-  $c < 1$ by the positive number $2s$ keeps the strict inequality, so
+  $c < 1$ by the positive number $2s$ keeps the strict inequality, and multiplying
+  $s \le \frac{\theta}{2}$ by the positive number $2$ keeps that one (the order rules), so
   $$
   \sin\theta = 2sc < 2s \le 2 \cdot \frac{\theta}{2} = \theta .
   $$
 - *Tangent.* By part (f) of [](#thm-calc-addition-formulas), $\cos\theta = c^2 - s^2$, and
-  $\cos\theta > 0$ by property 8. So $0 < c^2 - s^2 < c^2$, because $s^2 > 0$. Multiplying
+  $\cos\theta > 0$ by property 8. Adding $c^2 - s^2$ to both sides of $0 < s^2$ gives
+  $c^2 - s^2 < c^2$ (the order rules), so $0 < c^2 - s^2 < c^2$. Multiplying
   $c^2 - s^2 < c^2$ by the positive number $\frac{2sc}{(c^2 - s^2)\,c^2}$ keeps the strict
-  inequality and gives $\frac{2sc}{c^2} < \frac{2sc}{c^2 - s^2}$. Hence
+  inequality and gives $\frac{2sc}{c^2} < \frac{2sc}{c^2 - s^2}$. Multiplying
+  $\frac{\theta}{2} \le \frac{s}{c}$ by the positive number $2$ keeps it:
+  $2 \cdot \frac{s}{c} \ge 2 \cdot \frac{\theta}{2}$ (the order rules). Hence
   $$
   \begin{aligned}
   \tan\theta = \frac{\sin\theta}{\cos\theta} &= \frac{2sc}{c^2 - s^2} \\
@@ -570,11 +626,25 @@ and $c \ge 1$ would give $c^2 \ge 1$, by the order part of
   $$
 
 So $\sin\theta < \theta < \tan\theta$.
+
+% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 :::
 
-The proof rests on the facts from school, and in particular on the two of them that hide a
-limit: the arc from $A$ to $P(\theta)$ has length $\theta$ (that is how $P(\theta)$ is defined),
-and the sector has area $\frac{\theta}{2}$. It used no derivatives and no limits.
+The proof used no derivatives and no limits. It rests on these facts from school, none of which
+this course proves (Real Analysis does):
+
+- the equation of the unit circle and of the disc, and that the disc contains the segment
+  between any two of its points;
+- journeys and arcs: the arc from $A$ to $P(\theta)$ traced by the journey has length
+  $\theta$;
+- that the region between two radii whose arc is shorter than half the circle contains the
+  segment between any two of its points, and that the triangle $OAT$ is the part of that region
+  with $x \le 1$;
+- the area $\frac12 bh$ of a triangle, and the area $\frac{\theta}{2}$ of a sector (so the
+  unit disc has area $\pi$, Archimedes' theorem);
+- that a region inside another has at most its area.
+
+Two of them hide a limit: the length of an arc and the area of a sector.
 
 :::{proof:remark} Why $0 < \theta < \frac{\pi}{2}$
 :label: rem-calc-trig-functions-sin-bounds-hypothesis
@@ -587,29 +657,41 @@ Each part of the hypothesis is needed.
   property 1 of [](#rem-calc-trig-functions-circle-properties).
 - For $-\frac{\pi}{2} < \theta < 0$ the inequalities reverse: $\phi = -\theta$ satisfies the
   lemma, and by property 4 $\sin\theta = -\sin\phi$ and $\tan\theta = -\tan\phi$, so multiplying
-  $\sin\phi < \phi < \tan\phi$ by $-1$ gives $\sin\theta > \theta > \tan\theta$.
+  $\sin\phi < \phi < \tan\phi$ by the negative number ${-1}$, which reverses both inequalities
+  (the order rules of Real Numbers and Intervals), gives $\sin\theta > \theta > \tan\theta$.
+
+% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 :::
 
 ### Graphs: period, amplitude and phase
 
-As $t$ grows, $P(t)$ goes round and round the circle, and $\sin t$ and $\cos t$ repeat. A number
-$p > 0$ is a **period** of a function $f$ if, for every $x \in \dom f$, also $x + p \in \dom f$
-and $f(x + p) = f(x)$; a function with a period is **periodic**, and its smallest period, if
-there is one, is called **the period**.
+As $t$ grows, $P(t)$ goes round and round the circle, and $\sin t$ and $\cos t$ repeat.
+
+:::{proof:definition} Period
+:label: def-calc-period
+
+Let $f$ be a function. A number $p > 0$ is a **period** of $f$ if, for every $x \in \dom f$,
+also $x + p \in \dom f$ and $f(x + p) = f(x)$. A function with a period is **periodic**. If $f$
+has a period $p_0$ such that no number $p$ with $0 < p < p_0$ is a period of $f$, then $p_0$ is
+called **the period** of $f$.
+:::
 
 - **Period $2\pi$.** By property 3 of [](#rem-calc-trig-functions-circle-properties),
-  $2\pi$ is a period of $\sin$ and of $\cos$. No smaller $p > 0$ is a period of $\sin$: if
-  $\sin\bigl(\frac{\pi}{2} + p\bigr) = \sin\frac{\pi}{2} = 1$, then
+  $2\pi$ is a period of $\sin$ and of $\cos$ ([](#def-calc-period)). No smaller $p > 0$ is a
+  period of $\sin$: if $\sin\bigl(\frac{\pi}{2} + p\bigr) = \sin\frac{\pi}{2} = 1$, then
   $\cos\bigl(\frac{\pi}{2} + p\bigr) = 0$ by [](#thm-calc-pythagorean-identity), so
   $P\bigl(\frac{\pi}{2} + p\bigr) = (0, 1) = P\bigl(\frac{\pi}{2}\bigr)$, and $p = 2k\pi$ for an
-  integer $k$ by the converse in property 3; with $p > 0$ this means $p \ge 2\pi$. The same
-  argument at $t = 0$ shows it for $\cos$.
+  integer $k$ by the converse in property 3. As $p > 0$, $k \ge 1$, and multiplying $k \ge 1$
+  by the positive number $2\pi$ gives $p \ge 2\pi$ (the order rules of Real Numbers and
+  Intervals). The same argument at $t = 0$ shows it for $\cos$. So $2\pi$ is the period of
+  $\sin$ and of $\cos$.
 - **Values.** The values of $\sin$ and $\cos$ fill the interval $[-1, 1]$: they lie in it by
   [](#prop-calc-sin-bounded), and every $y \in [-1, 1]$ is a value of $\sin$. Indeed $y^2 \le 1$
   (for $y \ge 0$ by the order part of [the square-root remark](#rem-calc-square-roots), and for
-  $y < 0$ by the same applied to $-y$), so the point $\bigl(\sqrt{1 - y^2}, y\bigr)$ lies on the unit circle, and by the
-  facts from school it is $P(t)$ for some $t$; then $\sin t = y$. In the same way, the point
-  $\bigl(y, \sqrt{1 - y^2}\bigr)$ shows that $y$ is a value of $\cos$.
+  $y < 0$ by the same applied to $-y$), so $1 - y^2 \ge 0$ (adding $-y^2$, the order rules) and
+  the point $\bigl(\sqrt{1 - y^2}, y\bigr)$ lies on the unit circle. By the facts from school
+  (journeys along the circle) it is $P(t)$ for some $t$; then $\sin t = y$. In the same way, the
+  point $\bigl(y, \sqrt{1 - y^2}\bigr)$ shows that $y$ is a value of $\cos$.
 - **Shape.** On $[0, 2\pi]$ the graph of $\sin$ takes the values $0$, $1$, $0$, ${-1}$ and $0$ at
   $0$, $\frac{\pi}{2}$, $\pi$, $\frac{3\pi}{2}$ and $2\pi$ (property 1), and then repeats; in between,
   the widget below shows a smooth wave. By property 6, $\cos t = \sin\bigl(t + \frac{\pi}{2}\bigr)$ (apply 6 to
@@ -623,12 +705,16 @@ f(x) = a \sin\bigl(b(x - c)\bigr) + d
 $$
 has
 
-- **amplitude** $a$: its values fill $[d - a, d + a]$, because those of $\sin$ fill $[-1, 1]$;
+- **amplitude** $a$: its values fill $[d - a, d + a]$, because those of $\sin$ fill $[-1, 1]$,
+  and multiplying $-1 \le u \le 1$ by the positive number $a$ and then adding $d$ keeps both
+  inequalities (the order rules);
 - **period** $\frac{2\pi}{b}$: shifting $x$ by $p$ shifts $b(x - c)$ by $bp$, and as
   $b(x - c)$ runs through all real numbers when $x$ does, $p$ is a period of $f$ exactly when
   $bp$ is a period of $\sin$; the smallest such $bp$ is $2\pi$;
 - **phase shift** $c$: its graph is that of $a\sin(bx) + d$ shifted $c$ to the right;
 - **midline** $y = d$: the wave swings between $d - a$ and $d + a$, about the line $y = d$.
+
+% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 
 ::::{figure}
 :label: wdg-calc-trig-functions-wave
@@ -660,8 +746,10 @@ horizontally, increasing $c$ shifts it to the right, and increasing $d$ shifts i
 
 1. Set $b = 2$. How many complete waves fit between $0$ and $2\pi \approx 6.28$ now? What is
    the period?
-2. Set $b = 1$ again and move $c$ to ${-1.5}$, close to $-\frac{\pi}{2} \approx -1.571$. Which
-   function's graph do you see? (Look at the shape bullet above.)
+2. Set $b = 1$ again and move $c$ to ${-1.5}$, the slider's closest value to
+   $-\frac{\pi}{2} \approx -1.571$. The graph is now $y = \sin(x + 1.5)$. Which function from
+   this page does it almost match, and which value of $c$, not on the slider, would match it
+   exactly? (Look at the shape bullet above.)
 3. Set $c = 0$, $a = 3$ and $d = 2$. Between which heights does the wave swing, and where is its
    midline?
 
@@ -716,7 +804,8 @@ Find $\cos t$ and $\sin t$ exactly for $t = \frac{\pi}{4}$, $\frac{\pi}{3}$ and 
 2. **At $\frac{\pi}{3}$.** Let $c = \cos\frac{\pi}{3}$. Part (f) of
    [](#thm-calc-addition-formulas) gives $\cos\frac{2\pi}{3} = 2c^2 - 1$, and property 5 gives
    $\cos\frac{2\pi}{3} = \cos\bigl(\pi - \frac{\pi}{3}\bigr) = -c$. So $2c^2 - 1 = -c$, that is,
-   $2c^2 + c - 1 = 0$, which factors as $(2c - 1)(c + 1) = 0$. By property 8, $c > 0$, so $c + 1 > 0$, and therefore $2c - 1 = 0$: $c = \frac12$. Then
+   $2c^2 + c - 1 = 0$, which factors as $(2c - 1)(c + 1) = 0$. By property 8, $c > 0$, so adding $1$ gives $c + 1 > 1 > 0$ (the order rules of Real Numbers
+   and Intervals), and therefore $2c - 1 = 0$: $c = \frac12$. Then
    $\sin^2\frac{\pi}{3} = 1 - \frac14 = \frac34$, and $\sin\frac{\pi}{3} > 0$, so, as in step 1,
    $\sin\frac{\pi}{3} = \frac{\sqrt{3}}{2}$.
 3. **At $\frac{\pi}{6}$.** Since $\frac{\pi}{6} = \frac{\pi}{2} - \frac{\pi}{3}$, property 6 with
@@ -736,6 +825,8 @@ $\tan\frac{\pi}{3} = \sqrt{3}$.
 $\cos 1.047198 \approx 0.500000$ ✓, and $\frac{\pi}{4} \approx 0.785398$ gives
 $\sin 0.785398 \approx 0.707107 \approx \frac{1.414214}{2}$ ✓. Each pair satisfies
 $\cos^2 t + \sin^2 t = 1$: for example $\frac14 + \frac34 = 1$ ✓.
+
+% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 :::
 
 :::{proof:example} Angles outside the first quadrant
@@ -782,7 +873,8 @@ Given that $\sin t = \frac35$ and $\frac{\pi}{2} < t < \pi$, find $\cos t$ and $
 1. **The square.** By [](#thm-calc-pythagorean-identity),
    $\cos^2 t = 1 - \frac{9}{25} = \frac{16}{25}$.
 2. **The sign.** Let $u = \pi - t$. Multiplying $\frac{\pi}{2} < t < \pi$ by the negative number
-   ${-1}$ reverses both inequalities, and adding $\pi$ keeps them: $0 < u < \frac{\pi}{2}$. By
+   ${-1}$ reverses both inequalities, and adding $\pi$ keeps them (the order rules of Real
+   Numbers and Intervals): $0 < u < \frac{\pi}{2}$. By
    property 5 of [](#rem-calc-trig-functions-circle-properties),
    $\cos t = \cos(\pi - u) = -\cos u$, and $\cos u > 0$ by property 8. So $\cos t < 0$.
 3. **The value.** So $-\cos t$ is the non-negative number whose square is $\frac{16}{25}$, which
@@ -796,6 +888,8 @@ $$
 **Check.** $\bigl(\frac35\bigr)^2 + \bigl(-\frac45\bigr)^2 = \frac{9 + 16}{25} = 1$ ✓. With a
 calculator in radian mode, $t = 2.498092$ lies between $\frac{\pi}{2}$ and $\pi$ and gives
 $\sin t \approx 0.600000$ and $\cos t \approx -0.800000$ ✓.
+
+% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 :::
 
 :::{proof:example} An exact value from the addition formulas
@@ -925,15 +1019,28 @@ $\pi$. In the [widget](#wdg-calc-trig-functions-wave), $b = 2$ shows two waves o
 
 ## Rigorous track
 
-:::{admonition} Why radians, and not degrees?
+::::{admonition} Why radians, and not degrees?
 :class: dropdown rigor
 In degrees, the angle that cuts off an arc of length $\theta$ is $\frac{180\theta}{\pi}$, so the
 "sine in degrees" is $s(x) = \sin\frac{\pi x}{180}$. Then [](#lem-calc-sin-bounds) would read
-$s(x) < \frac{\pi x}{180} < \tan\frac{\pi x}{180}$ for $0 < x < 90$, and the limit that the page
-The Squeeze Theorem computes would be $\frac{s(x)}{x} \to \frac{\pi}{180}$ instead of $1$. Every
-derivative of a trigonometric function would carry that factor. Radians are the unit in which
-the length of the arc *is* the angle, and that is why calculus uses no other.
+$s(x) < \frac{\pi x}{180} < \tan\frac{\pi x}{180}$ for $0 < x < 90$: the sine is no longer
+compared with the angle $x$ itself, but with $\frac{\pi}{180}$ times it. In the same way, with
+$\theta = \frac{\pi x}{180}$,
+$$
+\frac{s(x)}{x} = \frac{\pi}{180} \cdot \frac{\sin\theta}{\theta},
+$$
+so every statement about $\frac{\sin\theta}{\theta}$ carries the factor $\frac{\pi}{180}$ when
+it is written in degrees. Radians are the unit in which the length of the arc *is* the angle,
+and no such factor appears.
+
+:::{admonition} Looking ahead
+:class: looking-ahead
+The page The Squeeze Theorem finds the limit of $\frac{\sin\theta}{\theta}$ as $\theta \to 0$
+from [](#lem-calc-sin-bounds). In degrees that limit, and every derivative of a trigonometric
+function, would carry the factor $\frac{\pi}{180}$; that is why calculus uses no unit but
+radians.
 :::
+::::
 
 :::{admonition} Defining sine without pictures
 :class: dropdown rigor
@@ -1126,13 +1233,15 @@ Write $t = u + \pi$ and use property 7 of [](#rem-calc-trig-functions-circle-pro
 We follow [](#eg-calc-trig-functions-sign).
 
 (a) By [](#thm-calc-pythagorean-identity), $\sin^2 t = 1 - \frac{25}{169} = \frac{144}{169}$.
-For the sign, let $u = t - \pi$; subtracting $\pi$ from $\pi < t < \frac{3\pi}{2}$ gives
-$0 < u < \frac{\pi}{2}$. By property 7 of [](#rem-calc-trig-functions-circle-properties),
+For the sign, let $u = t - \pi$; subtracting $\pi$ from $\pi < t < \frac{3\pi}{2}$ keeps both
+inequalities (the order rules of Real Numbers and Intervals) and gives $0 < u < \frac{\pi}{2}$. By property 7 of [](#rem-calc-trig-functions-circle-properties),
 $\sin t = \sin(u + \pi) = -\sin u$, and $\sin u > 0$ by property 8. So $\sin t < 0$, and
 $-\sin t$ is the non-negative number whose square is $\frac{144}{169}$, namely $\frac{12}{13}$
 ([the square-root remark](#rem-calc-square-roots)). So $\sin t = -\frac{12}{13}$.
 
 (b) $\tan t = \dfrac{-12/13}{-5/13} = \dfrac{12}{5}$.
+
+% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 ::::
 
 ::::{exercise} An exact value of sine
@@ -1248,14 +1357,17 @@ The function is $a\sin\bigl(b(x - c)\bigr) + d$ with $a = 2$, $b = 3$, $c = 0$ a
 widget, the wave swings between ${-1}$ and $3$, and about three waves fit between $0$ and
 $2\pi \approx 6.28$.
 
-(a) By [part (a) of the bounds on sine](#prop-calc-sin-bounded), $\sin 3x \le 1$, so
-$f(x) \le 2 + 1 = 3$ for every $x$. The value $3$ is taken: at $x = \frac{\pi}{6}$,
+(a) By [part (a) of the bounds on sine](#prop-calc-sin-bounded), $\sin 3x \le 1$.
+Multiplying by the positive number $2$ and adding $1$ keep the inequality (the order rules of
+Real Numbers and Intervals), so $f(x) \le 2 + 1 = 3$ for every $x$. The value $3$ is taken: at $x = \frac{\pi}{6}$,
 $\sin\frac{\pi}{2} = 1$ by property 1 of [](#rem-calc-trig-functions-circle-properties), so
 $f\bigl(\frac{\pi}{6}\bigr) = 3$. The largest value is $3$.
 
 (b) The period of $a\sin\bigl(b(x - c)\bigr) + d$ is $\frac{2\pi}{b}$ (Graphs: period,
 amplitude and phase), here $\frac{2\pi}{3} \approx 2.09$: three waves on $[0, 2\pi]$, as in the
 widget.
+
+% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 ::::
 
 ::::{exercise} When is the seat 32 metres up?
@@ -1288,7 +1400,9 @@ Find the points of the unit circle with $x = -\frac12$, as in
 :label: sol-calc-trig-functions-ferris-times
 :class: dropdown
 $h(t) = 32$ means $20\cos\frac{\pi t}{5} = -10$, that is, $\cos u = -\frac12$ with
-$u = \frac{\pi t}{5}$. As $t$ runs through $[0, 10)$, $u$ runs through $[0, 2\pi)$.
+$u = \frac{\pi t}{5}$. Multiplying $0 \le t < 10$ by the positive number $\frac{\pi}{5}$ keeps
+both inequalities (the order rules of Real Numbers and Intervals), and dividing by it does
+too, so as $t$ runs through $[0, 10)$, $u$ runs through $[0, 2\pi)$.
 
 The points of the unit circle with $x = -\frac12$ have $y^2 = 1 - \frac14 = \frac34$, so they are
 $\bigl(-\frac12, \frac{\sqrt{3}}{2}\bigr)$ and $\bigl(-\frac12, -\frac{\sqrt{3}}{2}\bigr)$
@@ -1303,6 +1417,8 @@ $[0, 2\pi)$ (the facts from school). With the values of
 
 Then $t = \frac{5u}{\pi}$ gives $t = \frac{10}{3}$ and $t = \frac{20}{3}$: after
 $3\frac13$ minutes on the way up and after $6\frac23$ minutes on the way down.
+
+% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 ::::
 
 ::::{exercise} Cosine decreases on $[0, \pi]$
@@ -1347,12 +1463,18 @@ $$
 &= 2\sin m\sin d .
 \end{aligned}
 $$
-Now $0 \le v < u \le \pi$ gives $0 < u + v < 2\pi$ (the sum is positive because $u > 0$, and
-less than $2\pi$ because $v < \pi$ and $u \le \pi$), so $0 < m < \pi$. Also
-$0 < u - v \le \pi$, so $0 < d \le \frac{\pi}{2} < \pi$. By property 8 of
+Now $0 \le v < u \le \pi$ gives $0 < u + v < 2\pi$: adding $0 \le v$ and $0 < u$ gives
+$0 < u + v$, and adding $v < \pi$ and $u \le \pi$ gives $u + v < 2\pi$ (the order rules of Real
+Numbers and Intervals: adding two inequalities, one of them strict, gives a strict one).
+Multiplying by the positive number $\frac12$ keeps both inequalities, so $0 < m < \pi$. Also,
+subtracting $v$ keeps $v < u$ and $u \le \pi$, so $0 < u - v$ and $u - v \le \pi - v$; and
+$\pi - v \le \pi$ because $v \ge 0$. So $0 < u - v \le \pi$; multiplying by the positive number $\frac12$ gives
+$0 < d \le \frac{\pi}{2} < \pi$. By property 8 of
 [](#rem-calc-trig-functions-circle-properties), $\sin m > 0$ and $\sin d > 0$. So
 $\cos v - \cos u = 2\sin m\sin d > 0$, that is, $\cos v > \cos u$. As $v < u$ in $[0, \pi]$ were
 arbitrary, $\cos$ is strictly decreasing on $[0, \pi]$.
+
+% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 ::::
 
 ::::{exercise} The period of the tangent
@@ -1364,7 +1486,7 @@ Show that $\pi$ is a period of $\tan$, and that no number $p$ with $0 < p < \pi$
 :::{admonition} Hint 1
 :class: dropdown hint
 For the first part, use property 7 of [](#rem-calc-trig-functions-circle-properties). Check the
-domain condition in the definition of a period too.
+domain condition in [](#def-calc-period) too.
 :::
 
 :::{admonition} Hint 2
@@ -1389,10 +1511,13 @@ $t + \pi \in \dom\tan$, and
 $\tan(t + \pi) = \frac{\sin(t + \pi)}{\cos(t + \pi)} = \frac{-\sin t}{-\cos t} = \tan t$.
 
 *No smaller period.* Let $p > 0$ be a period of $\tan$. Since $0 \in \dom\tan$ ($\cos 0 = 1$),
-the definition of a period gives $p = 0 + p \in \dom\tan$ and $\tan p = \tan 0 = 0$. So
+[](#def-calc-period) gives $p = 0 + p \in \dom\tan$ and $\tan p = \tan 0 = 0$. So
 $\frac{\sin p}{\cos p} = 0$, and multiplying by $\cos p \ne 0$ gives $\sin p = 0$. By
 [](#rem-calc-trig-functions-zeros), $p = k\pi$ for an integer $k$, and $k \ge 1$ because
-$p > 0$. So $p \ge \pi$.
+$p > 0$. Multiplying $k \ge 1$ by the positive number $\pi$ gives $p \ge \pi$ (the order rules
+of Real Numbers and Intervals). So $\pi$ is the period of $\tan$ ([](#def-calc-period)).
+
+% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 ::::
 
 ::::{exercise} Squeezing $\frac{\sin\theta}{\theta}$
@@ -1434,7 +1559,7 @@ $\theta < \tan\theta = \frac{\sin\theta}{\cos\theta}$, where $\cos\theta > 0$ by
 [](#rem-calc-trig-functions-circle-properties).
 
 - Multiplying $\sin\theta < \theta$ by the positive number $\frac{1}{\theta}$ keeps the strict
-  inequality: $\frac{\sin\theta}{\theta} < 1$.
+  inequality (the order rules of Real Numbers and Intervals): $\frac{\sin\theta}{\theta} < 1$.
 - Multiplying $\theta < \frac{\sin\theta}{\cos\theta}$ by the positive number
   $\frac{\cos\theta}{\theta}$ keeps it too: $\cos\theta < \frac{\sin\theta}{\theta}$.
 
@@ -1442,6 +1567,8 @@ Now let $-\frac{\pi}{2} < \theta < 0$, and $\phi = -\theta$, so that $0 < \phi <
 By property 4, $\cos\theta = \cos\phi$ and $\sin\theta = -\sin\phi$, so
 $\frac{\sin\theta}{\theta} = \frac{-\sin\phi}{-\phi} = \frac{\sin\phi}{\phi}$. The first part,
 for $\phi$, gives $\cos\phi < \frac{\sin\phi}{\phi} < 1$, which is the claim for $\theta$.
+
+% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 ::::
 
 ## Where this leads

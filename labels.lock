@@ -18,6 +18,7 @@ def-calc-function  calculus/preliminaries/functions.md
 def-calc-interval  calculus/preliminaries/real-numbers-and-intervals.md
 def-calc-limit  calculus/limits/limit-of-a-function.md
 def-calc-monotone  calculus/preliminaries/functions.md
+def-calc-period  calculus/preliminaries/trigonometric-functions.md
 def-calc-radian  calculus/preliminaries/trigonometric-functions.md
 def-calc-sin-cos  calculus/preliminaries/trigonometric-functions.md
 def-calc-supremum  calculus/preliminaries/real-numbers-and-intervals.md
