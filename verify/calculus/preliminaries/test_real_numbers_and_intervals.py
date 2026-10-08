@@ -9,6 +9,7 @@ import random
 
 import pytest
 import sympy as sp
+from sympy.calculus.util import function_range
 
 from mathcheck import (
     ManualAnswer,
@@ -17,9 +18,11 @@ from mathcheck import (
     b,
     covers,
     equal,
+    h,
     k,
     limit_is,
     n,
+    numeric_spot_check,
     s,
     series_converges_to,
     symbol,
@@ -220,9 +223,19 @@ def test_exr_calc_real_numbers_sqrt3_irrational_key_claims():
     # covered only by a reviewer's note.
     with pytest.raises(ManualAnswer):
         answer("exr-calc-real-numbers-sqrt3-irrational")
-    # A non-multiple of 3 squares to a non-multiple of 3: the two expansions in the solution.
+    # Division with remainder by 3: every integer is of exactly one of the forms 3m, 3m + 1,
+    # 3m + 2, and 3 divides it exactly when it is of the form 3m.
+    for p in range(-300, 301):
+        forms = [r_ for r_ in (0, 1, 2) if (p - r_) % 3 == 0]
+        assert len(forms) == 1
+        assert (p % 3 == 0) == (forms == [0])
+    # A non-multiple of 3 squares to a non-multiple of 3: the two expansions in the solution,
+    # each of the form 3j + 1 with j an integer when m is one.
+    mi = symbol("n")  # mathcheck's integer symbol, standing in for m ∈ ℤ
     assert equal((3 * m + 1) ** 2, 3 * (3 * m**2 + 2 * m) + 1)
     assert equal((3 * m + 2) ** 2, 3 * (3 * m**2 + 4 * m + 1) + 1)
+    assert (3 * mi**2 + 2 * mi).is_integer is True and (3 * mi**2 + 4 * mi + 1).is_integer is True
+    assert all(((3 * j + r_) ** 2) % 3 == 1 for j in range(-200, 201) for r_ in (1, 2))
     # The same claim by brute force over residues: 3 | p² exactly when 3 | p.
     assert all((p * p % 3 == 0) == (p % 3 == 0) for p in range(-300, 301))
     # p = 3k in p² = 3q² gives q² = 3k².
@@ -234,13 +247,24 @@ def test_exr_calc_real_numbers_sqrt3_irrational_key_claims():
 
 @covers("exr-calc-real-numbers-supremum")
 def test_exr_calc_real_numbers_supremum():
-    # (a) The terms 1 - 1/n increase with n (their differences are positive) and tend to their
-    # limit, so the supremum of the set is that limit.
+    # (a) The terms 1 - 1/n increase with n (their differences are positive).
     term = 1 - 1 / n
     assert equal(sp.simplify(term.subs(n, n + 1) - term), 1 / (n * (n + 1)))
     assert all(term.subs(n, j + 1) > term.subs(n, j) for j in range(1, 200))
-    sup_a = sp.limit(term, n, oo)
-    assert limit_is(1 - 1 / x, x, oo, sup_a)
+    # The candidate: the supremum of 1 - 1/x over the reals x ≥ 1, from SymPy's function_range.
+    # The integer points have the same supremum, since 1 - 1/x is increasing and every real
+    # x ≥ 1 lies below an integer.
+    sup_a = function_range(1 - 1 / x, x, sp.Interval(1, oo)).sup
+    # Condition 1 (upper bound): sup_a - (1 - 1/n) is 1/n, positive for every integer n ≥ 1.
+    npos = sp.Symbol("npos", integer=True, positive=True)
+    gap = sp.simplify(sup_a - term.subs(n, npos))
+    assert equal(gap, 1 / npos) and gap.is_positive is True
+    # Condition 2 (least): for every eps > 0, every x = 1/eps + w (w > 0) has gap 1/x < eps, so
+    # any integer n > 1/eps (the Archimedean property) gives an element above sup_a - eps; and
+    # the gap tends to 0.
+    eps, w_ = sp.Symbol("eps", positive=True), sp.Symbol("w_", positive=True)
+    assert sp.simplify(eps - 1 / (1 / eps + w_)).is_positive is True
+    assert limit_is(sup_a - (1 - 1 / x), x, oo, 0)
     # (b) The set {x ∈ ℝ : x² < 2} from its condition.
     T = solve(x**2 < 2)
     sup_b = T.sup
@@ -250,7 +274,7 @@ def test_exr_calc_real_numbers_supremum():
     rng = random.Random(0)
     for _ in range(200):
         u_ = sp.Rational(rng.randint(-10**6, 10**6 - 1), 10**6)
-        n_ = sp.floor(1 / (1 - u_)) + 1
+        n_ = sp.floor(1 / (sup_a - u_)) + 1
         assert n_ >= 1 and 1 - sp.Rational(1, n_) > u_
     # (b) the supremum is not in T; for 0 ≤ u < √2, x = (u + √2)/2 lies in T and exceeds u.
     assert equal(contains(T, sup_b), sp.false)
@@ -258,6 +282,18 @@ def test_exr_calc_real_numbers_supremum():
         u_ = sp.Rational(rng.randint(0, 14142), 10**4)
         xv = (u_ + sp.sqrt(2)) / 2
         assert (u_ < xv) is sp.true and equal(contains(T, xv), sp.true)
+        # The strict chain x² < √2·x < 2, at this x.
+        assert (xv**2 < sp.sqrt(2) * xv) is sp.true and (sp.sqrt(2) * xv < 2) is sp.true
+    # The two chains for every x, not only the sampled ones: x ≥ √2 gives x² ≥ √2·x ≥ 2, and
+    # 0 < x < √2 gives x² < √2·x < 2 (each solution set is the whole range of x).
+    above = sp.Interval(sp.sqrt(2), oo)
+    assert equal(sp.solveset(x**2 >= sp.sqrt(2) * x, x, above), above)
+    assert equal(sp.solveset(sp.sqrt(2) * x >= 2, x, above), above)
+    between = sp.Interval.open(0, sp.sqrt(2))
+    assert equal(sp.solveset(x**2 < sp.sqrt(2) * x, x, between), between)
+    assert equal(sp.solveset(sp.sqrt(2) * x < 2, x, between), between)
+    # The chain needs x > 0: at x = 0 the first inequality is an equality.
+    assert equal(contains(sp.solveset(x**2 < sp.sqrt(2) * x, x, R), 0), sp.false)
 
 
 @covers("exr-calc-real-numbers-rational-between")
@@ -279,9 +315,21 @@ def test_exr_calc_real_numbers_rational_between_key_claims():
         pairs.append((lo, lo + sp.Rational(rng.randint(1, 1000), 10**rng.randint(1, 6))))
     for av, bv in pairs:
         n_ = sp.floor(1 / (bv - av)) + 1
-        m_ = sp.floor(n_ * av) + 1
-        assert n_ * bv - n_ * av > 1
-        assert n_ * av < m_ <= n_ * av + 1 < n_ * bv
+        assert n_ >= 1 and n_ * bv - n_ * av > 1
+        na = n_ * av
+        # A = {integers j > na}. Its least element, found by walking up from below na.
+        j = sp.floor(na) - 3
+        while not (j > na):
+            j += 1
+        m_ = j
+        # The solution's shift: an integer k ≥ 1 with k > -na makes every j + k (j ∈ A) positive.
+        k_ = max(1, sp.floor(-na) + 1)
+        assert k_ >= 1 and k_ > -na
+        for jj in range(m_, m_ + 5):  # the elements of A start at m_
+            assert jj + k_ > na + k_ > 0
+        # m_ is the least element of A: m_ ∈ A, m_ - 1 ∉ A.
+        assert m_ > na and not (m_ - 1 > na)
+        assert na < m_ <= na + 1 < n_ * bv
         r_ = sp.Rational(m_, n_)
         assert r_.is_rational and (av < r_) is sp.true and (r_ < bv) is sp.true
 
@@ -374,13 +422,24 @@ def test_rigorous_track_claims():
     S = solve(sp.And(x >= 0, x**2 < 2))
     assert equal(contains(S, 1), sp.true) and S.sup <= 2
     assert equal(S.sup, sp.sqrt(2))
-    # Case s² < 2: h = (2 - s²)/(2s + 2) gives s² + h(2s + 2) = 2, and 0 < h < 1 on 1 ≤ s < √2.
+    # Case s² < 2: h = (2 - s²)/(2s + 2) gives s² + h(2s + 2) = 2.
     h1 = (2 - s**2) / (2 * s + 2)
     assert equal(s**2 + h1 * (2 * s + 2), 2)
     assert equal((s + h1) ** 2, s**2 + 2 * s * h1 + h1**2)
-    hs = sp.Interval.Ropen(1, sp.sqrt(2))
-    assert sp.maximum(h1, s, hs) < 1 and sp.minimum(h1, s, hs) >= 0
-    assert equal(contains(sp.solveset(h1 > 0, s, hs), 1), sp.true)
+    # The case is 1 ≤ s (as 1 ∈ S) and s² < 2. On all of it, each link of
+    # 0 < 2 - s² < 2 < 2s + 2 holds, and so do h > 0 and h < 1: each solution set is the case.
+    case = solve(sp.And(s >= 1, s**2 < 2), s)
+    assert equal(case, sp.Interval.Ropen(1, sp.sqrt(2)))
+    for claim in (0 < 2 - s**2, 2 - s**2 < 2, 2 < 2 * s + 2, h1 > 0, h1 < 1):
+        assert equal(sp.solveset(claim, s, case), case)
+    # 0 < h < 1 gives h² < h, and then (s + h)² = s² + 2sh + h² < s² + h(2s + 2): the difference
+    # is 2h - h², positive on 0 < h < 1 (it exceeds h, by h² < h).
+    hh = sp.Interval.open(0, 1)
+    assert equal(sp.solveset(h**2 < h, h, hh), hh)
+    assert equal(s**2 + h * (2 * s + 2) - (s + h) ** 2, 2 * h - h**2)
+    assert equal(sp.solveset(2 * h - h**2 > h, h, hh), hh)
+    # s ≥ 1 is needed for h < 1: at s = 0, h = 1.
+    assert equal(h1.subs(s, 0), 1)
     # Case s² > 2: h = (s² - 2)/(2s) gives s - h = (s² + 2)/(2s) and (s - h)² = 2 + h².
     h2 = (s**2 - 2) / (2 * s)
     assert equal(s - h2, (s**2 + 2) / (2 * s))
@@ -395,3 +454,89 @@ def test_rigorous_track_claims():
         else:
             v_ = u_ - h2.subs(s, u_)
             assert v_.is_rational and 0 < v_ < u_ and v_**2 > 2
+
+
+def test_rem_square_roots_rigorous_track():
+    # rem-calc-square-roots and its dropdown "Completeness gives every square root".
+    # The examples in the remark: √9 = 3 (and (-3)² = 9 too), √0 = 0, √2 = 1.41421…, and a
+    # negative number has no real square root (x² = y has no real solution for y < 0).
+    assert equal(sp.sqrt(9), 3) and equal((-3) ** 2, 9) and equal(sp.sqrt(0), 0)
+    assert sp.floor(sp.sqrt(2) * 10**5) == 141421
+    for yv in (-1, -sp.Rational(1, 100), -7):
+        assert equal(sp.solveset(sp.Eq(x**2, yv), x, R), sp.S.EmptySet)
+    p0 = sp.Symbol("p0", nonnegative=True)
+    d = sp.Symbol("d", positive=True)
+    d0 = sp.Symbol("d0", nonnegative=True)
+    e = sp.Symbol("e", positive=True)
+
+    # Uniqueness: 0 ≤ s < t gives s² ≤ st < t². Write s = p0 ≥ 0 and t = p0 + d with d > 0.
+    tt = p0 + d
+    assert equal(p0 * tt - p0**2, p0 * d) and (p0 * d).is_nonnegative is True
+    assert equal(tt**2 - p0 * tt, tt * d) and (tt * d).is_positive is True
+    # "In the same way", 0 ≤ s ≤ t gives s² ≤ t² (t = p0 + d0, d0 ≥ 0).
+    assert equal((p0 + d0) ** 2 - p0**2, d0 * (2 * p0 + d0)) and (d0 * (2 * p0 + d0)).is_nonnegative is True
+    # Hence two non-negative numbers with the same square are equal (q0 = 0 forces x = 0).
+    q0 = sp.Symbol("q0", positive=True)
+    assert equal(sp.solveset(sp.Eq(x**2, 0), x, sp.Interval(0, oo)), sp.FiniteSet(0))
+    assert equal(sp.solveset(sp.Eq(x**2, q0**2), x, sp.Interval(0, oo)), sp.FiniteSet(q0))
+
+    # S_y = {x ≥ 0 : x² < y} is bounded above by 1 + y: if x = 1 + y + d0 (y ≥ 0), then
+    # x² - x = x(x - 1) ≥ 0 and x - y = 1 + d0 > 0.
+    y0 = sp.Symbol("y0", nonnegative=True)
+    xb = 1 + y0 + d0
+    assert equal(xb**2 - xb, xb * (y0 + d0)) and (xb * (y0 + d0)).is_nonnegative is True
+    assert equal(xb - y0, 1 + d0) and (1 + d0).is_positive is True
+    # For y = 0 the set is empty (so completeness gives nothing there; the sketch takes s = 0).
+    assert equal(solve(sp.And(x >= 0, x**2 < 0)), sp.S.EmptySet)
+
+    # Case s² < y: write y = s² + e with e > 0 (s = p0 ≥ 0), and h_b = e/(2s + 1).
+    hb = e / (2 * p0 + 1)
+    assert hb.is_positive is True
+    # With h = h_b (the smaller one), s² + h(2s + 1) = y exactly.
+    assert equal(p0**2 + hb * (2 * p0 + 1), p0**2 + e)
+    # (s + h)² = s² + h(2s + 1) - h(1 - h), and h(1 - h) > 0 on 0 < h < 1.
+    assert equal((p0 + h) ** 2, p0**2 + h * (2 * p0 + 1) - h * (1 - h))
+    assert equal(sp.solveset(h * (1 - h) > 0, h, sp.Interval.open(0, 1)), sp.Interval.open(0, 1))
+    # The ½ is needed: at s = 0, y = 4, (y - s²)/(2s + 1) = 4 and (0 + 4)² = 16 > 4.
+    assert equal(hb.subs({p0: 0, e: 4}), 4) and equal((0 + hb.subs({p0: 0, e: 4})) ** 2, 16)
+
+    # Case s² > y: then s > 0; write y = s² - e (e > 0, s = sp_ > 0), h = (s² - y)/(2s).
+    sp_ = sp.Symbol("sp_", positive=True)
+    yv = sp_**2 - e
+    h2 = (sp_**2 - yv) / (2 * sp_)
+    assert h2.is_positive is True
+    assert equal(sp_ - h2, (sp_**2 + yv) / (2 * sp_))
+    assert equal((sp_ - h2) ** 2, yv + h2**2)
+    assert equal(sp_ - (sp_ - h2), h2)  # s - h < s, by h > 0
+    # s - h > 0 needs y ≥ 0: (s² + y)/(2s) with y = s² - e ≥ 0.
+    assert equal(sp_ - h2, sp_ - e / (2 * sp_))
+
+    # Exact-rational sampling over many (s, y): every choice of the sketch does what it claims.
+    rng = random.Random(3)
+    lo_cases = hi_cases = 0
+    for _ in range(3000):
+        yq = sp.Rational(rng.randint(1, 10**4), rng.randint(1, 10**3))  # y > 0
+        sq = sp.Rational(rng.randint(0, 10**4), rng.randint(1, 10**3))  # s ≥ 0
+        assert (1 + yq) ** 2 > yq and 1 + yq >= 1  # the bound 1 + y is not in S_y
+        if sq**2 < yq:
+            lo_cases += 1
+            hq = min(sp.Rational(1, 2), (yq - sq**2) / (2 * sq + 1))
+            assert 0 < hq < 1 and hq**2 < hq
+            assert (sq + hq) ** 2 < sq**2 + hq * (2 * sq + 1) <= yq
+            assert sq + hq > sq and sq + hq >= 0  # s + h ∈ S_y, above s
+        elif sq**2 > yq:
+            hi_cases += 1
+            assert sq > 0
+            hq = (sq**2 - yq) / (2 * sq)
+            assert hq > 0 and sq - hq == (sq**2 + yq) / (2 * sq) and sq - hq > 0
+            assert (sq - hq) ** 2 == yq + hq**2 and (sq - hq) ** 2 > yq
+            # Elements of S_y lie below s - h (sampled x ≥ 0 with x² < y).
+            for _ in range(5):
+                xq = sp.Rational(rng.randint(0, 10**4), rng.randint(1, 10**3))
+                if xq**2 < yq:
+                    assert xq < sq - hq
+    assert lo_cases > 500 and hi_cases > 500
+    # And the conclusion: SymPy's sup of S_y squares to y.
+    for yq in (sp.Rational(1, 9), sp.Rational(7, 3), sp.Integer(2), sp.Integer(10), sp.Rational(10**4, 3)):
+        S_y = solve(sp.And(x >= 0, x**2 < yq))
+        assert equal(S_y.sup**2, yq) and S_y.sup <= 1 + yq
