@@ -8,7 +8,7 @@ tags: [preliminaries, inequalities]
 maths:
   kind: topic
   subject: calc
-  status: draft
+  status: reviewed
   level: core
   difficulty: 2
   est_minutes: 25
@@ -19,7 +19,9 @@ maths:
     - Apply the triangle inequality.
   verify: verify/calculus/preliminaries/test_absolute_value_and_inequalities.py
   widgets: []
-  reviewed_by: []
+  reviewed_by: [vronnblom]
+  manual_checked:
+    exr-calc-absolute-value-inequalities-close-points: vronnblom
   sources: []
 ---
 
