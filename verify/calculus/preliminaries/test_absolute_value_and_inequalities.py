@@ -18,6 +18,7 @@ import random
 
 import pytest
 import sympy as sp
+from sympy.sets.setexpr import SetExpr
 
 from mathcheck import ManualAnswer, a, answer, answer_type, covers, equal, numeric_spot_check, x, y, z
 
@@ -113,6 +114,62 @@ def test_absolute_value_definition_and_remark():
     assert equal(sp.Abs(x) ** 2, x**2) and equal(sp.sqrt(x**2), sp.Abs(x))
 
 
+def test_remark_property_6():
+    # For u, v >= 0: u < v iff u^2 < v^2, and u = v iff u^2 = v^2. Both relations are unchanged when
+    # u and v are scaled by the same c > 0 (asserted), so v = 1 and v = 0 decide them for every
+    # v >= 0, and solveset decides each over every u in [0, oo).
+    p, q = sp.symbols("p q", real=True)
+    assert equal((c * p) ** 2 - (c * q) ** 2, c**2 * (p**2 - q**2)) and (c**2).is_positive
+    assert equal(c * p - c * q, c * (p - q))
+    nonneg = sp.Interval(0, oo)
+    for vv in (sp.Integer(1), sp.Integer(0)):
+        assert equal(sp.solveset(x < vv, x, nonneg), sp.solveset(x**2 < vv**2, x, nonneg))
+        assert equal(sp.solveset(sp.Eq(x, vv), x, nonneg), sp.solveset(sp.Eq(x**2, vv**2), x, nonneg))
+    assert equal(sp.solveset(x < 1, x, nonneg), sp.Interval.Ropen(0, 1))
+    # The fact cited from the proof of rem-calc-square-roots: 0 <= s < t implies s^2 < t^2
+    # (t^2 - s^2 = (t - s)(t + s) with t - s > 0 and t + s > 0).
+    sv, gap = sp.Symbol("sv", nonnegative=True), sp.Symbol("gap", positive=True)
+    assert ((sv + gap) ** 2 - sv**2).expand().is_positive
+    # The hypothesis u, v >= 0 is needed: -2 < 1 but (-2)^2 > 1^2, and (-1)^2 = 1^2 with -1 != 1.
+    assert not holds([x**2 < 1], -2) and holds([x < 1], -2)
+    assert equal((-1) ** 2, 1**2) and not equal(-1, 1)
+    # Exact random spot check.
+    rng = random.Random(2)
+    for _ in range(300):
+        uv, vv = (sp.Rational(rng.randint(0, 400), rng.randint(1, 20)) for _ in range(2))
+        assert (uv < vv) == (uv**2 < vv**2) and (uv == vv) == (uv**2 == vv**2)
+
+
+def test_order_toolkit():
+    # The order rules of "Working with inequalities", each with its gaps written as positive (or
+    # non-negative) symbols, so SymPy's assumptions decide the sign of the conclusion.
+    u0, s0, cc = sp.symbols("u0 s0 cc", real=True)
+    pos, pos2 = sp.symbols("pos pos2", positive=True)
+    nn, nn2 = sp.symbols("nn nn2", nonnegative=True)
+    # Transitivity, mixed: u <= v < w (v = u + nn, w = v + pos) gives w - u > 0.
+    assert ((u0 + nn + pos) - u0).is_positive
+    # Adding the same number: (v + c) - (u + c) = v - u.
+    assert equal(((u0 + pos) + cc) - (u0 + cc), pos)
+    # Adding two inequalities: u <= v and s <= t give a non-negative gap, positive if one is strict.
+    assert ((u0 + nn) + (s0 + nn2) - (u0 + s0)).is_nonnegative
+    assert ((u0 + pos) + (s0 + nn2) - (u0 + s0)).is_positive
+    # Multiplying u < v by c > 0 keeps it, by c < 0 reverses it; by c >= 0 only u <= v survives.
+    assert (pos2 * (u0 + pos) - pos2 * u0).expand().is_positive
+    assert ((-pos2) * (u0 + pos) - (-pos2) * u0).expand().is_negative
+    assert (nn2 * (u0 + nn) - nn2 * u0).expand().is_nonnegative
+    # ... and only <=: c = 0 makes both sides 0, so 1 < 2 gives 0 * 1 = 0 * 2.
+    assert equal(0 * 1, 0 * 2)
+    # The page's example of a <= form: u <= v and c < 0 give cu >= cv.
+    assert ((-pos2) * (u0 + nn) - (-pos2) * u0).expand().is_nonpositive
+    # Signs of a product and a quotient of two non-zero numbers.
+    assert (pos * pos2).is_positive and ((-pos) * (-pos2)).is_positive and (pos * (-pos2)).is_negative
+    assert (pos / pos2).is_positive and ((-pos) / (-pos2)).is_positive and (pos / (-pos2)).is_negative
+    # Trichotomy: exactly one of u < v, u = v, u > v, at exact points either side of and at v = 0.
+    for uv in (sp.Integer(-1), sp.Integer(0), sp.Integer(1)):
+        assert [uv < 0, uv == 0, uv > 0].count(True) == 1
+        assert (not (uv <= 0)) == (uv > 0) and (not (uv < 0)) == (uv >= 0)
+
+
 def test_prop_abs_interval():
     # (a)-(d) against solveset for a grid of centres a and half-widths delta, including delta = 0
     # and delta < 0 (the rigorous track says the proposition holds for every real delta).
@@ -135,6 +192,40 @@ def test_prop_abs_interval():
     # The proof's key step: the larger of y and -y is < delta iff both are, for y on either side of 0.
     for dv in (-1, 0, 2):
         assert equal(solve(sp.Max(x, -x) < dv), solve(x < dv, -x < dv))
+
+
+def test_prop_abs_interval_part_e():
+    # (e) 0 < |x - a| < delta iff a - delta < x < a or a < x < a + delta, for every real delta.
+    # The right-hand side is solved from the statement, not built from intervals.
+    for av in (sp.Integer(-3), sp.Integer(0), sp.Rational(5, 2), sp.Rational(-7, 3)):
+        for dv in (sp.Integer(-2), sp.Integer(0), sp.Rational(1, 100), sp.Rational(1, 10), sp.Integer(1), sp.Integer(4)):
+            lhs = (0 < sp.Abs(x - av), sp.Abs(x - av) < dv)
+            rhs = sp.Union(solve(av - dv < x, x < av), solve(av < x, x < av + dv))
+            assert equal(solve(*lhs), rhs), (av, dv)
+            if dv > 0:
+                # "In particular": the punctured neighbourhood, (a - delta, a + delta) without a.
+                punctured = sp.Union(sp.Interval.open(av - dv, av), sp.Interval.open(av, av + dv))
+                assert equal(punctured, sp.Interval.open(av - dv, av + dv) - sp.FiniteSet(av))
+                assert check_solution_set(punctured, *lhs), (av, dv)
+                # Exact points: the centre and both ends are out, just inside is in, just outside is out.
+                h = dv / 1000
+                for xv, inside in ((av, False), (av - dv, False), (av + dv, False),
+                                   (av - h, True), (av + h, True), (av - dv + h, True), (av + dv - h, True),
+                                   (av - dv - h, False), (av + dv + h, False)):
+                    assert holds(lhs, xv) == inside and bool(punctured.contains(xv)) == inside, (av, dv, xv)
+            else:
+                # Rigorous track: for delta <= 0 both sides are false for every x.
+                assert equal(solve(*lhs), sp.S.EmptySet) and equal(rhs, sp.S.EmptySet), (av, dv)
+                for xv in (av, av - 1, av + 1, av - dv, av + dv):
+                    assert not holds(lhs, xv)
+    # The proof: 0 < |x - a| iff x != a (property 1), then (a), then trichotomy splits x != a.
+    for av in (sp.Integer(-3), sp.Rational(5, 2)):
+        assert equal(solve(0 < sp.Abs(x - av)), R - sp.FiniteSet(av))
+        assert equal(solve(x < av), sp.Interval.open(-oo, av)) and equal(solve(x > av), sp.Interval.open(av, oo))
+        assert equal(sp.Union(solve(x < av), solve(x > av)), R - sp.FiniteSet(av))
+        dv = sp.Integer(1)
+        assert equal(solve(0 < sp.Abs(x - av), sp.Abs(x - av) < dv),
+                     sp.Intersection(solve(av - dv < x, x < av + dv), R - sp.FiniteSet(av)))
 
 
 def test_thm_triangle_inequality():
@@ -275,19 +366,15 @@ def test_eg_calc_absolute_value_inequalities_abs_greater():
 def test_eg_calc_absolute_value_inequalities_punctured():
     tenth = sp.Rational(1, 10)
     conditions = (0 < sp.Abs(x - 2), sp.Abs(x - 2) < tenth)
-    # Step 1: |x - 2| < 0.1 iff 1.9 < x < 2.1.
-    assert equal(solve(conditions[1]), sp.Interval.open(sp.Rational(19, 10), sp.Rational(21, 10)))
-    # Step 2: 0 < |x - 2| iff x != 2.
-    assert equal(solve(conditions[0]), R - sp.FiniteSet(2))
-    # Step 3 and boxed: (1.9, 2) U (2, 2.1).
+    # Step 1: proposition (e) with a = 2, delta = 0.1: a - delta = 1.9, a + delta = 2.1, and the
+    # conditions are 1.9 < x < 2 or 2 < x < 2.1 (test_prop_abs_interval_part_e checks (e) itself).
+    assert equal(2 - tenth, sp.Rational(19, 10)) and equal(2 + tenth, sp.Rational(21, 10))
+    assert equal(solve(*conditions),
+                 sp.Union(solve(sp.Rational(19, 10) < x, x < 2), solve(2 < x, x < sp.Rational(21, 10))))
+    # Step 2 and boxed: (1.9, 2) U (2, 2.1), the interval (1.9, 2.1) with its centre 2 removed.
     boxed = sp.Union(sp.Interval.open(sp.Rational(19, 10), 2), sp.Interval.open(2, sp.Rational(21, 10)))
     assert equal(boxed, sp.Interval.open(sp.Rational(19, 10), sp.Rational(21, 10)) - sp.FiniteSet(2))
     assert check_solution_set(boxed, *conditions)
-    # In general, for delta > 0: 0 < |x - a| < delta iff x in (a - delta, a) U (a, a + delta).
-    for av in (sp.Integer(-1), sp.Integer(0), sp.Rational(7, 3)):
-        for dv in (sp.Rational(1, 100), sp.Integer(1), sp.Integer(5)):
-            punctured = sp.Union(sp.Interval.open(av - dv, av), sp.Interval.open(av, av + dv))
-            assert check_solution_set(punctured, 0 < sp.Abs(x - av), sp.Abs(x - av) < dv)
     # Check line: x = 2 gives 0, not > 0; x = 2.05 gives 0 < 0.05 < 0.1; x = 2.1 gives 0.1, not < 0.1.
     assert equal(sp.Abs(2 - 2), 0) and not holds(conditions, 2)
     assert equal(sp.Abs(sp.Rational(205, 100) - 2), sp.Rational(5, 100)) and holds(conditions, sp.Rational(205, 100))
@@ -305,11 +392,18 @@ def test_eg_calc_absolute_value_inequalities_triangle_bound():
     assert equal(solve(sp.Abs(x + 2) > sp.Abs(x - 2) + 4), sp.S.EmptySet)
     assert near.is_subset(solve(sp.Abs(x + 2) < 5)) is True
     assert equal(sp.Intersection(near, solve(sp.Abs(x + 2) >= 5)), sp.S.EmptySet)
-    # Step 3: |x^2 - 4| = |(x - 2)(x + 2)| = |x - 2||x + 2| <= 5|x - 2| when |x - 2| < 1.
+    # Step 3: |x^2 - 4| = |(x - 2)(x + 2)| = |x - 2||x + 2|.
     assert equal(sp.factor(x**2 - 4), (x - 2) * (x + 2))
     assert equal(sp.Abs((x - 2) * (x + 2)), sp.Abs(x - 2) * sp.Abs(x + 2))
     assert numeric_spot_check(sp.Abs(x**2 - 4), sp.Abs(x - 2) * sp.Abs(x + 2), x, (-10, 10))
+    # Step 4: |x - 2| >= 0 for every x, and it is 0 exactly at x = 2, which lies in the window.
+    assert equal(solve(sp.Abs(x - 2) < 0), sp.S.EmptySet)
+    assert equal(solve(sp.Eq(sp.Abs(x - 2), 0)), sp.FiniteSet(2)) and near.contains(2) is sp.true
+    # So |x^2 - 4| <= 5|x - 2| on the window, with equality at x = 2 (both sides 0) ...
     assert equal(sp.Intersection(near, solve(sp.Abs(x**2 - 4) > 5 * sp.Abs(x - 2))), sp.S.EmptySet)
+    assert equal(sp.Abs(2**2 - 4), 0) and equal(5 * sp.Abs(2 - 2), 0)
+    # ... and only <=: the strict inequality fails on the window exactly at x = 2.
+    assert equal(sp.Intersection(near, solve(sp.Abs(x**2 - 4) >= 5 * sp.Abs(x - 2))), sp.FiniteSet(2))
     # Check line: x = 2.9: |4.9| = 4.9 < 5, and |2.9^2 - 4| = 4.41 <= 5 * 0.9 = 4.5.
     xv = sp.Rational(29, 10)
     assert near.contains(xv) is sp.true
@@ -419,13 +513,28 @@ def test_exr_calc_absolute_value_inequalities_close_points():
     assert answer_type("exr-calc-absolute-value-inequalities-close-points") == "manual"
     with pytest.raises(ManualAnswer):
         answer("exr-calc-absolute-value-inequalities-close-points")
-    # Triangle inequality (b) with z = a, and |a - y| = |y - a|.
+    # The solution's chain: triangle inequality (b) with z = a, |a - y| = |y - a| (property 2),
+    # and delta/2 + delta/2 = delta.
+    d = sp.Symbol("d", real=True)
     assert equal((x - a) + (a - y), x - y) and equal(sp.Abs(a - y), sp.Abs(y - a))
-    # The claim itself, reduced to u = x - a, v = y - a and (by scaling) delta = 2: if |u| < 1
-    # and |v| < 1 then |u - v| < 2. For each v, no u in (-1, 1) violates it; plus random exact points.
-    u = sp.Symbol("u", real=True)
-    for v in [sp.Rational(k, 16) for k in range(-15, 16)]:
-        assert sp.solveset(sp.Abs(u - v) >= 2, u, sp.Interval.open(-1, 1)) is sp.S.EmptySet
+    assert equal(d / 2 + d / 2, d)
+    # The claim for delta > 0, decided for all real a, x, y. With u = x - a, v = y - a (so
+    # u - v = x - y) and scaling by 2/delta > 0 (|c w| = c|w|), it says: if |u| < 1 and |v| < 1 then
+    # |u - v| < 2. The hypotheses say u, v lie in (-1, 1), independently, so u - v ranges over
+    # the interval difference (-1, 1) - (-1, 1), which SymPy computes exactly; no w in it has
+    # |w| >= 2.
+    assert equal((x - a) - (y - a), x - y) and equal(sp.Abs(c * (x - y)), c * sp.Abs(x - y))
+    assert equal(solve(sp.Abs(x) < 1), sp.Interval.open(-1, 1))
+    differences = (SetExpr(sp.Interval.open(-1, 1)) - SetExpr(sp.Interval.open(-1, 1))).set
+    assert equal(differences, sp.Interval.open(-2, 2))
+    assert equal(sp.Intersection(differences, solve(sp.Abs(x) >= 2)), sp.S.EmptySet)
+    # The vacuous case: for delta <= 0 no x satisfies |x - a| < delta/2, as |x - a| >= 0 >= delta/2.
+    d_nonpos = sp.Symbol("d_nonpos", nonpositive=True)
+    assert (sp.Abs(x - a) - d_nonpos / 2).is_nonnegative
+    for av in (sp.Integer(-2), sp.Rational(1, 3)):
+        for dv in (sp.Integer(0), sp.Integer(-1), sp.Rational(-7, 2)):
+            assert equal(solve(sp.Abs(x - av) < dv / 2), sp.S.EmptySet)
+    # Random exact points, for delta > 0.
     rng = random.Random(1)
     for _ in range(500):
         av = sp.Rational(rng.randint(-1000, 1000), 10)
@@ -448,6 +557,18 @@ def test_exr_calc_absolute_value_inequalities_largest_delta():
     assert sp.Interval.open(2 - printed, 2 + printed).is_subset(good) is True
     for extra in (sp.Rational(1, 10**9), sp.Rational(1, 1000), sp.Rational(1, 10)):
         assert sp.Interval.open(2 - printed - extra, 2 + printed + extra).is_subset(good) is False
-    # The solution's comparison: sqrt(5) - 2 < 2 - sqrt(3), via (sqrt 5 + sqrt 3)^2 = 8 + 2 sqrt 15 < 16.
+    # The solution's first step: |x^2 - 4| < 1 iff 3 < x^2 < 5, and for x > 0 iff sqrt 3 < x < sqrt 5.
+    assert equal(good, solve(3 < x**2, x**2 < 5))
+    assert equal(solve(3 < x**2, x**2 < 5, x > 0), sp.Interval.open(sp.sqrt(3), sp.sqrt(5)))
+    assert equal(component, sp.Interval.open(sp.sqrt(3), sp.sqrt(5)))
+    # The comparison: sqrt(5) - 2 < 2 - sqrt(3) iff sqrt 5 + sqrt 3 < 4, via sqrt 15 < 4 and
+    # (sqrt 5 + sqrt 3)^2 = 8 + 2 sqrt 15 < 16 (sqrt 5 sqrt 3 = sqrt 15: both are >= 0 and square to 15).
+    assert equal((2 - sp.sqrt(3)) - (sp.sqrt(5) - 2), 4 - (sp.sqrt(5) + sp.sqrt(3)))
+    assert equal((sp.sqrt(5) * sp.sqrt(3)) ** 2, 15) and equal(sp.sqrt(5) * sp.sqrt(3), sp.sqrt(15))
+    assert sp.sqrt(15) < 4 and equal(sp.Integer(4) ** 2, 16)
     assert equal(sp.expand((sp.sqrt(5) + sp.sqrt(3)) ** 2), 8 + 2 * sp.sqrt(15))
+    assert 8 + 2 * sp.sqrt(15) < 16
     assert sp.sqrt(5) - 2 < 2 - sp.sqrt(3)
+    # If delta > sqrt 5 - 2, the x in [sqrt 5, 2 + delta) are in the window but x^2 >= 5.
+    assert equal(solve(x >= sp.sqrt(5), x**2 < 5), sp.S.EmptySet)
+    assert equal(sp.Intersection(solve(x >= sp.sqrt(5)), good), sp.S.EmptySet)
