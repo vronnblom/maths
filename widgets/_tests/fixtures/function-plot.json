@@ -852,7 +852,7 @@
    ]
   },
   {
-   "source": "calculus/limits/limit-of-a-function.md:78",
+   "source": "calculus/limits/limit-of-a-function.md:90",
    "setting": "defaults",
    "f": "sin(pi/x)",
    "variable": "x",

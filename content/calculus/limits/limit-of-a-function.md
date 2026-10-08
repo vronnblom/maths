@@ -70,7 +70,19 @@ approach? What happens when you try to put $h = 0$ in the formula?
 
 The average speeds approach $10$, so the stone's speed at $t = 1$ should be $10$ metres per
 second. This page makes "approach" precise. That matters, because tables and pictures can
-mislead.
+mislead. The next figure, one worked example and one exercise use the sine function, and only
+the facts about it in the box below.
+
+:::{admonition} Facts from school used on this page
+With $t$ in radians:
+
+- $\sin(k\pi) = 0$ for every integer $k$;
+- $\sin\bigl(\frac{\pi}{2} + 2k\pi\bigr) = 1$ for every integer $k$;
+- $-1 \le \sin t \le 1$ for every real number $t$.
+
+These are the only facts about $\sin$ that this page uses. The page Trigonometric Functions, in
+the Preliminaries chapter, defines $\sin$ and proves them.
+:::
 
 ::::{figure}
 :label: wdg-calc-limit-misleading-table
@@ -85,9 +97,9 @@ mislead.
 }
 ```
 
-Graph of $y = \sin(\pi / x)$ for $-1 \le x \le 1$, $x \ne 0$. Near $x = 0$ the graph swings
-between $-1$ and $1$ faster and faster, too fast to draw: the plotted curve joins finitely many
-computed points, so close to $0$ it is a jumble of lines that misses most of the swings, with
+Graph of $y = \sin(\pi / x)$ for $-1 \le x \le 1$, $x \ne 0$. It stays between $-1$ and $1$.
+Near $x = 0$ it rises to height $1$ and falls back through $0$ again and again, faster and
+faster, too fast to draw: the plotted curve joins finitely many computed points, so close to $0$ it is a jumble of lines that misses most of the swings, with
 even a short flat piece at height $0$, an artefact of the drawing. A table lists the values at
 $x = 0.1, 0.01, 0.001$, where the exact values are $\sin(10\pi) = \sin(100\pi) = \sin(1000\pi) = 0$ (the
 computer shows tiny numbers such as $-1.2 \times 10^{-15}$ instead, because it rounds
@@ -109,7 +121,9 @@ them. With it, we will show that the average speeds really do approach $10$
 :class: looking-ahead
 The number that the average speeds approach is the stone's *instantaneous* speed. The
 Derivatives chapter turns this idea into the derivative, starting from the page Tangent Lines
-and Rates of Change.
+and Rates of Change. Like the average speed at $h = 0$, every difference quotient that defines
+a derivative is undefined at the point where its limit is taken, which is why a limit must
+ignore that point.
 :::
 
 ## What a limit is
@@ -118,13 +132,12 @@ Informally, $\lim_{x \to a} f(x) = L$ means that $f(x)$ is as close to $L$ as we
 $x$ close enough to $a$, but not equal to $a$. "As close as we like" is a tolerance, which we
 call $\eps$, and "close enough" is a distance, which we call $\delta$.
 
-We measure closeness with distances: $\abs{f(x) - L}$ is the distance from $f(x)$ to $L$, and
-$\abs{x - a}$ the distance from $x$ to $a$.
-% TODO link: def-calc-absolute-value once vronnblom/maths#7 is merged
-The set of $x$ with $0 < \abs{x - a} < \delta$ is the interval $(a - \delta, a + \delta)$ with
-its centre $a$ removed, a *punctured neighbourhood* of $a$, as on the page Absolute Value and
-Inequalities.
-% TODO link: eg-calc-absolute-value-inequalities-punctured once vronnblom/maths#7 is merged
+We measure closeness with distances: $\abs{f(x) - L}$ is
+[the distance](#def-calc-absolute-value) from $f(x)$ to $L$, and $\abs{x - a}$ the distance
+from $x$ to $a$. The set of $x$ with $0 < \abs{x - a} < \delta$ is the
+[open interval](#def-calc-interval) $(a - \delta, a + \delta)$ with its centre $a$ removed, the
+*punctured neighbourhood* of $a$ of radius $\delta$, by
+[part (e) of the proposition on distance inequalities](#prop-calc-abs-interval).
 
 :::{proof:definition} Limit of a function
 :label: def-calc-limit
@@ -208,11 +221,12 @@ $\delta$ passed the widget's check at the points it tested, or names a point whe
 
 **Why the smaller one.** The window $0 < \abs{x - 2} < \delta$ reaches the same distance
 $\delta$ on both sides of $2$, so one $\delta$ has to work on the left and on the right at
-once. For $\eps = 0.1$, a $\delta$ larger than about $0.0248$ lets in points just to the right
-of $2.0248$, where $x^2$ is already outside the band (at $x = 2.025$, $x^2 = 4.100625$); the
-left side would tolerate up to about $0.0252$, but that does not help. So the $\delta$ for
-both sides is the smaller of the two, here the right side's, because $x^2$ grows faster to the
-right of $2$ than it falls to the left. As $\eps$ shrinks, the band narrows and so does the
+once. For $\eps = 0.1$, a $\delta$ larger than $\sqrt{4.1} - 2 \approx 0.024846$ (the widget
+found $0.0248456$) lets in points just to the right of $\sqrt{4.1}$, where $x^2$ is already
+outside the band (at $x = 2.025$, $x^2 = 4.100625$); the left side would tolerate up to
+$2 - \sqrt{3.9} \approx 0.025158$, but that does not help. So the $\delta$ for both sides is
+the smaller of the two, here the right side's, because $x^2$ grows faster to the right of $2$
+than it falls to the left. As $\eps$ shrinks, the band narrows and so does the
 window.
 
 The widget's numbers are observations: it checks finitely many points, so it cannot prove that
@@ -250,8 +264,8 @@ apart.
 :::{proof:theorem} Uniqueness of limits
 :label: thm-calc-limit-unique
 
-Let $f$ be defined on an open interval containing $a$, except possibly at $a$. If
-$\lim_{x \to a} f(x) = L$ and $\lim_{x \to a} f(x) = M$, then $L = M$.
+Let $f$ and $a$ be as in [](#def-calc-limit). If $\lim_{x \to a} f(x) = L$ and
+$\lim_{x \to a} f(x) = M$, then $L = M$.
 :::
 
 :::{proof:proof} Rigorous track
@@ -270,9 +284,11 @@ $\abs{f(x) - M} < \eps$ for every $x$ with $0 < \abs{x - a} < \delta_2$.
 
 Let $\delta = \min(\delta_1, \delta_2)$ and $x = a + \frac{\delta}{2}$. Then
 $0 < \abs{x - a} = \frac{\delta}{2} < \delta$, so $x$ lies in both windows: $f(x)$ is defined,
-and $\abs{f(x) - L} < \eps$ and $\abs{f(x) - M} < \eps$. By the triangle inequality in the
-form $\abs{u - v} \le \abs{u - w} + \abs{w - v}$, with $w = f(x)$,
-% TODO link: thm-calc-triangle-inequality once vronnblom/maths#7 is merged
+and $\abs{f(x) - L} < \eps$ and $\abs{f(x) - M} < \eps$. The first of these says also that
+$\abs{L - f(x)} < \eps$, because $\abs{L - f(x)} = \abs{f(x) - L}$ by
+[property 2 of the absolute value](#rem-calc-absolute-value-properties). By
+[part (b) of the triangle inequality](#thm-calc-triangle-inequality),
+$\abs{u - v} \le \abs{u - w} + \abs{w - v}$, with $u = L$, $v = M$ and $w = f(x)$,
 $$
 \abs{L - M} \le \abs{L - f(x)} + \abs{f(x) - M} < \eps + \eps = \abs{L - M},
 $$
@@ -281,8 +297,9 @@ that is, $\abs{L - M} < \abs{L - M}$, which is impossible. So $L = M$.
 
 Because of [](#thm-calc-limit-unique), we may speak of *the* limit of $f(x)$ as $x \to a$,
 when there is one. If there is none, we say that **the limit does not exist**. The proof used
-that the windows contain points where $f$ is defined; the rigorous track shows that without
-this, uniqueness fails.
+the requirement in [](#def-calc-limit) that $f$ be defined at every point of the window; the
+rigorous track shows that if the definition dropped its requirements on the domain of $f$,
+uniqueness would fail.
 
 ## Worked examples
 
@@ -367,8 +384,9 @@ $x < 0$: the graph jumps from height $-1$ to height $1$ at $0$.
    are $-1$ and $1$, a distance $2$ apart. No number is within $1$ of both.
 2. **Proof.** Let $L$ be any real number, and suppose that $\delta > 0$ works for $\eps = 1$.
    The points $x = \frac{\delta}{2}$ and $x = -\frac{\delta}{2}$ are in the window, so
-   $\abs{1 - L} < 1$ and $\abs{-1 - L} < 1$. By the triangle inequality,
-   % TODO link: thm-calc-triangle-inequality once vronnblom/maths#7 is merged
+   $\abs{1 - L} < 1$ and $\abs{-1 - L} < 1$, and $\abs{L - (-1)} = \abs{-1 - L}$ by
+   [property 2 of the absolute value](#rem-calc-absolute-value-properties). By
+   [part (b) of the triangle inequality](#thm-calc-triangle-inequality),
    $$
    2 = \abs{1 - (-1)} \le \abs{1 - L} + \abs{L - (-1)} < 1 + 1 = 2,
    $$
@@ -387,7 +405,9 @@ still $2$ apart. ✓ The proof never used $f(0)$, which is undefined. ✓
 :label: eg-calc-limit-sin-1-over-x
 
 Let $f(x) = \sin(1/x)$ for $x \ne 0$. As $x$ decreases to $0$, $1/x$ increases without bound,
-so $\sin(1/x)$ runs through all its values between $-1$ and $1$ again and again.
+so it passes again and again through multiples of $\pi$, where $\sin$ is $0$, and through
+numbers $\frac{\pi}{2} + 2k\pi$, where $\sin$ is $1$, by the facts from school in
+[Why this matters](#wdg-calc-limit-misleading-table).
 
 1. **Strategy.** In every window around $0$ we find a point where $\sin(1/x) = 0$ and a point
    where $\sin(1/x) = 1$. No number is within $\frac12$ of both.
@@ -398,12 +418,12 @@ so $\sin(1/x)$ runs through all its values between $-1$ and $1$ again and again.
    Then $f(p_n) = \sin(2\pi n) = 0$ and $f(q_n) = \sin\bigl(2\pi n + \frac{\pi}{2}\bigr) = 1$,
    and $0 < q_n < p_n$.
 3. **Proof.** Let $L$ be any real number, and suppose that $\delta > 0$ works for
-   $\eps = \frac12$. The natural numbers are not bounded above, so there is an integer
-   % TODO link: rem-calc-naturals-unbounded once vronnblom/maths#8 is merged
-   $n \ge 1$ with $n > \frac{1}{2\pi\delta}$. Then $2\pi n > \frac{1}{\delta}$, so
+   $\eps = \frac12$. By [the Archimedean property](#rem-calc-naturals-unbounded), there is
+   an integer $n \ge 1$ with $n > \frac{1}{2\pi\delta}$. Then $2\pi n > \frac{1}{\delta}$, so
    $0 < q_n < p_n = \frac{1}{2\pi n} < \delta$: both points are in the window. Hence
-   $\abs{0 - L} < \frac12$ and $\abs{1 - L} < \frac12$, and by the triangle inequality
-   % TODO link: thm-calc-triangle-inequality once vronnblom/maths#7 is merged
+   $\abs{0 - L} < \frac12$ and $\abs{1 - L} < \frac12$, and $\abs{L - 0} = \abs{0 - L}$ by
+   [property 2 of the absolute value](#rem-calc-absolute-value-properties). By
+   [part (b) of the triangle inequality](#thm-calc-triangle-inequality),
    $$
    1 = \abs{1 - 0} \le \abs{1 - L} + \abs{L - 0} < \tfrac12 + \tfrac12 = 1,
    $$
@@ -518,9 +538,9 @@ $\abs{x^2 - 4} < \eps$. The function $x^2$ is defined for every $x$.
 1. **Scratch work.** $\abs{x^2 - 4} = \abs{x - 2}\,\abs{x + 2}$. The first factor is the one
    that $\delta$ controls. The second, $\abs{x + 2}$, changes with $x$, so we first bound it on a
    fixed window.
-2. **Bound the other factor.** If $\abs{x - 2} < 1$, then $1 < x < 3$, by the interval form of
-   an absolute-value inequality, so $3 < x + 2 < 5$ and $\abs{x + 2} < 5$.
-   % TODO link: prop-calc-abs-interval once vronnblom/maths#7 is merged
+2. **Bound the other factor.** If $\abs{x - 2} < 1$, then $1 < x < 3$, by
+   [part (a) of the proposition on distance inequalities](#prop-calc-abs-interval), so
+   $3 < x + 2 < 5$ and $\abs{x + 2} < 5$.
 3. **Choose $\delta$.** On that window, $\abs{x^2 - 4} < 5\abs{x - 2}$, which is less than
    $\eps$ when $\abs{x - 2} < \frac{\eps}{5}$. Both conditions hold if
    $\delta = \min\bigl(1, \frac{\eps}{5}\bigr)$.
@@ -554,12 +574,15 @@ $$
 \forall \eps > 0 \ \ \exists \delta > 0 \ \ \forall x \colon \quad
 0 < \abs{x - a} < \delta \implies \bigl(x \in \dom f \text{ and } \abs{f(x) - L} < \eps\bigr).
 $$
-The order matters. "$\exists \delta > 0 \ \forall \eps > 0$" would ask for one window that
-works for every tolerance at once; for the function $x$ at $a = 0$ that is false, since every
-$\delta$ fails for $\eps = \frac{\delta}{2}$.
+Here $\dom f$ is [the domain](#def-calc-domain-range) of $f$. The order matters.
+"$\exists \delta > 0 \ \forall \eps > 0$" would ask for one window that works for every
+tolerance at once. For $f(x) = x$ at $a = 0$, with $L = 0$, that is false: for each
+$\delta > 0$, the tolerance $\eps = \frac{\delta}{2}$ fails at the point $x = \frac{3\delta}{4}$
+of the window, where $\abs{f(x) - 0} = \frac{3\delta}{4} \ge \frac{\delta}{2}$.
 
-To negate, each $\forall$ becomes $\exists$ and each $\exists$ becomes $\forall$, and the
-implication $P \implies Q$ becomes "$P$ and not $Q$". So $L$ is **not** the limit when
+To negate, each $\forall$ becomes $\exists$ and each $\exists$ becomes $\forall$, the
+implication $P \implies Q$ becomes "$P$ and not $Q$", and, by De Morgan's law,
+"not ($A$ and $B$)" becomes "(not $A$) or (not $B$)". So $L$ is **not** the limit when
 $$
 \exists \eps > 0 \ \ \forall \delta > 0 \ \ \exists x \colon \quad
 0 < \abs{x - a} < \delta \ \text{ and } \ \bigl(x \notin \dom f \text{ or } \abs{f(x) - L} \ge \eps\bigr).
@@ -573,19 +596,20 @@ point $x$ that fails.
 The condition $0 < \abs{x - a}$ removes $x = a$ from every window. Without it, the
 definition would demand $\abs{f(a) - L} < \eps$ for every $\eps > 0$, that is, $f(a) = L$, and
 it would not apply at all where $f(a)$ is undefined. Both are exactly the cases we need
-limits for: the average speed $\frac{5(1+h)^2 - 5}{h}$ is undefined at $h = 0$, and so is every
-difference quotient that will define a derivative. The definition is built to describe how
-$f$ behaves *near* $a$, which is information that $f(a)$ cannot give.
+limits for: the average speed $\frac{5(1+h)^2 - 5}{h}$ is undefined at $h = 0$. The
+definition is built to describe how $f$ behaves *near* $a$, which is information that $f(a)$
+cannot give.
 :::
 
 :::{admonition} Why $f$ must be defined near $a$
 :class: dropdown rigor
 [](#def-calc-limit) asks for $f$ to be defined on an open interval around $a$ (except
-possibly at $a$), and for the window to lie in the domain. The proof of
-[](#thm-calc-limit-unique) needs this: it picks a point $x = a + \frac{\delta}{2}$ in the window
-and uses $f(x)$.
+possibly at $a$), and, in its domain clause, for $f$ to be defined at every point of the
+window. The proof of [](#thm-calc-limit-unique) rests on that clause of the definition: it picks
+a point $x = a + \frac{\delta}{2}$ in the window and uses $f(x)$.
 
-Suppose we dropped it and only asked that "$x \in \dom f$ and $0 < \abs{x - a} < \delta$ imply
+Suppose the definition dropped both requirements, the open interval and the domain clause,
+and only asked that "$x \in \dom f$ and $0 < \abs{x - a} < \delta$ imply
 $\abs{f(x) - L} < \eps$". Take $f(x) = \sqrt{x}$ and $a = -1$. For $\delta \le 1$ no $x$ in the
 domain $[0, \infty)$ satisfies $0 < \abs{x + 1} < \delta$, so the condition holds for *every*
 $L$, and every real number would be "the limit" of $\sqrt{x}$ at $-1$. Uniqueness fails, so
@@ -616,7 +640,7 @@ At an endpoint such as $0$ for $\sqrt{x}$, our course uses one-sided limits inst
   $\abs{f(x) - L}$ in terms of $\abs{x - a}$, choose $\delta$, then check it; for a quadratic,
   cap the window first, as in $\delta = \min\bigl(1, \frac{\eps}{5}\bigr)$.
 - A limit, if it exists, is unique ([](#thm-calc-limit-unique)).
-- A limit fails to exist when one $\eps$ defeats every $\delta$ for every $L$: typically a
+- A limit fails to exist when, for every $L$, some $\eps$ defeats every $\delta$: typically a
   jump, oscillation, or unbounded values.
 - Tables, graphs and the ε–δ widget suggest limits and $\delta$s; only a proof establishes
   them.
@@ -628,7 +652,7 @@ At an endpoint such as $0$ for $\sqrt{x}$, our course uses one-sided limits inst
 :class: tier-a
 
 Use a table of values with $x = 0.1, 0.01, 0.001$ (and the negatives) to estimate
-$\displaystyle \lim_{x \to 0} \frac{2^x - 1}{x}$ to two decimal places.
+$\displaystyle \lim_{x \to 0} \frac{\sqrt{1 + x} - 1}{x}$ to two decimal places.
 
 :::{admonition} Hint 1
 :class: dropdown hint
@@ -637,7 +661,7 @@ Evaluate on both sides of $0$ with a calculator. Do the values settle as $x$ shr
 
 :::{admonition} Answer
 :class: dropdown answer numeric-5e-3
-$0.69$
+$0.50$
 :::
 ::::
 
@@ -649,17 +673,19 @@ To six decimal places:
 
 | $x$ | $0.1$ | $0.01$ | $0.001$ | $-0.001$ | $-0.01$ | $-0.1$ |
 |---|---|---|---|---|---|---|
-| $\frac{2^x - 1}{x}$ | $0.717735$ | $0.695555$ | $0.693387$ | $0.692907$ | $0.690750$ | $0.669670$ |
+| $\frac{\sqrt{1 + x} - 1}{x}$ | $0.488088$ | $0.498756$ | $0.499875$ | $0.500125$ | $0.501256$ | $0.513167$ |
 
-The values from the right decrease and those from the left increase, and at $x = \pm 0.001$
-they agree to two decimal places, $0.69$. So we estimate the limit as $0.69$. This is an
+The values from the right increase and those from the left decrease, and at $x = \pm 0.001$
+they agree to two decimal places, $0.50$. So we estimate the limit as $0.50$. This is an
 estimate, not a proof: a table checks only finitely many points
 ([Why this matters](#wdg-calc-limit-misleading-table)).
 
 :::{admonition} Looking ahead
 :class: looking-ahead
-The exact value is $\ln 2 \approx 0.693147$; it follows from the derivative of $2^x$, on the
-page Derivatives of Exponential and Logarithmic Functions.
+The exact value is $\frac12$. For $x \ne 0$ (and $x \ge -1$), multiplying the numerator and
+the denominator by $\sqrt{1 + x} + 1$ gives $\frac{1}{\sqrt{1 + x} + 1}$, which is defined at
+$x = 0$ and equals $\frac12$ there. The page Computing Limits Algebraically shows why such a
+step gives the limit; rationalising is one of its methods.
 :::
 ::::
 
@@ -748,8 +774,12 @@ $\frac{1}{100}$
 :class: dropdown
 
 For $x \ne 0$, $x^2 > 0$, so multiplying by the positive number $\frac{x^2}{10\,000}$ shows
-that $\frac{1}{x^2} > 10\,000$ exactly when $x^2 < \frac{1}{10\,000}$. Since $x^2 = \abs{x}^2$
-and squaring is increasing on $[0, \infty)$, this holds exactly when $\abs{x} < \frac{1}{100}$.
+that $\frac{1}{x^2} > 10\,000$ exactly when $x^2 < \frac{1}{10\,000}$. Now $x^2 = \abs{x}^2$, by
+[property 5 of the absolute value](#rem-calc-absolute-value-properties), and
+$\frac{1}{10\,000} = \bigl(\frac{1}{100}\bigr)^2$. Both $\abs{x}$ and $\frac{1}{100}$ are
+non-negative, so by the order part of [the square-root remark](#rem-calc-square-roots), which is
+also [property 6 of the absolute value](#rem-calc-absolute-value-properties), this holds exactly
+when $\abs{x} < \frac{1}{100}$.
 So $\delta = \frac{1}{100}$ works. A larger $\delta$ does not: its window contains
 $x = \frac{1}{100}$, where $f(x) = 10\,000$, which is not greater than $10\,000$.
 
@@ -779,7 +809,7 @@ For (c), the window must fit inside the allowed region on both sides at once.
 
 :::{admonition} Answer
 :class: dropdown answer
-(a) $\sqrt{\frac{41}{10}} - 2$ (b) $2 - \sqrt{\frac{39}{10}}$ (c) $\sqrt{\frac{41}{10}} - 2$
+(a) $\frac{\sqrt{410}}{10} - 2$ (b) $2 - \frac{\sqrt{390}}{10}$ (c) $\frac{\sqrt{410}}{10} - 2$
 :::
 ::::
 
@@ -787,29 +817,45 @@ For (c), the window must fit inside the allowed region on both sides at once.
 :label: sol-calc-limit-widget-largest-delta
 :class: dropdown
 
-By the interval form of an absolute-value inequality, $\abs{x^2 - 4} < 0.1$ means
-$3.9 < x^2 < 4.1$.
-% TODO link: prop-calc-abs-interval once vronnblom/maths#7 is merged
-For $x > 0$, squaring is increasing, so this means $\sqrt{3.9} < x < \sqrt{4.1}$. Every
-window below lies in $x > 0$.
+By [part (a) of the proposition on distance inequalities](#prop-calc-abs-interval), applied to
+$x^2$ with $a = 4$ and $\delta = 0.1$, $\abs{x^2 - 4} < 0.1$ means $3.9 < x^2 < 4.1$. For
+$x > 0$, this means $\sqrt{3.9} < x < \sqrt{4.1}$, by the order part of
+[the square-root remark](#rem-calc-square-roots): for $s, t \ge 0$, $s < t$ exactly when
+$s^2 < t^2$, and here $(\sqrt{3.9})^2 = 3.9$ and $(\sqrt{4.1})^2 = 4.1$. Every window below
+lies in $x > 0$.
 
-(a) For $x > 2$ the condition $x > \sqrt{3.9}$ holds automatically ($\sqrt{3.9} < 2$, since
-$3.9 < 4$), so we need $x < \sqrt{4.1}$ for every $x$ in $(2, 2 + \delta)$. That holds exactly
-when $2 + \delta \le \sqrt{4.1}$. The largest $\delta$ is $\sqrt{4.1} - 2 \approx 0.0248457$.
+(a) For $x > 2$ the condition $x > \sqrt{3.9}$ holds automatically ($\sqrt{3.9} < 2$, by the
+same order part, since $3.9 < 4 = 2^2$), so we need $x < \sqrt{4.1}$ for every $x$ in
+$(2, 2 + \delta)$. That holds exactly when $2 + \delta \le \sqrt{4.1}$. The largest $\delta$
+is $\sqrt{4.1} - 2 \approx 0.0248457$.
 
-(b) For $x < 2$ the condition $x < \sqrt{4.1}$ holds automatically, so we need
-$x > \sqrt{3.9}$ for every $x$ in $(2 - \delta, 2)$, that is, $2 - \delta \ge \sqrt{3.9}$. The
-largest $\delta$ is $2 - \sqrt{3.9} \approx 0.0251582$.
+(b) For $x < 2$ the condition $x < \sqrt{4.1}$ holds automatically ($2 < \sqrt{4.1}$, since
+$2^2 = 4 < 4.1$), so we need $x > \sqrt{3.9}$ for every $x$ in $(2 - \delta, 2)$, that is,
+$2 - \delta \ge \sqrt{3.9}$. The largest $\delta$ is $2 - \sqrt{3.9} \approx 0.0251582$.
 
 (c) The window works on both sides exactly when $\delta$ is at most both numbers, so the largest
 is the smaller one. To compare them without a calculator: $\sqrt{4.1} - 2 < 2 - \sqrt{3.9}$
-means $\sqrt{4.1} + \sqrt{3.9} < 4$, and
-$\bigl(\sqrt{4.1} + \sqrt{3.9}\bigr)^2 = 8 + 2\sqrt{15.99} < 8 + 2 \cdot 4 = 16$. So the
-right side's value $\sqrt{4.1} - 2$ is the smaller one, and it is the answer to (c).
+means $\sqrt{4.1} + \sqrt{3.9} < 4$. We compare squares, using the order part of
+[the square-root remark](#rem-calc-square-roots) for non-negative numbers. First,
+$\bigl(\sqrt{4.1}\,\sqrt{3.9}\bigr)^2 = 4.1 \cdot 3.9 = 15.99 < 16 = 4^2$, so
+$\sqrt{4.1}\,\sqrt{3.9} < 4$. Then
+$$
+\bigl(\sqrt{4.1} + \sqrt{3.9}\bigr)^2 = 4.1 + 2\sqrt{4.1}\,\sqrt{3.9} + 3.9
+< 8 + 2 \cdot 4 = 16 = 4^2,
+$$
+so $\sqrt{4.1} + \sqrt{3.9} < 4$. So the right side's value $\sqrt{4.1} - 2$ is the smaller
+one, and it is the answer to (c).
 
-The widget reports $0.0248456$ and $0.0251582$: the exact values rounded *down* to six
-significant digits, as the widget's method promises (it never reports more than it checked).
-In the answer, $4.1 = \frac{41}{10}$ and $3.9 = \frac{39}{10}$.
+The widget reports $0.0248456$ and $0.0251582$: here, these are the exact values rounded down to
+six significant digits. Its method promises less: the $\delta$ it reports passed at every point
+it checked and lies below every point where it saw the check fail, and it may be smaller than
+the exact value by about $10^{-5}$ of that value.
+
+In the answer, the square roots are written with whole numbers under the root:
+$\sqrt{4.1} = \frac{\sqrt{410}}{10}$, because $\frac{\sqrt{410}}{10} \ge 0$ and
+$\bigl(\frac{\sqrt{410}}{10}\bigr)^2 = \frac{410}{100} = 4.1$, and the square root is unique
+([the square-root remark](#rem-calc-square-roots)). In the same way,
+$\sqrt{3.9} = \frac{\sqrt{390}}{10}$.
 ::::
 
 ::::{exercise} The stone at $t = 2$
@@ -960,9 +1006,8 @@ For an integer $n \ge 1$ let $x_n = \frac{2}{4n + 1}$. Then $\frac{\pi}{x_n} = 2
 \frac{\pi}{2}$, so $\sin\bigl(\frac{\pi}{x_n}\bigr) = 1$. (The last three rows of the table are
 $x_n$ for $n = 6, 31, 156$.)
 
-Let $\delta > 0$. The natural numbers are not bounded above, so there is an integer $n \ge 1$
-% TODO link: rem-calc-naturals-unbounded once vronnblom/maths#8 is merged
-with $n > \frac{1}{2\delta}$. Then $4n + 1 > 4n > \frac{2}{\delta}$, so
+Let $\delta > 0$. By [the Archimedean property](#rem-calc-naturals-unbounded), there is an
+integer $n \ge 1$ with $n > \frac{1}{2\delta}$. Then $4n + 1 > 4n > \frac{2}{\delta}$, so
 $0 < x_n = \frac{2}{4n + 1} < \delta$: the point $x_n$ is in the window. There
 $\abs{\sin(\pi/x_n) - 0} = 1 \ge \frac12$. So every window contains a point that fails, no
 $\delta$ works for $\eps = \frac12$, and $\lim_{x \to 0} \sin(\pi/x) \ne 0$.
@@ -986,7 +1031,9 @@ $\abs{x - 3} < 1$.
 
 :::{admonition} Hint 2
 :class: dropdown hint
-If $\abs{x - 3} < 1$, then $2 < x < 4$. How large can $\abs{x + 3}$ be?
+If $\abs{x - 3} < 1$, then $2 < x < 4$, by
+[part (a) of the proposition on distance inequalities](#prop-calc-abs-interval). How large can
+$\abs{x + 3}$ be?
 :::
 
 :::{admonition} Answer
@@ -1002,7 +1049,8 @@ $\delta = \min(1, \eps/7)$ works.
 We follow [](#eg-calc-limit-quadratic-eps-delta).
 
 **Scratch work.** $\abs{x^2 - 9} = \abs{x - 3}\,\abs{x + 3}$. If $\abs{x - 3} < 1$, then
-$2 < x < 4$, so $5 < x + 3 < 7$ and $\abs{x + 3} < 7$. Then $\abs{x^2 - 9} < 7\abs{x - 3}$,
+$2 < x < 4$, by [part (a) of the proposition on distance inequalities](#prop-calc-abs-interval),
+so $5 < x + 3 < 7$ and $\abs{x + 3} < 7$. Then $\abs{x^2 - 9} < 7\abs{x - 3}$,
 which is less than $\eps$ when $\abs{x - 3} < \frac{\eps}{7}$.
 
 **Proof.** $x^2$ is defined for every $x$. Let $\eps > 0$ and
@@ -1044,13 +1092,16 @@ $\delta = \min(4, 2\eps)$ works.
 The domain of $\sqrt{x}$ is $[0, \infty)$, which contains the open interval $(0, 8)$ around
 $4$, so [](#def-calc-limit) applies.
 
-**Scratch work.** For $x \ge 0$, $(\sqrt{x} - 2)(\sqrt{x} + 2) = x - 4$, and
-$\sqrt{x} + 2 \ge 2 > 0$, so
+**Scratch work.** For $x \ge 0$, $(\sqrt{x} - 2)(\sqrt{x} + 2) = x - 4$, because
+$(\sqrt{x})^2 = x$, and $\sqrt{x} + 2 \ge 2 > 0$, because $\sqrt{x} \ge 0$
+([the square-root remark](#rem-calc-square-roots)). So, by
+[property 4 of the absolute value](#rem-calc-absolute-value-properties),
 $$
 \abs{\sqrt{x} - 2} = \frac{\abs{x - 4}}{\sqrt{x} + 2} \le \frac{\abs{x - 4}}{2}.
 $$
 This is less than $\eps$ when $\abs{x - 4} < 2\eps$. The window must also lie in the domain:
-$\abs{x - 4} < 4$ gives $0 < x < 8$.
+$\abs{x - 4} < 4$ gives $0 < x < 8$, by
+[part (a) of the proposition on distance inequalities](#prop-calc-abs-interval).
 
 **Proof.** Let $\eps > 0$ and $\delta = \min(4, 2\eps)$. If $0 < \abs{x - 4} < \delta$, then
 $0 < x < 8$, so $\sqrt{x}$ is defined, and
