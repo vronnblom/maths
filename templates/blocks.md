@@ -178,7 +178,12 @@ the facts. The box:
   admonition, so a link to one goes nowhere (found on `calc-limit`'s box after it merged);
 - names the page that proves the facts in plain text (it is outside the closure, so no link).
   That page's `curriculum.yml` entry must list each fact as a result (a `curriculum` PR, as
-  vronnblom/maths#14 did for `calc-trig-functions`), so that the promise rests on the plan.
+  vronnblom/maths#14 did for `calc-trig-functions`), so that the promise rests on the plan;
+- or, for facts proved **outside this course**, names the subject that proves them ("proved in
+  Real Analysis"), and the circularity table of `docs/plan/08-calculus-curriculum.md` §8.3 has
+  a matching row (stated early in this page, proved in that subject), so that the promise rests
+  on the plan there instead; no curriculum entry lists them (the geometry of the unit circle in
+  `calc-trig-functions` is the case in point).
 
 The verifier tests each fact, and each use as an instance of one. A function that the closure
 could replace is replaced instead: `calc-limit` swapped $(2^x - 1)/x$ for
@@ -204,6 +209,13 @@ the Preliminaries chapter, defines $\sin$ and proves them.
 ```
 
 Later uses cite it: `by [the facts from school](#rem-calc-limit-school-facts)`.
+
+For facts proved outside the course, the last paragraph of the box names the subject instead:
+
+```markdown
+These are the only facts about the unit circle that this page uses. They are proved in Real
+Analysis, from a construction of $\sin$ and $\cos$ that does not rest on them.
+```
 
 ## Steps that say what they rest on
 
@@ -304,6 +316,9 @@ For $x \ne 0$, …
 
 Answer classes (add after `dropdown answer`):
 `antiderivative` · `set` · `bool` · `numeric-<tol>` (e.g. `numeric-1e-4`) · `manual`.
+One Answer, one type: if a question needs two different types (a limit and a True/False,
+say), rephrase it so that one part is the Answer and the other is a "show that …" that the
+solution checks.
 Tier classes on the exercise: `tier-a` · `tier-b` · `tier-c`, plus optional `rigor`, `applied`, `widget`.
 
 ## Widget
