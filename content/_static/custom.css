@@ -84,3 +84,15 @@ table.maths-chapter-topics th:not(:first-child) { white-space: nowrap; }
   line-height: 1;
   text-align: right;
 }
+
+/* ── Contrast of the theme's tinted headers (WCAG AA, 4.5:1) ─────────────────────
+   In light mode the theme's success, warning, danger and example text colours on their
+   own tinted backgrounds measure 3.15, 3.07, 4.41 and 3.35 (Lighthouse, the proof:example
+   and proof:remark titles). The Tailwind 700 shades give 4.79, 4.84, 5.91 and 4.88. Dark
+   mode already passes (≥ 6.4), so only light mode is changed. */
+html:not(.dark) {
+  --myst-color-success-text: #15803d;
+  --myst-color-warning-text: #b45309;
+  --myst-color-danger-text: #b91c1c;
+  --myst-color-example-text: #c2410c;
+}
