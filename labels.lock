@@ -119,6 +119,7 @@ fig-calc-real-numbers-diagonal  calculus/preliminaries/real-numbers-and-interval
 fig-calc-real-numbers-intervals  calculus/preliminaries/real-numbers-and-intervals.md
 prf-calc-limit-unique  calculus/limits/limit-of-a-function.md
 prop-calc-abs-interval  calculus/preliminaries/absolute-value-and-inequalities.md
+prop-calc-polynomial-degree-product  calculus/preliminaries/polynomial-and-rational-functions.md
 prop-calc-rational-domain  calculus/preliminaries/polynomial-and-rational-functions.md
 prop-calc-rational-sign  calculus/preliminaries/polynomial-and-rational-functions.md
 prop-calc-sign-rules  calculus/preliminaries/polynomial-and-rational-functions.md

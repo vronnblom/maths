@@ -91,15 +91,9 @@ the terms with coefficient $0$ at the top. Could one function have two such form
 different degrees? No: [](#cor-calc-polynomial-identity) below shows that the values of a
 polynomial determine its coefficients, so its degree is well defined.
 
-When we multiply a polynomial of degree $m$, with leading term $a x^m$, by one of degree $k$,
-with leading term $b x^k$, every product of two terms has a power of $x$ at most $x^{m + k}$,
-and only the product of the leading terms reaches it. That product is $ab\, x^{m + k}$, and
-$ab \ne 0$ because a product of non-zero numbers is non-zero
-([part (b) of the sign rules](#prop-calc-sign-rules) below). So the product has degree $m + k$.
-
 **Example.** $p(x) = 3x^4 - x + 7$ has degree $4$, leading coefficient $3$ and constant term
 $7$. The polynomial $(x - 1)(x + 2) = x^2 + x - 2$ has degree $2$, and its roots are $1$ and
-${-2}$. The polynomial $x^2 - 2$ has the roots $\sqrt{2}$ and $-\sqrt{2}$, because both square
+${-2}$. The polynomial $x^2 - 2$ has the roots $\sqrt{2}$ and ${-\sqrt{2}}$, because both square
 to $2$ ([the remark on square roots](#rem-calc-square-roots)).
 
 **Non-example.** $f(x) = \dfrac{1}{x}$ is not a polynomial. Its
@@ -127,9 +121,10 @@ $\frac{p(x)}{q(x)}$ is a real number exactly when the denominator $q(x)$ is not 
 domain is $\R$ without the roots of $q$. Every polynomial $p$ is a rational function, with
 $q(x) = 1$.
 
-**Example.** $f(x) = \dfrac{x + 1}{x^2 - 4}$ is a rational function. Its denominator
-$x^2 - 4 = (x - 2)(x + 2)$ is $0$ exactly when $x = 2$ or $x = -2$
-([part (b) of the sign rules](#prop-calc-sign-rules) below), so
+**Example.** $f(x) = \dfrac{x + 1}{x^2 - 4}$ is a rational function. An exercise on
+[Functions and Their Graphs](#calc-functions) asks for its natural domain; now we can also say
+why the denominator is $0$ only at $\pm 2$. It is $x^2 - 4 = (x - 2)(x + 2)$, which is $0$
+exactly when $x = 2$ or $x = -2$ ([part (a) of the sign rules](#prop-calc-sign-rules) below), so
 $\dom f = (-\infty, -2) \cup (-2, 2) \cup (2, \infty)$.
 
 **Non-example.** $g(x) = \dfrac{\sqrt{x}}{x + 1}$ is not a rational function. Its natural domain
@@ -141,79 +136,89 @@ is $[0, \infty)$, while the domain of a rational function leaves out only finite
 ### Signs of products and quotients
 
 To find where a rational function is positive, we need the signs of products and quotients.
-They follow from the rules for inequalities. [Real Numbers and Intervals](#calc-real-numbers)
-states that for any two real numbers $u$ and $v$, exactly one of $u < v$, $u = v$ and $u > v$
-holds, and it takes the rules of inequalities as properties of $\R$
-([the remark on the completeness axiom](#rem-calc-completeness-origin)). The ones we use are these, for all real
-numbers $u$, $v$ and $w$:
-
-- **transitivity:** $u < v$ and $v < w$ imply $u < w$, and the same holds when one of the two is
-  $\le$;
-- **adding** the same number to both sides keeps an inequality: $u < v$ implies
-  $u + w < v + w$;
-- **multiplying** both sides by a positive number keeps an inequality, and multiplying by a
-  negative number reverses it: if $u < v$ and $w > 0$, then $uw < vw$; if $u < v$ and $w < 0$,
-  then $uw > vw$.
+[Property 7 of the order rules](#rem-calc-order-rules), on Real Numbers and Intervals, settles
+two factors: a product or a quotient of two non-zero numbers is positive when they have the same
+sign, and negative when their signs differ. We use three more facts about signs, which follow
+from the order rules.
 
 :::{proof:proposition} Sign rules
 :label: prop-calc-sign-rules
 
 Let $u$ and $v$ be real numbers.
 
-(a) If $u$ and $v$ are both positive or both negative, then $uv > 0$. If one of them is
-positive and the other negative, then $uv < 0$.
+(a) $uv = 0$ exactly when $u = 0$ or $v = 0$. If $v \ne 0$, then $\frac{u}{v} = 0$ exactly when
+$u = 0$.
 
-(b) $uv = 0$ exactly when $u = 0$ or $v = 0$.
-
-(c) If $v \ne 0$, then $\frac{1}{v}$ has the same sign as $v$, and $\frac{u}{v}$ has the same
-sign as $uv$. In particular $\frac{u}{v} = 0$ exactly when $u = 0$.
-
-(d) For real numbers $x$ and $t$, the number $x - t$ is negative if $x < t$, zero if $x = t$,
+(b) For real numbers $x$ and $t$, the number $x - t$ is negative if $x < t$, zero if $x = t$,
 and positive if $x > t$.
 
-(e) A product of finitely many non-zero numbers, or a quotient of two such products, is positive
+(c) A product of finitely many non-zero numbers, or a quotient of two such products, is positive
 if an even number of all its factors (in the numerator and the denominator together) are
 negative, and negative if an odd number are.
 :::
 
 :::{proof:proof}
 :enumerated: false
-Each part comes from multiplying an inequality whose sign we know by a number whose sign we
-know.
+Parts (a) and (b) are short computations; for (c) we multiply in the factors one at a time and
+follow the sign with property 7 of the order rules.
 
-(a) If $u > 0$ and $v > 0$, multiplying $0 < u$ by the positive number $v$ keeps the
-inequality: $0 = 0 \cdot v < uv$. If $u < 0$ and $v < 0$, multiplying $u < 0$ by the negative
-number $v$ reverses it: $uv > 0 \cdot v = 0$. If $u > 0$ and $v < 0$, multiplying $0 < u$ by
-the negative number $v$ reverses it: $0 > uv$. If $u < 0$ and $v > 0$, the same argument with
-$u$ and $v$ swapped gives $vu < 0$, and $uv = vu$.
+(a) If $u = 0$ or $v = 0$, then $uv = 0$. Conversely, let $uv = 0$. If $u \ne 0$, then
+$v = \frac{1}{u} \cdot (uv) = \frac{1}{u} \cdot 0 = 0$. So $u = 0$ or $v = 0$. Now let $v \ne 0$.
+Then $\frac{1}{v} \ne 0$, because $v \cdot \frac{1}{v} = 1 \ne 0$, and
+$\frac{u}{v} = u \cdot \frac{1}{v}$. By what we have just proved, this is $0$ exactly when
+$u = 0$.
 
-(b) If $u = 0$ or $v = 0$, then $uv = 0$. Conversely, let $uv = 0$. If $u \ne 0$, then
-$v = \frac{1}{u} \cdot (uv) = \frac{1}{u} \cdot 0 = 0$. So $u = 0$ or $v = 0$.
+(b) By [property 3 of the order rules](#rem-calc-order-rules), adding $-t$ to both sides keeps an
+inequality: $x < t$ gives $x - t < 0$, and $x > t$ gives $x - t > 0$. If $x = t$, then
+$x - t = 0$.
 
-(c) First, $1 > 0$: since $1 \ne 0$, the number $1$ is positive or negative, and in both cases
-$1 = 1 \cdot 1$ is a product of two numbers of the same sign, which is positive by (a). Now let
-$v \ne 0$. Then $v \cdot \frac{1}{v} = 1 > 0$, so $\frac{1}{v} \ne 0$, and $v$ and
-$\frac{1}{v}$ do not have opposite signs, because by (a) their product would then be negative.
-So they have the same sign. Next, $\frac{u}{v} = u \cdot \frac{1}{v}$. If $u = 0$, both
-$\frac{u}{v}$ and $uv$ are $0$. If $u \ne 0$, then by (a) the sign of $u \cdot \frac{1}{v}$ is
-fixed by the signs of $u$ and $\frac{1}{v}$, which are those of $u$ and $v$, and so it is the
-sign of $uv$. In particular, $\frac{u}{v} = 0$ only when $u = 0$, because for $u \ne 0$ it is
-positive or negative.
-
-(d) Adding $-t$ to both sides keeps an inequality: $x < t$ gives $x - t < 0$, and $x > t$ gives
-$x - t > 0$. If $x = t$, then $x - t = 0$.
-
-(e) Start from $1 > 0$ and multiply in the factors one at a time. Each partial product is
-non-zero, by (b). By (a), multiplying a non-zero number by a positive factor keeps its sign, and
-multiplying it by a negative factor changes its sign. So the sign changes once for each negative
-factor, and the product is positive after an even number of changes and negative after an odd
-number. A quotient of two such products has the same sign as the product of its numerator and
-its denominator, by (c), and that is the product of all the factors.
+(c) Start from $1$, which is positive ([property 7 of the order rules](#rem-calc-order-rules)),
+and multiply in the factors one at a time. Each partial product is non-zero, by (a). By
+property 7, multiplying a non-zero number by a positive factor keeps its sign, and multiplying it
+by a negative factor changes its sign. So the sign changes once for each negative factor, and the
+product is positive after an even number of changes and negative after an odd number. A quotient
+$\frac{N}{D}$ of two such products is, by property 7 again, positive exactly when $N$ and $D$
+have the same sign, that is, exactly when $N \cdot D$ is positive. Since $N \cdot D$ is the
+product of all the factors, the count for the product decides the sign of the quotient.
 :::
 
 **In words.** "Minus times minus is plus": only the number of negative factors matters, and a
-quotient behaves like a product. Part (d) says that the factor $x - t$ is negative to the left
+quotient behaves like a product. Part (b) says that the factor $x - t$ is negative to the left
 of $t$ and positive to the right of it.
+
+### Degree of a product
+
+The first use of the sign rules is the degree of a product of polynomials, on which the division
+of polynomials below rests.
+
+:::{proof:proposition} Degree of a product
+:label: prop-calc-polynomial-degree-product
+
+Let $f$ be a polynomial of degree $m$ with leading coefficient $a$, and $g$ a polynomial of
+degree $k$ with leading coefficient $b$. Then $f(x)\, g(x)$ is a polynomial of degree $m + k$,
+with leading coefficient $ab$. In particular, a product of two polynomials that are not the zero
+polynomial is not the zero polynomial.
+:::
+
+:::{proof:proof}
+:enumerated: false
+We multiply out and find the highest power of $x$ that occurs.
+
+Write $f(x) = a_m x^m + \dots + a_1 x + a_0$ with $a_m = a$, and
+$g(x) = b_k x^k + \dots + b_1 x + b_0$ with $b_k = b$. Multiplying out, $f(x)\, g(x)$ is the sum
+of the terms $a_i b_j\, x^{i + j}$ for $i = 0, 1, \dots, m$ and $j = 0, 1, \dots, k$, and
+collecting equal powers of $x$ writes it in the form of [](#def-calc-polynomial): it is a
+polynomial. Since $i \le m$ and $j \le k$, every power that occurs has $i + j \le m + k$, and if
+$i < m$ or $j < k$, then $i + j < m + k$ ([property 4 of the order rules](#rem-calc-order-rules)).
+So only the term with $i = m$ and $j = k$ has the power $x^{m + k}$, and its coefficient is
+$ab$. Since $a \ne 0$ and $b \ne 0$, [part (a) of the sign rules](#prop-calc-sign-rules) gives
+$ab \ne 0$. So the product has degree $m + k$ and leading coefficient $ab$; having a degree, it
+is not the zero polynomial.
+:::
+
+**In words.** Multiplying polynomials adds their degrees and multiplies their leading
+coefficients. For example, $(3x^2 + 1)(x - 5)$ has degree $2 + 1 = 3$ and leading coefficient
+$3 \cdot 1 = 3$.
 
 ### Factors and roots
 
@@ -224,7 +229,11 @@ Let $p$ be a polynomial and $a$ a real number.
 
 (a) There is a polynomial $q$ such that, for every real $x$,
 $$
-p(x) - p(a) = (x - a)\, q(x) .
+p(x) - p(a) = (x - a)\, q(x) ,
+$$
+and so, for every real $x \ne a$,
+$$
+\frac{p(x) - p(a)}{x - a} = q(x) .
 $$
 If $p$ has degree $n \ge 1$, then $q$ has degree $n - 1$ and the same leading coefficient as
 $p$.
@@ -255,9 +264,12 @@ q_k(x) &= x^{k-1} + x^{k-2} a + \dots \\
 &\quad + x a^{k-2} + a^{k-1},
 \end{aligned}
 $$
-the sum of the $k$ terms $x^{j} a^{k - 1 - j}$ for $j = 0, 1, \dots, k - 1$ (for $k = 1$ it is
-the constant $1$). Then $x^k - a^k = (x - a)\, q_k(x)$. Indeed, multiplying $q_k(x)$ by $x$
-gives $x^k + x^{k-1} a + \dots + x a^{k-1}$, multiplying it by $-a$ gives
+the sum of the $k$ terms $x^{j} a^{k - 1 - j}$ for $j = 0, 1, \dots, k - 1$. Here, as in the
+constant term $c_0 = c_0 x^0$ of a polynomial, $x^0$ and $a^0$ mean $1$, also when $x = 0$ or
+$a = 0$: we read $0^0$ as $1$. For $k = 1$, $q_1$ is the constant $1$.
+
+Then $x^k - a^k = (x - a)\, q_k(x)$. Indeed, multiplying $q_k(x)$ by $x$ gives
+$x^k + x^{k-1} a + \dots + x a^{k-1}$, multiplying it by $-a$ gives
 $-x^{k-1} a - \dots - x a^{k-1} - a^k$, and in the sum of the two every term cancels except
 $x^k$ and $-a^k$.
 
@@ -268,8 +280,9 @@ $$
 Since $a$ is a fixed number, each $q_k$ is a polynomial in $x$ whose highest power is
 $x^{k-1}$, with coefficient $1$. So $q$ is a polynomial, no power higher than $x^{n-1}$ occurs in
 it, and $x^{n-1}$ occurs only in $c_n\, q_n(x)$, with coefficient $c_n$. If $p$ has degree
-$n \ge 1$, then $c_n \ne 0$, so $q$ has degree $n - 1$ and leading coefficient $c_n$. This
-proves (a).
+$n \ge 1$, then $c_n \ne 0$, so $q$ has degree $n - 1$ and leading coefficient $c_n$. Finally,
+for $x \ne a$ the number $x - a$ is not $0$, so we may divide both sides of
+$p(x) - p(a) = (x - a)\, q(x)$ by it, which gives the quotient form. This proves (a).
 
 (b) If $p(a) = 0$, the identity of (a) reads $p(x) = (x - a)\, q(x)$. Conversely, if
 $p(x) = (x - a)\, q(x)$ for every real $x$, then at $x = a$ it gives
@@ -277,15 +290,10 @@ $p(a) = 0 \cdot q(a) = 0$.
 :::
 
 **In words.** Every root $a$ splits off a linear factor $x - a$, and what is left has degree one
-less. For $x \ne a$ the number $x - a$ is not $0$, so we may divide by it, and part (a)
-becomes, for every $x \ne a$,
-$$
-\frac{p(x) - p(a)}{x - a} = q(x) .
-$$
-The quotient on the left is undefined at $x = a$, but it agrees with the polynomial $q$ at
-every other point. This is the form in which the Limits and Derivatives chapters use the
-theorem. The proof also gives a way to compute $q$: replace each $x^k - a^k$ by
-$(x - a)\, q_k(x)$ ([](#eg-calc-polynomial-rational-difference-quotient)).
+less. The quotient $\frac{p(x) - p(a)}{x - a}$ of part (a) is undefined at $x = a$, but it agrees
+with the polynomial $q$ at every other point. This is the form in which the Limits and
+Derivatives chapters use the theorem. The proof also gives a way to compute $q$: replace each
+$x^k - a^k$ by $(x - a)\, q_k(x)$ ([](#eg-calc-polynomial-rational-difference-quotient)).
 
 **Example.** For $p(x) = x^3$ and $a = 2$, the proof gives $q(x) = q_3(x) = x^2 + 2x + 4$, the
 factorisation of $x^3 - 8$ in Why this matters.
@@ -307,9 +315,8 @@ has degree $n - 1$. We turn this into a proof by looking at a smallest counterex
 
 A polynomial of degree $0$ is a non-zero constant, so it has no roots, and the theorem holds for
 it. Suppose the theorem fails for some degree. Then the degrees $n$ of the polynomials of degree
-$n$ with more than $n$ roots form a non-empty set of positive integers, and by the
-well-ordering principle (stated in [Real Numbers and Intervals](#calc-real-numbers), just
-before [the irrationality of $\sqrt{2}$](#thm-calc-sqrt2-irrational)) it has a smallest element
+$n$ with more than $n$ roots form a non-empty set of positive integers, and by
+[the well-ordering principle](#rem-calc-well-ordering) it has a smallest element
 $n \ge 1$. Let $p$ be a polynomial of degree $n$ with more than $n$ roots, and let $r$ be one of
 them.
 
@@ -318,7 +325,7 @@ the polynomial of part (a), of degree $n - 1$. Let $s$ be a root of $p$ with $s 
 $$
 0 = p(s) = (s - r)\, q(s),
 $$
-and $s - r \ne 0$, so $q(s) = 0$ by [part (b)](#prop-calc-sign-rules) of the sign rules. So
+and $s - r \ne 0$, so $q(s) = 0$ by [part (a) of the sign rules](#prop-calc-sign-rules). So
 each of the roots of $p$ other than $r$, of which there are more than $n - 1$, is a root of
 $q$. Then $q$ is a polynomial of degree $n - 1$ with more than $n - 1$ roots. If $n - 1 = 0$,
 this contradicts the first paragraph; if $n - 1 \ge 1$, it contradicts the choice of $n$ as the
@@ -416,7 +423,8 @@ unique; they are called the **quotient** and the **remainder** of $f$ divided by
 Long division removes the leading term of $f$, one term at a time. If $f$ is the zero
 polynomial or has smaller degree than $g$, then $q = 0$ and $r = f$ work. Otherwise let
 $a x^k$ be the leading term of $f$ and $b x^m$ that of $g$, with $k \ge m$. Subtracting
-$\frac{a}{b} x^{k - m} g(x)$, whose leading term is $a x^k$, from $f(x)$ cancels the leading
+$\frac{a}{b} x^{k - m} g(x)$, whose leading term is $a x^k$
+([](#prop-calc-polynomial-degree-product)), from $f(x)$ cancels the leading
 term of $f$ and leaves a polynomial $f_1$ that is zero or has degree less than $k$. Repeat with
 $f_1$ in place of $f$. The degree drops at every step, so after at most $k - m + 1$ steps what is
 left is zero or has degree less than $m$: that is $r$, and $q$ is the sum of the terms
@@ -453,6 +461,10 @@ $p$ that are not roots of $q$.
 
 :::{proof:proof}
 :enumerated: false
+Parts (a) and (c) come straight from the definition of a rational function, with the bound on
+the number of roots and the sign rules; for (b) we choose an interval around $a$ that no other
+root of $q$ reaches.
+
 (a) By [](#def-calc-rational-function), $\dom f = \{x \in \R : q(x) \ne 0\}$, which is $\R$
 without the roots of $q$. Since $q$ is not the zero polynomial, it has a degree $m$, and by
 [](#thm-calc-polynomial-roots-bound) it has at most $m$ roots.
@@ -467,7 +479,7 @@ $(\alpha, \beta)$ with $x \ne a$ has $q(x) \ne 0$, that is, $x \in \dom f$. If m
 $q(a) \ne 0$, then $a \in \dom f$ as well.
 
 (c) For $x \in \dom f$ we have $q(x) \ne 0$, so by
-[part (c) of the sign rules](#prop-calc-sign-rules), $\frac{p(x)}{q(x)} = 0$ exactly when
+[part (a) of the sign rules](#prop-calc-sign-rules), $\frac{p(x)}{q(x)} = 0$ exactly when
 $p(x) = 0$.
 :::
 
@@ -477,8 +489,8 @@ except perhaps at $a$ itself. It is zero exactly where the numerator is zero and
 is not.
 
 Its sign can be read off its factors. A polynomial such as $x^2 + 1$ is positive at every real
-number: $x^2 = x \cdot x \ge 0$ by [part (a) of the sign rules](#prop-calc-sign-rules) (a product
-of two numbers of the same sign, or $0$), and adding $1$ gives $x^2 + 1 \ge 1 > 0$.
+number: $x^2 \ge 0$ by [property 7 of the order rules](#rem-calc-order-rules), and adding $1$ to
+both sides gives $x^2 + 1 \ge 1 > 0$ (property 3).
 
 :::{proof:proposition} Sign of a factored rational function
 :label: prop-calc-rational-sign
@@ -507,7 +519,7 @@ $s_1, \dots, s_m$. Then:
 
 :::{proof:proof}
 :enumerated: false
-On $I$ each factor keeps one sign, and then [part (e) of the sign rules](#prop-calc-sign-rules)
+On $I$ each factor keeps one sign, and then [part (c) of the sign rules](#prop-calc-sign-rules)
 decides the sign of $f$.
 
 Let $t$ be one of the numbers $r_i$ or $s_j$. We show that $x - t$ is non-zero and has the same
@@ -516,18 +528,19 @@ $(\alpha, \beta)$, $(\alpha, \infty)$, $(-\infty, \beta)$ and $\R$, for real $\a
 is not $\R$, which contains $t$.
 
 - If $I = (\alpha, \beta) = \{x \in \R : \alpha < x < \beta\}$, then $t \notin I$ means that
-  $\alpha < t < \beta$ fails, so $t \le \alpha$ or $t \ge \beta$. If $t \le \alpha$, every
-  $x \in I$ satisfies $t \le \alpha < x$, so $x > t$ by transitivity, and $x - t > 0$ by
-  [part (d) of the sign rules](#prop-calc-sign-rules). If $t \ge \beta$, every $x \in I$
-  satisfies $x < \beta \le t$, so $x - t < 0$.
+  $\alpha < t < \beta$ fails, so $t \le \alpha$ or $t \ge \beta$
+  ([property 1 of the order rules](#rem-calc-order-rules)). If $t \le \alpha$, every
+  $x \in I$ satisfies $t \le \alpha < x$, so $x > t$ by transitivity (property 2), and
+  $x - t > 0$ by [part (b) of the sign rules](#prop-calc-sign-rules). If $t \ge \beta$, every
+  $x \in I$ satisfies $x < \beta \le t$, so $x - t < 0$.
 - If $I = (\alpha, \infty)$, then $t \notin I$ means $t \le \alpha$, and every $x \in I$ has
   $x - t > 0$, as in the first case above. If $I = (-\infty, \beta)$, then $t \ge \beta$, and
   every $x \in I$ has $x - t < 0$.
 
 So at every $x \in I$, each factor $x - r_i$ and $x - s_j$ is non-zero, with the same sign at
 every point of $I$; $P(x)$ and $Q(x)$ are positive; and $K \ne 0$. The denominator is a product
-of non-zero numbers, so it is not $0$, by part (b) of the sign rules (applied to one factor
-after another), and $x \in \dom f$. By part (e) of the sign rules, $f(x)$ is positive if an even
+of non-zero numbers, so it is not $0$, by part (a) of the sign rules (applied to one factor
+after another), and $x \in \dom f$. By part (c) of the sign rules, $f(x)$ is positive if an even
 number of the factors are negative and negative if an odd number are; $P(x)$ and $Q(x)$ are
 positive, so they do not change the count. In particular $f(x) \ne 0$. Since every factor has
 the same sign at every point of $I$, the count, and with it the sign of $f$, is the same at
@@ -599,7 +612,7 @@ roots.
    quotient has degree $2$ and leading coefficient $1$, as part (a) of the factor theorem says.
 3. **Factor the quadratic.** Two numbers with product ${-6}$ and sum ${-1}$ are ${-3}$ and $2$,
    so $x^2 - x - 6 = (x - 3)(x + 2)$.
-4. **The roots.** By [part (b) of the sign rules](#prop-calc-sign-rules), applied twice,
+4. **The roots.** By [part (a) of the sign rules](#prop-calc-sign-rules), applied twice,
    $p(x) = 0$ exactly when one of the factors is $0$: at $x = 1$, $3$ or ${-2}$. These are all
    the roots, as [](#thm-calc-polynomial-roots-bound) also confirms: a cubic has at most three.
 
@@ -656,7 +669,7 @@ intervals where $f$ is positive or negative.
    $$
    f(x) = \frac{(x - 1)(x + 1)}{(x - 3)(x + 2)} .
    $$
-2. **Domain.** By [part (b) of the sign rules](#prop-calc-sign-rules), the denominator is $0$
+2. **Domain.** By [part (a) of the sign rules](#prop-calc-sign-rules), the denominator is $0$
    exactly when $x = 3$ or $x = -2$. So
    $\dom f = (-\infty, -2) \cup (-2, 3) \cup (3, \infty)$.
 3. **Zeros.** By [](#prop-calc-rational-domain) (c), the zeros are the roots of the numerator
@@ -664,7 +677,7 @@ intervals where $f$ is positive or negative.
 4. **Sign.** The numbers ${-2}$, ${-1}$, $1$ and $3$ cut $\R$ into five open intervals, and on
    each of them $f$ has one sign, by [](#prop-calc-rational-sign) (here $K = 1$ and
    $P = Q = 1$). We count the negative factors, using
-   [part (d) of the sign rules](#prop-calc-sign-rules): a factor $x - t$ is negative exactly to
+   [part (b) of the sign rules](#prop-calc-sign-rules): a factor $x - t$ is negative exactly to
    the left of $t$.
 
    | Interval | $x + 2$ | $x + 1$ | $x - 1$ | $x - 3$ | $f(x)$ |
@@ -703,7 +716,7 @@ Graph of $y = \frac{x^2 - 1}{x^2 - x - 6}$ for $-5 \le x \le 6$. It has gaps at 
 $x = 3$, where the function is undefined, and next to them it is steep and leaves the view. It
 meets the $x$-axis at $x = {-1}$ and $x = 1$. A table lists the values at $x = {-3}$, ${-1.5}$,
 $0$, $2$ and $4$, one point in each interval of the sign chart. The exact values are
-$\frac{4}{3}$, $-\frac{5}{9}$, $\frac{1}{6}$, $-\frac{3}{4}$ and $\frac{5}{2}$: positive,
+$\frac{4}{3}$, ${-\frac{5}{9}}$, $\frac{1}{6}$, ${-\frac{3}{4}}$ and $\frac{5}{2}$: positive,
 negative, positive, negative, positive, as the sign chart of
 [](#eg-calc-polynomial-rational-sign-chart) predicts.
 ::::
@@ -743,7 +756,7 @@ needs exactly $12$.
    \frac{(x - 2)(x - 2)(x + 4)}{x} .
    $$
    For $x > 0$, the factors $x$ and $x + 4$ are positive ($x > 0 > -4$, and
-   [part (d) of the sign rules](#prop-calc-sign-rules)). On $(0, 2)$ both factors $x - 2$ are
+   [part (b) of the sign rules](#prop-calc-sign-rules)). On $(0, 2)$ both factors $x - 2$ are
    negative, and on $(2, \infty)$ both are positive. So on each of these intervals an even
    number of factors is negative, and $S(x) - 12 > 0$ there, by
    [](#prop-calc-rational-sign). At $x = 2$ the numerator is $0$, so $S(2) = 12$.
@@ -767,8 +780,8 @@ sum of products of two lengths in metres, so it is in square metres. ✓
 $x > 5$."
 
 **Why:** multiplying by $x - 1$ keeps the inequality only where $x - 1 > 0$. For $x < 1$ the
-factor is negative and reverses it. The answer $x > 5$ misses, for example, $x = 0$, where
-$\frac{0 + 3}{0 - 1} = -3 < 2$.
+factor is negative and reverses it ([property 5 of the order rules](#rem-calc-order-rules)).
+The answer $x > 5$ misses, for example, $x = 0$, where $\frac{0 + 3}{0 - 1} = -3 < 2$.
 
 ✓ **Right:** subtract $2$ and use one fraction:
 $\frac{x + 3}{x - 1} - 2 = \frac{5 - x}{x - 1} = \frac{(-1)(x - 5)}{x - 1}$. Its sign chart
@@ -813,6 +826,9 @@ $f(-2) = \frac{0}{12} = 0$.
 :::{admonition} Why the quotient and the remainder are unique
 :class: dropdown rigor
 This is the part of [](#thm-calc-polynomial-division) that its sketch leaves to this section.
+We subtract two divisions of $f$ by $g$ from each other and compare the coefficients of the
+highest power of $x$ on the two sides.
+
 Let $g$ have degree $m$ and leading coefficient $b$, and suppose that
 $$
 \begin{aligned}
@@ -831,9 +847,9 @@ $$
 On the right is a polynomial in which no power $x^j$ with $j \ge m$ has a non-zero coefficient.
 Suppose $q_1 - q_2$ were not the zero polynomial, say of degree $k$ with leading coefficient
 $e \ne 0$. Then the left-hand side would be a polynomial of degree $m + k$, with leading
-coefficient $be \ne 0$ (the degree of a product, as explained after
-[](#def-calc-polynomial)). The two sides agree at every real number, so by [](#cor-calc-polynomial-identity) they have the same
-coefficients. But the coefficient of $x^{m + k}$, where $m + k \ge m$, is $be \ne 0$ on the left
+coefficient $be \ne 0$, by [](#prop-calc-polynomial-degree-product). The two sides agree at
+every real number, so by [](#cor-calc-polynomial-identity) they have the same coefficients.
+But the coefficient of $x^{m + k}$, where $m + k \ge m$, is $be \ne 0$ on the left
 and $0$ on the right. So $q_1 - q_2$ is the zero polynomial: $q_1(x) = q_2(x)$ for every $x$,
 and then $r_1(x) = r_2(x)$ for every $x$ as well.
 :::
@@ -841,7 +857,7 @@ and then $r_1(x) = r_2(x)$ for every $x$ as well.
 :::{admonition} The degree of the zero polynomial
 :class: dropdown rigor
 The zero polynomial has no highest power with a non-zero coefficient, so it has no degree.
-Some books give it the degree $-\infty$, with the convention $-\infty + n = -\infty$, so that
+Some books give it the degree ${-\infty}$, with the convention $-\infty + n = -\infty$, so that
 "the degree of a product is the sum of the degrees" holds for every pair of polynomials. We
 avoid the convention and state the zero polynomial separately instead. It is the one polynomial
 that [](#thm-calc-polynomial-roots-bound) must leave out: every real number is a root of it.
@@ -859,7 +875,8 @@ page Complex Numbers finds the roots of such quadratics among the complex number
 ## Summary
 
 - A polynomial $c_n x^n + \dots + c_1 x + c_0$ with $c_n \ne 0$ has degree $n$; its values
-  determine its coefficients ([](#cor-calc-polynomial-identity)). A rational function
+  determine its coefficients ([](#cor-calc-polynomial-identity)). The degree of a product is
+  the sum of the degrees ([](#prop-calc-polynomial-degree-product)). A rational function
   $\frac{p(x)}{q(x)}$ is defined exactly where $q(x) \ne 0$.
 - **Factor theorem** ([](#thm-calc-factor-theorem)): $p(x) - p(a) = (x - a)\, q(x)$ for a
   polynomial $q$ of degree one less, so
@@ -953,7 +970,7 @@ $(-\infty, -3), (-3, 2), (2, \infty)$ (the union of these three intervals)
 :label: sol-calc-polynomial-rational-domain
 :class: dropdown
 The denominator is $x^2 + x - 6 = (x + 3)(x - 2)$. By
-[part (b) of the sign rules](#prop-calc-sign-rules) it is $0$ exactly when $x = -3$ or $x = 2$,
+[part (a) of the sign rules](#prop-calc-sign-rules) it is $0$ exactly when $x = -3$ or $x = 2$,
 and by [](#def-calc-rational-function) these two numbers are left out of the domain:
 $\dom f = (-\infty, -3) \cup (-3, 2) \cup (2, \infty)$. The numerator is also $0$ at $x = -3$, but that does not help: the formula gives $\frac{0}{0}$
 there, which is not a number. For $x$ in the domain, $f(x) = \frac{1}{x - 2}$, but the function
@@ -1108,7 +1125,8 @@ Find the remainder when $p(x) = x^{100} - 2x + 1$ is divided by $x - 1$.
 :::{admonition} Hint 1
 :class: dropdown hint
 Part (a) of [](#thm-calc-factor-theorem) with $a = 1$ gives
-$p(x) = (x - 1)\, q(x) + p(1)$. What is the degree of $p(1)$ as a polynomial?
+$p(x) = (x - 1)\, q(x) + p(1)$. Is $p(1)$ the zero polynomial or a polynomial of degree $0$?
+Compare with the degree of $x - 1$.
 :::
 
 :::{admonition} Answer
@@ -1153,14 +1171,15 @@ $(-1, 2)$
 ::::{solution} exr-calc-polynomial-rational-inequality
 :label: sol-calc-polynomial-rational-inequality
 :class: dropdown
-The left-hand side is defined for $x \ne -1$. Adding $-1$ to both sides keeps the inequality,
-and so does adding $1$ back, so for $x \ne -1$ the inequality holds exactly when
+The left-hand side is defined for $x \ne -1$. Adding ${-1}$ to both sides keeps the inequality,
+and so does adding $1$ back ([property 3 of the order rules](#rem-calc-order-rules)), so for
+$x \ne -1$ the inequality holds exactly when
 $\frac{2x - 1}{x + 1} - 1 < 0$. Over the common denominator $x + 1$, the numerator is
 $2x - 1 - (x + 1) = x - 2$, so this says
 $$
 \frac{x - 2}{x + 1} < 0 .
 $$
-The numbers $-1$ and $2$ cut $\R$ into three open intervals, and by
+The numbers ${-1}$ and $2$ cut $\R$ into three open intervals, and by
 [](#prop-calc-rational-sign) the quotient has one sign on each:
 
 - on $(-\infty, -1)$ both factors are negative, so it is positive;
@@ -1203,14 +1222,16 @@ $(1, 4)$
 ::::{solution} exr-calc-polynomial-rational-concentration
 :label: sol-calc-polynomial-rational-concentration
 :class: dropdown
-For every real $t$, $t^2 \ge 0$ ([part (a) of the sign rules](#prop-calc-sign-rules)), so
-$t^2 + 4 \ge 4 > 0$. Multiplying by the positive number $t^2 + 4$ keeps an inequality, and
-multiplying by its reciprocal, also positive ([part (c)](#prop-calc-sign-rules)), takes us back.
+For every real $t$, $t^2 \ge 0$ ([property 7 of the order rules](#rem-calc-order-rules)), so
+adding $4$ to both sides gives $t^2 + 4 \ge 4 > 0$ (property 3). Multiplying by the positive
+number $t^2 + 4$ keeps an inequality (property 5), and multiplying by its reciprocal, also
+positive (property 7), takes us back.
 So $c(t) > 1$ holds exactly when
 $$
 5t > t^2 + 4 ,
 $$
-that is, after adding $-5t$ to both sides, when $t^2 - 5t + 4 < 0$. Now
+that is, after adding $-5t$ to both sides (property 3, which works in both directions), when
+$t^2 - 5t + 4 < 0$. Now
 $t^2 - 5t + 4 = (t - 1)(t - 4)$. By [](#prop-calc-rational-sign) (with $K = 1$ and no
 denominator): on $(-\infty, 1)$ both factors are negative and the product is positive; on
 $(1, 4)$ only $t - 4$ is negative and the product is negative; on $(4, \infty)$ it is positive;
@@ -1249,7 +1270,7 @@ $2(x + 1)(x - 1)(x - 2)$
 :class: dropdown
 Since $p(-1) = 0$, [](#thm-calc-factor-theorem) gives $p(x) = (x + 1)\, q_1(x)$ for every real
 $x$, where $q_1$ has degree $2$ and the same leading coefficient as $p$. At $x = 1$:
-$0 = p(1) = 2\, q_1(1)$, so $q_1(1) = 0$ by [part (b) of the sign rules](#prop-calc-sign-rules).
+$0 = p(1) = 2\, q_1(1)$, so $q_1(1) = 0$ by [part (a) of the sign rules](#prop-calc-sign-rules).
 So, by the factor theorem again, $q_1(x) = (x - 1)\, q_2(x)$, where $q_2$ has degree $1$. At
 $x = 2$: $0 = p(2) = 3 \cdot 1 \cdot q_2(2)$, so $q_2(2) = 0$, and $q_2(x) = (x - 2)\, K$, where
 $K$ is a polynomial of degree $0$: a non-zero constant, the leading coefficient of $p$. Hence, for every real $x$,
@@ -1289,16 +1310,19 @@ $(-\infty, -1), (1, \infty)$ (the union of these two intervals)
 ::::{solution} exr-calc-polynomial-rational-inequality-hard
 :label: sol-calc-polynomial-rational-inequality-hard
 :class: dropdown
-Both sides are defined for $x \ne 1$ and $x \ne -1$. Subtracting the right-hand side keeps the
-inequality, so for these $x$ it holds exactly when $\frac{x}{x - 1} - \frac{2}{x + 1} \ge 0$.
+Both sides are defined for $x \ne 1$ and $x \ne -1$. Subtracting the right-hand side from both
+sides keeps the inequality, and adding it back returns to it
+([property 3 of the order rules](#rem-calc-order-rules)), so for these $x$ it holds exactly
+when $\frac{x}{x - 1} - \frac{2}{x + 1} \ge 0$.
 Over the common denominator $(x - 1)(x + 1)$, the numerator is
 $x(x + 1) - 2(x - 1) = x^2 - x + 2$, so this says
 $$
 \frac{x^2 - x + 2}{(x - 1)(x + 1)} \ge 0 .
 $$
 Completing the square, $x^2 - x + 2 = \bigl(x - \frac{1}{2}\bigr)^2 + \frac{7}{4}$. The square is
-$\ge 0$ ([part (a) of the sign rules](#prop-calc-sign-rules)), so the numerator is at least
-$\frac{7}{4}$, positive at every real $x$. By [](#prop-calc-rational-sign), with
+$\ge 0$ ([property 7 of the order rules](#rem-calc-order-rules)), so, adding $\frac{7}{4}$ to
+both sides (property 3), the numerator is at least $\frac{7}{4}$, positive at every real $x$.
+By [](#prop-calc-rational-sign), with
 $P(x) = x^2 - x + 2$, the quotient has one sign on each of $(-\infty, -1)$, $(-1, 1)$ and
 $(1, \infty)$, and it is never $0$:
 
@@ -1348,8 +1372,14 @@ it is an integer, and $r$ divides $c_0$. (If $n = 0$, then $p$ is the constant $
 $p(r) = 0$ says $c_0 = 0 = r \cdot 0$.)
 
 **The example.** For $x^3 + x^2 - 7x + 2$ the constant term is $2$, so an integer root must be one
-of the integers that divide $2$: $1$, ${-1}$, $2$ and ${-2}$. Testing them, with $p$ now this
-polynomial:
+of the integers that divide $2$. These are $1$, ${-1}$, $2$ and ${-2}$. Indeed, let $2 = rk$ with
+integers $r$ and $k$. Then $r \ne 0$ and $k \ne 0$, since otherwise $rk = 0$. If $r \ge 3$, then
+multiplying by the positive number $r$ ([property 5 of the order rules](#rem-calc-order-rules))
+turns $k \ge 1$ into $rk \ge r$, and $k \le -1$ into $rk \le -r$. Since $r \ge 3$, and so
+$-r \le -3$ (multiplying by ${-1}$, by the same property), this gives $rk \ge 3$ or
+$rk \le -3$; neither is $2$. If $r \le -3$, the same argument applies to $2 = (-r)(-k)$, with
+$-r \ge 3$. So $r$ is one of $1$, ${-1}$, $2$ and ${-2}$, and each of them divides $2$. Testing
+them, with $p$ now this polynomial:
 
 - $p(1) = 1 + 1 - 7 + 2 = -3$;
 - $p(-1) = -1 + 1 + 7 + 2 = 9$;
