@@ -12,8 +12,11 @@ from project import REPO, Project, Reporter
 
 
 def _repo(tmp_path):
-    """A copy of the content and labels.lock (widgets/ linked), so the scaffold can be written."""
+    """A copy of content/, verify/ and labels.lock (widgets/ linked), so the scaffold can be written.
+    verify/ is copied, not linked: the scaffold writes its stubs there, and check_frontmatter needs
+    the maths.verify file of every reviewed or verified page."""
     shutil.copytree(REPO / "content", tmp_path / "content", ignore=shutil.ignore_patterns("_build", "_generated"))
+    shutil.copytree(REPO / "verify", tmp_path / "verify", ignore=shutil.ignore_patterns("_answers.json", "_coverage.json", "__pycache__"))
     shutil.copy(REPO / "labels.lock", tmp_path / "labels.lock")
     (tmp_path / "widgets").symlink_to(REPO / "widgets")
     return tmp_path / "content"
