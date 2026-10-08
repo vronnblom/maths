@@ -10,7 +10,7 @@ tags: [limits, epsilon-delta, proofs]
 maths:
   kind: topic
   subject: calc
-  status: draft
+  status: reviewed
   level: core
   difficulty: 3
   est_minutes: 45
@@ -22,7 +22,11 @@ maths:
     - Recognise when a limit does not exist.
   verify: verify/calculus/limits/test_limit_of_a_function.py
   widgets: [epsilon-delta, function-plot]
-  reviewed_by: []
+  reviewed_by: [vronnblom]
+  manual_checked:
+    exr-calc-limit-eps-delta-linear: vronnblom
+    exr-calc-limit-eps-delta-quadratic: vronnblom
+    exr-calc-limit-eps-delta-sqrt: vronnblom
   sources: []
 ---
 
