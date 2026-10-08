@@ -28,7 +28,7 @@ maths:
     - Prove limits of linear functions directly from the definition.
     - Recognise when a limit does not exist (jump, oscillation, unboundedness).
   verify: verify/calculus/limits/test_limit_of_a_function.py
-  widgets: [function-plot, epsilon-delta]        # Phase 1a adds epsilon-delta (see the comment in "What a limit is")
+  widgets: [function-plot, no-such-widget]        # Phase 1a adds epsilon-delta (see the comment in "What a limit is")
   reviewed_by: []
   sources: []
 ---

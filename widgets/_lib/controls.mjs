@@ -17,7 +17,7 @@ export const STYLES = `
 .mp-slider label { font-style: italic; min-width: 1.5em; }
 .mp-slider input { width: 9rem; accent-color: currentColor; }
 .mp-slider output { font-variant-numeric: tabular-nums; min-width: 4.5em; }
-.mp-buttons { display: flex; gap: 0.5rem; }
+.mp-buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .mp-widget button {
   font: inherit; font-size: 0.875em; color: inherit; background: transparent;
   border: 1px solid currentColor; border-radius: 4px; padding: 0.15em 0.6em; cursor: pointer;
@@ -47,7 +47,8 @@ function el(doc, tag, props = {}, children = []) {
 
 /**
  * A labelled slider for `name` (rendered in italics, like a variable). Calls onInput(value)
- * as it moves. Returns {element, input, set(value)}.
+ * as it moves. Returns {element, input, set(value)}: set() returns the value the input really
+ * holds (a range input snaps a value that is off its grid), and shows and announces that one.
  */
 export function slider(doc, { name, min, max, step, value, onInput, describe = (v) => `${name} = ${formatNumber(v)}` }) {
   const id = `mp-slider-${++counter}`;
@@ -69,7 +70,9 @@ export function slider(doc, { name, min, max, step, value, onInput, describe = (
     input,
     set(v) {
       input.value = String(v);
-      show(v);
+      const held = Number(input.value);
+      show(held);
+      return held;
     },
   };
 }

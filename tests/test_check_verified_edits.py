@@ -72,7 +72,8 @@ def test_edited_verified_page_fails(repo):
     commit(repo)
     rep, _ = check(repo)
     (e,) = rep.errors
-    assert e.path == repo / PAGE and e.line == 139  # the {proof:example} line
+    example = (repo / PAGE).read_text(encoding="utf-8").splitlines().index(":::{proof:example} Prove $\\lim_{x \\to 3} (2x - 1) = 5$ from the definition") + 1
+    assert e.path == repo / PAGE and e.line == example  # the {proof:example} line
     assert e.message.startswith("eg-calc-limit-linear-eps-delta changed on a verified page, but "
                                 "verify/calculus/limits/test_limit_of_a_function.py did not change.")
     assert "set maths.status to reviewed" in e.message and "typo-only" in e.message

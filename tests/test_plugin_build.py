@@ -217,11 +217,13 @@ def test_chapter_topics_table(built):
     assert "minutes" not in text(header)
 
 
-def test_the_widget_reaches_the_ast(built):
+def test_the_widgets_reach_the_ast(built):
     _, pages = built
-    widget, = [n for n in walk(pages["calc-limit"]) if n["type"] == "anywidget"]
-    assert widget["esm"].endswith(".mjs") and "function-plot" in widget["esm"]
-    assert widget["model"]["hole"] == {"x": 0} and widget["model"]["variable"] == "h"
+    plot, eps_delta = [n for n in walk(pages["calc-limit"]) if n["type"] == "anywidget"]
+    assert plot["esm"].endswith(".mjs") and "function-plot" in plot["esm"]
+    assert plot["model"]["hole"] == {"x": 0} and plot["model"]["variable"] == "h"
+    assert eps_delta["esm"].endswith(".mjs") and "epsilon-delta" in eps_delta["esm"]
+    assert eps_delta["model"]["a"] == 2 and eps_delta["model"]["epsStep"] == 0.05
 
 
 def test_malformed_front_matter_fails_the_build(tmp_path):

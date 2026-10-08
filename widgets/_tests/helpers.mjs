@@ -8,6 +8,8 @@ export const { default: JXG } = await import(new URL("../../node_modules/jsxgrap
 
 export const fixtures = JSON.parse(readFileSync(new URL("./fixtures/function-plot.json", import.meta.url), "utf8"));
 export const invalid = JSON.parse(readFileSync(new URL("./fixtures/function-plot-invalid.json", import.meta.url), "utf8"));
+export const epsilonDelta = JSON.parse(readFileSync(new URL("./fixtures/epsilon-delta.json", import.meta.url), "utf8"));
+export const epsilonDeltaInvalid = JSON.parse(readFileSync(new URL("./fixtures/epsilon-delta-invalid.json", import.meta.url), "utf8"));
 
 /** |actual − expected| ≤ rel·max(1, |expected|); null in a fixture means "undefined" (NaN). */
 export function close(actual, expected, rel = 1e-9) {
