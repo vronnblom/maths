@@ -8,7 +8,7 @@ tags: [preliminaries, modelling]
 maths:
   kind: topic
   subject: calc
-  status: draft
+  status: reviewed
   level: core
   difficulty: 1
   est_minutes: 25
@@ -20,7 +20,12 @@ maths:
     - Model a situation with a function.
   verify: verify/calculus/preliminaries/test_functions.py
   widgets: []
-  reviewed_by: []
+  reviewed_by: [vronnblom]
+  manual_checked:
+    exr-calc-functions-sqrt-increasing: vronnblom
+    exr-calc-functions-odd-at-zero: vronnblom
+    exr-calc-functions-cube-increasing: vronnblom
+    exr-calc-functions-even-odd-decomposition: vronnblom
   sources: []
 ---
 
