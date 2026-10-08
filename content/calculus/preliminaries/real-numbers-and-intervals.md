@@ -9,7 +9,7 @@ tags: [preliminaries, proofs]
 maths:
   kind: topic
   subject: calc
-  status: draft
+  status: reviewed
   level: core
   difficulty: 1
   est_minutes: 35
@@ -20,7 +20,10 @@ maths:
     - State what "bounded above" and "supremum" mean (rigorous track).
   verify: verify/calculus/preliminaries/test_real_numbers_and_intervals.py
   widgets: []
-  reviewed_by: []
+  reviewed_by: [vronnblom]
+  manual_checked:
+    exr-calc-real-numbers-sqrt3-irrational: vronnblom
+    exr-calc-real-numbers-rational-between: vronnblom
   sources: []
 ---
 
