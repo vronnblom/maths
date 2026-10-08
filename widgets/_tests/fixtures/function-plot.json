@@ -876,6 +876,82 @@
    ]
   },
   {
+   "source": "calculus/limits/limit-laws.md:45",
+   "setting": "defaults",
+   "f": "(x^3 - 1)/(x^2 + 3)",
+   "variable": "x",
+   "params": {},
+   "holeX": null,
+   "points": [
+    1.9,
+    1.99,
+    1.999,
+    2.001,
+    2.01,
+    2.1
+   ],
+   "values": [
+    0.8863842662632375,
+    0.9885776066435827,
+    0.9988572041370491,
+    1.0011429183119762,
+    1.0114346387125184,
+    1.1148448043184884
+   ]
+  },
+  {
+   "source": "calculus/limits/limit-laws.md:330",
+   "setting": "defaults",
+   "f": "(x^2 + c*x)/x",
+   "variable": "x",
+   "params": {
+    "c": 1
+   },
+   "holeX": 0,
+   "points": [
+    0.1,
+    0.01,
+    0.001,
+    -0.001,
+    -0.01,
+    -0.1
+   ],
+   "values": [
+    1.1,
+    1.01,
+    1.001,
+    0.999,
+    0.99,
+    0.9
+   ]
+  },
+  {
+   "source": "calculus/limits/limit-laws.md:330",
+   "setting": "c one step up",
+   "f": "(x^2 + c*x)/x",
+   "variable": "x",
+   "params": {
+    "c": 1.5
+   },
+   "holeX": 0,
+   "points": [
+    0.1,
+    0.01,
+    0.001,
+    -0.001,
+    -0.01,
+    -0.1
+   ],
+   "values": [
+    1.6,
+    1.51,
+    1.501,
+    1.499,
+    1.49,
+    1.4
+   ]
+  },
+  {
    "source": "templates/topic.md:54",
    "setting": "defaults",
    "f": "(5*(1+h)^2 - 5)/h",
