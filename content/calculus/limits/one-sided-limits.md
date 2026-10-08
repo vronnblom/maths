@@ -86,7 +86,10 @@ $$
 if for every $\eps > 0$ there is a $\delta > 0$ such that $f$ is defined at every $x$ with
 $a < x < a + \delta$, and
 $$
-a < x < a + \delta \quad\text{implies}\quad \abs{f(x) - L} < \eps .
+\begin{aligned}
+&a < x < a + \delta \\
+&\quad\text{implies}\quad \abs{f(x) - L} < \eps .
+\end{aligned}
 $$
 
 (b) Let $f$ be a function that is defined at every point of an open interval $(a - r, a)$, for
@@ -98,7 +101,10 @@ $$
 if for every $\eps > 0$ there is a $\delta > 0$ such that $f$ is defined at every $x$ with
 $a - \delta < x < a$, and
 $$
-a - \delta < x < a \quad\text{implies}\quad \abs{f(x) - L} < \eps .
+\begin{aligned}
+&a - \delta < x < a \\
+&\quad\text{implies}\quad \abs{f(x) - L} < \eps .
+\end{aligned}
 $$
 
 These are the **right-hand** and the **left-hand limit**, together the **one-sided limits**. We
@@ -200,7 +206,11 @@ $\abs{L - f(x)} = \abs{f(x) - L}$. By
 [part (b) of the triangle inequality](#thm-calc-triangle-inequality),
 $\abs{u - v} \le \abs{u - w} + \abs{w - v}$, with $u = L$, $v = M$ and $w = f(x)$,
 $$
-\abs{L - M} \le \abs{L - f(x)} + \abs{f(x) - M} < \eps + \eps = \abs{L - M},
+\begin{aligned}
+\abs{L - M} &\le \abs{L - f(x)} \\
+&\quad + \abs{f(x) - M} \\
+&< \eps + \eps = \abs{L - M},
+\end{aligned}
 $$
 which is impossible. So $L = M$. For left-hand limits, take $x = a - \frac{\delta}{2}$
 instead, which satisfies $a - \delta < x < a$.
@@ -315,8 +325,8 @@ $\lim_{x \to 2} f(x)$ exists.
    [property 4 of the absolute value](#rem-calc-absolute-value-properties). The factor
    $\abs{x + 2}$ changes with $x$, so we bound it on a fixed half-window: if $1 < x < 2$, then
    adding $2$ keeps the inequalities, $3 < x + 2 < 4$, so $x + 2$ is positive and
-   $\abs{x + 2} = x + 2 < 4$ ([the definition of the absolute value](#def-calc-absolute-value)). On that half-window $\abs{x^2 - 4} < 4\abs{x - 2}$, which is less
-   than $\eps$ when $\abs{x - 2} < \frac{\eps}{4}$. Both conditions hold if
+   $\abs{x + 2} = x + 2 < 4$ ([the definition of the absolute value](#def-calc-absolute-value)).
+   On that half-window $\abs{x^2 - 4} < 4\abs{x - 2}$, which is less than $\eps$ when $\abs{x - 2} < \frac{\eps}{4}$. Both conditions hold if
    $\delta = \min\bigl(1, \frac{\eps}{4}\bigr)$.
 3. **From the left: proof.** Let $\eps > 0$, $\delta = \min\bigl(1, \frac{\eps}{4}\bigr)$, and
    $2 - \delta < x < 2$. Since $\delta \le 1$, multiplying by ${-1}$ reverses the inequality and
@@ -326,11 +336,16 @@ $\lim_{x \to 2} f(x)$ exists.
    $\abs{x - 2}$, and then $\abs{x - 2} < \frac{\eps}{4}$ by the positive number $4$, keeps
    both strict inequalities:
    $$
-   \abs{f(x) - 4} = \abs{x - 2}\,\abs{x + 2} < 4\abs{x - 2} < 4 \cdot \frac{\eps}{4} = \eps .
+   \begin{aligned}
+   \abs{f(x) - 4} &= \abs{x - 2}\,\abs{x + 2} \\
+   &< 4\abs{x - 2} \\
+   &< 4 \cdot \frac{\eps}{4} = \eps .
+   \end{aligned}
    $$
    So $\lim_{x \to 2^{-}} f(x) = 4$.
 4. **From the right.** For $x > 2$, $f(x) = 2x$, and $\abs{2x - 4} = 2\abs{x - 2} = 2(x - 2)$,
-   because $x - 2 > 0$. Let $\eps > 0$ and $\delta = \frac{\eps}{2}$. If $2 < x < 2 + \delta$,
+   by [property 4 of the absolute value](#rem-calc-absolute-value-properties) and because
+   $x - 2 > 0$. Let $\eps > 0$ and $\delta = \frac{\eps}{2}$. If $2 < x < 2 + \delta$,
    then $0 < x - 2 < \frac{\eps}{2}$, and multiplying by the positive number $2$ keeps the
    inequality: $\abs{f(x) - 4} = 2(x - 2) < \eps$. So $\lim_{x \to 2^{+}} f(x) = 4$.
 5. **The limit.** $f$ is defined on the open interval $\R$ around $2$, and both one-sided limits
@@ -338,7 +353,12 @@ $\lim_{x \to 2} f(x)$ exists.
    $f(2) = 0$.
 
 $$
-\boxed{\lim_{x \to 2^{-}} f(x) = \lim_{x \to 2^{+}} f(x) = \lim_{x \to 2} f(x) = 4}
+\boxed{
+\begin{aligned}
+\lim_{x \to 2^{-}} f(x) &= \lim_{x \to 2^{+}} f(x) = 4, \\
+\lim_{x \to 2} f(x) &= 4
+\end{aligned}
+}
 $$
 
 **Check.** For $\eps = 0.4$, the left $\delta$ is $\min(1, 0.1) = 0.1$, and $x = 1.95$ gives
@@ -372,12 +392,18 @@ $w = 2$, decide whether $\lim_{w \to 2} P(w)$ exists, and find the jump in price
    jumps by £2 at 2 kg.
 
 $$
-\boxed{\lim_{w \to 2^{-}} P(w) = 3, \quad \lim_{w \to 2^{+}} P(w) = 5, \quad \text{jump } 2}
+\boxed{
+\begin{aligned}
+\lim_{w \to 2^{-}} P(w) &= 3, \\
+\lim_{w \to 2^{+}} P(w) &= 5, \\
+\text{jump} &= 2
+\end{aligned}
+}
 $$
 
 **Check.** $P(1.999) = 3$ and $P(2.001) = 5$, in pounds: the prices on the two sides stay $2$
-apart however close to 2 kg the weights are. ✓ The widget in [the figure](#wdg-calc-one-sided-limits-parcel)
-found a $\delta$ on the right for $\eps = 0.5$, and observed none on the left, where every value
+apart however close to 2 kg the weights are. ✓ The widget in
+[the figure](#wdg-calc-one-sided-limits-parcel) found a $\delta$ on the right for $\eps = 0.5$, and observed none on the left, where every value
 is $3$, at distance $2$ from $5$. ✓ Units: pounds throughout. ✓
 :::
 
@@ -466,15 +492,21 @@ With quantifiers, $\lim_{x \to a^{+}} f(x) = L$ says
 $$
 \begin{aligned}
 &\forall \eps > 0 \ \ \exists \delta > 0 \ \ \forall x \colon \\
-&\quad a < x < a + \delta \implies \bigl(x \in \dom f \text{ and } \abs{f(x) - L} < \eps\bigr).
+&\quad a < x < a + \delta \implies \\
+&\qquad x \in \dom f \\
+&\qquad \text{and } \abs{f(x) - L} < \eps .
 \end{aligned}
 $$
-Here $\dom f$ is [the domain](#def-calc-domain-range) of $f$. Negating as in [The Limit of a
-Function](#calc-limit), $L$ is **not** the right-hand limit when
+Here $\dom f$ is [the domain](#def-calc-domain-range) of $f$. To negate, each $\forall$
+becomes $\exists$ and each $\exists$ becomes $\forall$, the implication $P \implies Q$ becomes
+"$P$ and not $Q$", and "not ($A$ and $B$)" becomes "(not $A$) or (not $B$)". So $L$ is **not**
+the right-hand limit when
 $$
 \begin{aligned}
 &\exists \eps > 0 \ \ \forall \delta > 0 \ \ \exists x \colon \\
-&\quad a < x < a + \delta \ \text{ and } \ \bigl(x \notin \dom f \text{ or } \abs{f(x) - L} \ge \eps\bigr).
+&\quad a < x < a + \delta \ \text{ and} \\
+&\qquad \bigl(x \notin \dom f \\
+&\qquad\quad \text{or } \abs{f(x) - L} \ge \eps\bigr).
 \end{aligned}
 $$
 This is the pattern of the non-example after [](#def-calc-one-sided-limit): $\eps = \frac12$,
@@ -503,7 +535,12 @@ of [](#eg-calc-one-sided-limits-sqrt) with $-x$ in place of $x$.
 - $\lim_{x \to a^{+}} f(x) = L$ ([](#def-calc-one-sided-limit)): for every $\eps > 0$ there is a
   $\delta > 0$ such that
   $$
-  \boxed{a < x < a + \delta \implies \abs{f(x) - L} < \eps ,}
+  \boxed{
+  \begin{aligned}
+  &a < x < a + \delta \\
+  &\quad \implies \abs{f(x) - L} < \eps ,
+  \end{aligned}
+  }
   $$
   and the left-hand limit uses $a - \delta < x < a$. The value $f(a)$ and the values on the
   other side play no part.
@@ -927,7 +964,10 @@ $1 - \delta < x < 1$. Since $\delta \le \frac12$, multiplying by ${-1}$ reverses
 and adding $1$ keeps it, so $1 - \delta \ge \frac12$ and $\frac12 < x < 1$. Then $\frac{1}{x}$ is
 defined, $\frac{1}{x} < 2$, and $0 < 1 - x < \delta \le \frac{\eps}{2}$, so, by the scratch work,
 $$
-\abs{\frac{1}{x} - 1} = \frac{1 - x}{x} < 2(1 - x) < 2 \cdot \frac{\eps}{2} = \eps ,
+\begin{aligned}
+\abs{\frac{1}{x} - 1} &= \frac{1 - x}{x} < 2(1 - x) \\
+&< 2 \cdot \frac{\eps}{2} = \eps ,
+\end{aligned}
 $$
 where the last step multiplies $1 - x < \frac{\eps}{2}$ by the positive number $2$. Hence
 $\lim_{x \to 1^{-}} \frac{1}{x} = 1$.
