@@ -18,7 +18,7 @@ from fractions import Fraction as Q
 import pytest
 import sympy as sp
 
-from mathcheck import ManualAnswer, answer, answer_type, covers, equal, h, limit_is, n, x
+from mathcheck import ManualAnswer, answer, answer_type, covers, equal, equal_on_domain, h, limit_is, n, x
 
 eps = sp.Symbol("epsilon", positive=True)
 delta = sp.Symbol("delta", positive=True)
@@ -143,6 +143,8 @@ def test_eg_calc_limit_jump():
     assert equal(f.subs(x, -delta / 2), -1)
     # No L is within ε = 1 of both values: {L : |1 − L| < 1 and |−1 − L| < 1} is empty.
     assert empty_on(sp.And(sp.Abs(1 - L) < 1, sp.Abs(-1 - L) < 1), L, sp.S.Reals)
+    # The symmetry step (property 2): |L − (−1)| = |−1 − L|.
+    assert equal(sp.Abs(L - (-1)), sp.Abs(-1 - L))
     # The triangle-inequality step: |1 − L| + |L + 1| ≥ 2 = |1 − (−1)| for every L.
     assert equal(sp.Abs(1 - (-1)), 2)
     rng = random.Random(19)
@@ -188,6 +190,8 @@ def test_eg_calc_limit_sin_1_over_x():
         assert (0 < qk) is sp.true and (qk < pk) is sp.true and (pk < d) is sp.true
         assert equal(f.subs(x, pk), 0)
         assert equal(f.subs(x, qk), 1)
+    # The symmetry step (property 2): |L − 0| = |0 − L|.
+    assert equal(sp.Abs(L - 0), sp.Abs(0 - L))
     # No L is within ½ of both 0 and 1, and |1 − 0| = 1 = ½ + ½.
     assert empty_on(sp.And(sp.Abs(0 - L) < sp.Rational(1, 2), sp.Abs(1 - L) < sp.Rational(1, 2)), L, sp.S.Reals)
     for lv in [Q(0), Q(1), Q(1, 2)] + [Q(rng.randint(-10**7, 10**7), 10**5) for _ in range(500)]:
@@ -288,28 +292,44 @@ def test_eg_calc_limit_quadratic_eps_delta():
 
 @covers("exr-calc-limit-table-estimate")
 def test_exr_calc_limit_table_estimate():
-    g = (2**x - 1) / x
+    g = (sp.sqrt(1 + x) - 1) / x
+    # The limit, from SymPy on both sides, and every point of the table is in the domain x ≥ −1.
     exact = sp.limit(g, x, 0)
-    assert equal(exact, sp.log(2))
-    assert limit_is(g, x, 0, sp.log(2))
-    # The table the exercise asks for: from the right the values decrease, from the left they
-    # increase, and at ±0.001 both round to the same two decimals as the limit.
+    assert limit_is(g, x, 0, exact)
+    assert limit_is(g, x, 0, exact, dir="+") and limit_is(g, x, 0, exact, dir="-")
+    # Looking ahead: for x ≠ 0, x ≥ −1, multiplying by √(1 + x) + 1 gives 1/(√(1 + x) + 1), which
+    # is defined at 0, where it equals the limit.
+    rationalised = 1 / (sp.sqrt(1 + x) + 1)
+    assert equal_on_domain(g, rationalised, x, sp.Interval.Ropen(-1, 0))
+    assert equal_on_domain(g, rationalised, x, sp.Interval.open(0, sp.oo))
+    assert equal(g.subs(x, -1), rationalised.subs(x, -1))            # the endpoint x = −1 too
+    assert equal(rationalised.subs(x, 0), exact)
+    assert equal(exact, sp.Rational(1, 2))
+    # The table the exercise asks for: from the right the values increase towards the limit, from
+    # the left they decrease towards it, and at ±0.001 both round to the limit's two decimals.
     pts = [sp.Rational(1, 10), sp.Rational(1, 100), sp.Rational(1, 1000)]
-    right = [sp.N(g.subs(x, p), 30) for p in pts]
-    left = [sp.N(g.subs(x, -p), 30) for p in pts]
-    assert right[0] > right[1] > right[2] > exact.evalf(30) > left[2] > left[1] > left[0]
-    two_dp = round(float(exact), 2)
-    assert round(float(right[2]), 2) == round(float(left[2]), 2) == two_dp
+    right = [g.subs(x, p) for p in pts]
+    left = [g.subs(x, -p) for p in pts]
+    chain = [right[0], right[1], right[2], exact, left[2], left[1], left[0]]
+    assert all((lo < hi) is sp.true for lo, hi in zip(chain, chain[1:]))
+
+    def rounded(v, places):
+        """v rounded to the nearest multiple of 10^−places, exactly (no float ties)."""
+        scale = sp.Integer(10) ** places
+        return sp.floor(v * scale + sp.Rational(1, 2)) / scale
+
+    two_dp = rounded(exact, 2)
+    assert equal(rounded(right[2], 2), two_dp) and equal(rounded(left[2], 2), two_dp)
     # The solution's printed six-decimal table, against the values computed here.
-    printed = {sp.Rational(1, 10): "0.717735", sp.Rational(1, 100): "0.695555", sp.Rational(1, 1000): "0.693387",
-               -sp.Rational(1, 1000): "0.692907", -sp.Rational(1, 100): "0.690750", -sp.Rational(1, 10): "0.669670"}
+    printed = {sp.Rational(1, 10): "0.488088", sp.Rational(1, 100): "0.498756", sp.Rational(1, 1000): "0.499875",
+               -sp.Rational(1, 1000): "0.500125", -sp.Rational(1, 100): "0.501256", -sp.Rational(1, 10): "0.513167"}
     for p, shown in printed.items():
-        assert f"{float(sp.N(g.subs(x, p), 30)):.6f}" == shown, (p, shown)
-    # The answer: within its tolerance (5·10⁻³) of ln 2, and the correctly rounded value.
+        assert equal(rounded(g.subs(x, p), 6), sp.Rational(shown)), (p, shown)
+    # The answer: within its tolerance (5·10⁻³) of the exact limit, and the correctly rounded value.
     value = answer("exr-calc-limit-table-estimate")
     assert answer_type("exr-calc-limit-table-estimate") == "numeric-5e-3"
-    assert abs(float(value) - float(exact)) <= 5e-3
-    assert equal(sp.nsimplify(value), sp.Rational(str(two_dp)))
+    assert (sp.Abs(value - exact) <= sp.Rational(5, 1000)) is sp.true
+    assert equal(value, two_dp)
 
 
 @covers("exr-calc-limit-value-at-a")
@@ -354,6 +374,14 @@ def test_exr_calc_limit_large_values():
     assert equal(good, sp.Interval.open(-largest, largest) - sp.FiniteSet(0))
     got = answer("exr-calc-limit-large-values")
     assert equal(got, largest)
+    # The solution's steps: for x ≠ 0, 1/x² > 10 000 ⟺ x² < 1/10 000 (multiplying by x²/10 000 > 0);
+    # x² = |x|²; 1/10 000 = (1/100)²; and for non-negative numbers, |x|² < (1/100)² ⟺ |x| < 1/100.
+    nonzero = sp.S.Reals - sp.FiniteSet(0)
+    assert equal(good, sp.solveset(x**2 < sp.Rational(1, bound), x, nonzero))
+    assert equal(x**2, sp.Abs(x) ** 2)
+    assert equal(sp.Rational(1, bound), sp.Rational(1, 100) ** 2)
+    assert equal(sp.solveset(sp.Abs(x) ** 2 < sp.Rational(1, 100) ** 2, x, nonzero),
+                 sp.solveset(sp.Abs(x) < sp.Rational(1, 100), x, nonzero))
     rng = random.Random(8)
     d = Q(str(got))
     for xv in window(0, d, rng, count=2000):
@@ -377,10 +405,32 @@ def test_exr_calc_limit_widget_largest_delta():
     assert (right < left) is sp.true
     got = answer("exr-calc-limit-widget-largest-delta")
     assert equal(got, (right, left, both))
-    # The solution's comparison: (√4.1 + √3.9)² = 8 + 2√15.99 < 16.
-    s = sp.sqrt(sp.Rational(41, 10)) + sp.sqrt(sp.Rational(39, 10))
-    assert equal(s**2, 8 + 2 * sp.sqrt(sp.Rational(1599, 100)))
-    assert (s**2 < 16) is sp.true
+    r41, r39 = sp.sqrt(sp.Rational(41, 10)), sp.sqrt(sp.Rational(39, 10))
+    # The solution's set-up: |x² − 4| < 0.1 ⟺ 3.9 < x² < 4.1, and for x > 0 that is √3.9 < x < √4.1.
+    band = sp.Intersection(sp.solveset(x**2 > 4 - e, x, sp.S.Reals), sp.solveset(x**2 < 4 + e, x, sp.S.Reals))
+    assert equal(good, band)
+    assert equal(component, sp.Interval.open(r39, r41))
+    assert equal(r39**2, sp.Rational(39, 10)) and equal(r41**2, sp.Rational(41, 10))
+    # (a), (b): √3.9 < 2 because 3.9 < 4 = 2², and 2 < √4.1 because 2² = 4 < 4.1.
+    assert sp.Rational(39, 10) < 4 < sp.Rational(41, 10)
+    assert (r39 < 2) is sp.true and (2 < r41) is sp.true
+    # (c), comparing squares (F4): (√4.1·√3.9)² = 4.1·3.9 = 15.99 < 16 = 4², so √4.1·√3.9 < 4; then
+    # (√4.1 + √3.9)² = 4.1 + 2√4.1·√3.9 + 3.9 < 8 + 2·4 = 16 = 4², so √4.1 + √3.9 < 4.
+    prod = r41 * r39
+    assert equal(prod**2, sp.Rational(41, 10) * sp.Rational(39, 10))
+    assert equal(sp.Rational(41, 10) * sp.Rational(39, 10), sp.Rational(1599, 100))
+    assert sp.Rational(1599, 100) < 16 and (prod < 4) is sp.true
+    s = r41 + r39
+    assert equal(s**2, sp.Rational(41, 10) + 2 * prod + sp.Rational(39, 10))
+    assert equal(sp.Rational(41, 10) + sp.Rational(39, 10), 8)
+    assert (s**2 < 16) is sp.true and (s < 4) is sp.true
+    # ... which is the comparison √4.1 − 2 < 2 − √3.9 that picks (c).
+    assert equal((2 - r39) - (r41 - 2), 4 - s)
+    # F10: √4.1 = √410/10 and √3.9 = √390/10 (non-negative, with squares 4.1 and 3.9).
+    for root, radicand, value in ((sp.sqrt(410) / 10, 410, sp.Rational(41, 10)), (sp.sqrt(390) / 10, 390, sp.Rational(39, 10))):
+        assert root.is_nonnegative
+        assert equal(root**2, sp.Rational(radicand, 100)) and equal(root**2, value)
+        assert equal(root, sp.sqrt(value))
     # The numbers the widget reports (Try this, step 1, and the solution) are the exact values
     # rounded down to six significant digits.
     assert equal(round_down_sig(right), sp.Rational(248456, 10**7))
@@ -388,6 +438,11 @@ def test_exr_calc_limit_widget_largest_delta():
     # The solution's "≈ 0.0248457" and "≈ 0.0251582" (nearest rounding).
     assert abs(sp.N(right, 30) - sp.Rational(248457, 10**7)) < sp.Rational(5, 10**8)
     assert abs(sp.N(left, 30) - sp.Rational(251582, 10**7)) < sp.Rational(5, 10**8)
+    # F6: "may be smaller than the exact value by about 10⁻⁵ of that value": here the reported
+    # numbers are below the exact ones by less than 10⁻⁵ (relative).
+    for exact_v, reported in ((right, sp.Rational(248456, 10**7)), (left, sp.Rational(251582, 10**7))):
+        assert (reported <= exact_v) is sp.true
+        assert ((exact_v - reported) / exact_v < sp.Rational(1, 10**5)) is sp.true
     # Each δ works on its side, exactly up to the edge.
     rng = random.Random(9)
     for side, d in ((1, right), (-1, left)):
@@ -521,8 +576,13 @@ def test_exr_calc_limit_eps_delta_sqrt():
         answer("exr-calc-limit-eps-delta-sqrt")
     u = sp.Symbol("u", nonnegative=True)
     assert limit_is(sp.sqrt(x), x, 4, 2)
-    # (√x − 2)(√x + 2) = x − 4 and √x + 2 ≥ 2 for x ≥ 0, so |√x − 2| ≤ |x − 4|/2.
+    # (√x − 2)(√x + 2) = x − 4, because (√x)² = x, and √x + 2 ≥ 2 > 0, because √x ≥ 0 (x ≥ 0);
+    # so |√x − 2| = |x − 4|/(√x + 2) ≤ |x − 4|/2.
+    assert equal(sp.sqrt(u) ** 2, u) and sp.sqrt(u).is_nonnegative
     assert equal((sp.sqrt(u) - 2) * (sp.sqrt(u) + 2), u - 4)
+    # Property 4, |p/q| = |p|/|q|, with q = √x + 2 = |√x + 2| > 0, applied to √x − 2 = (x − 4)/(√x + 2).
+    assert equal(sp.Abs(sp.sqrt(u) + 2), sp.sqrt(u) + 2) and (sp.sqrt(u) + 2).is_positive
+    assert equal(sp.Abs((u - 4) / (sp.sqrt(u) + 2)), sp.Abs(u - 4) / sp.Abs(sp.sqrt(u) + 2))
     assert equal(sp.minimum(sp.sqrt(x) + 2, x, sp.Interval(0, sp.oo)), 2)
     assert equal((u - 4) / (sp.sqrt(u) + 2), sp.sqrt(u) - 2)   # so |√x − 2| = |x − 4|/(√x + 2)
     assert empty_on(sp.Abs(sp.sqrt(x) - 2) > sp.Abs(x - 4) / 2, x, sp.Interval(0, sp.oo))
@@ -562,8 +622,12 @@ def test_definition_example_and_non_example():
         assert 0 < d < dv
         assert abs((1 + d) - Q(3, 2)) == Q(1, 2) - d >= Q(3, 8)
         assert not abs((1 + d) - Q(3, 2)) < Q(1, 4)
-    # The ∃δ∀ε order fails for x at 0: every δ fails ε = δ/2 at x = 3δ/4.
-    assert (sp.Abs(3 * delta / 4) >= delta / 2) is sp.true
+    # The ∃δ∀ε order fails for f(x) = x at a = 0 with L = 0: for each δ > 0, the point x = 3δ/4 is
+    # in the window 0 < |x − 0| < δ, and there |f(x) − 0| = 3δ/4 ≥ δ/2 = ε.
+    w = 3 * delta / 4
+    assert (0 < sp.Abs(w - 0)) is sp.true and (sp.Abs(w - 0) < delta) is sp.true
+    assert equal(sp.Abs(w - 0), 3 * delta / 4)
+    assert (sp.Abs(w - 0) >= delta / 2) is sp.true
     # "Why f must be defined near a": for √x at −1 and δ ≤ 1, no x of the domain [0, ∞) has
     # 0 < |x + 1| < δ (checked at δ = 1, the widest such window).
     assert empty_on(sp.Abs(x + 1) < 1, x, sp.Interval(0, sp.oo))
@@ -598,6 +662,9 @@ def test_thm_calc_limit_unique_computable_claims():
     assert equal(sp.Abs((L + gap * sv) - L), gap * sp.Abs(sv))
     assert equal(sp.Abs((L + gap * sv) - M), gap * sp.Abs(sv - 1))
     assert equal(e, gap / 2)
+    # The symmetry step (property 2), |L − f(x)| = |f(x) − L|, with a symbol for f(x).
+    fx = sp.Symbol("f_x", real=True)
+    assert equal(sp.Abs(L - fx), sp.Abs(fx - L))
     assert empty_on(sp.And(sp.Abs(sv) < sp.Rational(1, 2), sp.Abs(sv - 1) < sp.Rational(1, 2)), sv, sp.S.Reals)
     # The triangle inequality in the form used, on exact random triples.
     rng = random.Random(18)
@@ -638,8 +705,46 @@ def test_figure_misleading_table():
     tiny = [math.sin(math.pi / v) for v in (0.1, 0.01, 0.001)]
     assert all(0 < abs(t) < 1e-12 for t in tiny)
     assert f"{tiny[0]:.1e}" == "-1.2e-15"
-    # The graph swings between −1 and 1: the range on (0, 1].
-    assert equal(sp.sin(sp.pi / sp.Rational(2, 5)), 1) and equal(sp.sin(sp.pi / sp.Rational(2, 3)), -1)
+    # "It stays between −1 and 1. Near x = 0 it rises to height 1 and falls back through 0 again
+    # and again": the values lie in [−1, 1], and between consecutive zeros 1/(2m + 1) < 1/(2m) lies
+    # x_m = 2/(4m + 1), where the value is 1, for every integer m ≥ 1.
+    # (sin takes values in [−1, 1] on all of ℝ, and π/x is real for x ≠ 0.)
+    tt = sp.Symbol("t", real=True)
+    assert equal(sp.calculus.util.function_range(sp.sin(tt), tt, sp.S.Reals), sp.Interval(-1, 1))
+    assert (sp.pi / sp.Symbol("x_nz", real=True, nonzero=True)).is_real
+    m = sp.Symbol("m", integer=True, positive=True)
+    xm = 2 / (4 * m + 1)
+    assert equal(f.subs(x, 1 / (2 * m)), 0) and equal(f.subs(x, 1 / (2 * m + 1)), 0)
+    assert equal(f.subs(x, xm), 1)
+    assert equal(1 / (2 * m) - xm, 1 / (2 * m * (4 * m + 1))) and equal(xm - 1 / (2 * m + 1), 1 / ((4 * m + 1) * (2 * m + 1)))
+    assert (1 / (2 * m * (4 * m + 1))).is_positive and (1 / ((4 * m + 1) * (2 * m + 1))).is_positive
+
+
+def test_facts_from_school():
+    # The box "Facts from school used on this page", each fact symbolically (k an integer, any
+    # sign; t real), in radians.
+    kk = sp.Symbol("k", integer=True)
+    tt = sp.Symbol("t", real=True)
+    assert equal(sp.sin(kk * sp.pi), 0)
+    assert equal(sp.sin(sp.pi / 2 + 2 * kk * sp.pi), 1)
+    assert equal(sp.calculus.util.function_range(sp.sin(tt), tt, sp.S.Reals), sp.Interval(-1, 1))
+    # Every use on the page is an instance of the first two facts, with an integer k:
+    # the figure's 10π, 100π, 1000π (k = 10, 100, 1000) and 12.5π, 62.5π, 312.5π (k = 6, 31, 156);
+    for multiple in (10, 100, 1000):
+        assert equal(sp.sin(multiple * sp.pi), sp.sin(kk * sp.pi).subs(kk, multiple))
+    for value, k_ in ((sp.Rational(25, 2), 6), (sp.Rational(125, 2), 31), (sp.Rational(625, 2), 156)):
+        assert equal(value * sp.pi, sp.pi / 2 + 2 * k_ * sp.pi)
+    # p_n, q_n: sin(2πn) (k = 2n) and sin(2πn + π/2) (k = n); the n = 50 Check: sin(100π) and
+    # sin(100π + π/2); sin(π/x) solution: sin(nπ) at x = 1/n and π/x_n = 2πn + π/2.
+    nn = sp.Symbol("n", integer=True, positive=True)
+    assert equal(sp.sin(2 * sp.pi * nn), sp.sin(kk * sp.pi).subs(kk, 2 * nn))
+    assert equal(sp.sin(2 * sp.pi * nn + sp.pi / 2), sp.sin(sp.pi / 2 + 2 * kk * sp.pi).subs(kk, nn))
+    assert equal(sp.sin(100 * sp.pi + sp.pi / 2), 1)
+    assert equal(sp.pi / (2 / (4 * nn + 1)), 2 * sp.pi * nn + sp.pi / 2)
+    # In the sin(1/x) intro, 1/x passes through every multiple kπ (k ≥ 1) at x = 1/(kπ) and through
+    # every π/2 + 2kπ (k ≥ 0) at x = 1/(π/2 + 2kπ), points that tend to 0.
+    assert limit_is(1 / (nn * sp.pi), nn, sp.oo, 0)
+    assert limit_is(1 / (sp.pi / 2 + 2 * nn * sp.pi), nn, sp.oo, 0)
 
 
 def test_figure_epsilon_delta_and_try_this():
@@ -667,18 +772,35 @@ def test_figure_epsilon_delta_and_try_this():
     assert equal(round_down_sig(left), sp.Rational(251582, 10**7))
     assert equal(round_down_sig(right), sp.Rational(248456, 10**7))
     # Step 3: the largest slider value ≤ the found δ is 0.024; one step up is 0.025, which fails:
-    # x = 2.025 is in its window and x² = 4.100625 ≥ 4.1.
+    # its (open) window 0 < |x − 2| < 0.025 contains points right of √4.1, e.g. x = 2.0249, where
+    # x² = 4.10022001 ≥ 4.1. (x = 2.025 itself is the window's edge, not in it.)
     found = round_down_sig(right)
     on_slider = sp.floor(found / step) * step
     assert equal(on_slider, sp.Rational(24, 1000))
+    assert (on_slider < right) is sp.true            # δ = 0.024 really works
     up = on_slider + step
     assert equal(up, sp.Rational(25, 1000))
+    assert (up > right) is sp.true                   # δ = 0.025 does not
+    probe = sp.Rational(20249, 10**4)
+    assert (0 < probe - a_) and (probe - a_ < up)
+    assert equal(probe**2, sp.Rational(410022001, 10**8)) and probe**2 >= lim + e
+    # "Why the smaller one" (F7): a δ larger than √4.1 − 2 ≈ 0.024846 lets in points right of √4.1,
+    # where x² ≥ 4.1 (at x = 2.025, outside the band: x² = 4.100625; x = 2.025 is right of √4.1 and
+    # in the window of every δ > 0.025); the left side tolerates up to 2 − √3.9 ≈ 0.025158.
+    r41, r39 = sp.sqrt(lim + e), sp.sqrt(lim - e)
+    assert equal(right, r41 - 2) and equal(left, 2 - r39)
+    assert equal(sp.floor(right * 10**6 + sp.Rational(1, 2)), 24846)
+    assert equal(sp.floor(left * 10**6 + sp.Rational(1, 2)), 25158)
     assert equal(sp.Rational(2025, 1000) ** 2, sp.Rational(4100625, 10**6))
     assert sp.Rational(4100625, 10**6) >= lim + e
-    # "Why the smaller one": a δ above ≈ 0.0248 lets in points right of 2.0248 outside the band;
-    # the left side tolerates up to ≈ 0.0252.
-    assert abs(sp.N(right, 30) - sp.Rational(248, 10**4)) < sp.Rational(5, 10**5)
-    assert abs(sp.N(left, 30) - sp.Rational(252, 10**4)) < sp.Rational(5, 10**5)
+    assert (sp.Rational(2025, 1000) > r41) is sp.true
+    # Any δ above √4.1 − 2 fails: its window contains a point of (√4.1, 2 + δ), outside the band.
+    for d_over in (sp.Rational(1, 10**9), sp.Rational(1, 10**6), sp.Rational(1, 1000)):
+        xv = a_ + right + d_over / 2                  # in the window of δ = right + d_over
+        assert (0 < xv - a_) is sp.true and (xv - a_ < right + d_over) is sp.true
+        assert (sp.Abs(xv**2 - lim) >= e) is sp.true
+    # Within the left tolerance the left side is fine: every x in (2 − (2 − √3.9), 2) has x² > 3.9.
+    assert empty_on(x**2 <= lim - e, x, sp.Interval.open(a_ - left, a_))
     # Step 4 and "as ε shrinks, so does the window": the both-sides δ increases with ε.
     deltas = [sp.Min(*largest(sp.Rational(k, 100))) for k in (5, 10, 50, 100, 150)]
     assert all((p < q) is sp.true for p, q in zip(deltas, deltas[1:]))
