@@ -828,6 +828,54 @@
    ]
   },
   {
+   "source": "calculus/limits/limit-of-a-function.md:50",
+   "setting": "defaults",
+   "f": "(5*(1+h)^2 - 5)/h",
+   "variable": "h",
+   "params": {},
+   "holeX": 0,
+   "points": [
+    0.1,
+    0.01,
+    0.001,
+    -0.001,
+    -0.01,
+    -0.1
+   ],
+   "values": [
+    10.5,
+    10.05,
+    10.005,
+    9.995,
+    9.95,
+    9.5
+   ]
+  },
+  {
+   "source": "calculus/limits/limit-of-a-function.md:94",
+   "setting": "defaults",
+   "f": "sin(pi/x)",
+   "variable": "x",
+   "params": {},
+   "holeX": null,
+   "points": [
+    0.1,
+    0.01,
+    0.001,
+    0.08,
+    0.016,
+    0.0032
+   ],
+   "values": [
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  {
    "source": "templates/topic.md:50",
    "setting": "defaults",
    "f": "(5*(1+h)^2 - 5)/h",
