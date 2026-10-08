@@ -101,8 +101,9 @@ No page of this course proves these facts: they are where plane geometry starts.
 :::{admonition} Looking ahead
 :class: looking-ahead
 Two of these facts hide a limit: the length of a curved arc, and the area of a region with a
-curved edge. The Integrals chapter defines area as a limit of sums (The Definite Integral), and
-the page Arc Length and Surface Area defines the length of a curve. Those pages may not
+curved edge. The Integrals chapter makes area precise, as a limit of sums (the pages Area and
+Riemann Sums and The Definite Integral), and the page Arc Length and Surface Area defines the
+length of a curve. Those pages may not
 recover the arc length of the circle or the area of a sector with the derivatives of sine and
 cosine: the derivatives rest on [](#lem-calc-sin-bounds) of this page, so that would argue in
 a circle. A construction of sine and cosine that uses no geometry at all, from power series or
@@ -434,36 +435,33 @@ equals the distance from $P(s - t)$ to $A$, and so do their squares. By the dist
 and [](#thm-calc-pythagorean-identity), the first squared distance is
 $$
 \begin{aligned}
-(\cos s - \cos t)^2 + (\sin s - \sin t)^2
-  &= (\cos^2 s + \sin^2 s) + (\cos^2 t + \sin^2 t) \\
-  &\qquad - 2(\cos s \cos t + \sin s \sin t) \\
-  &= 2 - 2(\cos s \cos t + \sin s \sin t),
+&(\cos s - \cos t)^2 + (\sin s - \sin t)^2 \\
+&= \cos^2 s + \sin^2 s + \cos^2 t + \sin^2 t \\
+&\quad - 2\cos s \cos t - 2\sin s \sin t \\
+&= 2 - 2(\cos s \cos t + \sin s \sin t),
 \end{aligned}
 $$
 and the second is
 $$
 \begin{aligned}
-\bigl(\cos(s - t) - 1\bigr)^2 + \sin^2(s - t)
-  &= \cos^2(s - t) + \sin^2(s - t) - 2\cos(s - t) + 1 \\
-  &= 2 - 2\cos(s - t).
+&\bigl(\cos(s - t) - 1\bigr)^2 + \sin^2(s - t) \\
+&= \cos^2(s - t) + \sin^2(s - t) \\
+&\quad - 2\cos(s - t) + 1 \\
+&= 2 - 2\cos(s - t).
 \end{aligned}
 $$
 Setting them equal and solving for $\cos(s - t)$ gives (a).
 
-(b) Apply (a) to $s$ and $-t$; by property 4, $\cos(-t) = \cos t$ and $\sin(-t) = -\sin t$:
-$$
-\begin{aligned}
-\cos(s + t) &= \cos s \cos(-t) + \sin s \sin(-t) \\
-  &= \cos s \cos t - \sin s \sin t .
-\end{aligned}
-$$
+(b) Apply (a) to $s$ and $-t$; by property 4, $\cos(-t) = \cos t$ and $\sin(-t) = -\sin t$,
+so $\cos(s + t) = \cos s \cos(-t) + \sin s \sin(-t) = \cos s \cos t - \sin s \sin t$.
 
 (c) By property 6, $\sin(s + t) = \cos\bigl(\frac{\pi}{2} - (s + t)\bigr)
 = \cos\bigl(\bigl(\frac{\pi}{2} - s\bigr) - t\bigr)$. By (a), and property 6 again
 ($\cos\bigl(\frac{\pi}{2} - s\bigr) = \sin s$ and $\sin\bigl(\frac{\pi}{2} - s\bigr) = \cos s$),
 $$
 \begin{aligned}
-\sin(s + t) &= \cos\Bigl(\frac{\pi}{2} - s\Bigr)\cos t + \sin\Bigl(\frac{\pi}{2} - s\Bigr)\sin t \\
+\sin(s + t) &= \cos\Bigl(\frac{\pi}{2} - s\Bigr)\cos t \\
+  &\quad + \sin\Bigl(\frac{\pi}{2} - s\Bigr)\sin t \\
   &= \sin s \cos t + \cos s \sin t .
 \end{aligned}
 $$
@@ -548,10 +546,8 @@ $$
 **Step 2: the inequalities are strict.** Let $0 < \theta < \frac{\pi}{2}$ again, and let
 $s = \sin\frac{\theta}{2}$ and $c = \cos\frac{\theta}{2}$. Since
 $0 < \frac{\theta}{2} < \frac{\pi}{4} < \frac{\pi}{2}$, property 8 gives $s > 0$ and $c > 0$, and
-step 1, applied to $\frac{\theta}{2}$, gives
-$$
-s \le \frac{\theta}{2} \qquad\text{and}\qquad \frac{\theta}{2} \le \tan\frac{\theta}{2} = \frac{s}{c} .
-$$
+step 1, applied to $\frac{\theta}{2}$, gives $s \le \frac{\theta}{2}$ and
+$\frac{\theta}{2} \le \tan\frac{\theta}{2} = \frac{s}{c}$.
 Also $c < 1$: by [](#thm-calc-pythagorean-identity), $c^2 = 1 - s^2 < 1$, because $s^2 > 0$;
 and $c \ge 1$ would give $c^2 \ge 1$, by the order part of
 [the square-root remark](#rem-calc-square-roots).
@@ -576,9 +572,9 @@ and $c \ge 1$ would give $c^2 \ge 1$, by the order part of
 So $\sin\theta < \theta < \tan\theta$.
 :::
 
-The proof assumed exactly two facts about curved figures, both from the facts from school: the
-arc from $A$ to $P(\theta)$ has length $\theta$ (that is how $P(\theta)$ is defined), and the
-sector has area $\frac{\theta}{2}$. It used no derivatives and no limits.
+The proof rests on the facts from school, and in particular on the two of them that hide a
+limit: the arc from $A$ to $P(\theta)$ has length $\theta$ (that is how $P(\theta)$ is defined),
+and the sector has area $\frac{\theta}{2}$. It used no derivatives and no limits.
 
 :::{proof:remark} Why $0 < \theta < \frac{\pi}{2}$
 :label: rem-calc-trig-functions-sin-bounds-hypothesis
@@ -720,10 +716,7 @@ Find $\cos t$ and $\sin t$ exactly for $t = \frac{\pi}{4}$, $\frac{\pi}{3}$ and 
 2. **At $\frac{\pi}{3}$.** Let $c = \cos\frac{\pi}{3}$. Part (f) of
    [](#thm-calc-addition-formulas) gives $\cos\frac{2\pi}{3} = 2c^2 - 1$, and property 5 gives
    $\cos\frac{2\pi}{3} = \cos\bigl(\pi - \frac{\pi}{3}\bigr) = -c$. So $2c^2 - 1 = -c$, that is,
-   $$
-   2c^2 + c - 1 = (2c - 1)(c + 1) = 0 .
-   $$
-   By property 8, $c > 0$, so $c + 1 > 0$, and therefore $2c - 1 = 0$: $c = \frac12$. Then
+   $2c^2 + c - 1 = 0$, which factors as $(2c - 1)(c + 1) = 0$. By property 8, $c > 0$, so $c + 1 > 0$, and therefore $2c - 1 = 0$: $c = \frac12$. Then
    $\sin^2\frac{\pi}{3} = 1 - \frac14 = \frac34$, and $\sin\frac{\pi}{3} > 0$, so, as in step 1,
    $\sin\frac{\pi}{3} = \frac{\sqrt{3}}{2}$.
 3. **At $\frac{\pi}{6}$.** Since $\frac{\pi}{6} = \frac{\pi}{2} - \frac{\pi}{3}$, property 6 with
@@ -767,8 +760,10 @@ quadrant, where [](#eg-calc-trig-functions-special-values) gives the values.
 $$
 \boxed{
 \begin{aligned}
-\sin\frac{5\pi}{6} &= \frac12, & \cos\frac{4\pi}{3} &= -\frac12, \\
-\tan\Bigl(-\frac{\pi}{4}\Bigr) &= -1, & \sin\frac{17\pi}{6} &= \frac12
+\sin\frac{5\pi}{6} &= \frac12, \\
+\cos\frac{4\pi}{3} &= -\frac12, \\
+\tan\Bigl(-\frac{\pi}{4}\Bigr) &= -1, \\
+\sin\frac{17\pi}{6} &= \frac12
 \end{aligned}
 }
 $$
@@ -815,7 +810,8 @@ Find $\cos\frac{\pi}{12}$ exactly.
    $$
    \begin{aligned}
    \cos\frac{\pi}{12}
-     &= \cos\frac{\pi}{3}\cos\frac{\pi}{4} + \sin\frac{\pi}{3}\sin\frac{\pi}{4} \\
+     &= \cos\frac{\pi}{3}\cos\frac{\pi}{4} \\
+     &\quad + \sin\frac{\pi}{3}\sin\frac{\pi}{4} \\
      &= \frac12 \cdot \frac{\sqrt{2}}{2} + \frac{\sqrt{3}}{2} \cdot \frac{\sqrt{2}}{2} \\
      &= \frac{\sqrt{2} + \sqrt{6}}{4},
    \end{aligned}
@@ -1165,9 +1161,10 @@ part (c) of [](#thm-calc-addition-formulas) and the values of
 $$
 \begin{aligned}
 \sin\frac{5\pi}{12}
-  &= \sin\frac{\pi}{4}\cos\frac{\pi}{6} + \cos\frac{\pi}{4}\sin\frac{\pi}{6} \\
-  &= \frac{\sqrt{2}}{2}\cdot\frac{\sqrt{3}}{2} + \frac{\sqrt{2}}{2}\cdot\frac12
-   = \frac{\sqrt{6} + \sqrt{2}}{4} .
+  &= \sin\frac{\pi}{4}\cos\frac{\pi}{6} \\
+  &\quad + \cos\frac{\pi}{4}\sin\frac{\pi}{6} \\
+  &= \frac{\sqrt{2}}{2}\cdot\frac{\sqrt{3}}{2} + \frac{\sqrt{2}}{2}\cdot\frac12 \\
+  &= \frac{\sqrt{6} + \sqrt{2}}{4} .
 \end{aligned}
 $$
 This is the value of $\cos\frac{\pi}{12}$ found in [](#eg-calc-trig-functions-addition), as it
@@ -1343,9 +1340,11 @@ and $d = \frac{u - v}{2}$, so that $v = m - d$ and $u = m + d$. By parts (a) and
 [](#thm-calc-addition-formulas),
 $$
 \begin{aligned}
-\cos v - \cos u &= \cos(m - d) - \cos(m + d) \\
-  &= (\cos m\cos d + \sin m\sin d) - (\cos m\cos d - \sin m\sin d) \\
-  &= 2\sin m\sin d .
+&\cos v - \cos u \\
+&= \cos(m - d) - \cos(m + d) \\
+&= \cos m\cos d + \sin m\sin d \\
+&\quad - (\cos m\cos d - \sin m\sin d) \\
+&= 2\sin m\sin d .
 \end{aligned}
 $$
 Now $0 \le v < u \le \pi$ gives $0 < u + v < 2\pi$ (the sum is positive because $u > 0$, and
@@ -1387,9 +1386,7 @@ $\sin p = 0$ and $p$ is a positive multiple of $\pi$.
 *$\pi$ is a period.* Let $t \in \dom \tan$, so $\cos t \ne 0$. By property 7 of
 [](#rem-calc-trig-functions-circle-properties), $\cos(t + \pi) = -\cos t \ne 0$, so
 $t + \pi \in \dom\tan$, and
-$$
-\tan(t + \pi) = \frac{\sin(t + \pi)}{\cos(t + \pi)} = \frac{-\sin t}{-\cos t} = \tan t .
-$$
+$\tan(t + \pi) = \frac{\sin(t + \pi)}{\cos(t + \pi)} = \frac{-\sin t}{-\cos t} = \tan t$.
 
 *No smaller period.* Let $p > 0$ be a period of $\tan$. Since $0 \in \dom\tan$ ($\cos 0 = 1$),
 the definition of a period gives $p = 0 + p \in \dom\tan$ and $\tan p = \tan 0 = 0$. So
