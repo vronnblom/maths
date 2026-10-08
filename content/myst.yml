@@ -49,8 +49,8 @@ project:
         - title: Preliminaries
           children:
             - file: calculus/preliminaries/real-numbers-and-intervals.md
-            - file: calculus/preliminaries/functions.md
             - file: calculus/preliminaries/absolute-value-and-inequalities.md
+            - file: calculus/preliminaries/functions.md
 site:
   # Pinned to a commit (the theme repo has no tags): book-theme v1.4.1, built for mystmd 1.11.0.
   # Bump it only together with mystmd. scripts/fetch_theme.sh reads this line (05 §5.5).
