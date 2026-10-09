@@ -476,7 +476,7 @@ $f(x) \ge 102^2 = 10\,404$, far more than $1$ away from $100$. ✓
 :::{admonition} Looking ahead
 :class: looking-ahead
 The three ways to fail are treated separately later in the Limits chapter. A jump is
-described by the two one-sided limits, on the page One-Sided Limits. Values that grow without
+described by the two one-sided limits, on the page [One-Sided Limits](#calc-one-sided-limits). Values that grow without
 bound are written $\lim_{x \to 0} \frac{1}{x^2} = \infty$ on the page Infinite Limits and
 Vertical Asymptotes; even then the limit does not exist as a real number.
 :::
@@ -633,7 +633,7 @@ our definition does not apply, because $\sqrt{x}$ is undefined to the left of $0
 :::{admonition} Looking ahead
 :class: looking-ahead
 At an endpoint such as $0$ for $\sqrt{x}$, our course uses one-sided limits instead
-($\lim_{x \to 0^{+}} \sqrt{x} = 0$), on the page One-Sided Limits.
+($\lim_{x \to 0^{+}} \sqrt{x} = 0$), on the page [One-Sided Limits](#calc-one-sided-limits).
 :::
 
 ## Summary
