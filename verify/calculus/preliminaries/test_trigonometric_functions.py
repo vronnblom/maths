@@ -17,6 +17,11 @@ the page The Limit of a Function relies on (and that their statements match its 
 rem-calc-limit-school-facts), the properties of P(t), the identities, the zeros, lem-calc-sin-bounds
 (numerically; its proof is the reviewer's), the period, amplitude and phase, and the widget
 figure's caption and Try this.
+
+The last section (the second pass) tests what the Author's round added or changed: property 3's
+converse through the integer part, every interval obtained by a named order rule, the steps of the
+lemma's proof, each new fact of the box rem-calc-trig-functions-school-facts and its uses in the
+lemma (on exact grids), def-calc-radian, def-calc-period, the "Why radians" aside and Try this 2.
 """
 
 import json
@@ -711,7 +716,8 @@ def test_period_values_shape_and_wave():
     # Common mistake: sin 2x has period π, not 4π; sin(2(x + π)) = sin(2x + 2π) = sin 2x.
     assert equal(periodicity(sp.sin(2 * x), x), pi)
     assert equal(sp.sin(2 * (x + pi)), sp.sin(2 * x + 2 * pi)) and equal(sp.sin(2 * x + 2 * pi), sp.sin(2 * x))
-    # "Why radians": with s(x) = sin(πx/180), s(x)/x → π/180, not 1.
+    # The looking-ahead in "Why radians": in degrees the limit carries the factor π/180
+    # (s(x) = sin(πx/180), s(x)/x → π/180).
     assert limit_is(sp.sin(pi * x / 180) / x, x, 0, pi / 180)
 
 
@@ -775,3 +781,243 @@ def test_widget_caption_and_try_this():
     w = f.subs({a_: 3, b_: 1, c_: 0, d_: 2})
     assert equal(function_range(w, x, R), sp.Interval(-1, 5))
     assert equal(sum(function_range(w, x, R).boundary) / 2, 2)
+
+
+# ── Second pass: the claims the Author's round added or changed ────────────────
+# (vronnblom/maths#18, after review 5462488973: the facts box, property 3's converse, the order
+# rules named in each step, def-calc-period, the "Why radians" aside and Try this 2.)
+
+
+def _pythagorean_points() -> list[tuple[sp.Rational, sp.Rational]]:
+    """Exact rational points of the unit circle (from Pythagorean triples), in all four quadrants."""
+    pts = []
+    for a_, b_, c_ in ((3, 4, 5), (5, 12, 13), (8, 15, 17), (7, 24, 25), (20, 21, 29)):
+        for p_, q_ in ((a_, b_), (b_, a_)):
+            for sx in (1, -1):
+                for sy in (1, -1):
+                    pts.append((sp.Rational(sx * p_, c_), sp.Rational(sy * q_, c_)))
+    return pts
+
+
+def test_property_3_converse_by_the_integer_part():
+    # Reason 3's converse: k = the integer part of (s − t)/(2π) (rem-calc-integer-part), then
+    # 2kπ ≤ s − t < 2(k + 1)π, so u = s − t − 2kπ lies in [0, 2π), and P(s) = P(t + u). Checked for
+    # exact s, t of either sign, including s − t a multiple of 2π (u = 0) and s − t < 0 (k < 0).
+    rng = random.Random(3)
+    pairs = [(sp.Rational(rng.randint(-40000, 40000), 1000), sp.Rational(rng.randint(-40000, 40000), 1000))
+             for _ in range(60)]
+    pairs += [(t0 + 2 * j_ * pi, t0) for t0 in (sp.Integer(0), sp.Rational(7, 3), -pi / 5) for j_ in (-3, 0, 1, 4)]
+    for sv, tv in pairs:
+        q = (sv - tv) / (2 * pi)
+        kv = sp.floor(q)
+        assert kv.is_integer and is_true(kv <= q) and is_true(q < kv + 1)
+        assert is_true(2 * kv * pi <= sv - tv) and is_true(sv - tv < 2 * (kv + 1) * pi)   # × 2π > 0
+        uv = sv - tv - 2 * kv * pi
+        assert is_true(0 <= uv) and is_true(uv < 2 * pi)                                  # − 2kπ
+        assert equal((sp.cos(sv), sp.sin(sv)), (sp.cos(tv + uv), sp.sin(tv + uv)))
+        if equal(sp.cos(sv), sp.cos(tv)) and equal(sp.sin(sv), sp.sin(tv)):
+            assert equal(uv, 0)
+    # The remark's own example: the integer part of −1.5 is −2.
+    assert equal(sp.floor(sp.Rational(-3, 2)), -2)
+    # "Only one length in [0, 2π) leads from A to A": P(u) = A with u in [0, 2π) only for u = 0.
+    zeros = sp.solveset(sp.cos(x) - 1, x, sp.Interval.Ropen(0, 2 * pi)).intersect(
+        sp.solveset(sp.sin(x), x, sp.Interval.Ropen(0, 2 * pi)))
+    assert equal(zeros, sp.FiniteSet(0))
+    # The rotation mapping A to P(−t) maps P(t) to A and P(t + u) to P(u) (property 2 with α = −t).
+    u_ = sp.Symbol("u", real=True)
+    rot = sp.Matrix([[sp.cos(-t), -sp.sin(-t)], [sp.sin(-t), sp.cos(-t)]])
+    assert equal(tuple(rot * sp.Matrix([sp.cos(t), sp.sin(t)])), (1, 0))
+    assert equal(tuple(rot * sp.Matrix([sp.cos(t + u_), sp.sin(t + u_)])), (sp.cos(u_), sp.sin(u_)))
+
+
+def test_order_rule_steps():
+    # Each interval the page obtains by multiplying or adding (with the factor's sign named), by
+    # SymPy's imageset of the stated map on the stated interval.
+    v_ = sp.Symbol("v_", real=True)
+    img = lambda f_, I: sp.imageset(sp.Lambda(v_, f_(v_)), I)  # noqa: E731
+    # Lemma, step 2: θ/2 for 0 < θ < π/2 lies in (0, π/4), and π/4 < π/2.
+    assert equal(img(lambda w: w / 2, sp.Interval.open(0, pi / 2)), sp.Interval.open(0, pi / 4))
+    assert is_true(pi / 4 < pi / 2)
+    # eg-…-sign: u = π − t for π/2 < t < π lies in (0, π/2); sol-…-from-cosine: u = t − π for
+    # π < t < 3π/2 lies in (0, π/2).
+    assert equal(img(lambda w: pi - w, sp.Interval.open(pi / 2, pi)), sp.Interval.open(0, pi / 2))
+    assert equal(img(lambda w: w - pi, sp.Interval.open(pi, 3 * pi / 2)), sp.Interval.open(0, pi / 2))
+    # sol-…-ferris-times: u = πt/5 maps [0, 10) onto [0, 2π), and t = 5u/π maps it back.
+    assert equal(img(lambda w: pi * w / 5, sp.Interval.Ropen(0, 10)), sp.Interval.Ropen(0, 2 * pi))
+    assert equal(img(lambda w: 5 * w / pi, sp.Interval.Ropen(0, 2 * pi)), sp.Interval.Ropen(0, 10))
+    # Amplitude bullet: a·u + d for −1 ≤ u ≤ 1 and a > 0 fills [d − a, d + a] (sample a, d).
+    for a_, d_ in ((1, 0), (3, 2), (sp.Rational(1, 2), -2), (20, 22)):
+        assert equal(img(lambda w: a_ * w + d_, sp.Interval(-1, 1)), sp.Interval(d_ - a_, d_ + a_))
+    # Period bullet and sol-…-tan-period: an integer k with kπ > 0 has k ≥ 1, and then 2kπ ≥ 2π, kπ ≥ π.
+    kk = sp.Symbol("kk", integer=True)
+    assert equal(sp.solveset(kk * pi > 0, kk, sp.S.Integers), sp.Range(1, sp.oo))
+    assert equal(sp.solveset(2 * kk * pi >= 2 * pi, kk, sp.S.Integers), sp.Range(1, sp.oo))
+    # Period bullet's route: sin(π/2 + p) = 1 with p > 0 only at p = 2π, 4π, …; the least is 2π.
+    assert equal(sp.solveset(sp.sin(pi / 2 + x) - 1, x, sp.Interval.Lopen(0, 7 * pi)),
+                 sp.FiniteSet(2 * pi, 4 * pi, 6 * pi))
+    assert equal(sp.cos(pi / 2 + 2 * k * pi), 0)
+    # eg-…-special-values, step 2: 2c² + c − 1 = (2c − 1)(c + 1); with c > 0 only c = 1/2 remains.
+    cc = sp.Symbol("cc", real=True)
+    assert equal(2 * cc**2 + cc - 1, (2 * cc - 1) * (cc + 1))
+    assert equal(sp.solveset(2 * cc**2 + cc - 1, cc, sp.Interval.open(0, sp.oo)), sp.FiniteSet(sp.Rational(1, 2)))
+    # prop-calc-sin-bounded (a): from 0 ≤ cos² t, 1 − cos² t ≤ 1; a number > 1 squares to > 1, and
+    # one < −1 too (after multiplying by −1).
+    assert equal(sp.solveset(y**2 > 1, y, sp.Interval.open(1, sp.oo)), sp.Interval.open(1, sp.oo))
+    assert equal(sp.solveset(y**2 > 1, y, sp.Interval.open(-sp.oo, -1)), sp.Interval.open(-sp.oo, -1))
+    # rem-calc-trig-functions-zeros: cos² t = 1 gives cos t = 1 or −1.
+    assert equal(sp.solveset(y**2 - 1, y, R), sp.FiniteSet(-1, 1))
+    # Values bullet: y in [−1, 1] gives 1 − y² ≥ 0, and exactly then.
+    assert equal(sp.solveset(1 - y**2 >= 0, y, R), sp.Interval(-1, 1))
+    # sol-…-cos-decreasing: for 0 ≤ v < u ≤ π, π − v ≤ π, and u − v ≤ π − v (subtracting v).
+    rng = random.Random(5)
+    grid = [sp.Integer(0), pi] + [pi * sp.Rational(rng.randint(0, 1000), 1000) for _ in range(40)]
+    for vv in grid:
+        for uu in grid:
+            if is_true(vv < uu):
+                assert is_true(0 < uu + vv) and is_true(uu + vv < 2 * pi)
+                assert is_true(uu - vv <= pi - vv) and is_true(pi - vv <= pi)
+
+
+def test_lemma_steps_after_the_round():
+    # Step 1: every point (x, y) of the disc has x ≤ 1 (x² ≤ x² + y² ≤ 1); on the disc the largest x is 1.
+    assert equal(sp.solveset(x**2 <= 1, x, R), sp.Interval(-1, 1))
+    assert equal(function_range(sp.cos(x), x, sp.Interval(0, 2 * pi)).sup, 1)
+    # Step 2, at 2000 points of (0, π/2) and close to both ends (60 digits): with s = sin(θ/2),
+    # c = cos(θ/2): s > 0, 0 < c < 1, 0 < c² − s² < c², the factor 2sc/((c² − s²)c²) > 0, and the
+    # two chains sin θ = 2sc < 2s ≤ θ and tan θ = 2sc/(c² − s²) > 2s/c ≥ θ.
+    with mpmath.workdps(60):
+        half = mpmath.pi / 2
+        rng = random.Random(9)
+        pts = [half * mpmath.mpf(rng.uniform(1e-6, 1 - 1e-6)) for _ in range(2000)]
+        pts += [mpmath.mpf(10) ** -j_ for j_ in range(1, 20)] + [half - mpmath.mpf(10) ** -j_ for j_ in range(1, 20)]
+        for p in pts:
+            s_, c_ = mpmath.sin(p / 2), mpmath.cos(p / 2)
+            assert s_ > 0 and 0 < c_ < 1
+            assert 0 < c_**2 - s_**2 < c_**2
+            assert 2 * s_ * c_ / ((c_**2 - s_**2) * c_**2) > 0
+            assert 2 * s_ * c_ < 2 * s_ <= p
+            assert 2 * s_ * c_ / (c_**2 - s_**2) > 2 * s_ / c_ >= p
+            assert abs(2 * s_ * c_ - mpmath.sin(p)) < mpmath.mpf(10) ** -50
+            assert abs(2 * s_ * c_ / (c_**2 - s_**2) - mpmath.tan(p)) < mpmath.mpf(10) ** -40 * (1 + mpmath.tan(p))
+
+
+def _cone(pq):
+    """Membership in the region between the radii OA and OP, for P = pq with angle in (0, π):
+    y ≥ 0 and (x, y) not past the ray OP (cross product (x, y) × P ≥ 0)."""
+    p_, q_ = pq
+    return lambda X: X[1] >= 0 and X[0] * q_ - X[1] * p_ >= 0
+
+
+def _in_triangle(X, V0, V1, V2):
+    """Barycentric test: X is in the closed triangle V0V1V2."""
+    (x0, y0), (x1, y1), (x2, y2) = V0, V1, V2
+    det = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0)
+    l1 = ((X[0] - x0) * (y2 - y0) - (x2 - x0) * (X[1] - y0)) / det
+    l2 = ((x1 - x0) * (X[1] - y0) - (X[0] - x0) * (y1 - y0)) / det
+    return l1 >= 0 and l2 >= 0 and l1 + l2 <= 1
+
+
+def test_facts_box_geometry():
+    # rem-calc-trig-functions-school-facts, each new fact checked as an instance, and its uses in
+    # the proof of lem-calc-sin-bounds, on exact rational points.
+    O, A = (sp.Integer(0), sp.Integer(0)), (sp.Integer(1), sp.Integer(0))
+    # Distance: the disc contains the segment between any two of its points (sampled, exact).
+    rng = random.Random(4)
+    disc = []
+    while len(disc) < 40:
+        X = (sp.Rational(rng.randint(-100, 100), 100), sp.Rational(rng.randint(-100, 100), 100))
+        if X[0] ** 2 + X[1] ** 2 <= 1:
+            disc.append(X)
+    for X, Y in zip(disc, disc[1:]):
+        for lam in (sp.Rational(1, 7), sp.Rational(1, 2), sp.Rational(5, 6)):
+            Z = (lam * X[0] + (1 - lam) * Y[0], lam * X[1] + (1 - lam) * Y[1])
+            assert Z[0] ** 2 + Z[1] ** 2 <= 1
+    # Journeys and arcs: the arc traced by the journey of d from A, {P(τ) : 0 ≤ τ ≤ d}, has length d
+    # (the arc-length integral, and the inscribed polygons 2n sin(d/(2n)) → d as a second route).
+    d_, tau, nn = sp.Symbol("d", positive=True), sp.Symbol("tau", real=True), sp.Symbol("n", positive=True, integer=True)
+    speed = sp.sqrt(sp.diff(sp.cos(tau), tau) ** 2 + sp.diff(sp.sin(tau), tau) ** 2)
+    assert equal(sp.integrate(sp.simplify(speed), (tau, 0, d_)), d_)
+    assert equal(sp.limit(2 * nn * sp.sin(d_ / (2 * nn)), nn, sp.oo), d_)
+    # Rotations: for every point Q of the circle (here exact points in all four quadrants) the
+    # rotation by α = atan2(Q) maps A to Q.
+    for qx, qy in _pythagorean_points():
+        assert equal(qx**2 + qy**2, 1)
+        al = sp.atan2(qy, qx)
+        rot = sp.Matrix([[sp.cos(al), -sp.sin(al)], [sp.sin(al), sp.cos(al)]])
+        assert equal(tuple(rot * sp.Matrix(A)), (qx, qy))
+    # Sectors, for arcs from A to P with P = (p, q) exact, 0 < θ < π/2 (the lemma's case):
+    #  - the region between the radii is convex (θ < π), checked against its definition λX: the
+    #    angle of every convex combination of two points λX, μY lies in [0, θ] (60 digits);
+    #  - the triangle OAT is exactly the part of the region with x ≤ 1 (exact grid);
+    #  - triangle OAP ⊆ sector ⊆ triangle OAT (exact grid), the two inclusions of the proof;
+    #  - every point of the triangle OAP lies on a segment from O to a point Q of AP (the step that
+    #    opens "The triangle OAP lies in the sector").
+    N = 24
+    grid = [(sp.Rational(i, N), sp.Rational(j, N)) for i in range(-N // 2, 2 * N) for j in range(-N // 2, 2 * N)]
+    for P in [(p_, q_) for p_, q_ in _pythagorean_points() if p_ > 0 and q_ > 0]:
+        T = (sp.Integer(1), P[1] / P[0])
+        assert equal(T, (P[0] / P[0], P[1] / P[0]))                 # T = P / cos θ, on the ray OP
+        in_region = _cone(P)
+        with mpmath.workdps(60):
+            th = mpmath.atan2(mpmath.mpf(P[1].p) / P[1].q, mpmath.mpf(P[0].p) / P[0].q)
+            for _ in range(200):
+                l1, l2 = mpmath.mpf(rng.uniform(0, 3)), mpmath.mpf(rng.uniform(0, 3))
+                f1, f2 = th * mpmath.mpf(rng.random()), th * mpmath.mpf(rng.random())
+                lam = mpmath.mpf(rng.random())
+                Z = (lam * l1 * mpmath.cos(f1) + (1 - lam) * l2 * mpmath.cos(f2),
+                     lam * l1 * mpmath.sin(f1) + (1 - lam) * l2 * mpmath.sin(f2))
+                ang = mpmath.atan2(Z[1], Z[0])
+                assert -mpmath.mpf(10) ** -50 <= ang <= th + mpmath.mpf(10) ** -50
+        for X in grid:
+            in_disc = X[0] ** 2 + X[1] ** 2 <= 1
+            assert _in_triangle(X, O, A, T) == (in_region(X) and X[0] <= 1)
+            if _in_triangle(X, O, A, P):
+                assert in_region(X) and in_disc                            # triangle OAP ⊆ sector
+                if X != O:
+                    # Q = where the ray OX meets the line AP; Q is on the segment AP, X on OQ.
+                    mu = (P[1] * 1 - 0 * (P[0] - 1)) / (X[1] * (1 - P[0]) + X[0] * P[1])
+                    Q = (mu * X[0], mu * X[1])
+                    lam = (Q[0] - A[0]) / (P[0] - A[0])
+                    assert equal(Q[1], lam * P[1]) and 0 <= lam <= 1 and mu >= 1
+            if in_region(X) and in_disc:
+                assert _in_triangle(X, O, A, T)                            # sector ⊆ triangle OAT
+    # The hypothesis θ < π is needed for convexity: for the arc of 3π/2 from A to (0, −1), the
+    # region contains A and (0, −1), but not their midpoint (1/2, −1/2), whose angle is 7π/4.
+    assert equal(sp.atan2(-sp.Rational(1, 2), sp.Rational(1, 2)) + 2 * pi, 7 * pi / 4)
+    assert is_true(7 * pi / 4 > 3 * pi / 2)
+    # Area: the sector of arc θ has area θ/2 (the double integral of the first pass); at θ = 2π the
+    # disc has area π, and by a second route ∫ 2√(1 − x²) dx over [−1, 1] = π too.
+    assert equal(sp.integrate(2 * sp.sqrt(1 - x**2), (x, -1, 1)), pi)
+    assert equal((theta / 2).subs(theta, 2 * pi), pi)
+    # The quarter arcs of property 1 have length π/2 each (the arc-length integral on each quadrant).
+    for j_ in range(4):
+        assert equal(sp.integrate(sp.simplify(speed), (tau, j_ * pi / 2, (j_ + 1) * pi / 2)), pi / 2)
+
+
+def test_definitions_and_asides_after_the_round():
+    # def-calc-radian: for an angle φ with 0 < φ < π, the arc inside it (length φ) is the shorter of
+    # the two arcs (the other has length 2π − φ).
+    phi_ = sp.Symbol("phi", positive=True)
+    assert equal(sp.solveset(phi_ < 2 * pi - phi_, phi_, sp.Interval.open(0, 2 * pi)), sp.Interval.open(0, pi))
+    # def-calc-period, used for tan: π is a period (the domain is kept: cos(t + π) = 0 exactly when
+    # cos t = 0) and no p in (0, π) is (tan p = tan 0 = 0 has no solution there).
+    assert equal(sp.solveset(sp.cos(x + pi), x, sp.Interval(-10, 10)), sp.solveset(sp.cos(x), x, sp.Interval(-10, 10)))
+    assert equal(sp.solveset(sp.tan(x) - sp.tan(0), x, sp.Interval.open(0, pi)), sp.S.EmptySet)
+    # "Why radians, and not degrees?": with θ = πx/180, s(x)/x = (π/180)·(sin θ/θ), and the
+    # degree form of the lemma, s(x) < πx/180 < tan(πx/180), for 0 < x < 90 (sampled).
+    xd = sp.Symbol("x_deg", positive=True)
+    th = pi * xd / 180
+    assert equal(sp.sin(th) / xd, (pi / 180) * (sp.sin(th) / th))
+    assert equal(sp.imageset(sp.Lambda(xd, th), sp.Interval.open(0, 90)), sp.Interval.open(0, pi / 2))
+    for xv in (sp.Rational(1, 10), 1, 30, 45, 60, sp.Rational(899, 10)):
+        tv = pi * xv / 180
+        assert is_true(sp.sin(tv) < tv) and is_true(tv < sp.tan(tv))
+    # Try this 2: −π/2 is not on the c slider's grid, −1.5 is the grid value closest to it, and
+    # c = −π/2 would match cos exactly.
+    c_slider = widget_config()["parameters"]["c"]
+    assert not on_grid(c_slider, -pi / 2)
+    lo, hi, step = (sp.nsimplify(c_slider[key]) for key in ("min", "max", "step"))
+    values = [lo + j_ * step for j_ in range(int((hi - lo) / step) + 1)]
+    closest = min(values, key=lambda v: abs(float(v + pi / 2)))
+    assert equal(closest, sp.Rational(-3, 2))
+    assert equal(sp.sin(1 * (x - (-pi / 2))), sp.cos(x))
