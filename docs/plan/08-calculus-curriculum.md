@@ -126,11 +126,12 @@ pages, many exercises, few proofs.*
 - Prereqs: `calc-limit-laws`, `calc-polynomial-rational`
 - Objectives: resolve 0/0 forms by factoring, rationalising and simplifying; justify each step with the "agree except at a point" lemma.
 - Results: `lem-calc-limit-agree-except-point` **F**.
+- Widgets: `function-plot` (the average rate $(x^3-8)/(x-2)$ near $2$, with a hole and a table)
 
 **`calc-squeeze-theorem`** · The Squeeze Theorem · `squeeze-theorem.md`
 - Prereqs: `calc-limit-laws`, `calc-trig-functions`
 - Objectives: apply the squeeze theorem, including to oscillating factors; prove $\lim_{x\to0}\frac{\sin x}{x}=1$ geometrically; use it for related trigonometric limits.
-- Results: `thm-calc-squeeze` **R**; `thm-calc-sin-x-over-x` **F** (geometric, via `lem-calc-sin-bounds`; *must not* use derivatives or L'Hôpital); `cor-calc-one-minus-cos-over-x` **F**.
+- Results: `thm-calc-squeeze` **R**; `lem-calc-sin-cos-near-zero` (for $0<|x|<\pi/2$: $|\sin x|<|x|$, $1-x^2/2<\cos x<1$ and $\cos x<\frac{\sin x}{x}<1$; from `lem-calc-sin-bounds`, the symmetries and the double-angle formula) **F**; `lem-calc-sin-cos-limits-at-zero` (at $0$: $|x|\to0$, $\sin x\to0$ and $\cos x\to1$, by squeezing with `lem-calc-sin-cos-near-zero`; no continuity of $\sin$ or $\cos$ used) **F**; `thm-calc-sin-x-over-x` **F** (geometric, via `lem-calc-sin-bounds`; *must not* use derivatives or L'Hôpital); `cor-calc-one-minus-cos-over-x` **F**.
 - Widgets: `function-plot` (squeeze band)
 
 **`calc-infinite-limits`** · Infinite Limits and Vertical Asymptotes · `infinite-limits.md`
@@ -502,7 +503,9 @@ completeness axiom (ax-calc-completeness, stated)
    ├── IVT (R), monotone convergence (R), improper comparison (R)
    └── EVT, continuity ⇒ integrable, inverse continuity   ── deferred to `ana`
 EVT ── Fermat ── Rolle ── MVT ── monotonicity, ± const antiderivatives, L'Hôpital, Taylor
-sin θ < θ < tan θ (area argument) ── sin x/x → 1 ── (sin)' = cos
+sin θ < θ < tan θ (area argument) ── |sin x| < |x|, 1 − x²/2 < cos x < 1, cos x < sin x/x < 1
+   (lem-calc-sin-cos-near-zero) ── sin x → 0, cos x → 1 at 0 (lem-calc-sin-cos-limits-at-zero)
+   ── sin x/x → 1 ── (sin)' = cos
 "(e^h − 1)/h → 1" (fact) ── (e^x)' = e^x ── (ln x)' = 1/x  …  all proven independently in calc-ln-integral
 FTC ── substitution, parts ── all of ch. 7–9
 ```
