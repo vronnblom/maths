@@ -438,7 +438,7 @@ $1000$: the values do not settle. ✓
 :::{proof:example} Two resistors in parallel, again
 :label: eg-calc-computing-limits-resistors
 
-On [Limit Laws](#eg-calc-limit-laws-resistors), two resistors in parallel, of $3$ ohms and $t$
+In [an example on Limit Laws](#eg-calc-limit-laws-resistors), two resistors in parallel, of $3$ ohms and $t$
 ohms, have the combined resistance
 $$
 R(t) = \frac{3t}{3 + t}
@@ -1003,7 +1003,7 @@ limit is $0$.
 :label: exr-calc-computing-limits-lens
 :class: tier-b applied
 
-On [Limit Laws](#exr-calc-limit-laws-lens), a thin lens of focal length $5$ cm forms the image
+In [an exercise on Limit Laws](#exr-calc-limit-laws-lens), a thin lens of focal length $5$ cm forms the image
 of an object at distance $u$ cm at the distance
 $$
 v(u) = \frac{5u}{u - 5}
