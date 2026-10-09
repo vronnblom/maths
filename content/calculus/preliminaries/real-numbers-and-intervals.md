@@ -90,37 +90,9 @@ So the irrational numbers are exactly the real numbers whose decimals go on for 
 repeating. A decimal approximation such as $\sqrt{2} \approx 1.4142$ is a rational number close
 to $\sqrt{2}$, never $\sqrt{2}$ itself.
 
-**Order.** On the number line, $a < b$ means that $a$ lies to the left of $b$. We write $a \le b$
-for "$a < b$ or $a = b$". We take the following rules for inequalities, together with the rules
-of arithmetic, as properties of $\R$; later pages cite them by name.
-
-:::{proof:remark} Order rules
-:label: rem-calc-order-rules
-
-For all real numbers $u$, $v$, $w$, $s$, $t$ and $c$:
-
-1. **Trichotomy:** exactly one of $u < v$, $u = v$ and $u > v$ holds. So "$u \le v$" fails
-   exactly when $u > v$, and "$u < v$" fails exactly when $u \ge v$.
-2. **Transitivity:** $u < v$ and $v < w$ imply $u < w$. The same holds when one of the two
-   inequalities is $\le$ (for example, $u \le v < w$ implies $u < w$), and $u \le v \le w$
-   implies $u \le w$.
-3. **Adding the same number** to both sides keeps an inequality: $u < v$ implies
-   $u + c < v + c$, and $u \le v$ implies $u + c \le v + c$. Adding $-c$ takes us back, so
-   $u < v$ holds exactly when $u + c < v + c$, and $u \le v$ exactly when $u + c \le v + c$.
-4. **Adding two inequalities:** $u \le v$ and $s \le t$ imply $u + s \le v + t$, and the sum is
-   strict, $u + s < v + t$, if at least one of the two is strict.
-5. **Multiplying** both sides by a positive number keeps an inequality, and multiplying by a
-   negative number reverses it: if $u < v$ and $c > 0$ then $cu < cv$, and if $u < v$ and
-   $c < 0$ then $cu > cv$. The same holds for $\le$: if $u \le v$, then $cu \le cv$ when
-   $c > 0$, and $cu \ge cv$ when $c < 0$.
-6. **Multiplying by a number that may be zero:** if $u \le v$ and $c \ge 0$, then $cu \le cv$.
-   This holds in particular when $u < v$, but the conclusion is then only $\le$: for $c = 0$
-   both sides are $0$.
-7. **Signs:** a product or a quotient of two non-zero numbers is positive when they have the
-   same sign, and negative when their signs differ. In particular $1 = 1 \cdot 1 > 0$, the
-   number $\frac{1}{v}$ has the same sign as $v$ for $v \ne 0$, and $u^2 > 0$ for $u \ne 0$; so
-   $u^2 \ge 0$ for every real $u$.
-:::
+**Order.** For any two real numbers $a$ and $b$, exactly one of $a < b$, $a = b$ and $a > b$
+holds; on the number line, $a < b$ means that $a$ lies to the left of $b$. We write $a \le b$
+for "$a < b$ or $a = b$".
 
 ## Sets and intervals
 
@@ -206,15 +178,12 @@ Squaring keeps the order of non-negative numbers: for $s, t \ge 0$,
 $s < t \iff s^2 < t^2$ (and $s = t \iff s^2 = t^2$, by the uniqueness above).
 :::
 
-The proof below uses two facts about whole numbers. The first is that every integer is either
-**even**, of the form $2m$ with $m \in \Z$, or **odd**, of the form $2m + 1$ with $m \in \Z$, and
-not both. The second, which later pages cite by name, is this.
+The proof below uses two facts about whole numbers:
 
-:::{proof:remark} The well-ordering principle
-:label: rem-calc-well-ordering
-
-Every non-empty set of positive integers has a smallest element.
-:::
+- every integer is either **even**, of the form $2m$ with $m \in \Z$, or **odd**, of the form
+  $2m + 1$ with $m \in \Z$, and not both;
+- every non-empty set of positive integers has a smallest element (the **well-ordering
+  principle**).
 
 :::{proof:theorem} The square root of 2 is irrational
 :label: thm-calc-sqrt2-irrational
@@ -230,7 +199,7 @@ something impossible.
 Suppose that $r$ is rational and $r^2 = 2$. Then $r \ne 0$, and $(-r)^2 = r^2 = 2$ as well, so
 we may assume that $r > 0$ (otherwise we replace $r$ by $-r$). Then $r = \frac{p}{q}$ with
 positive integers $p$ and $q$. Among all such ways of writing $r$, we choose one with the
-smallest possible denominator $q$; there is one, by [](#rem-calc-well-ordering).
+smallest possible denominator $q$; there is one, by the well-ordering principle.
 
 1. From $\frac{p^2}{q^2} = 2$ we get $p^2 = 2q^2$, so $p^2$ is even.
 2. Then $p$ is even. Otherwise $p$ is odd, $p = 2m + 1$ with $m \in \Z$, and
@@ -490,8 +459,8 @@ and for $s, t \ge 0$, $s < t \iff s^2 < t^2$.
 gives $s^2 \le st$, and multiplying it by $t > 0$ gives $st < t^2$. So two different non-negative
 numbers have different squares, and $y$ has at most one non-negative square root. In the same
 way, if $0 \le s \le t$ then $s^2 \le t^2$. Conversely, let $s, t \ge 0$ with $s^2 < t^2$. By
-trichotomy (property 1 of [](#rem-calc-order-rules): exactly one of
-$s < t$, $s = t$ and $t < s$ holds), it is enough to rule out the other two. If $s = t$, then $s^2 = t^2$; if $t < s$, then $t^2 < s^2$
+trichotomy (the order rule above: exactly one of $s < t$, $s = t$ and $t < s$ holds), it is
+enough to rule out the other two. If $s = t$, then $s^2 = t^2$; if $t < s$, then $t^2 < s^2$
 by what we just proved, with $s$ and $t$ swapped. Neither is compatible with $s^2 < t^2$, so
 $s < t$.
 
@@ -862,7 +831,7 @@ $n \ge 1$ with $n > \frac{1}{b - a}$, that is $nb - na > 1$.
 
 Next, let $A$ be the set of integers greater than $na$. It is non-empty: by the Archimedean
 property again, some integer exceeds $na$. It has a smallest element, which we find with the
-well-ordering principle ([](#rem-calc-well-ordering)). The elements of $A$ need
+well-ordering principle (stated before [](#thm-calc-sqrt2-irrational)). The elements of $A$ need
 not be positive, so we first shift $A$ into the positive integers: the Archimedean property gives
 an integer $k \ge 1$ with $k > -na$, and then every $j \in A$ has $j + k > na + k > 0$. So the
 numbers $j + k$ with $j \in A$ form a non-empty set of positive integers, which by the
