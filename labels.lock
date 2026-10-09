@@ -7,10 +7,12 @@ ax-calc-completeness  calculus/preliminaries/real-numbers-and-intervals.md
 calc-absolute-value-inequalities  calculus/preliminaries/absolute-value-and-inequalities.md
 calc-functions  calculus/preliminaries/functions.md
 calc-limit  calculus/limits/limit-of-a-function.md
+calc-one-sided-limits  calculus/limits/one-sided-limits.md
 calc-polynomial-rational  calculus/preliminaries/polynomial-and-rational-functions.md
 calc-real-numbers  calculus/preliminaries/real-numbers-and-intervals.md
 calc-subject  calculus/index.md
 calc-trig-functions  calculus/preliminaries/trigonometric-functions.md
+cor-calc-one-sided-limits-differ  calculus/limits/one-sided-limits.md
 cor-calc-polynomial-identity  calculus/preliminaries/polynomial-and-rational-functions.md
 def-calc-absolute-value  calculus/preliminaries/absolute-value-and-inequalities.md
 def-calc-bounded-above  calculus/preliminaries/real-numbers-and-intervals.md
@@ -20,6 +22,7 @@ def-calc-function  calculus/preliminaries/functions.md
 def-calc-interval  calculus/preliminaries/real-numbers-and-intervals.md
 def-calc-limit  calculus/limits/limit-of-a-function.md
 def-calc-monotone  calculus/preliminaries/functions.md
+def-calc-one-sided-limit  calculus/limits/one-sided-limits.md
 def-calc-period  calculus/preliminaries/trigonometric-functions.md
 def-calc-polynomial  calculus/preliminaries/polynomial-and-rational-functions.md
 def-calc-radian  calculus/preliminaries/trigonometric-functions.md
@@ -44,6 +47,9 @@ eg-calc-limit-linear-eps-delta  calculus/limits/limit-of-a-function.md
 eg-calc-limit-quadratic-eps-delta  calculus/limits/limit-of-a-function.md
 eg-calc-limit-sin-1-over-x  calculus/limits/limit-of-a-function.md
 eg-calc-limit-unbounded  calculus/limits/limit-of-a-function.md
+eg-calc-one-sided-limits-agree  calculus/limits/one-sided-limits.md
+eg-calc-one-sided-limits-parcel  calculus/limits/one-sided-limits.md
+eg-calc-one-sided-limits-sqrt  calculus/limits/one-sided-limits.md
 eg-calc-polynomial-rational-box  calculus/preliminaries/polynomial-and-rational-functions.md
 eg-calc-polynomial-rational-difference-quotient  calculus/preliminaries/polynomial-and-rational-functions.md
 eg-calc-polynomial-rational-division  calculus/preliminaries/polynomial-and-rational-functions.md
@@ -98,6 +104,16 @@ exr-calc-limit-sin-pi-over-x  calculus/limits/limit-of-a-function.md
 exr-calc-limit-table-estimate  calculus/limits/limit-of-a-function.md
 exr-calc-limit-value-at-a  calculus/limits/limit-of-a-function.md
 exr-calc-limit-widget-largest-delta  calculus/limits/limit-of-a-function.md
+exr-calc-one-sided-limits-abs-over-x  calculus/limits/one-sided-limits.md
+exr-calc-one-sided-limits-claim  calculus/limits/one-sided-limits.md
+exr-calc-one-sided-limits-largest-delta  calculus/limits/one-sided-limits.md
+exr-calc-one-sided-limits-parameter  calculus/limits/one-sided-limits.md
+exr-calc-one-sided-limits-parking  calculus/limits/one-sided-limits.md
+exr-calc-one-sided-limits-piecewise  calculus/limits/one-sided-limits.md
+exr-calc-one-sided-limits-reciprocal  calculus/limits/one-sided-limits.md
+exr-calc-one-sided-limits-reciprocal-left  calculus/limits/one-sided-limits.md
+exr-calc-one-sided-limits-sqrt-shift  calculus/limits/one-sided-limits.md
+exr-calc-one-sided-limits-widget-eps  calculus/limits/one-sided-limits.md
 exr-calc-polynomial-rational-concentration  calculus/preliminaries/polynomial-and-rational-functions.md
 exr-calc-polynomial-rational-degree  calculus/preliminaries/polynomial-and-rational-functions.md
 exr-calc-polynomial-rational-difference-quotient  calculus/preliminaries/polynomial-and-rational-functions.md
@@ -144,6 +160,7 @@ fig-calc-trig-functions-sin-bounds-areas  calculus/preliminaries/trigonometric-f
 fig-calc-trig-functions-unit-circle  calculus/preliminaries/trigonometric-functions.md
 lem-calc-sin-bounds  calculus/preliminaries/trigonometric-functions.md
 prf-calc-addition-formulas  calculus/preliminaries/trigonometric-functions.md
+prf-calc-limit-iff-one-sided  calculus/limits/one-sided-limits.md
 prf-calc-limit-unique  calculus/limits/limit-of-a-function.md
 prop-calc-abs-interval  calculus/preliminaries/absolute-value-and-inequalities.md
 prop-calc-polynomial-degree-product  calculus/preliminaries/polynomial-and-rational-functions.md
@@ -159,6 +176,8 @@ rem-calc-integer-part  calculus/preliminaries/real-numbers-and-intervals.md
 rem-calc-limit-school-facts  calculus/limits/limit-of-a-function.md
 rem-calc-limit-value-irrelevant  calculus/limits/limit-of-a-function.md
 rem-calc-naturals-unbounded  calculus/preliminaries/real-numbers-and-intervals.md
+rem-calc-one-sided-limit-unique  calculus/limits/one-sided-limits.md
+rem-calc-one-sided-limits-jump  calculus/limits/one-sided-limits.md
 rem-calc-order-rules  calculus/preliminaries/real-numbers-and-intervals.md
 rem-calc-sqrt4-rational  calculus/preliminaries/real-numbers-and-intervals.md
 rem-calc-square-roots  calculus/preliminaries/real-numbers-and-intervals.md
@@ -211,6 +230,16 @@ sol-calc-limit-sin-pi-over-x  calculus/limits/limit-of-a-function.md
 sol-calc-limit-table-estimate  calculus/limits/limit-of-a-function.md
 sol-calc-limit-value-at-a  calculus/limits/limit-of-a-function.md
 sol-calc-limit-widget-largest-delta  calculus/limits/limit-of-a-function.md
+sol-calc-one-sided-limits-abs-over-x  calculus/limits/one-sided-limits.md
+sol-calc-one-sided-limits-claim  calculus/limits/one-sided-limits.md
+sol-calc-one-sided-limits-largest-delta  calculus/limits/one-sided-limits.md
+sol-calc-one-sided-limits-parameter  calculus/limits/one-sided-limits.md
+sol-calc-one-sided-limits-parking  calculus/limits/one-sided-limits.md
+sol-calc-one-sided-limits-piecewise  calculus/limits/one-sided-limits.md
+sol-calc-one-sided-limits-reciprocal  calculus/limits/one-sided-limits.md
+sol-calc-one-sided-limits-reciprocal-left  calculus/limits/one-sided-limits.md
+sol-calc-one-sided-limits-sqrt-shift  calculus/limits/one-sided-limits.md
+sol-calc-one-sided-limits-widget-eps  calculus/limits/one-sided-limits.md
 sol-calc-polynomial-rational-concentration  calculus/preliminaries/polynomial-and-rational-functions.md
 sol-calc-polynomial-rational-degree  calculus/preliminaries/polynomial-and-rational-functions.md
 sol-calc-polynomial-rational-difference-quotient  calculus/preliminaries/polynomial-and-rational-functions.md
@@ -249,6 +278,7 @@ sol-calc-trig-functions-tan-period  calculus/preliminaries/trigonometric-functio
 sol-calc-trig-functions-widget-wave  calculus/preliminaries/trigonometric-functions.md
 thm-calc-addition-formulas  calculus/preliminaries/trigonometric-functions.md
 thm-calc-factor-theorem  calculus/preliminaries/polynomial-and-rational-functions.md
+thm-calc-limit-iff-one-sided  calculus/limits/one-sided-limits.md
 thm-calc-limit-unique  calculus/limits/limit-of-a-function.md
 thm-calc-polynomial-division  calculus/preliminaries/polynomial-and-rational-functions.md
 thm-calc-polynomial-roots-bound  calculus/preliminaries/polynomial-and-rational-functions.md
@@ -258,6 +288,7 @@ thm-calc-triangle-inequality  calculus/preliminaries/absolute-value-and-inequali
 wdg-calc-limit-average-speed  calculus/limits/limit-of-a-function.md
 wdg-calc-limit-eps-delta  calculus/limits/limit-of-a-function.md
 wdg-calc-limit-misleading-table  calculus/limits/limit-of-a-function.md
+wdg-calc-one-sided-limits-parcel  calculus/limits/one-sided-limits.md
 wdg-calc-polynomial-rational-cubic-roots  calculus/preliminaries/polynomial-and-rational-functions.md
 wdg-calc-polynomial-rational-sign-chart  calculus/preliminaries/polynomial-and-rational-functions.md
 wdg-calc-trig-functions-wave  calculus/preliminaries/trigonometric-functions.md
