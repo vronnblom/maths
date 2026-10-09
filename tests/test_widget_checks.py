@@ -145,10 +145,62 @@ def test_widget_fixtures_are_fresh():
         assert committed == mod.render(data), f"{path.name}: run uv run python widgets/_tests/make_fixtures.py and commit the result"
 
 
+def _moved(text: str) -> str:
+    """text with every widget figure moved down: a line added to the front matter (as the owner's
+    sign-off adds them) and a comment line before each figure."""
+    assert text.startswith("---\n")
+    text = "---\n# a line the sign-off adds\n" + text[len("---\n"):]
+    return text.replace("::::{figure}\n", "% a line above the figure\n::::{figure}\n")
+
+
+def test_moving_a_figure_leaves_the_fixtures_unchanged(tmp_path):
+    """The fixtures name each figure by its page and wdg- label, not its line: moving every figure
+    on the site and in the template, configs unchanged, gives exactly the committed fixtures."""
+    mod = load_make_fixtures()
+    shutil.copytree(REPO / "content", tmp_path / "content", ignore=shutil.ignore_patterns("_build"))
+    template = tmp_path / "topic.md"
+    template.write_text(mod.TEMPLATE.read_text(encoding="utf-8"), encoding="utf-8")
+    for page in [template, *(tmp_path / "content").rglob("*.md")]:
+        text = page.read_text(encoding="utf-8")
+        if "{anywidget}" in text:
+            page.write_text(_moved(text), encoding="utf-8")
+    moved = mod.site_sources(tmp_path / "content", template)
+
+    def lines(sources):
+        return {key: d.line for where, _, text in sources for d in mod.ms.parse(text).directives()
+                if d.name == "anywidget" for key in [f"{where}#{d.parent.label}"]}
+
+    before, after = lines(mod.site_sources()), lines(moved)
+    assert before.keys() == after.keys() and len(before) >= 5
+    assert all(after[k] > before[k] for k in before), "every widget moved"
+
+    plot = json.loads(mod.OUT.read_text(encoding="utf-8"))
+    eps = json.loads(mod.OUT_EPSILON_DELTA.read_text(encoding="utf-8"))
+    assert mod.table_cases(moved) == plot["tables"]
+    assert mod.site_epsilon_delta_cases(moved) == [c for c in eps["cases"] if c["source"] != "make_fixtures.py"]
+
+
+@pytest.mark.parametrize("old, new, line, message", [
+    (FIGURE_START, "::::{admonition} A box\n", 53, "{anywidget} must be the only content of a {figure} labelled wdg-…"),
+    (":label: wdg-calc-limit-average-speed\n", "", 51, "a widget figure needs a wdg- label, not none"),
+    (":label: wdg-calc-limit-average-speed\n", ":label: fig-calc-limit-average-speed\n", 52, "a widget figure needs a wdg- label, not fig-calc-limit-average-speed"),
+])
+def test_make_fixtures_refuses_a_widget_without_a_labelled_figure(tmp_path, old, new, line, message):
+    """A widget with no wdg- figure to name it by stops make_fixtures.py with check_widgets.py's
+    error, as file:line: error: message."""
+    mod = load_make_fixtures()
+    errors = check(tmp_path, old, new)
+    assert (line, next(m for _, m in errors if message in m)) in errors, errors
+    sources = mod.site_sources(tmp_path / "f" / "content", mod.TEMPLATE)
+    with pytest.raises(mod.UnnamedWidget) as e:
+        mod.table_cases(sources)
+    assert str(e.value).endswith(f"/{PAGE}:{line}: error: {next(m for _, m in errors if message in m)}"), e.value
+
+
 def test_every_site_widget_table_is_in_the_fixtures():
     """The widget tests check the table of every function-plot figure on the site."""
     data = json.loads((REPO / "widgets" / "_tests" / "fixtures" / "function-plot.json").read_text(encoding="utf-8"))
-    sources = {t["source"].split(":")[0] for t in data["tables"]}
+    sources = {t["source"].split("#")[0] for t in data["tables"]}
     assert {"about/how-to-read.md", "templates/topic.md"} <= sources
 
 

@@ -774,7 +774,7 @@
  ],
  "tables": [
   {
-   "source": "about/how-to-read.md:93",
+   "source": "about/how-to-read.md#wdg-site-transformed-sine",
    "setting": "defaults",
    "f": "a*sin(b*(x - c)) + d",
    "variable": "x",
@@ -801,7 +801,7 @@
    ]
   },
   {
-   "source": "about/how-to-read.md:93",
+   "source": "about/how-to-read.md#wdg-site-transformed-sine",
    "setting": "a one step up",
    "f": "a*sin(b*(x - c)) + d",
    "variable": "x",
@@ -828,7 +828,7 @@
    ]
   },
   {
-   "source": "calculus/preliminaries/polynomial-and-rational-functions.md:732",
+   "source": "calculus/preliminaries/polynomial-and-rational-functions.md#wdg-calc-polynomial-rational-sign-chart",
    "setting": "defaults",
    "f": "(x^2 - 1)/(x^2 - x - 6)",
    "variable": "x",
@@ -850,7 +850,7 @@
    ]
   },
   {
-   "source": "calculus/limits/limit-of-a-function.md:54",
+   "source": "calculus/limits/limit-of-a-function.md#wdg-calc-limit-average-speed",
    "setting": "defaults",
    "f": "(5*(1+h)^2 - 5)/h",
    "variable": "h",
@@ -874,7 +874,7 @@
    ]
   },
   {
-   "source": "calculus/limits/limit-of-a-function.md:98",
+   "source": "calculus/limits/limit-of-a-function.md#wdg-calc-limit-misleading-table",
    "setting": "defaults",
    "f": "sin(pi/x)",
    "variable": "x",
@@ -898,7 +898,7 @@
    ]
   },
   {
-   "source": "calculus/limits/limit-laws.md:48",
+   "source": "calculus/limits/limit-laws.md#wdg-calc-limit-laws-rational",
    "setting": "defaults",
    "f": "(x^3 - 1)/(x^2 + 3)",
    "variable": "x",
@@ -922,7 +922,7 @@
    ]
   },
   {
-   "source": "calculus/limits/limit-laws.md:386",
+   "source": "calculus/limits/limit-laws.md#wdg-calc-limit-laws-zero-over-zero",
    "setting": "defaults",
    "f": "(x^2 + c*x)/x",
    "variable": "x",
@@ -948,7 +948,7 @@
    ]
   },
   {
-   "source": "calculus/limits/limit-laws.md:386",
+   "source": "calculus/limits/limit-laws.md#wdg-calc-limit-laws-zero-over-zero",
    "setting": "c one step up",
    "f": "(x^2 + c*x)/x",
    "variable": "x",
@@ -974,7 +974,7 @@
    ]
   },
   {
-   "source": "templates/topic.md:54",
+   "source": "templates/topic.md#wdg-calc-limit-average-speed",
    "setting": "defaults",
    "f": "(5*(1+h)^2 - 5)/h",
    "variable": "h",

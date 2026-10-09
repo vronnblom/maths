@@ -257,6 +257,18 @@ def _caption_text(nodes) -> str:
     return " ".join(t for n in nodes if isinstance(n, ms.Paragraph) for _, t in n.lines).strip()
 
 
+def figure_label(d: ms.Directive) -> tuple[str | None, tuple[int, str] | None]:
+    """(the wdg- label of the {figure} that holds the {anywidget} d, None) or, if there is none,
+    (None, (line, message)). The label names the widget: widgets/_tests/make_fixtures.py keys its
+    cases by it."""
+    fig = d.parent
+    if fig is None or fig.name != "figure":
+        return None, (d.line, "{anywidget} must be the only content of a {figure} labelled wdg-…, whose caption describes the widget (docs/plan/05 §5.8)")
+    if not (fig.label or "").startswith("wdg-"):
+        return None, (fig.option_line("label"), f"a widget figure needs a wdg- label, not {fig.label or 'none'} (docs/plan/05 §5.8)")
+    return fig.label, None
+
+
 def check_page(page: Page, doc: ms.Document, project: Project, rep: Reporter, known: set[str]) -> None:
     for d in doc.directives():
         if d.name == "figure":
@@ -267,15 +279,16 @@ def check_page(page: Page, doc: ms.Document, project: Project, rep: Reporter, kn
         if d.name != "anywidget":
             continue
         fig = d.parent
+        _, label_problem = figure_label(d)
         if fig is None or fig.name != "figure":
-            rep.error(page.path, d.line, "{anywidget} must be the only content of a {figure} labelled wdg-…, whose caption describes the widget (docs/plan/05 §5.8)")
+            rep.error(page.path, *label_problem)
         else:
             others = [c for c in fig.children if not isinstance(c, ms.Comment) and c is not d]
             first = next(c for c in fig.children if not isinstance(c, ms.Comment))
             if first is not d or any(not isinstance(c, ms.Paragraph) for c in others):
                 rep.error(page.path, fig.line, "a widget figure holds only the {anywidget}, then its caption (docs/plan/05 §5.8)")
-            if not (fig.label or "").startswith("wdg-"):
-                rep.error(page.path, fig.option_line("label"), f"a widget figure needs a wdg- label, not {fig.label or 'none'} (docs/plan/05 §5.8)")
+            if label_problem:
+                rep.error(page.path, *label_problem)
             if not _caption_text(others):
                 rep.error(page.path, fig.line, f"widget figure {fig.label or '(unlabelled)'}: the caption (the widget's text description) is missing; it is all that readers without the widget see (docs/plan/05 §5.8)")
         _check_widget(page, d, project, rep, known)
