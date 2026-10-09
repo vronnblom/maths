@@ -294,7 +294,8 @@ class LabelChecker:
                         continue
                     if proof is not None:
                         stmt = self.proves.get(id(proof))
-                        if stmt is not None and site.line >= stmt.line:
+                        # A proof may cite exactly the statement it proves, and nothing later.
+                        if stmt is not None and label != stmt.label and site.line >= stmt.line:
                             self.rep.report(severity, page.path, line,
                                             f"the proof of {stmt.label} cites {label}, which is not stated before {stmt.label} (docs/plan/02 §2.5)")
                     elif solution is not None and site.line >= line:

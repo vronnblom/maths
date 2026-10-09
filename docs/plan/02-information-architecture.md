@@ -294,6 +294,10 @@ For every cross-reference on page P to a block on page Q, one of these must hold
   the page than the **statement that proof proves**. Comparing with the position of the
   citation is not enough: policy-R proofs may sit in the `## Rigorous track` section, below
   several statements, and two such proofs could then cite each other's theorems;
+- Q is P itself, the reference is inside a **proof**, and the target is **exactly the
+  statement that proof proves** (e.g. `prf-calc-limit-laws` linking to
+  `thm-calc-limit-laws`, so that a rigorous-track proof can say what it proves). Every
+  other block from that statement on stays forbidden;
 - Q is P itself, the reference is inside a **solution**, and the target block comes earlier
   on the page than the reference;
 - the reference sits inside an admonition with class `see-also` / `looking-ahead` (or a

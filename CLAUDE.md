@@ -150,7 +150,10 @@ CONTRIBUTING.md, CODE_OF_CONDUCT.md    for people; agents read this file
   admonition no anchor), sits before the first use and lists exactly the facts
   used, as a bulleted list; the sentence before it names every place that uses them; the
   proving page is named in plain text; and that page's `curriculum.yml` entry must list each
-  fact as a result (a `curriculum` PR). Form and rules: `templates/blocks.md`.
+  fact as a result (a `curriculum` PR). Facts proved **outside this course** are allowed too,
+  if the box names the subject that proves them ("proved in Real Analysis") and the 08 §8.3
+  circularity table has a matching row (stated early in this page, proved in that subject);
+  then no curriculum entry lists them. Form and rules: `templates/blocks.md`.
 - **Notation**: follow `content/about/notation.md` (source: `docs/plan/04-notation-and-style.md`).
   Use the macros: `\R \N \Z \Q \C \dd \dv \dvn \pdv \abs \norm \vb \eps \sgn \arsinh \dom \ran`. Write `\ln` (never a bare
   `\log`), `\arcsin` (not `\sin^{-1}`), `\int_a^b f(x) \dd x`, intervals `[a, b)`, radians.
@@ -162,12 +165,16 @@ CONTRIBUTING.md, CODE_OF_CONDUCT.md    for people; agents read this file
   machine-checkable LaTeX subset (`\frac`, `\sqrt`, `\pi`, `e`, `\ln`, `\infty`, …; 04 §4.3), or
   `answer manual` for proofs. An extra class gives the answer type: `expr` (default),
   `antiderivative` (ends `+ C`), `set` (brackets are intervals), `bool` (the word True or
-  False), `numeric-<tol>` (`numeric-5e-3` for two decimal places). A `{solution}` follows
-  each exercise, collapsed.
+  False), `numeric-<tol>` (`numeric-5e-3` for two decimal places). An Answer has **one**
+  answer type: a question that needs two different types (a value and a True/False, say) is
+  rephrased so that one part is the Answer and the other is a "show that …" checked in the
+  solution. A `{solution}` follows each exercise, collapsed.
 - **Writing**: en-GB spelling, "we" for reasoning, "you" for instructions. No "clearly" or
   "obviously". Alt text on every figure; static SVGs get a white background, so they read in
   dark mode.
 - **Displays on a phone**: no display may hide its meaning behind a sideways scroll at 375 px.
+  Reviewers measure at 375 px, and only a display that **hides** its meaning there must be
+  reflowed; one that scrolls a little but shows what it says may stay.
   Units and words go in the sentence, not inside a display ("…, in metres per second."); split
   a long chain over lines with `aligned`; a list of facts is a bulleted list, not a display. A
   lone negative number inline is `${-1}$` (`$-1$` renders a hyphen).

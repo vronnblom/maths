@@ -43,6 +43,7 @@ DEFECTS = {
     "orphan-proof": ("check_labels", "limit-of-a-function.md", 34, "orphan proof"),
     "forward-reference-outside-closure": ("check_labels", "limit-of-a-function.md", 27, "cites thm-calc-limit-laws on calculus/limits/limit-laws.md, which is not in the prerequisite closure of calc-limit"),
     "forward-citation-in-proof": ("check_labels", "limit-of-a-function.md", 50, "the proof of thm-calc-limit-unique cites lem-calc-limit-local, which is not stated before thm-calc-limit-unique"),
+    "proof-cites-later-theorem": ("check_labels", "limit-of-a-function.md", 50, "the proof of thm-calc-limit-unique cites thm-calc-limit-local, which is not stated before thm-calc-limit-unique"),
     "prerequisite-cycle": ("graph", "curriculum.yml", 31, "prerequisite cycle: calc-limit → calc-functions → calc-limit"),
     "unknown-prerequisite": ("graph", "curriculum.yml", 21, "unknown prerequisite calc-no-such-topic"),
     "reviewed-with-draft-prerequisite": ("check_frontmatter", "limit-of-a-function.md", 12, "status reviewed needs every prerequisite at least reviewed: calc-functions is draft"),
@@ -80,7 +81,7 @@ def fmt(rep):
 
 def test_every_fixture_is_listed():
     projects = {p.parent.parent.name for p in FIXTURES.glob("*/content/myst.yml")}
-    other = {"clean", "us-spelling", "redirects", "redirect-collision"}
+    other = {"clean", "us-spelling", "redirects", "redirect-collision", "proof-cites-own-statement"}
     gate = {p for p in projects if p.startswith("gate-")}  # tests/test_build_gate.py
     assert projects == set(DEFECTS) | other | gate
 
@@ -128,6 +129,11 @@ def test_forward_references_warn_on_unverified_pages(name, tmp_path):
     rep = run(tmp_path / name / "content")
     assert not rep.errors, fmt(rep)
     assert len(rep.warnings) == 1 and DEFECTS[name][3] in rep.warnings[0].message, fmt(rep)
+
+
+def test_a_proof_may_cite_the_statement_it_proves():
+    """Directly after its statement or paired by prf-<slug>, a proof may cite that statement (02 §2.5)."""
+    assert not run("proof-cites-own-statement").diagnostics
 
 
 def test_looking_ahead_admonition_allows_a_forward_reference(tmp_path):
