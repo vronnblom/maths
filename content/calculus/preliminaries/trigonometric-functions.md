@@ -9,7 +9,7 @@ tags: [preliminaries, trigonometry]
 maths:
   kind: topic
   subject: calc
-  status: draft
+  status: reviewed
   level: core
   difficulty: 2
   est_minutes: 50
@@ -21,7 +21,11 @@ maths:
     - Graph trigonometric functions with amplitude, period and phase.
   verify: verify/calculus/preliminaries/test_trigonometric_functions.py
   widgets: [function-plot]
-  reviewed_by: []
+  reviewed_by: [vronnblom]
+  manual_checked:
+    exr-calc-trig-functions-cos-decreasing: vronnblom
+    exr-calc-trig-functions-tan-period: vronnblom
+    exr-calc-trig-functions-sin-over-theta: vronnblom
   sources: []
 ---
 
