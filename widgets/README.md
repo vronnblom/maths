@@ -107,7 +107,9 @@ also compiles every expression with JessieCode (`scripts/compile_expressions.mjs
 
 **Modes to come** (docs/plan/08, `content/calculus/curriculum.yml`): unit circle ↔ graph,
 squeeze band, bisection, f and f′ linked, reveal step by step. Each will be a new optional
-key, so existing configs stay valid.
+key, so existing configs stay valid. The squeeze band (g, f and h drawn at once) was requested
+by vronnblom/maths#26 for `calc-squeeze-theorem`; until it is built, that page's figure
+switches between g, f and h with a parameter slider.
 
 ### `epsilon-delta`
 
