@@ -9,7 +9,7 @@ tags: [limits, epsilon-delta, proofs]
 maths:
   kind: topic
   subject: calc
-  status: draft
+  status: reviewed
   level: core
   difficulty: 3
   est_minutes: 50
@@ -20,7 +20,10 @@ maths:
     - Identify when the laws do not apply.
   verify: verify/calculus/limits/test_limit_laws.py
   widgets: [function-plot]
-  reviewed_by: []
+  reviewed_by: [vronnblom]
+  manual_checked:
+    exr-calc-limit-laws-constant-multiple: vronnblom
+    exr-calc-limit-laws-absolute-value: vronnblom
   sources: []
 ---
 
