@@ -136,10 +136,8 @@ is $[0, \infty)$, while the domain of a rational function leaves out only finite
 ### Signs of products and quotients
 
 To find where a rational function is positive, we need the signs of products and quotients.
-[Property 7 of the order rules](#rem-calc-order-rules), on Real Numbers and Intervals, settles
-two factors: a product or a quotient of two non-zero numbers is positive when they have the same
-sign, and negative when their signs differ. We use three more facts about signs, which follow
-from the order rules.
+[The order rules](#rem-calc-order-rules), on Real Numbers and Intervals, speak of inequalities,
+not of signs; the proposition below derives from them the facts about signs that we use.
 
 :::{proof:proposition} Sign rules
 :label: prop-calc-sign-rules
@@ -152,15 +150,20 @@ $u = 0$.
 (b) For real numbers $x$ and $t$, the number $x - t$ is negative if $x < t$, zero if $x = t$,
 and positive if $x > t$.
 
-(c) A product of finitely many non-zero numbers, or a quotient of two such products, is positive
+(c) If $u \ne 0$ and $v \ne 0$, then $uv$ and $\frac{u}{v}$ are positive when $u$ and $v$ have
+the same sign, and negative when their signs differ. In particular $\frac{1}{v}$ has the same
+sign as $v$, $u^2 > 0$ for $u \ne 0$, so $u^2 \ge 0$ for every real $u$, and $1 > 0$.
+
+(d) A product of finitely many non-zero numbers, or a quotient of two such products, is positive
 if an even number of all its factors (in the numerator and the denominator together) are
 negative, and negative if an odd number are.
 :::
 
 :::{proof:proof}
 :enumerated: false
-Parts (a) and (b) are short computations; for (c) we multiply in the factors one at a time and
-follow the sign with property 7 of the order rules.
+Parts (a) and (b) are short computations, (c) applies the rules for multiplying an inequality
+to $0 < v$ or $v < 0$, and for (d) we multiply in the factors one at a time and follow the sign
+with (c).
 
 (a) If $u = 0$ or $v = 0$, then $uv = 0$. Conversely, let $uv = 0$. If $u \ne 0$, then
 $v = \frac{1}{u} \cdot (uv) = \frac{1}{u} \cdot 0 = 0$. So $u = 0$ or $v = 0$. Now let $v \ne 0$.
@@ -172,13 +175,30 @@ $u = 0$.
 inequality: $x < t$ gives $x - t < 0$, and $x > t$ gives $x - t > 0$. If $x = t$, then
 $x - t = 0$.
 
-(c) Start from $1$, which is positive ([property 7 of the order rules](#rem-calc-order-rules)),
-and multiply in the factors one at a time. Each partial product is non-zero, by (a). By
-property 7, multiplying a non-zero number by a positive factor keeps its sign, and multiplying it
-by a negative factor changes its sign. So the sign changes once for each negative factor, and the
-product is positive after an even number of changes and negative after an odd number. A quotient
-$\frac{N}{D}$ of two such products is, by property 7 again, positive exactly when $N$ and $D$
-have the same sign, that is, exactly when $N \cdot D$ is positive. Since $N \cdot D$ is the
+(c) First the product. If $v > 0$, multiplying $0 < v$ by $u$ gives $0 = u \cdot 0 < uv$ when
+$u > 0$ ([property 5(a) of the order rules](#rem-calc-order-rules)), and multiplying $u < 0$
+by $v > 0$ gives $uv < 0 \cdot v = 0$ when $u < 0$ (property 5(a) again). If $v < 0$,
+multiplying $u < 0$ by $v$ reverses it, $uv > 0 \cdot v = 0$, when $u < 0$
+([property 5(c)](#rem-calc-order-rules)), and multiplying $0 < u$ by $v$ gives $0 > uv$ when
+$u > 0$ (property 5(c) again). So $uv > 0$ when the signs agree and $uv < 0$ when they differ.
+
+Next, $\frac{1}{v}$ has the sign of $v$. If $v > 0$, then $\frac{1}{v} > 0$
+([property 6 of the order rules](#rem-calc-order-rules)). If $v < 0$, adding $-v$ to both sides
+gives $0 < -v$ ([property 3](#rem-calc-order-rules)), so $\frac{1}{-v} > 0$ by property 6, and
+adding $\frac{1}{v}$ to both sides (property 3) gives $\frac{1}{v} < \frac{1}{-v} + \frac{1}{v}
+= 0$. Since $\frac{u}{v} = u \cdot \frac{1}{v}$ and $\frac{1}{v}$ has the sign of $v$, the rule
+for products gives the rule for quotients.
+
+In particular, $u \cdot u$ has two factors of the same sign, so $u^2 > 0$ for $u \ne 0$; with
+$0^2 = 0$ this gives $u^2 \ge 0$ for every real $u$. And $1 = 1^2 > 0$, as $1 \ne 0$.
+
+(d) Start from $1$, which is positive by (c), and multiply in the factors one at a time. Each
+partial product is non-zero, by (a). By (c), multiplying a non-zero number by a positive factor
+keeps its sign, and multiplying it by a negative factor changes its sign. So the sign changes
+once for each negative factor, and the product is positive after an even number of changes and
+negative after an odd number. A quotient $\frac{N}{D}$ of two such products is, by (c) again,
+positive exactly when $N$ and $D$ have the same sign, that is, exactly when $N \cdot D$ is
+positive. Since $N \cdot D$ is the
 product of all the factors, the count for the product decides the sign of the quotient.
 :::
 
@@ -489,8 +509,9 @@ except perhaps at $a$ itself. It is zero exactly where the numerator is zero and
 is not.
 
 Its sign can be read off its factors. A polynomial such as $x^2 + 1$ is positive at every real
-number: $x^2 \ge 0$ by [property 7 of the order rules](#rem-calc-order-rules), and adding $1$ to
-both sides gives $x^2 + 1 \ge 1 > 0$ (property 3).
+number: $x^2 \ge 0$ and $1 > 0$ by [part (c) of the sign rules](#prop-calc-sign-rules), adding
+$1$ to both sides gives $x^2 + 1 \ge 1$ ([property 3 of the order rules](#rem-calc-order-rules)),
+and so $x^2 + 1 > 0$ (property 2).
 
 :::{proof:proposition} Sign of a factored rational function
 :label: prop-calc-rational-sign
@@ -519,7 +540,7 @@ $s_1, \dots, s_m$. Then:
 
 :::{proof:proof}
 :enumerated: false
-On $I$ each factor keeps one sign, and then [part (c) of the sign rules](#prop-calc-sign-rules)
+On $I$ each factor keeps one sign, and then [part (d) of the sign rules](#prop-calc-sign-rules)
 decides the sign of $f$.
 
 Let $t$ be one of the numbers $r_i$ or $s_j$. We show that $x - t$ is non-zero and has the same
@@ -529,7 +550,7 @@ is not $\R$, which contains $t$.
 
 - If $I = (\alpha, \beta) = \{x \in \R : \alpha < x < \beta\}$, then $t \notin I$ means that
   $\alpha < t < \beta$ fails, so $t \le \alpha$ or $t \ge \beta$
-  ([property 1 of the order rules](#rem-calc-order-rules)). If $t \le \alpha$, every
+  ([property 7 of the order rules](#rem-calc-order-rules)). If $t \le \alpha$, every
   $x \in I$ satisfies $t \le \alpha < x$, so $x > t$ by transitivity (property 2), and
   $x - t > 0$ by [part (b) of the sign rules](#prop-calc-sign-rules). If $t \ge \beta$, every
   $x \in I$ satisfies $x < \beta \le t$, so $x - t < 0$.
@@ -540,7 +561,7 @@ is not $\R$, which contains $t$.
 So at every $x \in I$, each factor $x - r_i$ and $x - s_j$ is non-zero, with the same sign at
 every point of $I$; $P(x)$ and $Q(x)$ are positive; and $K \ne 0$. The denominator is a product
 of non-zero numbers, so it is not $0$, by part (a) of the sign rules (applied to one factor
-after another), and $x \in \dom f$. By part (c) of the sign rules, $f(x)$ is positive if an even
+after another), and $x \in \dom f$. By part (d) of the sign rules, $f(x)$ is positive if an even
 number of the factors are negative and negative if an odd number are; $P(x)$ and $Q(x)$ are
 positive, so they do not change the count. In particular $f(x) \ne 0$. Since every factor has
 the same sign at every point of $I$, the count, and with it the sign of $f$, is the same at
@@ -780,7 +801,8 @@ sum of products of two lengths in metres, so it is in square metres. ✓
 $x > 5$."
 
 **Why:** multiplying by $x - 1$ keeps the inequality only where $x - 1 > 0$. For $x < 1$ the
-factor is negative and reverses it ([property 5 of the order rules](#rem-calc-order-rules)).
+factor is negative and reverses it
+([property 5(a) and (c) of the order rules](#rem-calc-order-rules)).
 The answer $x > 5$ misses, for example, $x = 0$, where $\frac{0 + 3}{0 - 1} = -3 < 2$.
 
 ✓ **Right:** subtract $2$ and use one fraction:
@@ -1222,15 +1244,16 @@ $(1, 4)$
 ::::{solution} exr-calc-polynomial-rational-concentration
 :label: sol-calc-polynomial-rational-concentration
 :class: dropdown
-For every real $t$, $t^2 \ge 0$ ([property 7 of the order rules](#rem-calc-order-rules)), so
-adding $4$ to both sides gives $t^2 + 4 \ge 4 > 0$ (property 3). Multiplying by the positive
-number $t^2 + 4$ keeps an inequality (property 5), and multiplying by its reciprocal, also
-positive (property 7), takes us back.
+For every real $t$, $t^2 \ge 0$ ([part (c) of the sign rules](#prop-calc-sign-rules)), so
+adding $4$ to both sides gives $t^2 + 4 \ge 4 > 0$
+([property 3 of the order rules](#rem-calc-order-rules)). Multiplying by the positive number
+$t^2 + 4$ keeps an inequality (property 5(a)), and multiplying by its reciprocal, also positive
+(property 6), takes us back.
 So $c(t) > 1$ holds exactly when
 $$
 5t > t^2 + 4 ,
 $$
-that is, after adding $-5t$ to both sides (property 3, which works in both directions), when
+that is, after adding $-5t$ to both sides (property 3; adding $5t$ takes us back), when
 $t^2 - 5t + 4 < 0$. Now
 $t^2 - 5t + 4 = (t - 1)(t - 4)$. By [](#prop-calc-rational-sign) (with $K = 1$ and no
 denominator): on $(-\infty, 1)$ both factors are negative and the product is positive; on
@@ -1320,8 +1343,8 @@ $$
 \frac{x^2 - x + 2}{(x - 1)(x + 1)} \ge 0 .
 $$
 Completing the square, $x^2 - x + 2 = \bigl(x - \frac{1}{2}\bigr)^2 + \frac{7}{4}$. The square is
-$\ge 0$ ([property 7 of the order rules](#rem-calc-order-rules)), so, adding $\frac{7}{4}$ to
-both sides (property 3), the numerator is at least $\frac{7}{4}$, positive at every real $x$.
+$\ge 0$ ([part (c) of the sign rules](#prop-calc-sign-rules)), so, adding $\frac{7}{4}$ to both
+sides ([property 3 of the order rules](#rem-calc-order-rules)), the numerator is at least $\frac{7}{4}$, positive at every real $x$.
 By [](#prop-calc-rational-sign), with
 $P(x) = x^2 - x + 2$, the quotient has one sign on each of $(-\infty, -1)$, $(-1, 1)$ and
 $(1, \infty)$, and it is never $0$:
@@ -1374,9 +1397,9 @@ $p(r) = 0$ says $c_0 = 0 = r \cdot 0$.)
 **The example.** For $x^3 + x^2 - 7x + 2$ the constant term is $2$, so an integer root must be one
 of the integers that divide $2$. These are $1$, ${-1}$, $2$ and ${-2}$. Indeed, let $2 = rk$ with
 integers $r$ and $k$. Then $r \ne 0$ and $k \ne 0$, since otherwise $rk = 0$. If $r \ge 3$, then
-multiplying by the positive number $r$ ([property 5 of the order rules](#rem-calc-order-rules))
+multiplying by the positive number $r$ ([property 5(b) of the order rules](#rem-calc-order-rules))
 turns $k \ge 1$ into $rk \ge r$, and $k \le -1$ into $rk \le -r$. Since $r \ge 3$, and so
-$-r \le -3$ (multiplying by ${-1}$, by the same property), this gives $rk \ge 3$ or
+$-r \le -3$ (multiplying by ${-1}$ reverses it, by property 5(c)), this gives $rk \ge 3$ or
 $rk \le -3$; neither is $2$. If $r \le -3$, the same argument applies to $2 = (-r)(-k)$, with
 $-r \ge 3$. So $r$ is one of $1$, ${-1}$, $2$ and ${-2}$, and each of them divides $2$. Testing
 them, with $p$ now this polynomial:
