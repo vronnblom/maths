@@ -99,6 +99,10 @@ chapters:
           - {label: thm-calc-factor-theorem, policy: F}
           - {label: thm-calc-polynomial-division, policy: S}
           - {label: thm-calc-polynomial-roots-bound, policy: F, note: at most $n$ roots}
+          - {label: prop-calc-sign-rules, policy: F, note: "signs of products and quotients, the zero-product rule, the sign of $x - t$; from trichotomy and the order rules"}
+          - {label: prop-calc-rational-domain, policy: F, note: "the domain of $p/q$ leaves out at most $\\deg q$ points; the zeros are the roots of $p$ in the domain"}
+          - {label: prop-calc-rational-sign, policy: F, note: "a factored rational function has constant sign on an open interval free of its linear-factor points; no continuity used"}
+          - {label: cor-calc-polynomial-identity, policy: F, note: "two polynomials of degree at most $n$ that agree at $n + 1$ points have the same coefficients"}
       - label: calc-exponential-functions
         file: preliminaries/exponential-functions.md
         title: Exponential Functions and the Number e
@@ -225,6 +229,7 @@ chapters:
         results:
           - {label: def-calc-one-sided-limit}
           - {label: thm-calc-limit-iff-one-sided, policy: R}
+          - {label: cor-calc-one-sided-limits-differ, policy: F, note: "different one-sided limits at $a$: the limit at $a$ does not exist"}
       - label: calc-limit-laws
         file: limits/limit-laws.md
         title: Limit Laws
