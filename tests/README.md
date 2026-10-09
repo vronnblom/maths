@@ -24,6 +24,8 @@ often `content/calculus/curriculum.yml`, a `labels.lock`, and sometimes a `verif
 | `orphan-proof` | a proof after prose, without a `prf-` label | `check_labels.py` |
 | `forward-reference-outside-closure` | a verified page cites a page outside its closure | `check_labels.py --forward-refs` |
 | `forward-citation-in-proof` | a rigorous-track proof cites a lemma stated after its theorem | `check_labels.py --forward-refs` |
+| `proof-cites-later-theorem` | a rigorous-track proof cites its own theorem (allowed) and a theorem stated after it | `check_labels.py --forward-refs` |
+| `proof-cites-own-statement` | none: two proofs, one directly after its lemma and one paired by `prf-`, each cite the statement they prove | – |
 | `prerequisite-cycle` | `calc-functions` ↔ `calc-limit` in the curriculum | `graph.py check` |
 | `unknown-prerequisite` | `calc-no-such-topic` | `graph.py check` |
 | `reviewed-with-draft-prerequisite` | a reviewed page needs a draft one | `check_frontmatter.py` |

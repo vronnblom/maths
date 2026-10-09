@@ -5,7 +5,9 @@ is derived here from the statement (the set's defining conditions, the decimal a
 copied from the page's answers or solutions; the page's answers are read with answer(label).
 """
 
+import itertools
 import random
+from fractions import Fraction
 
 import pytest
 import sympy as sp
@@ -317,18 +319,20 @@ def test_exr_calc_real_numbers_rational_between_key_claims():
         n_ = sp.floor(1 / (bv - av)) + 1
         assert n_ >= 1 and n_ * bv - n_ * av > 1
         na = n_ * av
-        # A = {integers j > na}. Its least element, found by walking up from below na.
+        # The smallest integer greater than na, found by walking up from below na.
         j = sp.floor(na) - 3
         while not (j > na):
             j += 1
         m_ = j
-        # The solution's shift: an integer k ≥ 1 with k > -na makes every j + k (j ∈ A) positive.
-        k_ = max(1, sp.floor(-na) + 1)
-        assert k_ >= 1 and k_ > -na
-        for jj in range(m_, m_ + 5):  # the elements of A start at m_
-            assert jj + k_ > na + k_ > 0
-        # m_ is the least element of A: m_ ∈ A, m_ - 1 ∉ A.
+        # The solution: the integer part k of na (k ≤ na < k + 1, by SymPy's floor) and m = k + 1
+        # give that same integer. The shift argument behind the integer part is tested in
+        # test_rem_integer_part.
+        k_ = sp.floor(na)
+        assert k_ <= na < k_ + 1 and k_ + 1 == m_
+        # m is greater than na and m - 1 is not; an integer greater than na is at least m.
         assert m_ > na and not (m_ - 1 > na)
+        for jj in range(m_ - 5, m_ + 5):
+            assert (jj > na) == (jj >= m_)
         assert na < m_ <= na + 1 < n_ * bv
         r_ = sp.Rational(m_, n_)
         assert r_.is_rational and (av < r_) is sp.true and (r_ < bv) is sp.true
@@ -540,3 +544,179 @@ def test_rem_square_roots_rigorous_track():
     for yq in (sp.Rational(1, 9), sp.Rational(7, 3), sp.Integer(2), sp.Integer(10), sp.Rational(10**4, 3)):
         S_y = solve(sp.And(x >= 0, x**2 < yq))
         assert equal(S_y.sup**2, yq) and S_y.sup <= 1 + yq
+
+
+# ── rem-calc-order-rules, rem-calc-well-ordering, rem-calc-integer-part (vronnblom/maths#21) ──
+
+# Exact sample values for the order rules: Fractions (fast, exact) with negatives, zero, equal
+# values and close pairs, so that every case of every rule (strict, equal, c = 0) occurs.
+ORDER_SAMPLE = sorted({Fraction(p, q) for p in range(-4, 5) for q in (1, 2, 3)}
+                      | {Fraction(1, 10**6), Fraction(-1, 10**6), Fraction(999999, 10**6)})
+
+
+def test_rem_order_rules_symbolic():
+    # Route 1: write each hypothesis "a < b" as b = a + d with d > 0 ("a ≤ b" with d ≥ 0), and
+    # let SymPy's sign assumptions decide the sign of the conclusion's right side minus its left.
+    d1, d2 = sp.Symbol("d1", positive=True), sp.Symbol("d2", positive=True)
+    e1, e2 = sp.Symbol("e1", nonnegative=True), sp.Symbol("e2", nonnegative=True)
+    c = symbol("c")
+    cp, cn, c0 = sp.Symbol("cp", positive=True), sp.Symbol("cn", negative=True), sp.Symbol("c0", nonnegative=True)
+    # 2: a < b < c gives c - a = d1 + d2 > 0; a ≤ b < c and a < b ≤ c give e1 + d2, d1 + e2 > 0;
+    # a ≤ b ≤ c gives e1 + e2 ≥ 0.
+    assert (d1 + d2).is_positive and (e1 + d2).is_positive and (d1 + e2).is_positive
+    assert (e1 + e2).is_nonnegative
+    # 3: (b + c) - (a + c) = b - a, with any c.
+    assert equal(((a + d1) + c) - (a + c), d1) and equal(((a + e1) + c) - (a + c), e1)
+    # 4: (b + d) - (a + c) is the sum of the two gaps: < + < and ≤ + < strict, ≤ + ≤ only ≥ 0.
+    assert equal(((a + d1) + (c + d2)) - (a + c), d1 + d2)
+    assert equal(((a + e1) + (c + d2)) - (a + c), e1 + d2) and (e1 + d2).is_positive
+    assert equal(((a + e1) + (c + e2)) - (a + c), e1 + e2) and (e1 + e2).is_nonnegative
+    # 5(a): c(a + d) - ca = cd > 0 for c > 0.  5(b): c ≥ 0, d ≥ 0 give cd ≥ 0.
+    assert equal(cp * (a + d1) - cp * a, cp * d1) and (cp * d1).is_positive
+    assert equal(c0 * (a + e1) - c0 * a, c0 * e1) and (c0 * e1).is_nonnegative
+    # 5(c): c(a + d) - ca = cd < 0 for c < 0 (reversed), and cd ≤ 0 when d ≥ 0.
+    assert equal(cn * (a + d1) - cn * a, cn * d1) and (cn * d1).is_negative
+    assert (cn * e1).is_nonpositive
+    # 6: 1/a > 0 for a > 0, and 1/a - 1/(a + d) = d/(a(a + d)) > 0.
+    ap = sp.Symbol("ap", positive=True)
+    assert (1 / ap).is_positive
+    assert equal(1 / ap - 1 / (ap + d1), d1 / (ap * (ap + d1))) and (d1 / (ap * (ap + d1))).is_positive
+
+
+def test_rem_order_rules_sampled():
+    # Route 2: every case of every rule, on all tuples of exact sample values.
+    V = ORDER_SAMPLE
+    for av, bv in itertools.product(V, V):
+        # 1: exactly one of a < b, a = b, a > b.
+        assert [av < bv, av == bv, av > bv].count(True) == 1
+        # 7: not (a < b) exactly when a ≥ b; not (a ≤ b) exactly when a > b.
+        assert (not av < bv) == (av >= bv) and (not av <= bv) == (av > bv)
+        if av > 0 and bv > 0:
+            assert 1 / av > 0  # 6, first part
+            if av < bv:
+                assert 1 / bv < 1 / av  # 6, second part
+                # The reason: ab > 0, 1/(ab) > 0, and a·1/(ab) = 1/b, b·1/(ab) = 1/a.
+                assert av * bv > 0 and 1 / (av * bv) > 0
+                assert av / (av * bv) == 1 / bv and bv / (av * bv) == 1 / av
+    for av, bv, cv in itertools.product(V, V, V):
+        # 2, all four forms.
+        if av < bv < cv or av <= bv < cv or av < bv <= cv:
+            assert av < cv
+        if av <= bv <= cv:
+            assert av <= cv
+        # 3, strict and ≤.
+        if av < bv:
+            assert av + cv < bv + cv
+        if av <= bv:
+            assert av + cv <= bv + cv
+        # 5(a), 5(b), 5(c), each with < and ≤.
+        if av < bv and cv > 0:
+            assert cv * av < cv * bv
+        if av <= bv and cv >= 0:
+            assert cv * av <= cv * bv
+        if av < bv and cv < 0:
+            assert cv * av > cv * bv
+            # The reason: 0 < -c, so -ca < -cb, and adding ca + cb gives cb < ca.
+            assert 0 < -cv and -cv * av < -cv * bv
+            assert -cv * av + (cv * av + cv * bv) == cv * bv
+            assert -cv * bv + (cv * av + cv * bv) == cv * av
+        if av <= bv and cv < 0:
+            assert cv * av >= cv * bv
+    for av, bv, cv, dv in itertools.product(V[::2], V[::2], V[::2], V[::2]):
+        # 4: the three stated forms, and the reason's chain a + c ≤ b + c < b + d.
+        if av < bv and cv < dv:
+            assert av + cv < bv + dv
+        if av <= bv and cv <= dv:
+            assert av + cv <= bv + dv
+        if av <= bv and cv < dv:
+            assert av + cv <= bv + cv < bv + dv and av + cv < bv + dv
+    # The sample has every case: equal pairs, c = 0, negatives, and a < b with mixed signs.
+    assert 0 in V and min(V) < 0 < max(V) and len(V) == len(set(V))
+
+
+def test_rem_order_rules_cases_named_on_the_page():
+    # 5(b): even when a < b, c = 0 gives only ≤ (both sides 0).
+    assert equal(0 * 1, 0 * 2) and equal(0 * 2, 0)
+    # 5(c): multiplying 1 < 2 by -1 reverses it.
+    assert (-1 * 1 > -1 * 2) is True
+    # 6, the reason: 1·1 = 1 and 1·0 = 0 (so 1 < 0 would give 1 > 0); a·(1/a) = 1.
+    assert equal(1 * 1, 1) and equal(1 * 0, 0) and equal(a * (1 / a), 1)
+    assert equal(sp.S.One > 0, sp.true)
+    # 6 needs 0 < a: for a = -1 < b = 1 the reciprocals keep the order (1/b = 1 > -1 = 1/a).
+    assert equal(sp.Rational(1, 1) > sp.Rational(1, -1), sp.true)
+    # 1 and 7 also hold for irrational numbers, by SymPy's exact comparisons.
+    vals = [sp.sqrt(2), sp.Rational(141421, 100000), sp.pi, sp.Rational(22, 7), -sp.E, sp.Integer(0)]
+    for av, bv in itertools.product(vals, vals):
+        lt, eq_, gt = bool(av < bv), bool(sp.Eq(av, bv)), bool(av > bv)
+        assert [lt, eq_, gt].count(True) == 1
+        assert (not lt) == bool(av >= bv) and (not bool(av <= bv)) == gt
+
+
+def test_rem_well_ordering():
+    # A non-empty set of positive integers has a smallest element: sampled finite sets.
+    rng = random.Random(4)
+    for _ in range(200):
+        S = {rng.randint(1, 10**6) for _ in range(rng.randint(1, 30))}
+        mn = min(S)
+        assert mn in S and all(mn <= el for el in S)
+    # The hypothesis matters: Z has no smallest element (m - 1 < m), and the positive rationals
+    # 1/n have none either (1/(n + 1) < 1/n).
+    assert equal(sp.simplify((n - 1) - n), -1)
+    assert equal(sp.simplify(1 / n - 1 / (n + 1)), 1 / (n * (n + 1)))
+    # Its use in thm-calc-sqrt2-irrational's proof, for a rational r = p/q > 0: the denominators
+    # q ≥ 1 with r·q an integer have a smallest element, the denominator of r in lowest terms.
+    for rv in (sp.Rational(3, 2), sp.Rational(10, 4), sp.Rational(7, 1), sp.Rational(22, 14)):
+        dens = [qq for qq in range(1, 200) if (rv * qq).is_integer]
+        assert min(dens) == sp.fraction(rv)[1]
+
+
+def _integer_part_by_construction(u_):
+    """The integer part of u, built as rem-calc-integer-part's existence proof builds it, with no
+    floor: n ≥ 1 with n > u and j ≥ 1 with j > -u (Archimedean, here by doubling), then the
+    smallest element m of A = {integers > u}, found by walking up from -j, and k = m - 1."""
+    nn = 1
+    while not nn > u_:
+        nn *= 2
+    jj = 1
+    while not jj > -u_:
+        jj *= 2
+    assert nn >= 1 and nn > u_ and jj >= 1 and jj > -u_
+    i = -jj  # -j < u, so -j ∉ A, and every element of A lies above it
+    assert not i > u_
+    while not i > u_:
+        i += 1
+    m_ = i
+    assert m_ <= nn  # A is non-empty: n ∈ A, so its smallest element is at most n
+    # The shift: every i ∈ A has i + j > u + j > 0; the least of the i + j is m + j, with m ∈ A.
+    for i in range(m_, m_ + 6):
+        assert i > u_ and i + jj > u_ + jj > 0
+    assert m_ + jj >= 1 and not (m_ - 1 > u_)
+    return m_ - 1
+
+
+def test_rem_integer_part():
+    # The examples: the integer parts of 2.7, 3 and -1.5 are 2, 3 and -2 (and -1 is not, since
+    # -1 > -1.5). Computed by SymPy's floor and checked against k ≤ u < k + 1.
+    for uv, kv in ((sp.Rational(27, 10), 2), (sp.Integer(3), 3), (sp.Rational(-3, 2), -2)):
+        assert equal(sp.floor(uv), kv) and kv <= uv < kv + 1
+    assert sp.Integer(-1) > sp.Rational(-3, 2) and not (sp.Integer(-1) <= sp.Rational(-3, 2))
+    # Existence: the proof's construction gives k with k ≤ u < k + 1, and it agrees with SymPy's
+    # floor (a second route). Exact rationals, integers (u ∈ Z: then k = u), values just either
+    # side of an integer, and irrationals.
+    rng = random.Random(5)
+    us = [Fraction(rng.randint(-10**6, 10**6), rng.randint(1, 1000)) for _ in range(300)]
+    us += [Fraction(v) for v in range(-5, 6)]
+    us += [Fraction(v) + s_ * Fraction(1, 10**9) for v in (-3, 0, 1, 7) for s_ in (-1, 1)]
+    for uv in us:
+        kv = _integer_part_by_construction(uv)
+        assert kv <= uv < kv + 1 and kv == sp.floor(sp.Rational(uv.numerator, uv.denominator))
+        # Uniqueness: no other integer near k satisfies l ≤ u < l + 1.
+        assert [l_ for l_ in range(kv - 5, kv + 6) if l_ <= uv < l_ + 1] == [kv]
+    for uv in (sp.sqrt(2), -sp.sqrt(2), sp.pi, -sp.pi, 100 * sp.E, -sp.Rational(1, 3) * sp.pi):
+        kv = _integer_part_by_construction(uv)
+        assert kv <= uv < kv + 1 and equal(sp.floor(uv), kv)
+    # Uniqueness, the steps: from k < l + 1 and l < k + 1, adding -l and -1 - l gives
+    # k - l < 1 and -1 < k - l; the only integer strictly between -1 and 1 is 0.
+    ll = symbol("l")
+    assert equal((k + 1) - 1 - ll, k - ll) and equal(ll - 1 - ll, -1) and equal((ll + 1) - ll, 1)
+    assert equal(sp.Interval.open(-1, 1).intersect(sp.S.Integers), sp.FiniteSet(0))
