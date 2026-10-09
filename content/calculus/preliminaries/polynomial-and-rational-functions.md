@@ -9,7 +9,7 @@ tags: [preliminaries, proofs, inequalities]
 maths:
   kind: topic
   subject: calc
-  status: draft
+  status: reviewed
   level: core
   difficulty: 2
   est_minutes: 45
@@ -20,7 +20,9 @@ maths:
     - Find domains, zeros and the sign of rational functions.
   verify: verify/calculus/preliminaries/test_polynomial_and_rational_functions.py
   widgets: [function-plot]
-  reviewed_by: []
+  reviewed_by: [vronnblom]
+  manual_checked:
+    exr-calc-polynomial-rational-integer-root: vronnblom
   sources: []
 ---
 
