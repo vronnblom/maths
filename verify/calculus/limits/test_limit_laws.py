@@ -200,6 +200,20 @@ def test_power_and_root_sketches():
     gap = sp.Abs(fy - Lp) / sp.sqrt(Lp) - sp.Abs(fy - Lp) / q_
     assert equal(gap, sp.Abs(fy - Lp) * sp.sqrt(fy) / (sp.sqrt(Lp) * q_))
     assert (sp.Abs(fy - Lp) * sp.sqrt(fy) / (sp.sqrt(Lp) * q_)).is_nonnegative
+    # The order steps the sketch now names: adding √L to √f ≥ 0 gives √f + √L ≥ √L; multiplying
+    # √L ≤ √f + √L by the positive 1/(√L(√f + √L)) gives 1/(√f + √L) ≤ 1/√L (each side
+    # simplified); multiplying by |f − L| ≥ 0 gives ≤; multiplying |f − L| < ε√L by 1/√L > 0
+    # gives |f − L|/√L < ε.
+    assert sp.sqrt(fy).is_nonnegative and equal(sp.sqrt(fy) + sp.sqrt(Lp), q_)
+    m = 1 / (sp.sqrt(Lp) * q_)
+    assert m.is_positive
+    assert equal(sp.sqrt(Lp) * m, 1 / q_) and equal(q_ * m, 1 / sp.sqrt(Lp))
+    # 1/√L − 1/(√f + √L) = √f/(√L(√f + √L)) ≥ 0 (SymPy cannot sign the difference directly)
+    assert equal(1 / sp.sqrt(Lp) - 1 / q_, sp.sqrt(fy) * m) and (sp.sqrt(fy) * m).is_nonnegative
+    assert sp.Abs(fy - Lp).is_nonnegative
+    assert equal(eps * sp.sqrt(Lp) * (1 / sp.sqrt(Lp)), eps) and (1 / sp.sqrt(Lp)).is_positive
+    # √L ≠ 0 because 0² = 0 ≠ L.
+    assert equal(sp.Integer(0) ** 2, 0) and Lp.is_nonzero
     # |f − L| < L gives f > 0: the set {f : |f − L| < L} is (0, 2L).
     fr = sp.Symbol("f_r", real=True)
     assert equal(sp.solveset(sp.Abs(fr - 4) < 4, fr, sp.S.Reals), sp.Interval.open(0, 8))
@@ -287,6 +301,68 @@ def test_cor_calc_direct_substitution_every_example():
     hh = sp.Piecewise((5, sp.Eq(x, 1)), (x + 1, True))
     assert equal(hh.subs(x, 1), 5)
     assert limit_is(x + 1, x, 1, 2)   # h = x + 1 on x ≠ 1 (sp.limit mishandles the Piecewise)
+    # Common mistake 3's argument: the corollary would give h(1) = 5, the remark gives 2, and
+    # 2 ≠ 5 contradicts uniqueness.
+    assert not equal(sp.Integer(2), hh.subs(x, 1))
+
+
+def rho_for(alpha, beta, a):
+    """The proof of (c): ρ = min(a − α, β − a), a − α, β − a or 1, as I is (α, β), (α, ∞),
+    (−∞, β) or ℝ (None for a missing endpoint)."""
+    sides = [d for d in ((a - alpha) if alpha is not None else None,
+                         (beta - a) if beta is not None else None) if d is not None]
+    return min(sides) if sides else Q(1)
+
+
+def in_interval(v, alpha, beta):
+    return (alpha is None or alpha < v) and (beta is None or v < beta)
+
+
+def restriction_holds(r, defined, a, alpha, beta, delta0, samples, seed=0):
+    """Part (c) as its proof builds it: δ = min(δ0(ε), ρ). Every sampled x with 0 < |x − a| < δ
+    lies in I and in r's domain (so s is defined there), and |s(x) − s(a)| < ε."""
+    rng = random.Random(seed)
+    rho = rho_for(alpha, beta, a)
+    assert rho > 0
+    # ρ ≤ a − α gives α ≤ a − ρ (adding α − ρ to both sides); ρ ≤ β − a gives a + ρ ≤ β.
+    assert alpha is None or alpha <= a - rho
+    assert beta is None or a + rho <= beta
+    for e in samples:
+        d = min(delta0(e), rho)
+        assert d > 0 and a - rho <= a - d and a + d <= a + rho
+        for xv in window(a, d, rng, count=10):
+            assert in_interval(xv, alpha, beta) and defined(xv), (e, d, xv)
+            assert abs(r(xv) - r(a)) < e, (e, d, xv)
+    return True
+
+
+def test_cor_calc_direct_substitution_restriction_proof():
+    # Part (c)'s proof on the four kinds of open interval (def-calc-interval), with r = 3t/(3 + t)
+    # at 6. δ0 for r: |r(t) − 2| = |t − 6|/(3 + t) (derived below); on |t − 6| < 3, 3 + t > 6, so
+    # δ0(ε) = min(3, 6ε) wins the round ε for r itself.
+    assert equal(sp.together(3 * t / (3 + t) - 2), (t - 6) / (t + 3))
+    r = lambda v: 3 * v / (3 + v)            # noqa: E731
+    defined = lambda v: v != -3              # noqa: E731
+    delta0 = lambda e: min(Q(3), 6 * e)      # noqa: E731
+    assert implication_holds(r, Q(6), Q(2), delta0, eps_samples(140, count=60))
+    intervals = [(Q(0), None),               # (0, ∞), the example's I
+                 (Q(11, 2), Q(13, 2)),       # (α, β), narrower than δ0's window for large ε
+                 (Q(-2), Q(100)),            # (α, β), with −3 outside
+                 (None, Q(61, 10)),          # (−∞, β): contains −3, where r is undefined
+                 (None, None)]               # ℝ
+    for i, (alpha, beta) in enumerate(intervals):
+        assert in_interval(Q(6), alpha, beta)
+        assert restriction_holds(r, defined, Q(6), alpha, beta, delta0, eps_samples(141 + i, count=40), seed=i)
+    # ρ for each kind: min(a − α, β − a); a − α; β − a; 1.
+    assert rho_for(Q(11, 2), Q(13, 2), Q(6)) == Q(1, 2) and rho_for(Q(0), None, Q(6)) == 6
+    assert rho_for(None, Q(61, 10), Q(6)) == Q(1, 10) and rho_for(None, None, Q(6)) == 1
+    # The same on random bounded intervals α < a < β: the window of radius ρ lies inside.
+    rng = random.Random(146)
+    for _ in range(500):
+        av = Q(rng.randint(-10**6, 10**6), 997)
+        lo, hi = av - Q(rng.randint(1, 10**6), 991), av + Q(rng.randint(1, 10**6), 983)
+        rho = rho_for(lo, hi, av)
+        assert rho > 0 and lo <= av - rho and av + rho <= hi
 
 
 # ── When the laws do not apply ───────────────────────────────────────────────────
@@ -311,8 +387,11 @@ def test_sec_calc_limit_laws_not_apply():
     # The stone's speed (5(1 + h)² − 5)/h: numerator and denominator both → 0 at 0.
     hs = symbol("h")
     assert equal(sp.limit(5 * (1 + hs) ** 2 - 5, hs, 0), 0) and equal(sp.limit(hs, hs, 0), 0)
-    # Power n = −1: (f(x))^{−1} = 1/f(x); for f = x at 0, no limit.
+    # Negative powers: (f(x))^{−1} = 1/f(x); with L ≠ 0 the quotient law gives 1/L (f = x + 2 at
+    # 0: 1/2; f = 3 − x² at 1: 1/2); with L = 0, f = x at 0, no limit.
     assert equal(x ** (-1), 1 / x)
+    assert limit_is((x + 2) ** (-1), x, 0, sp.Rational(1, 2))
+    assert limit_is((3 - x**2) ** (-1), x, 1, sp.Rational(1, 2))
     # Root with L < 0: x − 1 → −1 at 0, and x − 1 < 0 exactly for x < 1, a set containing a whole
     # interval around 0, so √(x − 1) is real on no punctured interval around 0.
     assert limit_is(x - 1, x, 0, -1)
@@ -388,10 +467,18 @@ def test_eg_calc_limit_laws_sum_delta():
     assert implication_holds(lambda v: 6 * v - 1, Q(3), Q(17), lambda e: e / 8, eps_samples(90))
     assert (eps / 8 < eps / 6) is sp.true
     # On the window of the largest δ, ε/6, f uses at most 2·ε/6 = ε/3 of the tolerance (less than
-    # half) and g up to 4·ε/6 = 2ε/3 (more than half). See the report on the sentence
-    # "g needs less than half".
+    # half) and g up to 4·ε/6 = 2ε/3 (more than half), as the page now says ("g needs more than
+    # half"; the first round's sentence had it reversed).
     assert equal(2 * largest, eps / 3) and (eps / 3 < eps / 2) is sp.true
     assert equal(4 * largest, 2 * eps / 3) and (2 * eps / 3 > eps / 2) is sp.true
+    # "comes as close as we like to 2ε/3": at |x − 3| = (ε/6)(1 − 1/k), inside the window for
+    # every k ≥ 2, g's error is 2ε/3 − 2ε/(3k); and the window holds points where it exceeds ε/2
+    # (|x − 3| = ε/7: 4ε/7). f's error 2|x − 3| < 2·ε/6 = ε/3 on the whole window.
+    k = sp.Symbol("k", positive=True)
+    assert equal(4 * largest * (1 - 1 / k), 2 * eps / 3 - 2 * eps / (3 * k))
+    assert (eps / 7 < largest) is sp.true and (4 * eps / 7 > eps / 2) is sp.true
+    # "Held to half of the tolerance, g allows only δ2 = ε/8", smaller than ε/6.
+    assert equal(d2, eps / 8) and (d2 < largest) is sp.true
     # Check: ε = 0.6 gives δ = 0.075; x = 3.07 is in the window and |6(3.07) − 18| = 0.42 < 0.6.
     e = sp.Rational(6, 10)
     assert equal((eps / 8).subs(eps, e), sp.Rational(75, 1000))
@@ -471,18 +558,25 @@ def test_eg_calc_limit_laws_root_quotient():
 @covers("eg-calc-limit-laws-resistors")
 def test_eg_calc_limit_laws_resistors():
     R = 3 * t / (3 + t)
-    # Step 1: defined for every t > 0 (the denominator vanishes only at t = −3).
+    # Step 1: the rational function r = 3t/(3 + t) is defined at every t ≠ −3 (its denominator
+    # vanishes only there), so at every point of (0, ∞), which contains 6. R is its restriction to
+    # (0, ∞), not r itself: r(−1) = −3/2 is defined (q(−1) = 2 ≠ 0), R(−1) is not.
     assert equal(sp.solveset(sp.Eq(3 + t, 0), t, sp.S.Reals), sp.FiniteSet(-3))
-    # Step 2: 3 + 6 = 9 ≠ 0.  Step 3: R(6) = 18/9 = 2, by sp.limit and by substitution.
+    pos = sp.Interval.open(0, sp.oo)
+    assert equal(sp.Intersection(pos, sp.FiniteSet(-3)), sp.S.EmptySet) and pos.contains(6) is sp.true
+    assert equal((3 + t).subs(t, -1), 2) and pos.contains(-1) is sp.false
+    # Step 2: 3 + 6 = 9 ≠ 0.  Step 3: R(6) = 18/9 = 2, by sp.limit and by substitution; and by
+    # part (c)'s δ for the restriction to (0, ∞) (δ0 = min(3, 6ε) for r, ρ = 6), on exact pairs.
     assert equal((3 + t).subs(t, 6), 9)
     assert equal((3 * t).subs(t, 6), 18) and equal(sp.Rational(18, 9), 2)
     assert substitution_agrees(R, t, 6, 2)
+    assert restriction_holds(lambda v: 3 * v / (3 + v), lambda v: v > 0, Q(6), Q(0), None,
+                             lambda e: min(Q(3), 6 * e), eps_samples(150))
     # Check: R(6.01) = 18.03/9.01 ≈ 2.00111.
     tv = sp.Rational("6.01")
     assert equal(R.subs(t, tv), sp.Rational("18.03") / sp.Rational("9.01"))
     assert rounds_to(R.subs(t, tv), "2.00111")
     # A parallel combination is smaller than each resistor: R(t) < 3 and R(t) < t for t > 0.
-    pos = sp.Interval.open(0, sp.oo)
     assert equal(sp.solveset(R >= 3, t, pos), sp.S.EmptySet)
     assert equal(sp.solveset(R >= t, t, pos), sp.S.EmptySet)
 
@@ -580,6 +674,15 @@ def test_exr_calc_limit_laws_lens():
     ans = answer("exr-calc-limit-laws-lens")
     assert substitution_agrees(vv, u, 15, ans)
     assert equal(ans, sp.limit(vv, u, 15))
+    # The solution: v is the restriction of 5u/(u − 5), defined at every u ≠ 5, to (5, ∞), which
+    # contains 15; part (c)'s δ for it. |v − 15/2| = 5|u − 15|/(2(u − 5)) (derived below); on
+    # |u − 15| < 5, u − 5 > 5, so δ0(ε) = min(5, 2ε) works for the rational function; ρ = 10.
+    assert equal(sp.solveset(sp.Eq(u - 5, 0), u, sp.S.Reals), sp.FiniteSet(5))
+    assert sp.Interval.open(5, sp.oo).contains(15) is sp.true
+    assert equal(sp.together(vv - sp.Rational(15, 2)), 5 * (15 - u) / (2 * (u - 5)))
+    assert restriction_holds(lambda v: 5 * v / (v - 5), lambda v: v > 5, Q(15), Q(5), None,
+                             lambda e: min(Q(5), 2 * e), eps_samples(151))
+    assert equal(sp.Rational(75, 10), ans) and equal((5 * u).subs(u, 15), 75)
     # "7.5 cm", and at the focal point the numerator → 25, the denominator → 0.
     assert equal(ans, sp.Rational("7.5"))
     assert equal(sp.limit(5 * u, u, 5), 25) and equal(sp.limit(u - 5, u, 5), 0)
@@ -646,6 +749,8 @@ def test_exr_calc_limit_laws_root_zero():
     assert equal(inner, x**2 * (1 + x**2))
     assert equal(sp.solveset(inner < 0, x, sp.S.Reals), sp.S.EmptySet)
     assert equal(sp.solveset(1 + x**2 < 1, x, sp.S.Reals), sp.S.EmptySet)
+    # 1 + x² ≥ 1 > 0, so multiplying 0 ≤ x² by the positive 1 + x² gives 0 ≤ x²(1 + x²).
+    assert equal(sp.solveset(1 + x**2 <= 0, x, sp.S.Reals), sp.S.EmptySet)
     ans = answer("exr-calc-limit-laws-root-zero")
     assert limit_is(sp.sqrt(inner), x, 0, ans)
     assert equal(ans, sp.sqrt(inner.subs(x, 0)))
@@ -669,14 +774,27 @@ def test_exr_calc_limit_laws_root_domain():
     got = answer("exr-calc-limit-laws-root-domain")
     assert equal(got, expected)
     # For c > 2: cx − x² > 0 on (1, c), the limit under the root is 2c − 4 > 0, and the limit is
-    # √(2c − 4) (the solution's value; the Answer prints only the set).
+    # √(2c − 4), the "show that" of the question (the Answer is the set alone, the owner's ruling).
     for cv in (sp.Rational(5, 2), 3, 10):
         assert equal(sp.solveset(cv * x - x**2 <= 0, x, sp.Interval.open(1, cv)), sp.S.EmptySet)
         assert limit_is(sp.sqrt(cv * x - x**2), x, 2, sp.sqrt(2 * cv - 4))
+    assert equal(sp.limit(c * x - x**2, x, 2), 2 * c - 4)
+    assert equal(sp.solveset(2 * c - 4 > 0, c, sp.S.Reals), sp.Interval.open(2, sp.oo))
     # c = 2: the limit under the root is 0, but 2x − x² < 0 just right of 2 (the solution's
     # x between 2 and 3).
     assert equal(sp.limit(2 * x - x**2, x, 2), 0)
     assert equal(sp.solveset(2 * x - x**2 < 0, x, sp.Interval.open(2, 3)), sp.Interval.open(2, 3))
+    # For every c ≤ 2, x(c − x) < 0 at every x in (2, 3): x > 0 and c − x < c − 2 ≤ 0.
+    cle = sp.Symbol("c_le", real=True)
+    for cv in (2, sp.Rational(3, 2), 0, -3):
+        assert equal(sp.solveset(x * (cv - x) < 0, x, sp.Interval.open(2, 3)), sp.Interval.open(2, 3))
+    assert equal((cle - x) - (cle - 2), 2 - x)     # c − x < c − 2 exactly when x > 2
+    assert equal(sp.solveset(2 - x < 0, x, sp.S.Reals), sp.Interval.open(2, sp.oo))
+    # The point the solution takes: halfway between 2 and min(3, β) when I has the right endpoint
+    # β > 2, or 5/2 when it has none; in each case it lies in (2, 3) and in I.
+    for beta in (Q(201, 100), Q(5, 2), Q(3), Q(7), None):
+        xv = Q(5, 2) if beta is None else (2 + min(Q(3), beta)) / 2
+        assert 2 < xv < 3 and (beta is None or xv < beta)
 
 
 @covers("exr-calc-limit-laws-constant-multiple")
