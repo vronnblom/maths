@@ -94,6 +94,54 @@ to $\sqrt{2}$, never $\sqrt{2}$ itself.
 holds; on the number line, $a < b$ means that $a$ lies to the left of $b$. We write $a \le b$
 for "$a < b$ or $a = b$".
 
+Every inequality on this site rests on the rules below. Four of them are **axioms of the
+order**: like the rules of arithmetic, we take them as defining properties of $\R$ (the rigorous
+track says more in [](#rem-calc-completeness-origin)). The others follow from the axioms, and
+each comes with its reason.
+
+:::{proof:remark} The order rules
+:label: rem-calc-order-rules
+
+For all real numbers $a$, $b$, $c$ and $d$:
+
+1. **Trichotomy** (axiom): exactly one of $a < b$, $a = b$ and $a > b$ holds.
+2. **Transitivity**: if $a < b$ and $b < c$, then $a < c$ (axiom). The same holds when one of
+   the two inequalities is $\le$: $a \le b < c$ and $a < b \le c$ each imply $a < c$. And
+   $a \le b \le c$ implies $a \le c$. *Reason:* where a $\le$ is an equality, substitute it;
+   otherwise both inequalities are strict and the axiom applies.
+3. **Adding the same number** (axiom): if $a < b$, then $a + c < b + c$. Also, if $a \le b$,
+   then $a + c \le b + c$ (*reason:* for $a = b$ both sides are equal).
+4. **Adding two inequalities**: if $a < b$ and $c < d$, then $a + c < b + d$; if $a \le b$ and
+   $c \le d$, then $a + c \le b + d$; and if $a \le b$ and $c < d$, then $a + c < b + d$.
+   *Reason:* adding $c$ to $a \le b$ and $b$ to $c < d$ (property 3) gives
+   $a + c \le b + c < b + d$, and property 2 gives $a + c < b + d$. The other two cases are the
+   same, with both steps strict or both $\le$.
+5. **Multiplying by a number**:
+
+   (a) if $a < b$ and $c > 0$, then $ca < cb$ (axiom);
+
+   (b) if $a \le b$ and $c \ge 0$, then $ca \le cb$. Even when $a < b$, the result is then only
+   $\le$: for $c = 0$ both sides are $0$. *Reason:* for $a < b$ and $c > 0$ this is (a); if
+   $a = b$ or $c = 0$, both sides are equal;
+
+   (c) if $a < b$ and $c < 0$, then $ca > cb$: multiplying by a negative number reverses the
+   inequality. Likewise $a \le b$ and $c < 0$ give $ca \ge cb$. *Reason:* adding $-c$ to
+   $c < 0$ (property 3) gives $0 < -c$, so (a) gives $-ca < -cb$, and adding $ca + cb$ to both
+   sides (property 3) gives $cb < ca$. For $a = b$ both sides are equal.
+6. **Reciprocals of positive numbers**: if $a > 0$, then $\frac{1}{a} > 0$; and if
+   $0 < a < b$, then $\frac{1}{b} < \frac{1}{a}$. *Reason:* first, $1 > 0$, because $1 \ne 0$,
+   and $1 < 0$ would give $1 \cdot 1 > 1 \cdot 0$ by 5(c), that is $1 > 0$, against property 1.
+   Next, $\frac{1}{a} \ne 0$ since $a \cdot \frac{1}{a} = 1$, and $\frac{1}{a} < 0$ would give
+   $a \cdot \frac{1}{a} < a \cdot 0$ by 5(a), that is $1 < 0$; so $\frac{1}{a} > 0$ by
+   property 1. Finally, if $0 < a < b$, then $b > 0$ (property 2), so $ab > 0$ (multiplying
+   $0 < a$ by $b > 0$, by 5(a)) and $\frac{1}{ab} > 0$. Multiplying $a < b$ by
+   $\frac{1}{ab} > 0$ (5(a)) gives $\frac{1}{b} < \frac{1}{a}$.
+7. **Negation**: "not $a < b$" holds exactly when $a \ge b$, and "not $a \le b$" exactly when
+   $a > b$. *Reason:* by property 1, $a < b$ fails exactly when $a = b$ or $a > b$, that is
+   when $a \ge b$; and $a \le b$ fails exactly when neither $a < b$ nor $a = b$ holds, that is
+   when $a > b$.
+:::
+
 ## Sets and intervals
 
 A **set** is a collection of objects, its **elements**. We write $x \in A$ for "$x$ is an
@@ -182,8 +230,14 @@ The proof below uses two facts about whole numbers:
 
 - every integer is either **even**, of the form $2m$ with $m \in \Z$, or **odd**, of the form
   $2m + 1$ with $m \in \Z$, and not both;
-- every non-empty set of positive integers has a smallest element (the **well-ordering
-  principle**).
+- the well-ordering principle, [](#rem-calc-well-ordering).
+
+:::{proof:remark} The well-ordering principle
+:label: rem-calc-well-ordering
+
+Every non-empty set of positive integers has a smallest element (the **well-ordering
+principle**).
+:::
 
 :::{proof:theorem} The square root of 2 is irrational
 :label: thm-calc-sqrt2-irrational
@@ -199,7 +253,8 @@ something impossible.
 Suppose that $r$ is rational and $r^2 = 2$. Then $r \ne 0$, and $(-r)^2 = r^2 = 2$ as well, so
 we may assume that $r > 0$ (otherwise we replace $r$ by $-r$). Then $r = \frac{p}{q}$ with
 positive integers $p$ and $q$. Among all such ways of writing $r$, we choose one with the
-smallest possible denominator $q$; there is one, by the well-ordering principle.
+smallest possible denominator $q$; there is one, by
+[the well-ordering principle](#rem-calc-well-ordering).
 
 1. From $\frac{p^2}{q^2} = 2$ we get $p^2 = 2q^2$, so $p^2$ is even.
 2. Then $p$ is even. Otherwise $p$ is odd, $p = 2m + 1$ with $m \in \Z$, and
@@ -459,7 +514,7 @@ and for $s, t \ge 0$, $s < t \iff s^2 < t^2$.
 gives $s^2 \le st$, and multiplying it by $t > 0$ gives $st < t^2$. So two different non-negative
 numbers have different squares, and $y$ has at most one non-negative square root. In the same
 way, if $0 \le s \le t$ then $s^2 \le t^2$. Conversely, let $s, t \ge 0$ with $s^2 < t^2$. By
-trichotomy (the order rule above: exactly one of $s < t$, $s = t$ and $t < s$ holds), it is
+trichotomy ([property 1 of the order rules](#rem-calc-order-rules): exactly one of $s < t$, $s = t$ and $t < s$ holds), it is
 enough to rule out the other two. If $s = t$, then $s^2 = t^2$; if $t < s$, then $t^2 < s^2$
 by what we just proved, with $s$ and $t$ swapped. Neither is compatible with $s^2 < t^2$, so
 $s < t$.
@@ -479,6 +534,36 @@ $x^2 \ge x > y$). By [](#ax-calc-completeness) it has a supremum $s \ge 0$.
   than $s$.
 
 Both cases contradict $s = \sup S_y$, so $s^2 = y$.
+:::
+
+One more consequence of [the Archimedean property](#rem-calc-naturals-unbounded), which later
+pages cite: every real number lies between two consecutive integers.
+
+:::{proof:remark} The integer part
+:label: rem-calc-integer-part
+
+For every real number $u$ there is exactly one integer $k$ with $k \le u < k + 1$. It is called
+the **integer part** of $u$. For example, the integer part of $2.7$ is $2$, that of $3$ is $3$,
+and that of ${-1.5}$ is ${-2}$ (not ${-1}$, which is greater than ${-1.5}$).
+
+*Reason.* **Existence.** Let $A$ be the set of integers greater than $u$. It is non-empty:
+[the Archimedean property](#rem-calc-naturals-unbounded) gives an integer $n \ge 1$ with
+$n > u$. We find its smallest element with
+[the well-ordering principle](#rem-calc-well-ordering). The elements of $A$ need not be
+positive, so we first shift $A$ into the positive integers: the Archimedean property gives an
+integer $j \ge 1$ with $j > -u$, and then every $i \in A$ has $i + j > u + j > 0$ (adding $j$
+to $i > u$ and $u$ to $j > -u$, by [property 3 of the order rules](#rem-calc-order-rules),
+then property 2). So the numbers $i + j$ with $i \in A$ form a non-empty set of positive
+integers, which by the well-ordering principle has a smallest element $m + j$ with $m \in A$.
+Then $m$ is the smallest element of $A$: every $i \in A$ has $i + j \ge m + j$, so $i \ge m$
+(adding $-j$, property 3). Let $k = m - 1$. Then $k + 1 = m > u$. And $k \notin A$, because
+$k < m$ and $m$ is the smallest element of $A$; so $k$ is not greater than $u$, that is
+$k \le u$ by property 7.
+
+**Uniqueness.** Let $k$ and $l$ be integers with $k \le u < k + 1$ and $l \le u < l + 1$. Then
+$k \le u < l + 1$ gives $k < l + 1$ (property 2), and in the same way $l < k + 1$. Adding $-l$
+to the first and $-1 - l$ to the second (property 3) gives $-1 < k - l < 1$. The only integer
+strictly between ${-1}$ and $1$ is $0$, so $k = l$.
 :::
 
 ## Summary
@@ -829,14 +914,10 @@ $r = \frac{m}{n}$ works.
 Since $b - a > 0$, [the Archimedean property](#rem-calc-naturals-unbounded) gives an integer
 $n \ge 1$ with $n > \frac{1}{b - a}$, that is $nb - na > 1$.
 
-Next, let $A$ be the set of integers greater than $na$. It is non-empty: by the Archimedean
-property again, some integer exceeds $na$. It has a smallest element, which we find with the
-well-ordering principle (stated before [](#thm-calc-sqrt2-irrational)). The elements of $A$ need
-not be positive, so we first shift $A$ into the positive integers: the Archimedean property gives
-an integer $k \ge 1$ with $k > -na$, and then every $j \in A$ has $j + k > na + k > 0$. So the
-numbers $j + k$ with $j \in A$ form a non-empty set of positive integers, which by the
-well-ordering principle has a smallest element $m + k$ with $m \in A$; then $m$ is the smallest
-element of $A$. Since $m$ is the smallest, $m - 1$ is not greater than $na$, so
+Next, [the integer part](#rem-calc-integer-part) of $na$ is an integer $k$ with
+$k \le na < k + 1$. Let $m = k + 1$. Then $m$ is an integer greater than $na$, and $m - 1 = k$
+is not; so $m$ is the smallest integer greater than $na$, since an integer greater than $na$ is
+greater than $m - 1$ and hence at least $m$. Since $m - 1 \le na$,
 $$
 na < m \le na + 1 < na + (nb - na) = nb .
 $$
