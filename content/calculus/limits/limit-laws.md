@@ -222,15 +222,17 @@ $$
 \abs{\sqrt{f(x)} - \sqrt{L}} = \frac{\abs{f(x) - L}}{\sqrt{f(x)} + \sqrt{L}}
 \le \frac{\abs{f(x) - L}}{\sqrt{L}} .
 $$
-The inequality uses two of the order rules of
-[Absolute Value and Inequalities](#calc-absolute-value-inequalities) ("Working with
-inequalities"). Multiplying $\sqrt{L} \le \sqrt{f(x)} + \sqrt{L}$ by the positive number
-$\frac{1}{\sqrt{L}\,(\sqrt{f(x)} + \sqrt{L})}$ keeps it, and gives
-$\frac{1}{\sqrt{f(x)} + \sqrt{L}} \le \frac{1}{\sqrt{L}}$. Multiplying this by
-$\abs{f(x) - L}$, which is $\ge 0$ and may be $0$, gives only $\le$. So a window in which
-$\abs{f(x) - L} < \eps\sqrt{L}$ also has $\abs{\sqrt{f(x)} - \sqrt{L}} < \eps$: multiplying
-$\abs{f(x) - L} < \eps\sqrt{L}$ by the positive number $\frac{1}{\sqrt{L}}$ keeps the strict
-inequality, and $\le$ followed by $<$ gives $<$ (transitivity). *What this leaves out:* that
+The inequality uses [the order rules](#rem-calc-order-rules). The number
+$\sqrt{L}\,(\sqrt{f(x)} + \sqrt{L})$ is positive, as the product of two positive numbers
+(multiplying $0 < \sqrt{f(x)} + \sqrt{L}$ by $\sqrt{L} > 0$, property 5(a)), so its reciprocal
+$\frac{1}{\sqrt{L}\,(\sqrt{f(x)} + \sqrt{L})}$ is positive (property 6). Multiplying
+$\sqrt{L} \le \sqrt{f(x)} + \sqrt{L}$ by this positive number keeps it (property 5(b)), and
+gives $\frac{1}{\sqrt{f(x)} + \sqrt{L}} \le \frac{1}{\sqrt{L}}$. Multiplying this by
+$\abs{f(x) - L}$, which is $\ge 0$ and may be $0$, gives only $\le$ (property 5(b)). So a
+window in which $\abs{f(x) - L} < \eps\sqrt{L}$ also has $\abs{\sqrt{f(x)} - \sqrt{L}} < \eps$:
+multiplying $\abs{f(x) - L} < \eps\sqrt{L}$ by the positive number $\frac{1}{\sqrt{L}}$
+(property 6) keeps the strict inequality (property 5(a)), and $\le$ followed by $<$ gives $<$
+(transitivity, property 2). *What this leaves out:* that
 $\sqrt{f(x)}$ is defined in the window at all, that is, $f(x) \ge 0$ there. The tolerance $L$ in the definition of
 $\lim_{x \to a} f(x) = L$ gives a window in which $\abs{f(x) - L} < L$, so $f(x) > 0$ by
 [part (a) of the proposition on distance inequalities](#prop-calc-abs-interval); a full proof
@@ -302,8 +304,11 @@ window around $a$ that lies inside $I$. By [the definition of an interval](#def-
 $I$ is $(\alpha, \beta)$, $(\alpha, \infty)$, $(-\infty, \beta)$ or $\R$. Since $a$ is in $I$,
 $\alpha < a$ when $I$ has the left endpoint $\alpha$, and $a < \beta$ when it has the right
 endpoint $\beta$. Let $\rho$ be the smaller of $a - \alpha$ and
-$\beta - a$, or $a - \alpha$, or $\beta - a$, or $1$, in these four cases. Then $\rho > 0$,
-$\rho \le a - \alpha$ when $I$ has the left endpoint $\alpha$, and $\rho \le \beta - a$ when it
+$\beta - a$, or $a - \alpha$, or $\beta - a$, or $1$, in these four cases. Then $\rho > 0$:
+adding $-\alpha$ to both sides of $\alpha < a$ gives $0 < a - \alpha$, and adding $-a$ to both
+sides of $a < \beta$ gives $0 < \beta - a$ ([property 3 of the order
+rules](#rem-calc-order-rules)), and the smaller of two positive numbers is one of them, so it is
+positive. Also $\rho \le a - \alpha$ when $I$ has the left endpoint $\alpha$, and $\rho \le \beta - a$ when it
 has the right endpoint $\beta$.
 
 Let $\eps > 0$. By (b), there is a $\delta_0 > 0$ such that $r$ is defined and
@@ -312,7 +317,9 @@ $\delta = \min(\delta_0, \rho)$, which is positive, and let $0 < \abs{x - a} < \
 [part (a) of the proposition on distance inequalities](#prop-calc-abs-interval),
 $a - \delta < x < a + \delta$. If $I$ has the left endpoint $\alpha$, then adding
 $\alpha - \rho$ to both sides of $\rho \le a - \alpha$ gives $\alpha \le a - \rho$, and
-$a - \rho \le a - \delta$ since $\delta \le \rho$, so $\alpha < x$. In the same way, if $I$ has
+adding $a - \rho - \delta$ to both sides of $\delta \le \rho$ gives $a - \rho \le a - \delta$
+(both by property 3 of the order rules). So $\alpha \le a - \rho \le a - \delta < x$, and
+$\alpha < x$ by transitivity (property 2). In the same way, if $I$ has
 the right endpoint $\beta$, then $x < \beta$. So $x$ is in $I$. Since also
 $\abs{x - a} < \delta_0$, $r$ is defined at $x$, so $s$ is defined there, and
 $$
@@ -516,9 +523,9 @@ $$
 ohms, for $t > 0$. The second resistor warms up, and its resistance $t$ approaches $6$ ohms.
 What does the combined resistance approach?
 
-1. **The function.** Only $t > 0$ makes sense here, so $R$ is not itself a rational function: it
-   is the restriction of the rational function $r(t) = \frac{3t}{3 + t}$, defined at every
-   $t \ne -3$, to the open interval $(0, \infty)$. That interval contains $6$, and $R$ is
+1. **The function.** Only $t > 0$ makes sense here, so $R$ is the restriction of the rational
+   function $r(t) = \frac{3t}{3 + t}$, defined at every $t \ne -3$, to the open interval
+   $(0, \infty)$. That interval contains $6$, and $R$ is
    defined at every point of it.
 2. **The hypothesis.** The denominator at $t = 6$ is $3 + 6 = 9 \ne 0$.
 3. **Substitute.** By part (c) of [](#cor-calc-direct-substitution), with $I = (0, \infty)$,
@@ -634,7 +641,7 @@ stay away from $0$.
 :label: prf-calc-limit-laws
 :enumerated: false
 :class: dropdown
-This proves parts (c) and (d) of the limit laws, stated in Main results. For the product we split
+This proves parts (c) and (d) of [](#thm-calc-limit-laws). For the product we split
 $f(x)\,g(x) - LM$ into two terms, each a small error times a bounded factor; for the quotient we
 first show that $\frac{1}{g(x)}$ approaches $\frac{1}{M}$ and then use the product law. Every
 multiplication of an inequality below names the sign of the factor, by the order rules of
@@ -956,7 +963,7 @@ $\lim_{u \to 15} v(u)$, in cm.
 
 :::{admonition} Hint 1
 :class: dropdown hint
-$v$ is a rational function of $u$, used only for $u > 5$. Which part of
+$v$ is given by a rational function of $u$, but only for $u > 5$. Which part of
 [](#cor-calc-direct-substitution) covers that? Is the denominator $0$ at $u = 15$?
 :::
 

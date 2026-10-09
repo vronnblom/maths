@@ -876,7 +876,7 @@
    ]
   },
   {
-   "source": "calculus/limits/limit-laws.md:45",
+   "source": "calculus/limits/limit-laws.md:48",
    "setting": "defaults",
    "f": "(x^3 - 1)/(x^2 + 3)",
    "variable": "x",
@@ -900,7 +900,7 @@
    ]
   },
   {
-   "source": "calculus/limits/limit-laws.md:376",
+   "source": "calculus/limits/limit-laws.md:386",
    "setting": "defaults",
    "f": "(x^2 + c*x)/x",
    "variable": "x",
@@ -926,7 +926,7 @@
    ]
   },
   {
-   "source": "calculus/limits/limit-laws.md:376",
+   "source": "calculus/limits/limit-laws.md:386",
    "setting": "c one step up",
    "f": "(x^2 + c*x)/x",
    "variable": "x",
