@@ -255,8 +255,11 @@ chapters:
         objectives:
           - "Resolve 0/0 forms by factoring, rationalising and simplifying."
           - Justify each step with the "agree except at a point" lemma.
+        widgets: [function-plot]
         results:
           - {label: lem-calc-limit-agree-except-point, policy: F}
+        notes:
+          - "Widget function-plot: the average rate $(x^3-8)/(x-2)$ near $2$, with a hole and a table"
       - label: calc-squeeze-theorem
         file: limits/squeeze-theorem.md
         title: The Squeeze Theorem
@@ -269,6 +272,8 @@ chapters:
         widgets: [function-plot]
         results:
           - {label: thm-calc-squeeze, policy: R}
+          - {label: lem-calc-sin-cos-near-zero, policy: F, note: "for $0<|x|<\\pi/2$: $|\\sin x|<|x|$, $1-x^2/2<\\cos x<1$ and $\\cos x<\\frac{\\sin x}{x}<1$; from `lem-calc-sin-bounds`, the symmetries and the double-angle formula"}
+          - {label: lem-calc-sin-cos-limits-at-zero, policy: F, note: "at $0$: $|x|\\to0$, $\\sin x\\to0$ and $\\cos x\\to1$, by squeezing with `lem-calc-sin-cos-near-zero`; no continuity of $\\sin$ or $\\cos$ used"}
           - {label: thm-calc-sin-x-over-x, policy: F, note: "geometric, via `lem-calc-sin-bounds`; *must not* use derivatives or L'Hôpital"}
           - {label: cor-calc-one-minus-cos-over-x, policy: F}
         notes:
