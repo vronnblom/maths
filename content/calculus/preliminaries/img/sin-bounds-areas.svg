@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 330" width="360" height="330" role="img">
+  <rect x="0" y="0" width="360" height="330" rx="8" fill="#ffffff"/>
+  <g font-family="sans-serif" font-size="14" fill="#24292f">
+    <path d="M40,300 L260,300 L260.00,49.57 Z" fill="#9a3412" fill-opacity="0.10" stroke="#9a3412" stroke-width="2"/>
+    <path d="M40,300 L260,300 A220,220 0 0 0 185.20,134.72 Z" fill="#0b5cad" fill-opacity="0.16" stroke="#0b5cad" stroke-width="2"/>
+    <path d="M40,300 L260,300 L185.20,134.72 Z" fill="#1a7f37" fill-opacity="0.18" stroke="#1a7f37" stroke-width="2" stroke-dasharray="7 4"/>
+    <path d="M185.20,134.72 A220,220 0 0 0 40,80" fill="none" stroke="#24292f" stroke-width="1" stroke-dasharray="3 4"/>
+    <line x1="185.20" y1="134.72" x2="185.20" y2="300" stroke="#24292f" stroke-width="1" stroke-dasharray="3 3"/>
+    <circle cx="260.00" cy="300.00" r="4" fill="#24292f"/>
+    <circle cx="185.20" cy="134.72" r="4" fill="#24292f"/>
+    <circle cx="260.00" cy="49.57" r="4" fill="#24292f"/>
+    <circle cx="40" cy="300" r="4" fill="#24292f"/>
+    <text x="34" y="320">O</text>
+    <text x="256" y="320">A = (1, 0)</text>
+    <text x="35.20" y="126.72">P = (cos θ, sin θ)</text>
+    <text x="142.00" y="53.57">T = (1, tan θ)</text>
+    <text x="74" y="290" fill="#24292f">θ</text>
+    <text x="141.20" y="217.36" fill="#1a7f37">sin θ</text>
+    <text x="266" y="174.78" fill="#9a3412">tan θ</text>
+  </g>
+</svg>

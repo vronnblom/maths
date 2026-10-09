@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 320" width="380" height="320" role="img">
+  <rect x="0" y="0" width="380" height="320" rx="8" fill="#ffffff"/>
+  <g font-family="sans-serif" font-size="14" fill="#24292f">
+    <line x1="20" y1="165" x2="355" y2="165" stroke="#24292f" stroke-width="1.2"/>
+    <path d="M355,160 L365,165 L355,170 Z" fill="#24292f"/>
+    <line x1="165" y1="305" x2="165" y2="25" stroke="#24292f" stroke-width="1.2"/>
+    <path d="M160,25 L165,15 L170,25 Z" fill="#24292f"/>
+    <text x="360" y="185" text-anchor="middle" font-style="italic">x</text>
+    <text x="179" y="22" font-style="italic">y</text>
+    <circle cx="165" cy="165" r="120" fill="none" stroke="#24292f" stroke-width="1.5"/>
+    <path d="M285,165 A120,120 0 0 0 239.59,71.00" fill="none" stroke="#9a3412" stroke-width="4"/>
+    <line x1="165" y1="165" x2="239.59" y2="71.00" stroke="#0b5cad" stroke-width="2"/>
+    <line x1="165" y1="165" x2="239.59" y2="165" stroke="#1a7f37" stroke-width="3.5"/>
+    <line x1="239.59" y1="165" x2="239.59" y2="71.00" stroke="#1a7f37" stroke-width="2.5" stroke-dasharray="6 4"/>
+    <circle cx="165" cy="165" r="3.5" fill="#24292f"/>
+    <circle cx="285" cy="165" r="4.5" fill="#24292f"/>
+    <circle cx="239.59" cy="71.00" r="5" fill="#0b5cad"/>
+    <text x="149" y="185">O</text>
+    <text x="291" y="185">A</text>
+    <text x="17" y="185">−1</text>
+    <text x="141" y="39">1</text>
+    <text x="135" y="305">−1</text>
+    <text x="247.59" y="59.00">P(t) = (cos t, sin t)</text>
+    <text x="285.66" y="106.71" fill="#9a3412">arc length t</text>
+    <text x="202.30" y="185" text-anchor="middle" fill="#1a7f37">cos t</text>
+    <text x="245.59" y="123.00" fill="#1a7f37">sin t</text>
+  </g>
+</svg>
