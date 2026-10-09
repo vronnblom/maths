@@ -242,10 +242,11 @@ Let $t$ and $\alpha$ be real numbers and $k$ an integer.
    $\alpha$, the image is reached from $A$ by a journey of $\alpha + t$: it is $P(t + \alpha)$.
 3. A journey of $2\pi$ goes once round the circle and ends where it started, so
    $P(t + 2\pi) = P(t)$; repeating this $k$ times (with $t - 2\pi$ in place of $t$ when
-   $k < 0$) gives $P(t + 2k\pi) = P(t)$. Conversely, let $P(s) = P(t)$. By the remark on the
-   integer part of a real number in Real Numbers and Intervals, there is an integer $k$ with
-   $k \le \frac{s - t}{2\pi} < k + 1$. Multiplying by the positive number $2\pi$ keeps both
-   inequalities, and subtracting $2k\pi$ keeps them too (the order rules of Real Numbers and
+   $k < 0$) gives $P(t + 2k\pi) = P(t)$. Conversely, let $P(s) = P(t)$. By
+   [the remark on the integer part of a real number](#rem-calc-integer-part) in Real Numbers and
+   Intervals, there is an integer $k$ with $k \le \frac{s - t}{2\pi} < k + 1$. Multiplying by the
+   positive number $2\pi$ keeps both inequalities, and subtracting $2k\pi$ keeps them too
+   ([properties 5 and 3 of the order rules](#rem-calc-order-rules) of Real Numbers and
    Intervals), so $u = s - t - 2k\pi$ satisfies $0 \le u < 2\pi$. Then
    $P(s) = P(t + u + 2k\pi) = P(t + u)$. The rotation that maps $A$ to
    $P(-t)$ maps $P(t)$ to $P(0) = A$ and $P(t + u)$ to $P(u)$, by property 2. As
@@ -267,9 +268,6 @@ Let $t$ and $\alpha$ be real numbers and $k$ an integer.
    neither of its ends $(1, 0)$ and $(0, 1)$, by 1; there $x > 0$ and $y > 0$. A journey of $t$
    with $0 < t < \pi$ ends on the upper half of the circle, from $(1, 0)$ to $({-1}, 0)$, at
    neither end; there $y > 0$.
-
-% TODO link: rem-calc-integer-part once P1 (the calc-real-numbers PR that adds it) is merged
-% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 :::
 
 Property 4 says that $\cos$ is [even](#def-calc-even-odd) and $\sin$ is odd: their common
@@ -353,7 +351,7 @@ We show that $\sin^2 t \le 1$, and then that a number whose square is at most $1
 $-1$ and $1$.
 
 (a) A square is never negative, so $\cos^2 t \ge 0$. Adding $1 - \cos^2 t$ to both sides keeps
-the inequality (the order rules of Real Numbers and Intervals), so, by
+the inequality ([property 3 of the order rules](#rem-calc-order-rules)), so, by
 [](#thm-calc-pythagorean-identity), $\sin^2 t = 1 - \cos^2 t \le 1$. Suppose $\sin t > 1$.
 Both $\sin t$ and $1$ are then non-negative, and by the order part of
 [the square-root remark](#rem-calc-square-roots) (for non-negative $u$ and $v$, $u < v$ exactly
@@ -361,8 +359,6 @@ when $u^2 < v^2$), $1 < \sin t$ gives $1 < \sin^2 t$, which is impossible. Suppo
 $\sin t < -1$. Multiplying by the negative number ${-1}$ reverses the inequality (the order
 rules), so $-\sin t > 1$, and in the same way $1 < (-\sin t)^2 = \sin^2 t$, which is
 impossible. So $-1 \le \sin t \le 1$.
-
-% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 
 (b) The same argument with $\cos$ and $\sin$ exchanged, using
 $\cos^2 t = 1 - \sin^2 t \le 1$.
@@ -422,8 +418,8 @@ except $k\pi$, $k \in \Z$.
 Conversely, let $\sin t = 0$. Then $\cos^2 t = 1$ by [](#thm-calc-pythagorean-identity). If
 $\cos t \ge 0$, then $\cos t$ is the non-negative square root of $1$, which is $1$
 ([the square-root remark](#rem-calc-square-roots)); if $\cos t < 0$, then $-\cos t > 0$
-(multiplying by the negative number ${-1}$ reverses the inequality, by the order rules of Real
-Numbers and Intervals), and in the same way $-\cos t = 1$. So $P(t) = (1, 0) = P(0)$ or
+(multiplying by the negative number ${-1}$ reverses the inequality, by
+[property 5(c) of the order rules](#rem-calc-order-rules)), and in the same way $-\cos t = 1$. So $P(t) = (1, 0) = P(0)$ or
 $P(t) = ({-1}, 0) = P(\pi)$, by property 1 of
 [](#rem-calc-trig-functions-circle-properties). By the converse in property 3, $t = 2m\pi$ or
 $t = \pi + 2m\pi$ for an integer $m$: in both cases $t$ is an integer multiple of $\pi$.
@@ -431,8 +427,6 @@ $t = \pi + 2m\pi$ for an integer $m$: in both cases $t$ is an integer multiple o
 2. By property 6, $\cos t = \sin\bigl(\frac{\pi}{2} - t\bigr)$. By 1, this is $0$ exactly when
 $\frac{\pi}{2} - t = j\pi$ for an integer $j$, that is, when $t = \frac{\pi}{2} + k\pi$ with
 $k = -j$.
-
-% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 :::
 
 ### The addition formulas
@@ -578,15 +572,15 @@ They lie inside one another.
   of the region between the radii $OA$ and $OP$ that lies on the same side of the line $AT$
   (the line $x = 1$) as $O$, or on it: the part with $x \le 1$ (the facts from school,
   sectors). Every point $(x, y)$ of the disc has $x \le 1$. Indeed, $y^2 \ge 0$, so adding
-  $x^2$ keeps the inequality and $x^2 \le x^2 + y^2 \le 1$ (the order rules of Real Numbers and
-  Intervals).
+  $x^2$ keeps the inequality and $x^2 \le x^2 + y^2 \le 1$
+  ([properties 3 and 2 of the order rules](#rem-calc-order-rules)).
   If $x > 1$, then $x > 1 \ge 0$, and the order part of
   [the square-root remark](#rem-calc-square-roots) would give $x^2 > 1$, which is impossible. So
   the sector, the part of that region in the disc, lies in the triangle $OAT$.
 
 A region that lies inside another has at most its area (the facts from school), so
 $\frac12\sin\theta \le \frac{\theta}{2} \le \frac12\tan\theta$. Multiplying by the positive
-number $2$ keeps both inequalities (the order rules). So, for every $\theta$ with
+number $2$ keeps both inequalities ([property 5(b) of the order rules](#rem-calc-order-rules)). So, for every $\theta$ with
 $0 < \theta < \frac{\pi}{2}$,
 $$
 \sin\theta \le \theta \le \tan\theta .
@@ -594,29 +588,31 @@ $$
 
 **Step 2: the inequalities are strict.** Let $0 < \theta < \frac{\pi}{2}$ again, and let
 $s = \sin\frac{\theta}{2}$ and $c = \cos\frac{\theta}{2}$. Multiplying
-$0 < \theta < \frac{\pi}{2}$ by the positive number $\frac12$ keeps both inequalities (the order
-rules of Real Numbers and Intervals), so
+$0 < \theta < \frac{\pi}{2}$ by the positive number $\frac12$ keeps both inequalities
+([property 5(a) of the order rules](#rem-calc-order-rules)), so
 $0 < \frac{\theta}{2} < \frac{\pi}{4} < \frac{\pi}{2}$. Property 8 then gives $s > 0$ and
 $c > 0$, and step 1, applied to $\frac{\theta}{2}$, gives $s \le \frac{\theta}{2}$ and
 $\frac{\theta}{2} \le \tan\frac{\theta}{2} = \frac{s}{c}$.
 Also $c < 1$: $s^2 > 0$, and adding $1 - s^2$ to both sides of $0 < s^2$ gives
-$1 - s^2 < 1$ (the order rules), so $c^2 = 1 - s^2 < 1$ by
+$1 - s^2 < 1$ ([property 3 of the order rules](#rem-calc-order-rules)), so $c^2 = 1 - s^2 < 1$ by
 [](#thm-calc-pythagorean-identity); and $c \ge 1$ would give $c^2 \ge 1$, by the order part of
 [the square-root remark](#rem-calc-square-roots).
 
 - *Sine.* By part (e) of [](#thm-calc-addition-formulas), $\sin\theta = 2sc$. Multiplying
   $c < 1$ by the positive number $2s$ keeps the strict inequality, and multiplying
-  $s \le \frac{\theta}{2}$ by the positive number $2$ keeps that one (the order rules), so
+  $s \le \frac{\theta}{2}$ by the positive number $2$ keeps that one
+  ([properties 5(a) and 5(b) of the order rules](#rem-calc-order-rules)), so
   $$
   \sin\theta = 2sc < 2s \le 2 \cdot \frac{\theta}{2} = \theta .
   $$
 - *Tangent.* By part (f) of [](#thm-calc-addition-formulas), $\cos\theta = c^2 - s^2$, and
   $\cos\theta > 0$ by property 8. Adding $c^2 - s^2$ to both sides of $0 < s^2$ gives
-  $c^2 - s^2 < c^2$ (the order rules), so $0 < c^2 - s^2 < c^2$. Multiplying
+  $c^2 - s^2 < c^2$ ([property 3 of the order rules](#rem-calc-order-rules)), so $0 < c^2 - s^2 < c^2$. Multiplying
   $c^2 - s^2 < c^2$ by the positive number $\frac{2sc}{(c^2 - s^2)\,c^2}$ keeps the strict
   inequality and gives $\frac{2sc}{c^2} < \frac{2sc}{c^2 - s^2}$. Multiplying
   $\frac{\theta}{2} \le \frac{s}{c}$ by the positive number $2$ keeps it:
-  $2 \cdot \frac{s}{c} \ge 2 \cdot \frac{\theta}{2}$ (the order rules). Hence
+  $2 \cdot \frac{s}{c} \ge 2 \cdot \frac{\theta}{2}$
+  ([properties 5(a) and 5(b) of the order rules](#rem-calc-order-rules)). Hence
   $$
   \begin{aligned}
   \tan\theta = \frac{\sin\theta}{\cos\theta} &= \frac{2sc}{c^2 - s^2} \\
@@ -626,8 +622,6 @@ $1 - s^2 < 1$ (the order rules), so $c^2 = 1 - s^2 < 1$ by
   $$
 
 So $\sin\theta < \theta < \tan\theta$.
-
-% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 :::
 
 The proof used no derivatives and no limits. It rests on these facts from school, none of which
@@ -658,9 +652,8 @@ Each part of the hypothesis is needed.
 - For $-\frac{\pi}{2} < \theta < 0$ the inequalities reverse: $\phi = -\theta$ satisfies the
   lemma, and by property 4 $\sin\theta = -\sin\phi$ and $\tan\theta = -\tan\phi$, so multiplying
   $\sin\phi < \phi < \tan\phi$ by the negative number ${-1}$, which reverses both inequalities
-  (the order rules of Real Numbers and Intervals), gives $\sin\theta > \theta > \tan\theta$.
-
-% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
+  ([property 5(c) of the order rules](#rem-calc-order-rules)), gives
+  $\sin\theta > \theta > \tan\theta$.
 :::
 
 ### Graphs: period, amplitude and phase
@@ -682,13 +675,13 @@ called **the period** of $f$.
   $\cos\bigl(\frac{\pi}{2} + p\bigr) = 0$ by [](#thm-calc-pythagorean-identity), so
   $P\bigl(\frac{\pi}{2} + p\bigr) = (0, 1) = P\bigl(\frac{\pi}{2}\bigr)$, and $p = 2k\pi$ for an
   integer $k$ by the converse in property 3. As $p > 0$, $k \ge 1$, and multiplying $k \ge 1$
-  by the positive number $2\pi$ gives $p \ge 2\pi$ (the order rules of Real Numbers and
-  Intervals). The same argument at $t = 0$ shows it for $\cos$. So $2\pi$ is the period of
+  by the positive number $2\pi$ gives $p \ge 2\pi$
+  ([property 5(b) of the order rules](#rem-calc-order-rules)). The same argument at $t = 0$ shows it for $\cos$. So $2\pi$ is the period of
   $\sin$ and of $\cos$.
 - **Values.** The values of $\sin$ and $\cos$ fill the interval $[-1, 1]$: they lie in it by
   [](#prop-calc-sin-bounded), and every $y \in [-1, 1]$ is a value of $\sin$. Indeed $y^2 \le 1$
   (for $y \ge 0$ by the order part of [the square-root remark](#rem-calc-square-roots), and for
-  $y < 0$ by the same applied to $-y$), so $1 - y^2 \ge 0$ (adding $-y^2$, the order rules) and
+  $y < 0$ by the same applied to $-y$), so $1 - y^2 \ge 0$ (adding $-y^2$, [property 3 of the order rules](#rem-calc-order-rules)) and
   the point $\bigl(\sqrt{1 - y^2}, y\bigr)$ lies on the unit circle. By the facts from school
   (journeys along the circle) it is $P(t)$ for some $t$; then $\sin t = y$. In the same way, the
   point $\bigl(y, \sqrt{1 - y^2}\bigr)$ shows that $y$ is a value of $\cos$.
@@ -707,14 +700,12 @@ has
 
 - **amplitude** $a$: its values fill $[d - a, d + a]$, because those of $\sin$ fill $[-1, 1]$,
   and multiplying $-1 \le u \le 1$ by the positive number $a$ and then adding $d$ keeps both
-  inequalities (the order rules);
+  inequalities ([properties 5(b) and 3 of the order rules](#rem-calc-order-rules));
 - **period** $\frac{2\pi}{b}$: shifting $x$ by $p$ shifts $b(x - c)$ by $bp$, and as
   $b(x - c)$ runs through all real numbers when $x$ does, $p$ is a period of $f$ exactly when
   $bp$ is a period of $\sin$; the smallest such $bp$ is $2\pi$;
 - **phase shift** $c$: its graph is that of $a\sin(bx) + d$ shifted $c$ to the right;
 - **midline** $y = d$: the wave swings between $d - a$ and $d + a$, about the line $y = d$.
-
-% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 
 ::::{figure}
 :label: wdg-calc-trig-functions-wave
@@ -804,8 +795,9 @@ Find $\cos t$ and $\sin t$ exactly for $t = \frac{\pi}{4}$, $\frac{\pi}{3}$ and 
 2. **At $\frac{\pi}{3}$.** Let $c = \cos\frac{\pi}{3}$. Part (f) of
    [](#thm-calc-addition-formulas) gives $\cos\frac{2\pi}{3} = 2c^2 - 1$, and property 5 gives
    $\cos\frac{2\pi}{3} = \cos\bigl(\pi - \frac{\pi}{3}\bigr) = -c$. So $2c^2 - 1 = -c$, that is,
-   $2c^2 + c - 1 = 0$, which factors as $(2c - 1)(c + 1) = 0$. By property 8, $c > 0$, so adding $1$ gives $c + 1 > 1 > 0$ (the order rules of Real Numbers
-   and Intervals), and therefore $2c - 1 = 0$: $c = \frac12$. Then
+   $2c^2 + c - 1 = 0$, which factors as $(2c - 1)(c + 1) = 0$. By property 8, $c > 0$,
+   so adding $1$ gives $c + 1 > 1 > 0$
+   ([properties 3 and 2 of the order rules](#rem-calc-order-rules)), and therefore $2c - 1 = 0$: $c = \frac12$. Then
    $\sin^2\frac{\pi}{3} = 1 - \frac14 = \frac34$, and $\sin\frac{\pi}{3} > 0$, so, as in step 1,
    $\sin\frac{\pi}{3} = \frac{\sqrt{3}}{2}$.
 3. **At $\frac{\pi}{6}$.** Since $\frac{\pi}{6} = \frac{\pi}{2} - \frac{\pi}{3}$, property 6 with
@@ -825,8 +817,6 @@ $\tan\frac{\pi}{3} = \sqrt{3}$.
 $\cos 1.047198 \approx 0.500000$ ✓, and $\frac{\pi}{4} \approx 0.785398$ gives
 $\sin 0.785398 \approx 0.707107 \approx \frac{1.414214}{2}$ ✓. Each pair satisfies
 $\cos^2 t + \sin^2 t = 1$: for example $\frac14 + \frac34 = 1$ ✓.
-
-% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 :::
 
 :::{proof:example} Angles outside the first quadrant
@@ -873,8 +863,8 @@ Given that $\sin t = \frac35$ and $\frac{\pi}{2} < t < \pi$, find $\cos t$ and $
 1. **The square.** By [](#thm-calc-pythagorean-identity),
    $\cos^2 t = 1 - \frac{9}{25} = \frac{16}{25}$.
 2. **The sign.** Let $u = \pi - t$. Multiplying $\frac{\pi}{2} < t < \pi$ by the negative number
-   ${-1}$ reverses both inequalities, and adding $\pi$ keeps them (the order rules of Real
-   Numbers and Intervals): $0 < u < \frac{\pi}{2}$. By
+   ${-1}$ reverses both inequalities, and adding $\pi$ keeps them
+   ([properties 5(c) and 3 of the order rules](#rem-calc-order-rules)): $0 < u < \frac{\pi}{2}$. By
    property 5 of [](#rem-calc-trig-functions-circle-properties),
    $\cos t = \cos(\pi - u) = -\cos u$, and $\cos u > 0$ by property 8. So $\cos t < 0$.
 3. **The value.** So $-\cos t$ is the non-negative number whose square is $\frac{16}{25}$, which
@@ -888,8 +878,6 @@ $$
 **Check.** $\bigl(\frac35\bigr)^2 + \bigl(-\frac45\bigr)^2 = \frac{9 + 16}{25} = 1$ ✓. With a
 calculator in radian mode, $t = 2.498092$ lies between $\frac{\pi}{2}$ and $\pi$ and gives
 $\sin t \approx 0.600000$ and $\cos t \approx -0.800000$ ✓.
-
-% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 :::
 
 :::{proof:example} An exact value from the addition formulas
@@ -1234,14 +1222,13 @@ We follow [](#eg-calc-trig-functions-sign).
 
 (a) By [](#thm-calc-pythagorean-identity), $\sin^2 t = 1 - \frac{25}{169} = \frac{144}{169}$.
 For the sign, let $u = t - \pi$; subtracting $\pi$ from $\pi < t < \frac{3\pi}{2}$ keeps both
-inequalities (the order rules of Real Numbers and Intervals) and gives $0 < u < \frac{\pi}{2}$. By property 7 of [](#rem-calc-trig-functions-circle-properties),
+inequalities ([property 3 of the order rules](#rem-calc-order-rules)) and gives
+$0 < u < \frac{\pi}{2}$. By property 7 of [](#rem-calc-trig-functions-circle-properties),
 $\sin t = \sin(u + \pi) = -\sin u$, and $\sin u > 0$ by property 8. So $\sin t < 0$, and
 $-\sin t$ is the non-negative number whose square is $\frac{144}{169}$, namely $\frac{12}{13}$
 ([the square-root remark](#rem-calc-square-roots)). So $\sin t = -\frac{12}{13}$.
 
 (b) $\tan t = \dfrac{-12/13}{-5/13} = \dfrac{12}{5}$.
-
-% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 ::::
 
 ::::{exercise} An exact value of sine
@@ -1358,16 +1345,14 @@ widget, the wave swings between ${-1}$ and $3$, and about three waves fit betwee
 $2\pi \approx 6.28$.
 
 (a) By [part (a) of the bounds on sine](#prop-calc-sin-bounded), $\sin 3x \le 1$.
-Multiplying by the positive number $2$ and adding $1$ keep the inequality (the order rules of
-Real Numbers and Intervals), so $f(x) \le 2 + 1 = 3$ for every $x$. The value $3$ is taken: at $x = \frac{\pi}{6}$,
+Multiplying by the positive number $2$ and adding $1$ keep the inequality
+([properties 5(b) and 3 of the order rules](#rem-calc-order-rules)), so $f(x) \le 2 + 1 = 3$ for every $x$. The value $3$ is taken: at $x = \frac{\pi}{6}$,
 $\sin\frac{\pi}{2} = 1$ by property 1 of [](#rem-calc-trig-functions-circle-properties), so
 $f\bigl(\frac{\pi}{6}\bigr) = 3$. The largest value is $3$.
 
 (b) The period of $a\sin\bigl(b(x - c)\bigr) + d$ is $\frac{2\pi}{b}$ (Graphs: period,
 amplitude and phase), here $\frac{2\pi}{3} \approx 2.09$: three waves on $[0, 2\pi]$, as in the
 widget.
-
-% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 ::::
 
 ::::{exercise} When is the seat 32 metres up?
@@ -1401,8 +1386,8 @@ Find the points of the unit circle with $x = -\frac12$, as in
 :class: dropdown
 $h(t) = 32$ means $20\cos\frac{\pi t}{5} = -10$, that is, $\cos u = -\frac12$ with
 $u = \frac{\pi t}{5}$. Multiplying $0 \le t < 10$ by the positive number $\frac{\pi}{5}$ keeps
-both inequalities (the order rules of Real Numbers and Intervals), and dividing by it does
-too, so as $t$ runs through $[0, 10)$, $u$ runs through $[0, 2\pi)$.
+both inequalities, and dividing by it (multiplying by $\frac{5}{\pi}$, which is positive) does
+too ([properties 5 and 6 of the order rules](#rem-calc-order-rules)), so as $t$ runs through $[0, 10)$, $u$ runs through $[0, 2\pi)$.
 
 The points of the unit circle with $x = -\frac12$ have $y^2 = 1 - \frac14 = \frac34$, so they are
 $\bigl(-\frac12, \frac{\sqrt{3}}{2}\bigr)$ and $\bigl(-\frac12, -\frac{\sqrt{3}}{2}\bigr)$
@@ -1417,8 +1402,6 @@ $[0, 2\pi)$ (the facts from school). With the values of
 
 Then $t = \frac{5u}{\pi}$ gives $t = \frac{10}{3}$ and $t = \frac{20}{3}$: after
 $3\frac13$ minutes on the way up and after $6\frac23$ minutes on the way down.
-
-% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 ::::
 
 ::::{exercise} Cosine decreases on $[0, \pi]$
@@ -1464,17 +1447,16 @@ $$
 \end{aligned}
 $$
 Now $0 \le v < u \le \pi$ gives $0 < u + v < 2\pi$: adding $0 \le v$ and $0 < u$ gives
-$0 < u + v$, and adding $v < \pi$ and $u \le \pi$ gives $u + v < 2\pi$ (the order rules of Real
-Numbers and Intervals: adding two inequalities, one of them strict, gives a strict one).
-Multiplying by the positive number $\frac12$ keeps both inequalities, so $0 < m < \pi$. Also,
+$0 < u + v$, and adding $v < \pi$ and $u \le \pi$ gives $u + v < 2\pi$ ([property 4 of the order
+rules](#rem-calc-order-rules): adding two inequalities, one of them strict, gives a strict one).
+Multiplying by the positive number $\frac12$ keeps both inequalities (property 5(a) of the
+order rules), so $0 < m < \pi$. Also,
 subtracting $v$ keeps $v < u$ and $u \le \pi$, so $0 < u - v$ and $u - v \le \pi - v$; and
 $\pi - v \le \pi$ because $v \ge 0$. So $0 < u - v \le \pi$; multiplying by the positive number $\frac12$ gives
 $0 < d \le \frac{\pi}{2} < \pi$. By property 8 of
 [](#rem-calc-trig-functions-circle-properties), $\sin m > 0$ and $\sin d > 0$. So
 $\cos v - \cos u = 2\sin m\sin d > 0$, that is, $\cos v > \cos u$. As $v < u$ in $[0, \pi]$ were
 arbitrary, $\cos$ is strictly decreasing on $[0, \pi]$.
-
-% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 ::::
 
 ::::{exercise} The period of the tangent
@@ -1514,10 +1496,8 @@ $\tan(t + \pi) = \frac{\sin(t + \pi)}{\cos(t + \pi)} = \frac{-\sin t}{-\cos t} =
 [](#def-calc-period) gives $p = 0 + p \in \dom\tan$ and $\tan p = \tan 0 = 0$. So
 $\frac{\sin p}{\cos p} = 0$, and multiplying by $\cos p \ne 0$ gives $\sin p = 0$. By
 [](#rem-calc-trig-functions-zeros), $p = k\pi$ for an integer $k$, and $k \ge 1$ because
-$p > 0$. Multiplying $k \ge 1$ by the positive number $\pi$ gives $p \ge \pi$ (the order rules
-of Real Numbers and Intervals). So $\pi$ is the period of $\tan$ ([](#def-calc-period)).
-
-% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
+$p > 0$. Multiplying $k \ge 1$ by the positive number $\pi$ gives $p \ge \pi$
+([property 5(b) of the order rules](#rem-calc-order-rules)). So $\pi$ is the period of $\tan$ ([](#def-calc-period)).
 ::::
 
 ::::{exercise} Squeezing $\frac{\sin\theta}{\theta}$
@@ -1559,7 +1539,8 @@ $\theta < \tan\theta = \frac{\sin\theta}{\cos\theta}$, where $\cos\theta > 0$ by
 [](#rem-calc-trig-functions-circle-properties).
 
 - Multiplying $\sin\theta < \theta$ by the positive number $\frac{1}{\theta}$ keeps the strict
-  inequality (the order rules of Real Numbers and Intervals): $\frac{\sin\theta}{\theta} < 1$.
+  inequality ([property 5(a) of the order rules](#rem-calc-order-rules)):
+  $\frac{\sin\theta}{\theta} < 1$.
 - Multiplying $\theta < \frac{\sin\theta}{\cos\theta}$ by the positive number
   $\frac{\cos\theta}{\theta}$ keeps it too: $\cos\theta < \frac{\sin\theta}{\theta}$.
 
@@ -1567,8 +1548,6 @@ Now let $-\frac{\pi}{2} < \theta < 0$, and $\phi = -\theta$, so that $0 < \phi <
 By property 4, $\cos\theta = \cos\phi$ and $\sin\theta = -\sin\phi$, so
 $\frac{\sin\theta}{\theta} = \frac{-\sin\phi}{-\phi} = \frac{\sin\phi}{\phi}$. The first part,
 for $\phi$, gives $\cos\phi < \frac{\sin\phi}{\phi} < 1$, which is the claim for $\theta$.
-
-% TODO link: rem-calc-order-rules once P1 (the calc-real-numbers PR that adds it) is merged
 ::::
 
 ## Where this leads
