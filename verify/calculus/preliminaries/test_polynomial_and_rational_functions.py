@@ -194,6 +194,15 @@ def test_degree_of_a_product():
         g = b_ * x**k + sum(cf[m + 1 + i] * x**i for i in range(k))
         Pfg = poly(f * g)
         assert Pfg.degree() == m + k and Pfg.LC() == a_ * b_
+        assert sp.expand(f * g) != 0  # "a product of two non-zero polynomials is not zero"
+    # The proof: among 0 <= i <= m, 0 <= j <= k, only (i, j) = (m, k) has i + j = m + k.
+    for m in range(6):
+        for k in range(6):
+            top = [(i, j) for i in range(m + 1) for j in range(k + 1) if i + j >= m + k]
+            assert top == [(m, k)]
+    # "In words": (3x^2 + 1)(x - 5) has degree 3 and leading coefficient 3.
+    P = poly((3 * x**2 + 1) * (x - 5))
+    assert P.degree() == 3 and P.LC() == 3
 
 
 def test_factor_theorem_statement():
@@ -215,6 +224,15 @@ def test_factor_theorem_statement():
         assert Q.degree() == n_ - 1 and Q.LC() == cs[n_]
         construction = sum(cs[k_] * sum(x**j * av**(k_ - 1 - j) for j in range(k_)) for k_ in range(1, n_ + 1))
         assert equal(sp.expand(construction - q), 0)
+        # (a), the quotient form: (p(x) - p(a))/(x - a) = q(x) for x != a. Symbolically by
+        # cancelling, and exactly at rational x != a, including x close to a; at x = a the
+        # quotient has the denominator 0.
+        dq = (p - p.subs(x, av)) / (x - av)
+        assert equal(sp.cancel(dq) - q, 0)
+        for xv in (av - 1, av + sp.Rational(1, 7), av - EPS, av + EPS, sp.Integer(0), sp.Integer(5)):
+            if xv != av:
+                assert equal(dq.subs(x, xv), q.subs(x, xv))
+        assert (x - av).subs(x, av) == 0
         # (b): p(a) = 0 exactly when x - a divides p, on a root and a non-root.
         factor_theorem_iff(p, av)
         assert factor_theorem_iff(p - p.subs(x, av), av)
@@ -264,33 +282,47 @@ def test_cor_calc_polynomial_identity():
 def test_prop_calc_sign_rules():
     rng = random.Random(4)
     vals = [sp.Rational(rng.randint(-50, 50), rng.randint(1, 7)) for _ in range(60)] + [sp.Integer(0)]
+    # The part letters follow the statement as it now is: (a) zero product and zero quotient,
+    # (b) the sign of x - t, (c) two non-zero numbers, (d) counting negative factors.
     for u_, v_ in itertools.product(vals, repeat=2):
         prod = u_ * v_
-        # (a)
-        if (u_ > 0 and v_ > 0) or (u_ < 0 and v_ < 0):
-            assert prod > 0
-        if (u_ > 0 and v_ < 0) or (u_ < 0 and v_ > 0):
-            assert prod < 0
-        # (b)
+        # (a): uv = 0 exactly when u = 0 or v = 0; for v != 0, u/v = 0 exactly when u = 0.
         assert (prod == 0) == (u_ == 0 or v_ == 0)
-        # (c)
         if v_ != 0:
-            assert sp.sign(1 / v_) == sp.sign(v_)
-            assert sp.sign(u_ / v_) == sp.sign(u_ * v_)
             assert (u_ / v_ == 0) == (u_ == 0)
-        # (d), with x = u, t = v
+        # (b), with x = u, t = v.
         assert sp.sign(u_ - v_) == (-1 if u_ < v_ else 0 if u_ == v_ else 1)
-    # (b) symbolically: uv = 0 exactly when u = 0 or v = 0 (solveset in u for fixed v != 0).
+        # (c): for u, v != 0, uv and u/v are positive for equal signs, negative otherwise;
+        # 1/v has the sign of v.
+        if u_ != 0 and v_ != 0:
+            same = (u_ > 0) == (v_ > 0)
+            assert (prod > 0) == same and (prod < 0) == (not same)
+            assert (u_ / v_ > 0) == same and (u_ / v_ < 0) == (not same)
+            assert sp.sign(1 / v_) == sp.sign(v_)
+            # The proof's step for v < 0: 1/(-v) > 0 and 1/(-v) + 1/v = 0.
+            if v_ < 0:
+                assert 1 / (-v_) > 0 and 1 / (-v_) + 1 / v_ == 0
+    # (c), "in particular": u^2 > 0 for u != 0, u^2 >= 0 for every u, and 1 > 0. Sampled on the
+    # values above, and symbolically: u^2 < 0 has no real solution, u^2 = 0 only u = 0.
+    for u_ in vals:
+        assert u_**2 >= 0 and (u_**2 > 0) == (u_ != 0)
+    assert equal(sp.solveset(x**2 < 0, x, R), sp.S.EmptySet)
+    assert equal(sp.solveset(sp.Eq(x**2, 0), x, R), sp.FiniteSet(0))
+    assert sp.Integer(1) == sp.Integer(1)**2 and sp.Integer(1) > 0
+    # (a) symbolically: uv = 0 exactly when u = 0, for fixed v != 0 (solveset in u).
     for v_ in (-3, sp.Rational(1, 2), 7):
         assert equal(sp.solveset(x * v_, x, R), sp.FiniteSet(0))
-    # (e): products and quotients of non-zero numbers, sign = (-1)^(number of negative factors).
+    # (d): products and quotients of non-zero numbers, sign = (-1)^(number of negative factors);
+    # and the proof's last step, N/D has the sign of N·D.
     nonzero = [v_ for v_ in vals if v_ != 0]
     for _ in range(500):
         num = rng.sample(nonzero, rng.randint(1, 5))
         den = rng.sample(nonzero, rng.randint(0, 4))
-        q = sp.Mul(*num) / sp.Mul(*den)
+        N, D = sp.Mul(*num), sp.Mul(*den)
+        q = N / D
         negs = sum(1 for v_ in num + den if v_ < 0)
         assert sp.sign(q) == (-1) ** negs
+        assert sp.sign(q) == sp.sign(N * D)
 
 
 def test_prop_calc_rational_domain():
@@ -778,6 +810,7 @@ def test_exr_calc_polynomial_rational_concentration():
     spot_check(printed, rel, var=t, extra=[0, 1, 4])
     # The denominator is positive everywhere; the reduction to t^2 - 5t + 4 < 0 = (t - 1)(t - 4).
     assert equal(sp.solveset(t**2 + 4 <= 0, t, R), sp.S.EmptySet)
+    assert equal(sp.solveset(t**2 + 4 < 4, t, R), sp.S.EmptySet)  # t^2 + 4 >= 4 for every t
     assert equal(sp.solveset(t**2 - 5 * t + 4 < 0, t, R), expected)
     assert equal(sp.expand((t - 1) * (t - 4)), t**2 - 5 * t + 4)
     # The check values: c(2) = 10/8 = 1.25, c(1) = 1.
@@ -805,6 +838,8 @@ def test_exr_calc_polynomial_rational_from_roots():
     cubic = sum(cs[i] * x**i for i in range(4))
     sol = sp.solve([cubic.subs(x, -1), cubic.subs(x, 1), cubic.subs(x, 2), cubic.subs(x, 0) - 4], cs, dict=True)
     assert len(sol) == 1 and equal(sp.expand(cubic.subs(sol[0]) - printed), 0)
+    # The solution's K is the leading coefficient of p.
+    assert equal(poly(expected).LC(), Kv[0])
     # The solution's values: (x + 1) at 1 is 2; (x + 1)(x - 1) at 2 is 3 · 1; at 0, (1)(-1)(-2) = 2.
     assert (x + 1).subs(x, 1) == 2 and (x + 1).subs(x, 2) == 3 and (x - 1).subs(x, 2) == 1
     assert ((x + 1) * (x - 1) * (x - 2)).subs(x, 0) == 2
@@ -863,3 +898,20 @@ def test_exr_calc_polynomial_rational_integer_root():
     for v, val in ((1, -3), (-1, 9), (2, 0), (-2, 12)):
         assert equal(p.subs(x, v), val)
     assert set(d * s_ for d in sp.divisors(2) for s_ in (1, -1)) == {1, -1, 2, -2}
+    # The solution's proof that the integers dividing 2 are ±1, ±2. Exhaustively over
+    # |r|, |k| <= 60 (a sampled check, not a proof): 2 = rk only for r in {±1, ±2}, and never
+    # with r = 0 or k = 0.
+    pairs = [(r, k) for r in range(-60, 61) for k in range(-60, 61) if r * k == 2]
+    assert {r for r, _ in pairs} == {1, -1, 2, -2}
+    assert all(r != 0 and k != 0 for r, k in pairs)
+    # Its steps, on the same range: for r >= 3, k >= 1 gives rk >= r >= 3 and k <= -1 gives
+    # rk <= -r <= -3; for r <= -3, 2 = rk is 2 = (-r)(-k) with -r >= 3.
+    for r in range(3, 61):
+        for k in range(-60, 61):
+            if k >= 1:
+                assert r * k >= r >= 3
+            if k <= -1:
+                assert r * k <= -r <= -3
+    for r in range(-60, -2):
+        for k in range(-60, 61):
+            assert r * k == (-r) * (-k) and -r >= 3
