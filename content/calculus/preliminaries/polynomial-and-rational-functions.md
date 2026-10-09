@@ -164,8 +164,8 @@ negative, and negative if an odd number are.
 :::{proof:proof}
 :enumerated: false
 Parts (a) and (b) are short computations, (c) applies the rules for multiplying an inequality
-to $0 < v$ or $v < 0$, and for (d) we multiply in the factors one at a time and follow the sign
-with (c).
+to $0 < u$, $u < 0$, $0 < v$ or $v < 0$, and for (d) we multiply in the factors one at a time and
+follow the sign with (c).
 
 (a) If $u = 0$ or $v = 0$, then $uv = 0$. Conversely, let $uv = 0$. If $u \ne 0$, then
 $v = \frac{1}{u} \cdot (uv) = \frac{1}{u} \cdot 0 = 0$. So $u = 0$ or $v = 0$. Now let $v \ne 0$.
@@ -177,7 +177,9 @@ $u = 0$.
 inequality: $x < t$ gives $x - t < 0$, and $x > t$ gives $x - t > 0$. If $x = t$, then
 $x - t = 0$.
 
-(c) First the product. If $v > 0$, multiplying $0 < v$ by $u$ gives $0 = u \cdot 0 < uv$ when
+(c) First the product. Since $u \ne 0$ and $v \ne 0$, each of them is positive or negative, by
+[property 1 (trichotomy) of the order rules](#rem-calc-order-rules) with $0$ for $b$. If $v > 0$,
+multiplying $0 < v$ by $u$ gives $0 = u \cdot 0 < uv$ when
 $u > 0$ ([property 5(a) of the order rules](#rem-calc-order-rules)), and multiplying $u < 0$
 by $v > 0$ gives $uv < 0 \cdot v = 0$ when $u < 0$ (property 5(a) again). If $v < 0$,
 multiplying $u < 0$ by $v$ reverses it, $uv > 0 \cdot v = 0$, when $u < 0$
@@ -235,7 +237,8 @@ $i < m$ or $j < k$, then $i + j < m + k$ ([property 4 of the order rules](#rem-c
 So only the term with $i = m$ and $j = k$ has the power $x^{m + k}$, and its coefficient is
 $ab$. Since $a \ne 0$ and $b \ne 0$, [part (a) of the sign rules](#prop-calc-sign-rules) gives
 $ab \ne 0$. So the product has degree $m + k$ and leading coefficient $ab$; having a degree, it
-is not the zero polynomial.
+is not the zero polynomial (its form is unique by the corollary "Polynomials that agree at many
+points" below, whose proof does not use this proposition).
 :::
 
 **In words.** Multiplying polynomials adds their degrees and multiplies their leading
