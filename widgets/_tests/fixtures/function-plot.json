@@ -974,6 +974,30 @@
    ]
   },
   {
+   "source": "calculus/limits/computing-limits.md:44",
+   "setting": "defaults",
+   "f": "(x^3 - 8)/(x - 2)",
+   "variable": "x",
+   "params": {},
+   "holeX": 2,
+   "points": [
+    1.9,
+    1.99,
+    1.999,
+    2.001,
+    2.01,
+    2.1
+   ],
+   "values": [
+    11.41,
+    11.9401,
+    11.994001,
+    12.006001,
+    12.0601,
+    12.61
+   ]
+  },
+  {
    "source": "templates/topic.md:54",
    "setting": "defaults",
    "f": "(5*(1+h)^2 - 5)/h",
