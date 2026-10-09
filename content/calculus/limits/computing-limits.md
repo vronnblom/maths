@@ -57,7 +57,7 @@ $x = 0$ to $28$ at $x = 4$, with an open circle at $x = 2$, where the formula is
 widget draws the circle at the height it estimates from the values on both sides of $2$. A
 slider for $x$ moves a point along the graph. A table lists the values at
 $x = 1.9, 1.99, 1.999$: $11.41$, $11.9401$, $11.994001$, and at $x = 2.001, 2.01, 2.1$:
-$12.006001$, $12.0601$, $12.61$. They approach $12$ from both sides.
+$12.006001$, $12.0601$, $12.61$. They get closer to $12$ from both sides.
 ::::
 
 **Try this:** move the point towards $x = 2$ from both sides and read the values. Then compute
@@ -166,11 +166,14 @@ around $a$, however small, matters.
   ([](#exr-calc-computing-limits-abs-sqrt)): every window around $0$ also contains points
   $x < 0$, where its value is ${-1}$.
 - **What we already knew.** [The remark on the value at $a$](#rem-calc-limit-value-irrelevant)
-  says that changing a function at the single point $a$ does not change its limit, and
-  [part (c) of direct substitution](#cor-calc-direct-substitution) says that a rational function
-  used only on an open interval around $a$ keeps its limit there. The lemma is the general form
-  of both ideas: $g$ may be any function that has a limit at $a$, given by any formula, and $f$
-  need not be defined at $a$. This is what limits of the form $\frac{0}{0}$ need.
+  says that changing a function at the single point $a$, or leaving it undefined there, does
+  not change its limit, and [part (c) of direct substitution](#cor-calc-direct-substitution)
+  says that a rational function whose denominator is not $0$ at $a$, used only on an open
+  interval around $a$, keeps its limit $\frac{p(a)}{q(a)}$. The lemma is the general form of
+  both ideas. Unlike the remark, it asks $f$ and $g$ to agree only on a window around $a$, not
+  at every $x \ne a$. Unlike part (c), it allows $g$ to be any function that has a limit at $a$,
+  given by any formula, and $f$ need not be defined at $a$. This is what limits of the form
+  $\frac{0}{0}$ need.
 
 **Example.** For $x \ne 1$, $\frac{x^2 - 1}{x - 1} = \frac{(x - 1)(x + 1)}{x - 1} = x + 1$,
 cancelling the non-zero number $x - 1$. Both functions are defined at every $x$ with
@@ -207,13 +210,17 @@ laws apply.
 ### Three ways to rewrite
 
 **Factoring.** Let $f = \frac{p}{q}$, with polynomials $p$ and $q$ such that $p(a) = 0$ and
-$q(a) = 0$. By [part (b) of the factor theorem](#thm-calc-factor-theorem),
+$q(a) = 0$, and $p$ not the zero polynomial. (If $p$ is the zero polynomial, $f$ is $0$
+wherever it is defined; the rigorous track treats this case.) A polynomial of degree $0$ is a
+non-zero constant, which has no root, so $p$ has degree at least $1$. So has $q$, which is not
+the zero polynomial, by [the definition of a rational function](#def-calc-rational-function).
+By [part (b) of the factor theorem](#thm-calc-factor-theorem),
 $$
 p(x) = (x - a)\, p_1(x) \quad\text{and}\quad q(x) = (x - a)\, q_1(x)
 $$
 for every real $x$, where $p_1$ and $q_1$ are polynomials whose degrees are one less than those
-of $p$ and $q$ (part (a) of the theorem). To find $p_1$, divide $p$ by $x - a$: since
-$p(x) = (x - a)\, p_1(x) + 0$, the uniqueness in
+of $p$ and $q$ (part (a) of the theorem, for degree at least $1$). To find $p_1$, divide $p$ by
+$x - a$: since $p(x) = (x - a)\, p_1(x) + 0$, the uniqueness in
 [division of polynomials](#thm-calc-polynomial-division) says that $p_1$ is the quotient, with
 the zero polynomial as the remainder. For a quadratic, a factorisation found by inspection is
 just as good, once multiplying out confirms it.
@@ -236,10 +243,16 @@ $r \le a - \alpha$, or of $r \le \beta - a$; [property 3 of the order rules](#re
 so $\alpha < x < \beta$ (property 2). So both functions are defined and agree on the window
 $0 < \abs{x - a} < r$, [part (b) of direct substitution](#cor-calc-direct-substitution) gives
 $\lim_{x \to a} \frac{p_1(x)}{q_1(x)} = \frac{p_1(a)}{q_1(a)}$, and the lemma gives the same
-limit for $\frac{p}{q}$. If $q_1(a) = 0$ too, the limit is again of the form $\frac{0}{0}$, and
-we factor again ([](#exr-calc-computing-limits-factor-twice); the rigorous track shows that
-this ends). In an example, the window is usually found directly, from the roots of the
-denominator.
+limit for $\frac{p}{q}$. If $q_1(a) = 0$ too, there are two cases.
+
+- If $p_1(a) = 0$ as well, the limit is again of the form $\frac{0}{0}$, and we factor again
+  ([](#exr-calc-computing-limits-factor-twice)).
+- If $p_1(a) \ne 0$, the limit does not exist, as for $\frac{x}{x^2}$ at $0$ in
+  [](#eg-calc-computing-limits-same-form) (iii), where $p_1(x) = 1$ and $q_1(x) = x$.
+
+The rigorous track, "Factoring always ends", proves both cases: after finitely many steps,
+factoring gives the limit or shows that there is none. In an example, the window is usually
+found directly, from the roots of the denominator.
 
 The cube of Why this matters is a special case of a general fact. For every polynomial $p$ and
 every real $a$, [part (a) of the factor theorem](#thm-calc-factor-theorem) gives a polynomial
@@ -309,13 +322,17 @@ grows when its side is $2$ cm.
 2. **Factor.** Let $p(x) = x^3 - 8$. Since $p(2) = 0$,
    [part (b) of the factor theorem](#thm-calc-factor-theorem) gives a polynomial $q$, of degree
    $2$ with leading coefficient $1$ (part (a)), such that $p(x) = (x - 2)\, q(x)$ for every
-   real $x$. Here $q(x) = x^2 + 2x + 4$, because multiplying out gives
+   real $x$. Multiplying out gives
    $$
    \begin{aligned}
-   (x - 2)(x^2 + 2x + 4) &= x^3 + 2x^2 + 4x - 2x^2 - 4x - 8 \\
+   (x - 2)(x^2 + 2x + 4) &= x^3 + 2x^2 + 4x \\
+     &\quad - 2x^2 - 4x - 8 \\
      &= x^3 - 8 .
    \end{aligned}
    $$
+   So $p(x) = (x - 2)(x^2 + 2x + 4) + 0$ and $p(x) = (x - 2)\, q(x) + 0$ for every real $x$, and
+   by the uniqueness of the quotient in [division of polynomials](#thm-calc-polynomial-division),
+   dividing $p$ by $x - 2$, we get $q(x) = x^2 + 2x + 4$.
 3. **Cancel.** For $x \ne 2$ the number $x - 2$ is not $0$, so
    $$
    A(x) = \frac{(x - 2)(x^2 + 2x + 4)}{x - 2} = x^2 + 2x + 4 .
@@ -460,7 +477,8 @@ as $t \to 6$, in ohms per ohm.
    $\lim_{t \to 6} R(t) = 2$, so the numerator approaches $2 - 2 = 0$
    ([parts (a) and (b) of the limit laws](#thm-calc-limit-laws)). The denominator approaches
    $0$. The limit is of the form $\frac{0}{0}$.
-3. **One fraction.** For $t > 0$, the number $3 + t$ is positive, so not $0$, and
+3. **One fraction.** For $t > 0$, adding $0 < 3$ and $0 < t$ gives $3 + t > 0$
+   ([property 4 of the order rules](#rem-calc-order-rules)), so $3 + t \ne 0$, and
    $$
    R(t) - 2 = \frac{3t - 2(3 + t)}{3 + t} = \frac{t - 6}{3 + t} .
    $$
@@ -551,8 +569,14 @@ to compute the two limits on the right.
 **Why:** the difference law, part (b) of [the limit laws](#thm-calc-limit-laws), needs both
 limits on the right to exist, as real numbers. Here neither does: the two functions are
 $\frac{1/x}{x - 3}$ and $\frac{1/3}{x - 3}$, whose numerators approach $\frac{1}{3}$, not $0$,
-while their denominators approach $0$; by [](#exr-calc-computing-limits-numerator-zero), such a
-quotient has no limit. Splitting a
+while their denominators approach $0$. Such a quotient has no limit. If $\frac{1/x}{x - 3}$ had
+a limit $M$, then, since $x - 3 \to 0$ (parts (a) and (b)), the product law, part (c), would
+give $(x - 3) \cdot \frac{1/x}{x - 3} \to 0 \cdot M = 0$. But on the window
+$0 < \abs{x - 3} < 3$ this product is $\frac{1}{x}$, whose limit is $\frac{1}{3}$ by
+[part (b) of direct substitution](#cor-calc-direct-substitution) and the lemma, and
+$0 \ne \frac{1}{3}$ contradicts [uniqueness of limits](#thm-calc-limit-unique). The same
+argument, with the constant $\frac{1}{3}$, applies to $\frac{1/3}{x - 3}$
+([](#exr-calc-computing-limits-numerator-zero) proves the general fact behind this). Splitting a
 limit is a conclusion of the laws, never a step you may take before checking their hypotheses.
 
 ✓ **Right:** first bring the numerator to one fraction. For $x \ne 0$,
@@ -580,8 +604,9 @@ $x$, with $P(a) \ne 0$ and $j \ge 0$ ($j = 0$ when $p(a) \ne 0$). (If $p$ is the
 polynomial, $f$ is $0$ wherever it is defined, and the limit is $0$.) By
 [part (b) of the proposition on the domain of a rational function](#prop-calc-rational-domain),
 applied to $\frac{P}{Q}$, and as in the factoring paragraph of the main results, there is a window
-$0 < \abs{x - a} < r$ on which $Q$ has no root; there $x - a \ne 0$ too, so $q(x) \ne 0$, by
-[part (a) of the sign rules](#prop-calc-sign-rules), and $f$ is defined. On that window:
+$0 < \abs{x - a} < r$ on which $Q$ has no root; there $x - a \ne 0$ too, so
+$q(x) = (x - a)^k\, Q(x) \ne 0$, by [part (a) of the sign rules](#prop-calc-sign-rules)
+applied $k$ times, and $f$ is defined. On that window:
 
 - **If $j \ge k$:** cancelling $(x - a)^k$ gives $f(x) = \frac{(x - a)^{j - k} P(x)}{Q(x)}$, a
   rational function whose denominator is not $0$ at $a$. By
@@ -707,12 +732,16 @@ At $x = 2$ the numerator is $4 - 2 - 2 = 0$ and the denominator $4 - 4 = 0$, so 
 [part (a) of direct substitution](#cor-calc-direct-substitution) the form is $\frac{0}{0}$.
 Multiplying out confirms
 $$
-x^2 - x - 2 = (x - 2)(x + 1), \qquad x^2 - 4 = (x - 2)(x + 2) .
+\begin{aligned}
+x^2 - x - 2 &= (x - 2)(x + 1), \\
+x^2 - 4 &= (x - 2)(x + 2) .
+\end{aligned}
 $$
 By [part (a) of the sign rules](#prop-calc-sign-rules), the denominator is $0$ only at $x = 2$
 and $x = -2$. If $0 < \abs{x - 2} < 1$, then $1 < x < 3$ and $x \ne 2$
 ([part (e) of the proposition on distance inequalities](#prop-calc-abs-interval)), so
-$x + 2 > 0$ and $x - 2 \ne 0$. On this window, cancelling $x - 2$,
+$x + 2 > 3 > 0$ (adding $2$ to $1 < x$, [property 3 of the order rules](#rem-calc-order-rules),
+then property 2) and $x - 2 \ne 0$. On this window, cancelling $x - 2$,
 $$
 \frac{x^2 - x - 2}{x^2 - 4} = \frac{x + 1}{x + 2} .
 $$
@@ -745,7 +774,8 @@ $\frac{1}{4}$
 
 **The window.** If $0 < \abs{x} < 4$, then $-4 < x < 4$ and $x \ne 0$
 ([part (e) of the proposition on distance inequalities](#prop-calc-abs-interval)), so
-$x + 4 > 0$ and $\sqrt{x + 4}$ is defined ([the square-root remark](#rem-calc-square-roots)).
+$x + 4 > 0$ (adding $4$ to $-4 < x$, [property 3 of the order rules](#rem-calc-order-rules)) and
+$\sqrt{x + 4}$ is defined ([the square-root remark](#rem-calc-square-roots)).
 
 **The form.** By [part (a) of direct substitution](#cor-calc-direct-substitution),
 $x + 4 \to 4$, and $4 > 0$, so the root law,
@@ -841,7 +871,10 @@ $\frac{x^2 + x - 2}{x - 1}$, and at $x = 1$ its numerator $1 + 1 - 2$ and denomi
 $0$ again. Since $1$ is a root of $x^2 + x - 2$, the factor theorem gives
 $x^2 + x - 2 = (x - 1)(x + 2)$. So
 $$
-x^3 - 3x + 2 = (x - 1)^2 (x + 2), \qquad x^2 - 2x + 1 = (x - 1)^2 .
+\begin{aligned}
+x^3 - 3x + 2 &= (x - 1)^2 (x + 2), \\
+x^2 - 2x + 1 &= (x - 1)^2 .
+\end{aligned}
 $$
 For $x \ne 1$, $(x - 1)^2 \ne 0$ ([part (a) of the sign rules](#prop-calc-sign-rules)), so
 $$
@@ -933,8 +966,8 @@ $\abs{f(x) - L} < 1$ at every $x$ with $0 < \abs{x} < \delta$. The points
 $\frac{\delta}{2}$ and $-\frac{\delta}{2}$ are in this window, so $\abs{1 - L} < 1$ and
 $\abs{-1 - L} < 1$, and $\abs{L - (-1)} = \abs{-1 - L}$ by
 [property 2 of the absolute value](#rem-calc-absolute-value-properties). By
-[part (b) of the triangle inequality](#thm-calc-triangle-inequality), with $u = 1$, $v = -1$
-and $w = L$,
+[part (b) of the triangle inequality](#thm-calc-triangle-inequality), with $x = 1$, $y = -1$
+and $z = L$,
 $$
 2 = \abs{1 - (-1)} \le \abs{1 - L} + \abs{L - (-1)} < 1 + 1 = 2,
 $$
@@ -1031,7 +1064,8 @@ $-\frac{1}{4}$
 
 **The window.** If $0 < \abs{u - 15} < 10$, then $5 < u < 25$ and $u \ne 15$
 ([part (e) of the proposition on distance inequalities](#prop-calc-abs-interval)), so
-$u - 5 > 0$, $v(u)$ is defined, and so is the quotient.
+$u - 5 > 0$ (adding ${-5}$ to $5 < u$, [property 3 of the order rules](#rem-calc-order-rules)),
+$v(u)$ is defined, and so is the quotient.
 
 **The form.** $v$ is the restriction of the rational function $\frac{5u}{u - 5}$ to
 $(5, \infty)$, which contains $15$, and $15 - 5 = 10 \ne 0$. By
