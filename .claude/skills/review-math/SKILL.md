@@ -49,7 +49,8 @@ What the Phase 1a reviews kept finding; look for each one:
 - anything from outside the closure that no label reveals (values of $\sin$, $2^x$): the
   forward-reference check can't see it, so you have to. It needs a `curriculum` PR or the
   owner's ruling and a "Facts from school" box (CLAUDE.md); check the box lists exactly what is
-  used, names every use, and that the proving page's curriculum entry lists the facts;
+  used, names every use, and that the proving page's curriculum entry lists the facts (or, for
+  facts proved outside the course, that the box names the subject and 08 §8.3 has the row);
 - `% TODO link` targets: does each target state what the step uses?
 - widget wording: no "the limit is (not) $L$", no "the largest $\delta$ is", nothing beyond the
   widget's entry in `widgets/README.md`;

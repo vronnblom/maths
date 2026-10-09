@@ -70,7 +70,7 @@ pages, many exercises, few proofs.*
 **`calc-polynomial-rational`** · Polynomial and Rational Functions · `polynomial-and-rational-functions.md`
 - Prereqs: `calc-functions`
 - Objectives: factor polynomials using known roots; perform polynomial division; find domains, zeros and the sign of rational functions.
-- Results: `thm-calc-factor-theorem` **F**; `thm-calc-polynomial-division` **S**; `thm-calc-polynomial-roots-bound` (at most $n$ roots) **F**.
+- Results: `thm-calc-factor-theorem` **F**; `thm-calc-polynomial-division` **S**; `thm-calc-polynomial-roots-bound` (at most $n$ roots) **F**; `prop-calc-sign-rules` (signs of products and quotients, the zero-product rule, the sign of $x - t$; from trichotomy and the order rules) **F**; `prop-calc-rational-domain` (the domain of $p/q$ leaves out at most $\deg q$ points; the zeros are the roots of $p$ in the domain) **F**; `prop-calc-rational-sign` (a factored rational function has constant sign on an open interval free of its linear-factor points; no continuity used) **F**; `cor-calc-polynomial-identity` (two polynomials of degree at most $n$ that agree at $n + 1$ points have the same coefficients) **F**.
 
 **`calc-exponential-functions`** · Exponential Functions and the Number e · `exponential-functions.md`
 - Prereqs: `calc-function-operations`
@@ -114,7 +114,7 @@ pages, many exercises, few proofs.*
 **`calc-one-sided-limits`** · One-Sided Limits · `one-sided-limits.md`
 - Prereqs: `calc-limit`
 - Objectives: compute left and right limits, including for piecewise functions; decide existence of a limit from the one-sided limits.
-- Results: `def-calc-one-sided-limit`; `thm-calc-limit-iff-one-sided` **R**.
+- Results: `def-calc-one-sided-limit`; `thm-calc-limit-iff-one-sided` **R**; `cor-calc-one-sided-limits-differ` (different one-sided limits at $a$: the limit at $a$ does not exist) **F**.
 
 **`calc-limit-laws`** · Limit Laws · `limit-laws.md`
 - Prereqs: `calc-limit`
@@ -508,6 +508,10 @@ FTC ── substitution, parts ── all of ch. 7–9
 Every arrow goes forward in the prerequisite graph except the deliberate "fact now, proof
 later" items, which are listed in the table below so reviewers can check them.
 
+The Integrals pages can't prove the unit-circle facts of `calc-trig-functions` (the last row):
+arc length and sector area as integrals need the derivative of $\sin$, which rests on
+$\sin\theta < \theta < \tan\theta$ and so on these very facts, which would be circular.
+
 | Stated early | Where | Proved in |
 |---|---|---|
 | Real exponents $a^x$ well-defined and continuous | `calc-exponential-functions`, `calc-continuity-elementary` | `calc-ln-integral` |
@@ -515,6 +519,7 @@ later" items, which are listed in the table below so reviewers can check them.
 | $e=\lim(1+1/n)^n$ | `calc-exponential-functions` | `calc-ln-integral` |
 | $e^{i\theta}=\cos\theta+i\sin\theta$ | `calc-complex-numbers` (definition) | `calc-taylor-series` (consistency) |
 | EVT, continuous ⇒ integrable, inverse continuity, term-by-term differentiation | various | `ana` (future subject) |
+| Geometry of the unit circle: the journey along the circle defines arc length; a rotation taking $A$ to $P(\alpha)$ exists; the region between two radii is convex; the sector of angle $\theta$ has area $\theta/2$ (so the disc has area $\pi$: Archimedes' theorem) | `calc-trig-functions` | `ana` (future subject) |
 
 ## 8.4 Backlog (not in Calculus 1.0 unless decided at Phase 6)
 - **Parametric and polar curves** (chapter `parametric-polar/`): parametric curves and

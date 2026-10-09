@@ -43,8 +43,8 @@ maths:
 % Average speeds over [1, 1+h] approach a number as h shrinks — that "approach" is a limit.
 % Units go in the prose ("…, in metres per second."), never inside a display: at 375 px a display
 % wider than the screen scrolls sideways and hides its end. Split long chains with aligned.
-% Facts from outside the prerequisite closure (e.g. values of sin from school): only by the
-% owner's ruling, in a labelled "Facts from school used on this page" box (templates/blocks.md).
+% Facts from outside the prerequisite closure (values of sin from school, or facts proved outside
+% the course): only by the owner's ruling, in a "Facts from school" box (templates/blocks.md).
 
 % A widget sits alone in a {figure}: the figure carries the wdg- label, and its caption is
 % the text description (shown even when the widget can't load). See docs/plan/05 §5.8.
