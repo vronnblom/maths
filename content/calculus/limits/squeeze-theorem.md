@@ -92,10 +92,11 @@ between $-\abs{x}$ and $\abs{x}$.
 Graph, for $-0.5 \le x \le 0.5$ and $x \ne 0$, of one of three functions, chosen by a slider
 for $k$, which takes the values ${-1}$, $0$ and $1$ and starts at $0$. At $k = -1$ it is the
 lower bound $g(x) = -\abs{x}$, at $k = 0$ the function $f(x) = x \sin(1/x)$, and at $k = 1$ the
-upper bound $h(x) = \abs{x}$ (the widget plots $k\abs{x} + (1 - \abs{k})\,x\sin(1/x)$). The
-graphs of $g$ and $h$ are the edges of a band shaped like a bow tie, which narrows to the
-origin. The graph of $f$ swings up and down inside the band and touches its edges again and
-again, faster and faster as $x$ approaches $0$; close to $0$ the drawing is a jumble of lines,
+upper bound $h(x) = \abs{x}$ (the widget plots $k\abs{x} + (1 - \abs{k})\,x\sin(1/x)$). Taken
+together, the graphs at $k = -1$ and $k = 1$ are the edges of a band shaped like a bow tie,
+which narrows to the origin. At $k = 0$, the graph of $f$ swings between the heights
+$-\abs{x}$ and $\abs{x}$, faster and faster as $x$ approaches $0$; close to $0$ the drawing is a
+jumble of lines,
 because the plotted curve joins finitely many computed points. An open circle marks the
 origin, where the formula is undefined. A table lists the values at
 $x = 0.1, 0.01, 0.001, -0.001, -0.01, -0.1$. For $k = 0$ they are $-0.0544021$,
@@ -111,8 +112,8 @@ at $x = 0.001$, and what does that say about $f(0.001)$? Then move the traced po
 $0$ and switch $k$ between ${-1}$, $0$ and $1$ at each position.
 
 The table of $f$ alone looks irregular: its values change sign, and their sizes do not shrink
-at a steady rate. What the widget shows, at every point it computed, is that $f$ stays inside a
-band whose width $2\abs{x}$ shrinks to $0$. A picture and a table only check finitely many
+at a steady rate. What the tables show, at the six points they list, is that the value of $f$
+lies between those of $g$ and $h$, in a band whose width $2\abs{x}$ shrinks to $0$. A picture and a table only check finitely many
 points; the squeeze theorem turns the band into a proof that $x\sin(1/x)$ approaches $0$
 ([](#eg-calc-squeeze-theorem-oscillating)).
 
@@ -186,7 +187,8 @@ the hard part and the bounds are easy.
 
 **Non-example.** For $x \ne 0$, $-1 \le \sin(1/x) \le 1$, but the bounds ${-1}$ and $1$
 approach *different* numbers, so the theorem says nothing about $\lim_{x \to 0} \sin(1/x)$. In
-fact that limit does not exist: the bounds leave room for the values to swing between them.
+fact that limit does not exist ([the example on $\sin(1/x)$](#eg-calc-limit-sin-1-over-x) in
+The Limit of a Function): the bounds leave room for the values to swing between them.
 
 The hypotheses are all needed: [](#rem-calc-squeeze-theorem-hypotheses) gives a counterexample
 for each. First, a form of the theorem that is often quicker to use. Most squeezes bound the
@@ -328,13 +330,13 @@ the hypothesis of the lemma, and (a), applied to $s$, gives $\abs{\sin s} < \abs
 are non-negative ([property 1 of the absolute value](#rem-calc-absolute-value-properties)), so
 squaring keeps the strict inequality ([property 6 of the absolute
 value](#rem-calc-absolute-value-properties)), and by property 5 of the absolute value,
-$\abs{y}^2 = y^2$:
+$\abs{u}^2 = u^2$ for every real $u$:
 $$
 \sin^2 s = \abs{\sin s}^2 < \abs{s}^2 = s^2 = \frac{x^2}{4} .
 $$
 Multiplying by the positive number $2$ keeps it (property 5(a) of the order rules):
 $2\sin^2 s < \frac{x^2}{2}$. By [part (f) of the addition formulas](#thm-calc-addition-formulas),
-with $t = s$,
+applied to the number $s$,
 $$
 \cos x = \cos 2s = 1 - 2\sin^2 s .
 $$
@@ -374,14 +376,14 @@ $0 < \abs{x - 0} < \delta$, then $\bigl\lvert \abs{x} - 0 \bigr\rvert = \abs{x} 
 $\lim_{x \to 0} \abs{x} = 0$.
 
 **(b)** The functions $\sin x$ and $\abs{x}$ are defined for every real $x$. For every $x$ with
-$0 < \abs{x} < \frac{\pi}{2}$, [part (a) of the lemma](#lem-calc-sin-cos-near-zero) gives
-$\abs{\sin x - 0} = \abs{\sin x} < \abs{x}$, so in particular $\abs{\sin x - 0} \le \abs{x}$. By
-(a), $\lim_{x \to 0} \abs{x} = 0$. So [](#rem-calc-squeeze-theorem-distance), with $a = 0$,
-$L = 0$, $r = \frac{\pi}{2}$, $f(x) = \sin x$ and $b(x) = \abs{x}$, gives
-$\lim_{x \to 0} \sin x = 0$.
+$0 < \abs{x} < \frac{\pi}{2}$, [part (a) of the lemma on sine and cosine near
+0](#lem-calc-sin-cos-near-zero) gives $\abs{\sin x - 0} = \abs{\sin x} < \abs{x}$, so in
+particular $\abs{\sin x - 0} \le \abs{x}$. By part (a) above, $\lim_{x \to 0} \abs{x} = 0$. So
+[](#rem-calc-squeeze-theorem-distance), with $a = 0$, $L = 0$, $r = \frac{\pi}{2}$,
+$f(x) = \sin x$ and $b(x) = \abs{x}$, gives $\lim_{x \to 0} \sin x = 0$.
 
-**(c)** For every $x$ with $0 < \abs{x} < \frac{\pi}{2}$, [part (b) of the
-lemma](#lem-calc-sin-cos-near-zero) gives
+**(c)** For every $x$ with $0 < \abs{x} < \frac{\pi}{2}$, [part (b) of the lemma on sine and
+cosine near 0](#lem-calc-sin-cos-near-zero) gives
 $$
 1 - \frac{x^2}{2} \le \cos x \le 1 .
 $$
@@ -443,10 +445,39 @@ using the symmetries of $\sin$ and $\cos$ traps $\frac{\sin x}{x}$ between $\cos
 derivative, a series, or the continuity of $\sin$ or $\cos$.
 
 **Why radians.** The lemma compares $\sin\theta$ with $\theta$, the *length* of an arc of the
-unit circle, and that length is the measure of the angle in radians ([](#def-calc-radian)). In
-degrees the ratio does not approach $1$: an angle of $x$ degrees is $\frac{\pi x}{180}$ radians,
-and at $x = 0.01$ the ratio $\sin\bigl(\frac{\pi \cdot 0.01}{180}\bigr) / 0.01$ is about
-$0.0174533$, close to $\frac{\pi}{180} \approx 0.0174533$ rather than to $1$.
+unit circle, and that length is the measure of the angle in radians ([](#def-calc-radian)). An
+angle of $x$ degrees is $\frac{\pi x}{180}$ radians, so in degrees the ratio is
+$\frac{\sin(cx)}{x}$ with $c = \frac{\pi}{180}$. At $x = 0.01$ it is about $0.0174533$, close to
+$\frac{\pi}{180} \approx 0.0174533$ rather than to $1$. The lemmas prove that this is the
+limit, with no new tool.
+
+Let $c > 0$, and let $0 < \abs{x} < \frac{\pi}{2c}$. By [property 4 of the absolute
+value](#rem-calc-absolute-value-properties), $\abs{cx} = \abs{c}\,\abs{x} = c\abs{x}$ (since
+$c > 0$, $\abs{c} = c$ by [the definition of the absolute value](#def-calc-absolute-value)), and
+multiplying $0 < \abs{x} < \frac{\pi}{2c}$ by the positive number $c$ keeps both inequalities
+([property 5(a) of the order rules](#rem-calc-order-rules)): $0 < \abs{cx} < \frac{\pi}{2}$.
+So parts (b) and (c) of [the lemma on sine and cosine near 0](#lem-calc-sin-cos-near-zero)
+apply to the number $cx$:
+$$
+1 - \frac{c^2x^2}{2} < \cos(cx) < \frac{\sin(cx)}{cx} < 1 .
+$$
+By transitivity (property 2 of the order rules),
+$1 - \frac{c^2x^2}{2} < \frac{\sin(cx)}{cx} < 1$. Multiplying by the positive number $c$ keeps
+both inequalities (property 5(a)), and $c \cdot \frac{\sin(cx)}{cx} = \frac{\sin(cx)}{x}$, so
+$$
+c - \frac{c^3x^2}{2} < \frac{\sin(cx)}{x} < c ,
+$$
+and so the same with $\le$. The lower bound is a polynomial in $x$, so by [part (a) of direct
+substitution](#cor-calc-direct-substitution) it approaches $c - 0 = c$; the upper bound is the
+constant $c$, which approaches $c$ by [part (a) of the limit laws](#thm-calc-limit-laws). The
+bounds are defined for every real $x$, and $\frac{\sin(cx)}{x}$ for every $x \ne 0$. The
+number $r = \frac{\pi}{2c}$ is positive: it is the positive number $\frac{\pi}{2}$ times
+$\frac{1}{c} > 0$ (properties 6 and 5(a) of the order rules). So the [squeeze
+theorem](#thm-calc-squeeze), with $a = 0$, $L = c$ and this $r$, gives
+$$
+\lim_{x \to 0} \frac{\sin(cx)}{x} = c .
+$$
+With $c = \frac{\pi}{180}$: in degrees, the ratio approaches $\frac{\pi}{180}$, not $1$.
 
 ### A related limit
 
@@ -475,7 +506,8 @@ $1 + \cos x \ne 0$. Multiplying numerator and denominator by $1 + \cos x$, and u
 $$
 \begin{aligned}
 \frac{1 - \cos x}{x}
-  &= \frac{(1 - \cos x)(1 + \cos x)}{x\,(1 + \cos x)} = \frac{\sin^2 x}{x\,(1 + \cos x)} \\
+  &= \frac{(1 - \cos x)(1 + \cos x)}{x\,(1 + \cos x)} \\
+  &= \frac{\sin^2 x}{x\,(1 + \cos x)} \\
   &= \frac{\sin x}{x} \cdot \frac{\sin x}{1 + \cos x} .
 \end{aligned}
 $$
@@ -617,7 +649,9 @@ below $0.01$?
    $$
    0 < 1 - \frac{\sin\theta}{\theta} < \frac{\theta^2}{2} .
    $$
-   So the replacement always overestimates, by a relative error less than $\frac{\theta^2}{2}$.
+   So the relative error is positive and less than $\frac{\theta^2}{2}$: $\theta$ is larger than
+   $\sin\theta$ in absolute value (for $\theta > 0$, larger), as part (a) of the same lemma,
+   $\abs{\sin\theta} < \abs{\theta}$, also says.
 2. **When is the bound at most $0.01$?** $\frac{\theta^2}{2} \le 0.01$ exactly when
    $\theta^2 \le 0.02$ (multiplying by the positive number $2$, or by $\frac12$, keeps
    inequalities, [property 5(b) of the order rules](#rem-calc-order-rules)). By [property 5 of
@@ -625,15 +659,25 @@ below $0.01$?
    $0.02 = \bigl(\sqrt{0.02}\bigr)^2$ ([the square-root remark](#rem-calc-square-roots)). Both
    $\abs{\theta}$ and $\sqrt{0.02}$ are non-negative, so by [property 6 of the absolute
    value](#rem-calc-absolute-value-properties) this holds exactly when
-   $\abs{\theta} \le \sqrt{0.02} \approx 0.141421$.
-3. **Conclusion.** Since $\sqrt{0.02} \approx 0.141$ is less than $\frac{\pi}{2} \approx 1.571$,
-   step 1 applies to every $\theta$ with $0 < \abs{\theta} \le \sqrt{0.02}$, and then
-   $1 - \frac{\sin\theta}{\theta} < \frac{\theta^2}{2} \le 0.01$ (transitivity). In degrees,
-   $\sqrt{0.02}$ radians is $\frac{180\sqrt{0.02}}{\pi} \approx 8.10$ degrees, since a full turn
-   is $2\pi$ radians ([](#def-calc-radian)) and $360$ degrees.
+   $\abs{\theta} \le \sqrt{0.02} \approx 0.141421$ (property 6 gives this for $<$ and for $=$;
+   the two parts together give it for $\le$).
+3. **Conclusion.** Step 1 needs $\abs{\theta} < \frac{\pi}{2}$, so we compare $\sqrt{0.02}$
+   with $\frac{\pi}{2}$, without a decimal value of $\pi$. By the proposition bounding $\pi$ in
+   Trigonometric Functions, $2\sqrt{2} < \pi$. Multiplying by the positive number $\frac12$
+   keeps the inequality ([property 5(a) of the order rules](#rem-calc-order-rules)):
+   $\sqrt{2} < \frac{\pi}{2}$. Next, $\sqrt{0.02}$ and $\sqrt{2}$ are non-negative, their
+   squares are $0.02$ and $2$, and $0.02 < 2$; so $\sqrt{0.02} < \sqrt{2}$, because squaring
+   keeps the order of non-negative numbers ([the square-root remark](#rem-calc-square-roots)). By transitivity
+   (property 2 of the order rules), $\sqrt{0.02} < \frac{\pi}{2}$. So every $\theta$ with
+   $0 < \abs{\theta} \le \sqrt{0.02}$ has $\abs{\theta} < \frac{\pi}{2}$ (transitivity again),
+   step 1 applies to it, and then $1 - \frac{\sin\theta}{\theta} < \frac{\theta^2}{2} \le 0.01$
+   (transitivity). In degrees, $\sqrt{0.02}$ radians is
+   $\frac{180\sqrt{0.02}}{\pi} \approx 8.10$ degrees, since a full turn is $2\pi$ radians
+   ([](#def-calc-radian)) and $360$ degrees.
+   % TODO link: prop-calc-pi-bounds once vronnblom/maths#TBD is merged
 
 $$
-\boxed{\abs{\theta} \le \sqrt{0.02} \approx 0.141}
+\boxed{0 < \abs{\theta} \le \sqrt{0.02} \approx 0.141}
 $$
 
 in radians, about $8.1$ degrees: for such angles, replacing $\sin\theta$ by $\theta$ makes a
@@ -661,7 +705,8 @@ the bound found here, which explains the factor in the last check.
 
 **Why:** the product law, [part (c) of the limit laws](#thm-calc-limit-laws), needs both
 factors to have limits, as real numbers. "Between ${-1}$ and $1$" is a bound, not a limit, and
-$\sin(1/x)$ has no limit at $0$ (the page The Limit of a Function shows this). So
+$\sin(1/x)$ has no limit at $0$ ([the example on $\sin(1/x)$](#eg-calc-limit-sin-1-over-x)
+in The Limit of a Function). So
 $\lim_{x \to 0} \sin(1/x)$ cannot be written down at all.
 
 ✓ **Right:** squeeze. Since $\bigl\lvert x\sin(1/x)\bigr\rvert \le \abs{x}$ for $x \ne 0$, and
@@ -700,7 +745,8 @@ $\frac{\sin x}{x}$ is not $1$."
 
 **Why:** the calculator was set to degrees. On this site $\sin x$ always takes $x$ in radians,
 and [](#thm-calc-sin-x-over-x) rests on comparing $\sin\theta$ with the arc length $\theta$,
-which is the angle in radians. In degrees the ratio approaches $\frac{\pi}{180}$ instead.
+which is the angle in radians. In degrees the ratio approaches $\frac{\pi}{180}$ instead, as
+**Why radians**, after the proof of [](#thm-calc-sin-x-over-x), shows.
 
 ✓ **Right:** set the calculator to radians: $\frac{\sin 0.01}{0.01} \approx 0.999983$.
 :::
@@ -720,7 +766,8 @@ the derivative of $\sin$, or through a power series for $\sin$: the derivative i
 [](#thm-calc-sin-x-over-x), and this course defines $\sin$ by the unit circle, not by a series.
 The only facts about $\sin$ and $\cos$ used on this page are the statements of Trigonometric
 Functions: the lemma on sine, angle and tangent, the properties of the point $P(t)$, the
-Pythagorean identity, the addition formulas, and the bounds $-1 \le \sin t, \cos t \le 1$.
+definition of the tangent, the Pythagorean identity, the addition formulas, the bounds
+$-1 \le \sin t, \cos t \le 1$, and the bound $2\sqrt{2} < \pi$.
 :::
 
 :::{admonition} The squeeze theorem with "eventually" bounds
@@ -730,8 +777,10 @@ interval $0 < \abs{x - a} < r$; what happens farther from $a$ does not matter. F
 $\abs{\sin x} < \abs{x}$ was proved only for $0 < \abs{x} < \frac{\pi}{2}$, and that was enough
 for $\lim_{x \to 0} \sin x = 0$. In quantifiers, the hypothesis reads
 $$
-\exists r > 0 \ \ \forall x \colon \quad
-0 < \abs{x - a} < r \implies g(x) \le f(x) \le h(x),
+\begin{aligned}
+&\exists r > 0 \ \ \forall x \colon \\
+&\quad 0 < \abs{x - a} < r \implies g(x) \le f(x) \le h(x),
+\end{aligned}
 $$
 and the proof chooses $\delta = \min(\delta_1, \delta_2, r)$ so that the window lies inside the
 interval where the inequalities hold.
@@ -748,8 +797,10 @@ interval where the inequalities hold.
   ([](#rem-calc-squeeze-theorem-hypotheses)).
 - To show $f(x) \to L$, it is often enough to bound the distance: $\abs{f(x) - L} \le b(x)$
   with $b(x) \to 0$ ([](#rem-calc-squeeze-theorem-distance)).
-- A bounded factor times a factor that approaches $0$ approaches $0$, as in
-  $x\sin(1/x) \to 0$; the product law does not apply there, the squeeze theorem does.
+- To handle a bounded factor such as $\sin(1/x)$, which has no limit, bound the distance, as
+  in $\bigl\lvert x\sin(1/x)\bigr\rvert \le \abs{x}$ with $\abs{x} \to 0$, which gives
+  $x\sin(1/x) \to 0$ ([](#eg-calc-squeeze-theorem-oscillating)); the product law does not apply
+  there, the squeeze theorem does.
 - Near $0$, $\abs{\sin x} < \abs{x}$ and $1 - \frac{x^2}{2} < \cos x < 1$, so $\sin x \to 0$ and
   $\cos x \to 1$ ([](#lem-calc-sin-cos-near-zero), [](#lem-calc-sin-cos-limits-at-zero)).
 - In radians, $\displaystyle \lim_{x \to 0} \frac{\sin x}{x} = 1$
@@ -905,7 +956,8 @@ $P(t)$](#rem-calc-trig-functions-circle-properties), $\cos x = \cos\abs{x} > 0$,
 $$
 \begin{aligned}
 \frac{1 - \cos x}{x^2}
-  &= \frac{(1 - \cos x)(1 + \cos x)}{x^2\,(1 + \cos x)} = \frac{\sin^2 x}{x^2\,(1 + \cos x)} \\
+  &= \frac{(1 - \cos x)(1 + \cos x)}{x^2\,(1 + \cos x)} \\
+  &= \frac{\sin^2 x}{x^2\,(1 + \cos x)} \\
   &= \Bigl(\frac{\sin x}{x}\Bigr)^2 \cdot \frac{1}{1 + \cos x} .
 \end{aligned}
 $$
@@ -993,14 +1045,25 @@ Multiplying by the positive number $2$, or by $\frac12$, keeps inequalities
 exactly when $\theta^2 \le 0.01$. Now $\theta^2 = \abs{\theta}^2$ ([property 5 of the absolute
 value](#rem-calc-absolute-value-properties)) and $0.01 = 0.1^2$, and $\abs{\theta}$ and $0.1$
 are non-negative, so by [property 6 of the absolute
-value](#rem-calc-absolute-value-properties) this holds exactly when $\abs{\theta} \le 0.1$.
+value](#rem-calc-absolute-value-properties) this holds exactly when $\abs{\theta} \le 0.1$
+(property 6 gives this for $<$ and for $=$; the two parts together give it for $\le$).
 
 So $r = 0.1$ works: every $\theta$ with $0 < \abs{\theta} < 0.1$ has $\abs{\theta} \le 0.1$.
 No larger $r$ works: if $r > 0.1$, the number $\theta = \frac{0.1 + r}{2}$ satisfies
 $0.1 < \theta < r$, and then $\abs{\theta} = \theta > 0.1$, so $\frac{\theta^2}{2} > 0.005$ by
-the equivalence just shown. Hence $r = 0.1 = \frac{1}{10}$
-radians. As $0.1 < \frac{\pi}{2} \approx 1.571$, the bound of the example applies to all these
-$\theta$, and then the relative error is less than $\frac{\theta^2}{2} \le 0.005$.
+the equivalence just shown. Hence $r = 0.1 = \frac{1}{10}$ radians.
+
+The bound of the example needs $\abs{\theta} < \frac{\pi}{2}$. As in its step 3, the proposition
+bounding $\pi$ in Trigonometric Functions gives $2\sqrt{2} < \pi$, and multiplying by the
+positive number $\frac12$ keeps the inequality ([property 5(a) of the order
+rules](#rem-calc-order-rules)): $\sqrt{2} < \frac{\pi}{2}$. Also $1 < \sqrt{2}$: the numbers
+$1$ and $\sqrt{2}$ are non-negative, their squares are $1$ and $2$, and $1 < 2$; and squaring
+keeps the order of non-negative numbers ([the square-root remark](#rem-calc-square-roots)). So
+$0.1 < 1 < \sqrt{2} < \frac{\pi}{2}$, and by transitivity (property 2 of the order rules)
+$0.1 < \frac{\pi}{2}$. So every $\theta$ with $0 < \abs{\theta} < 0.1$ has
+$\abs{\theta} < \frac{\pi}{2}$ (transitivity again), the bound of the example applies to it, and
+then the relative error is less than $\frac{\theta^2}{2} \le 0.005$.
+% TODO link: prop-calc-pi-bounds once vronnblom/maths#TBD is merged
 
 In degrees, $0.1$ radians is $\frac{180 \cdot 0.1}{\pi} = \frac{18}{\pi} \approx 5.73$
 degrees. Halving the tolerance shrank the guaranteed range by the factor
@@ -1108,8 +1171,9 @@ $\abs{f(0)} \le 0$ gives $f(0) = 0$; and $\Bigl\lvert \frac{f(x)}{x} \Bigr\rvert
 
 **$f(0) = 0$.** At $x = 0$ the hypothesis says $\abs{f(0)} \le 0^2 = 0$. Also
 $\abs{f(0)} \ge 0$, by [property 1 of the absolute
-value](#rem-calc-absolute-value-properties), so $\abs{f(0)} = 0$, and by the same property
-$f(0) = 0$.
+value](#rem-calc-absolute-value-properties). So neither $\abs{f(0)} < 0$ nor $\abs{f(0)} > 0$
+holds, and by trichotomy ([property 1 of the order rules](#rem-calc-order-rules))
+$\abs{f(0)} = 0$; by property 1 of the absolute value again, $f(0) = 0$.
 
 **The limit.** Let $x \ne 0$. Then $\abs{x} > 0$ (property 1 of the absolute value), and by
 [properties 4 and 5 of the absolute value](#rem-calc-absolute-value-properties),
@@ -1124,10 +1188,15 @@ of the lemma on limits at 0](#lem-calc-sin-cos-limits-at-zero). By
 [](#rem-calc-squeeze-theorem-distance), with $a = 0$, $L = 0$, $r = 1$ and $b(x) = \abs{x}$,
 $\lim_{x \to 0} \frac{f(x)}{x} = 0$.
 
-For example, $f(x) = x^2\cos(1/x)$ for $x \ne 0$ and $f(0) = 0$ satisfies the hypothesis:
-$\abs{\cos(1/x)} \le 1$ by [part (b) of the proposition on the bounds of sine and
-cosine](#prop-calc-sin-bounded), and multiplying by $x^2 \ge 0$ gives
-$\bigl\lvert x^2\cos(1/x)\bigr\rvert \le x^2$.
+For example, $f(x) = x^2\cos(1/x)$ for $x \ne 0$ and $f(0) = 0$ satisfies the hypothesis. For
+$x \ne 0$, $-1 \le \cos(1/x) \le 1$ by [part (b) of the proposition on the bounds of sine and
+cosine](#prop-calc-sin-bounded), which says $\abs{\cos(1/x)} \le 1$ ([part (b) of the
+proposition on distance inequalities](#prop-calc-abs-interval)); by [properties 4 and 5 of the
+absolute value](#rem-calc-absolute-value-properties),
+$\bigl\lvert x^2\cos(1/x)\bigr\rvert = x^2\,\abs{\cos(1/x)}$, and multiplying
+$\abs{\cos(1/x)} \le 1$ by $x^2 \ge 0$ ([property 5(b) of the order
+rules](#rem-calc-order-rules)) gives $\bigl\lvert x^2\cos(1/x)\bigr\rvert \le x^2$. At $x = 0$,
+$\abs{f(0)} = \abs{0} = 0 \le 0 = 0^2$.
 ::::
 
 ## Where this leads
