@@ -103,6 +103,7 @@ chapters:
           - {label: prop-calc-rational-domain, policy: F, note: "the domain of $p/q$ leaves out at most $\\deg q$ points; the zeros are the roots of $p$ in the domain"}
           - {label: prop-calc-rational-sign, policy: F, note: "a factored rational function has constant sign on an open interval free of its linear-factor points; no continuity used"}
           - {label: cor-calc-polynomial-identity, policy: F, note: "two polynomials of degree at most $n$ that agree at $n + 1$ points have the same coefficients"}
+          - {label: prop-calc-polynomial-degree-product, policy: F, note: "degree and leading coefficient of a product: degree $m + k$, leading coefficient $ab$"}
       - label: calc-exponential-functions
         file: preliminaries/exponential-functions.md
         title: Exponential Functions and the Number e
@@ -152,6 +153,7 @@ chapters:
           - {label: prop-calc-sin-maxima, policy: F, note: "$\\sin(\\pi/2+2k\\pi)=1$ for every integer $k$, from the unit circle; used by calc-limit"}
           - {label: thm-calc-addition-formulas, policy: R, note: geometric proof}
           - {label: lem-calc-sin-bounds, policy: F, note: "$\\sin\\theta<\\theta<\\tan\\theta$ for $0<\\theta<\\pi/2$, by comparing areas"}
+          - {label: def-calc-period}
         notes:
           - "Widget function-plot: unit circle ↔ graph"
       - label: calc-inverse-trig
@@ -226,10 +228,13 @@ chapters:
         objectives:
           - "Compute left and right limits, including for piecewise functions."
           - Decide existence of a limit from the one-sided limits.
+        widgets: [epsilon-delta]
         results:
           - {label: def-calc-one-sided-limit}
           - {label: thm-calc-limit-iff-one-sided, policy: R}
           - {label: cor-calc-one-sided-limits-differ, policy: F, note: "different one-sided limits at $a$: the limit at $a$ does not exist"}
+        notes:
+          - "Widget epsilon-delta: the left and right half-windows reported separately"
       - label: calc-limit-laws
         file: limits/limit-laws.md
         title: Limit Laws
@@ -272,7 +277,7 @@ chapters:
         file: limits/infinite-limits.md
         title: Infinite Limits and Vertical Asymptotes
         level: core
-        prerequisites: [calc-one-sided-limits]
+        prerequisites: [calc-one-sided-limits, calc-polynomial-rational]
         objectives:
           - Determine infinite one-sided limits via sign analysis.
           - Locate vertical asymptotes.
@@ -741,7 +746,7 @@ chapters:
         file: integration-techniques/partial-fractions.md
         title: Partial Fractions
         level: core
-        prerequisites: [calc-substitution, calc-polynomial-rational]
+        prerequisites: [calc-substitution]
         objectives:
           - "Decompose rational functions (distinct, repeated, irreducible quadratic factors)."
           - Integrate them.

@@ -70,7 +70,7 @@ pages, many exercises, few proofs.*
 **`calc-polynomial-rational`** · Polynomial and Rational Functions · `polynomial-and-rational-functions.md`
 - Prereqs: `calc-functions`
 - Objectives: factor polynomials using known roots; perform polynomial division; find domains, zeros and the sign of rational functions.
-- Results: `thm-calc-factor-theorem` **F**; `thm-calc-polynomial-division` **S**; `thm-calc-polynomial-roots-bound` (at most $n$ roots) **F**; `prop-calc-sign-rules` (signs of products and quotients, the zero-product rule, the sign of $x - t$; from trichotomy and the order rules) **F**; `prop-calc-rational-domain` (the domain of $p/q$ leaves out at most $\deg q$ points; the zeros are the roots of $p$ in the domain) **F**; `prop-calc-rational-sign` (a factored rational function has constant sign on an open interval free of its linear-factor points; no continuity used) **F**; `cor-calc-polynomial-identity` (two polynomials of degree at most $n$ that agree at $n + 1$ points have the same coefficients) **F**.
+- Results: `thm-calc-factor-theorem` **F**; `thm-calc-polynomial-division` **S**; `thm-calc-polynomial-roots-bound` (at most $n$ roots) **F**; `prop-calc-sign-rules` (signs of products and quotients, the zero-product rule, the sign of $x - t$; from trichotomy and the order rules) **F**; `prop-calc-rational-domain` (the domain of $p/q$ leaves out at most $\deg q$ points; the zeros are the roots of $p$ in the domain) **F**; `prop-calc-rational-sign` (a factored rational function has constant sign on an open interval free of its linear-factor points; no continuity used) **F**; `cor-calc-polynomial-identity` (two polynomials of degree at most $n$ that agree at $n + 1$ points have the same coefficients) **F**; `prop-calc-polynomial-degree-product` (degree and leading coefficient of a product: degree $m + k$, leading coefficient $ab$) **F**.
 
 **`calc-exponential-functions`** · Exponential Functions and the Number e · `exponential-functions.md`
 - Prereqs: `calc-function-operations`
@@ -85,7 +85,7 @@ pages, many exercises, few proofs.*
 **`calc-trig-functions`** · Trigonometric Functions · `trigonometric-functions.md`
 - Prereqs: `calc-functions`
 - Objectives: work in radians; define sin and cos on the unit circle; use the core identities; graph trigonometric functions with amplitude, period and phase.
-- Results: `def-calc-radian`, `def-calc-sin-cos`, `def-calc-tan-sec-csc-cot`; `thm-calc-pythagorean-identity` **F**; `prop-calc-sin-bounded` ($-1\le\sin t\le 1$ for real $t$, from the Pythagorean identity) **F**; `prop-calc-sin-multiples-of-pi` ($\sin(k\pi)=0$ for every integer $k$) **F**; `prop-calc-sin-maxima` ($\sin(\pi/2+2k\pi)=1$ for every integer $k$) **F**, the three facts `calc-limit` takes from school; `thm-calc-addition-formulas` **R** (geometric proof); `lem-calc-sin-bounds` ($\sin\theta<\theta<\tan\theta$ for $0<\theta<\pi/2$, by comparing areas) **F**.
+- Results: `def-calc-radian`, `def-calc-sin-cos`, `def-calc-tan-sec-csc-cot`; `thm-calc-pythagorean-identity` **F**; `prop-calc-sin-bounded` ($-1\le\sin t\le 1$ for real $t$, from the Pythagorean identity) **F**; `prop-calc-sin-multiples-of-pi` ($\sin(k\pi)=0$ for every integer $k$) **F**; `prop-calc-sin-maxima` ($\sin(\pi/2+2k\pi)=1$ for every integer $k$) **F**, the three facts `calc-limit` takes from school; `thm-calc-addition-formulas` **R** (geometric proof); `lem-calc-sin-bounds` ($\sin\theta<\theta<\tan\theta$ for $0<\theta<\pi/2$, by comparing areas) **F**; `def-calc-period`.
 - Widgets: `function-plot` (unit circle ↔ graph)
 
 **`calc-inverse-trig`** · Inverse Trigonometric Functions · `inverse-trigonometric-functions.md`
@@ -115,6 +115,7 @@ pages, many exercises, few proofs.*
 - Prereqs: `calc-limit`
 - Objectives: compute left and right limits, including for piecewise functions; decide existence of a limit from the one-sided limits.
 - Results: `def-calc-one-sided-limit`; `thm-calc-limit-iff-one-sided` **R**; `cor-calc-one-sided-limits-differ` (different one-sided limits at $a$: the limit at $a$ does not exist) **F**.
+- Widgets: `epsilon-delta` (the left and right half-windows reported separately)
 
 **`calc-limit-laws`** · Limit Laws · `limit-laws.md`
 - Prereqs: `calc-limit`
@@ -133,7 +134,7 @@ pages, many exercises, few proofs.*
 - Widgets: `function-plot` (squeeze band)
 
 **`calc-infinite-limits`** · Infinite Limits and Vertical Asymptotes · `infinite-limits.md`
-- Prereqs: `calc-one-sided-limits`
+- Prereqs: `calc-one-sided-limits`, `calc-polynomial-rational`
 - Objectives: determine infinite one-sided limits via sign analysis; locate vertical asymptotes; explain why "$=\infty$" means the limit does not exist in ℝ.
 - Results: `def-calc-infinite-limit` (precise version in rigorous track); `def-calc-vertical-asymptote`; `prop-calc-reciprocal-power-limits` **F**.
 
@@ -333,7 +334,7 @@ pages, many exercises, few proofs.*
 - Results: method page.
 
 **`calc-partial-fractions`** · Partial Fractions · `partial-fractions.md`
-- Prereqs: `calc-substitution`, `calc-polynomial-rational`
+- Prereqs: `calc-substitution`
 - Objectives: decompose rational functions (distinct, repeated, irreducible quadratic factors); integrate them.
 - Results: `thm-calc-partial-fraction-decomposition` (existence) **S**, **D** → `linalg` (algebra).
 
@@ -519,7 +520,7 @@ $\sin\theta < \theta < \tan\theta$ and so on these very facts, which would be ci
 | $e=\lim(1+1/n)^n$ | `calc-exponential-functions` | `calc-ln-integral` |
 | $e^{i\theta}=\cos\theta+i\sin\theta$ | `calc-complex-numbers` (definition) | `calc-taylor-series` (consistency) |
 | EVT, continuous ⇒ integrable, inverse continuity, term-by-term differentiation | various | `ana` (future subject) |
-| Geometry of the unit circle: the journey along the circle defines arc length; a rotation taking $A$ to $P(\alpha)$ exists; the region between two radii is convex; the sector of angle $\theta$ has area $\theta/2$ (so the disc has area $\pi$: Archimedes' theorem) | `calc-trig-functions` | `ana` (future subject) |
+| Geometry of the unit circle: the journey along the circle defines arc length; a rotation taking $A$ to $P(\alpha)$ exists; the region between two radii is convex when its arc is shorter than half the circle ($\theta < \pi$); the sector of angle $\theta$ has area $\theta/2$ (so the disc has area $\pi$: Archimedes' theorem) | `calc-trig-functions` | `ana` (future subject) |
 
 ## 8.4 Backlog (not in Calculus 1.0 unless decided at Phase 6)
 - **Parametric and polar curves** (chapter `parametric-polar/`): parametric curves and
