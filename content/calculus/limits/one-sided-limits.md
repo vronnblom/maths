@@ -9,7 +9,7 @@ tags: [limits, epsilon-delta]
 maths:
   kind: topic
   subject: calc
-  status: draft
+  status: reviewed
   level: core
   difficulty: 2
   est_minutes: 40
@@ -19,7 +19,9 @@ maths:
     - Decide existence of a limit from the one-sided limits.
   verify: verify/calculus/limits/test_one_sided_limits.py
   widgets: [epsilon-delta]
-  reviewed_by: []
+  reviewed_by: [vronnblom]
+  manual_checked:
+    exr-calc-one-sided-limits-reciprocal-left: vronnblom
   sources: []
 ---
 
