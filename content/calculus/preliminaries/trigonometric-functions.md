@@ -93,7 +93,8 @@ We write $O = (0, 0)$ for the origin and $A = (1, 0)$.
   point has the sum of their lengths. The whole circle has length $2\pi$: this is the
   definition of the number $\pi$.
 - **Journeys along the circle.** From any point of the circle, travelling a distance $d \ge 0$
-  along it anticlockwise, or clockwise, ends at exactly one point. Counting clockwise
+  along it anticlockwise, or clockwise, ends at exactly one point; anticlockwise is the
+  direction in which a journey from $A$ sets off towards $(0, 1)$. Counting clockwise
   distances as negative, a journey of $s$ followed by a journey of $t$ ends where a journey of
   $s + t$ does. Every point of the circle is reached from $A$ by an anticlockwise journey of
   exactly one length in $[0, 2\pi)$.
@@ -113,7 +114,8 @@ We write $O = (0, 0)$ for the origin and $A = (1, 0)$.
   that lies in the unit disc. If $\theta < \pi$, the region contains, with any two of its
   points, the segment between them; and if $Q$ and $R$ are points other than $O$ on the two rays
   from $O$ through the ends of the arc, the triangle $OQR$ is the part of the region that lies
-  on the same side of the line $QR$ as $O$, or on that line.
+  on the same side of the line $QR$ as $O$, or on that line. Every point of that triangle lies
+  on a segment from $O$ to a point of its side $QR$.
 - **Area.** A triangle with base $b$ and height $h$ has area $\frac12 bh$. A sector whose arc
   has length $\theta$, where $0 < \theta \le 2\pi$, has area $\frac{\theta}{2}$. For
   $\theta = 2\pi$ this says that the unit disc has area $\pi$: that is Archimedes' theorem, not
@@ -146,7 +148,8 @@ walk.
 Let an angle have its vertex at the centre $O$ of the unit circle. Its two arms meet the circle
 at two points, which cut the circle into two arcs. The angle's **measure in radians** is the
 length of the one of these arcs that lies inside the angle. (For an angle smaller than a
-straight angle, this is the shorter arc.)
+straight angle, this is the shorter arc.) A full turn, whose arms coincide, has the whole
+circle as its arc: $2\pi$.
 :::
 
 **In words.** An angle of $\theta$ radians is the angle you turn through while you walk a
@@ -222,7 +225,7 @@ Let $t$ and $\alpha$ be real numbers and $k$ an integer.
 
 1. $P(0) = (1, 0)$, $P\bigl(\frac{\pi}{2}\bigr) = (0, 1)$, $P(\pi) = ({-1}, 0)$ and
    $P\bigl(\frac{3\pi}{2}\bigr) = (0, {-1})$.
-2. The rotation about $O$ that maps $A$ to $P(\alpha)$ maps $P(t)$ to $P(t + \alpha)$.
+2. A rotation about $O$ that maps $A$ to $P(\alpha)$ maps $P(t)$ to $P(t + \alpha)$.
 3. $P(t + 2k\pi) = P(t)$. Conversely, if $P(s) = P(t)$ for real numbers $s$ and $t$, then
    $s - t = 2k\pi$ for some integer $k$.
 4. $\cos(-t) = \cos t$ and $\sin(-t) = -\sin t$.
@@ -252,7 +255,7 @@ Let $t$ and $\alpha$ be real numbers and $k$ an integer.
    positive number $2\pi$ keeps both inequalities, and subtracting $2k\pi$ keeps them too
    ([properties 5 and 3 of the order rules](#rem-calc-order-rules) of Real Numbers and
    Intervals), so $u = s - t - 2k\pi$ satisfies $0 \le u < 2\pi$. Then
-   $P(s) = P(t + u + 2k\pi) = P(t + u)$. The rotation that maps $A$ to
+   $P(s) = P(t + u + 2k\pi) = P(t + u)$. A rotation that maps $A$ to
    $P(-t)$ maps $P(t)$ to $P(0) = A$ and $P(t + u)$ to $P(u)$, by property 2. As
    $P(t + u) = P(t)$, it follows that $P(u) = A = P(0)$. Only one length in $[0, 2\pi)$ leads
    from $A$ to $A$, so $u = 0$ and $s - t = 2k\pi$.
@@ -360,9 +363,9 @@ the inequality ([property 3 of the order rules](#rem-calc-order-rules)), so, by
 Both $\sin t$ and $1$ are then non-negative, and by the order part of
 [the square-root remark](#rem-calc-square-roots) (for non-negative $u$ and $v$, $u < v$ exactly
 when $u^2 < v^2$), $1 < \sin t$ gives $1 < \sin^2 t$, which is impossible. Suppose
-$\sin t < -1$. Multiplying by the negative number ${-1}$ reverses the inequality (the order
-rules), so $-\sin t > 1$, and in the same way $1 < (-\sin t)^2 = \sin^2 t$, which is
-impossible. So $-1 \le \sin t \le 1$.
+$\sin t < -1$. Multiplying by the negative number ${-1}$ reverses the inequality
+([property 5(c) of the order rules](#rem-calc-order-rules)), so $-\sin t > 1$, and in the same
+way $1 < (-\sin t)^2 = \sin^2 t$, which is impossible. So $-1 \le \sin t \le 1$ (property 7 of the order rules, negation).
 
 (b) The same argument with $\cos$ and $\sin$ exchanged, using
 $\cos^2 t = 1 - \sin^2 t \le 1$.
@@ -465,7 +468,7 @@ We compute the distance between $P(s)$ and $P(t)$ in two ways: directly, and aft
 that moves $P(t)$ to $A$. This gives (a), and the others follow from (a) and the properties of
 $P(t)$.
 
-(a) By property 2 of [](#rem-calc-trig-functions-circle-properties) with $\alpha = -t$, the
+(a) By property 2 of [](#rem-calc-trig-functions-circle-properties) with $\alpha = -t$, a
 rotation about $O$ that maps $A$ to $P(-t)$ maps $P(t)$ to $P(0) = A$ and $P(s)$ to $P(s - t)$.
 A rotation keeps distances (the facts from school), so the distance from $P(s)$ to $P(t)$
 equals the distance from $P(s - t)$ to $A$, and so do their squares. By the distance formula
@@ -564,8 +567,8 @@ $\tan\theta = \frac{\sin\theta}{\cos\theta}$ is defined and positive
 They lie inside one another.
 
 - *The triangle $OAP$ lies in the sector.* Every point of the triangle lies on a segment from
-  $O$ to a point $Q$ of its side $AP$. The disc contains $A$ and $P$, so it contains the segment
-  $AP$ and with it $Q$, and then the whole segment $OQ$ (the facts from school, distance). The
+  $O$ to a point $Q$ of its side $AP$ (the facts from school, sectors). The disc contains $A$
+  and $P$, so it contains the segment $AP$ and with it $Q$, and then the whole segment $OQ$ (the facts from school, distance). The
   region between the radii $OA$ and $OP$ contains $O$, $A$ and $P$ (take $\lambda = 0$ or
   $\lambda = 1$), and, since $\theta < \frac{\pi}{2} < \pi$, with any two of its points the
   segment between them (the facts from school, sectors); so it contains $Q$ and then the
@@ -628,8 +631,7 @@ $1 - s^2 < 1$ ([property 3 of the order rules](#rem-calc-order-rules)), so $c^2 
 So $\sin\theta < \theta < \tan\theta$.
 :::
 
-The proof used no derivatives and no limits. It rests on these facts from school, none of which
-this course proves (Real Analysis does):
+The proof used no derivatives and no limits. It rests directly on these facts from school:
 
 - the equation of the unit circle and of the disc, and that the disc contains the segment
   between any two of its points;
@@ -638,11 +640,16 @@ this course proves (Real Analysis does):
 - that the region between two radii whose arc is shorter than half the circle contains the
   segment between any two of its points, and that the triangle $OAT$ is the part of that region
   with $x \le 1$;
+- that every point of the triangle $OAP$ lies on a segment from $O$ to a point $Q$ of its side
+  $AP$;
 - the area $\frac12 bh$ of a triangle, and the area $\frac{\theta}{2}$ of a sector (so the
   unit disc has area $\pi$, Archimedes' theorem);
 - that a region inside another has at most its area.
 
-Two of them hide a limit: the length of an arc and the area of a sector.
+Through property 8, the Pythagorean identity and parts (e) and (f), it also rests on the rest of
+the box: the lengths of arcs, journeys along the circle, reflections and rotations. This course
+proves none of these facts (Real Analysis does). Two of them hide a limit: the length of an arc
+and the area of a sector.
 
 :::{proof:remark} Why $0 < \theta < \frac{\pi}{2}$
 :label: rem-calc-trig-functions-sin-bounds-hypothesis
@@ -678,14 +685,18 @@ called **the period** of $f$.
   period of $\sin$: if $\sin\bigl(\frac{\pi}{2} + p\bigr) = \sin\frac{\pi}{2} = 1$, then
   $\cos\bigl(\frac{\pi}{2} + p\bigr) = 0$ by [](#thm-calc-pythagorean-identity), so
   $P\bigl(\frac{\pi}{2} + p\bigr) = (0, 1) = P\bigl(\frac{\pi}{2}\bigr)$, and $p = 2k\pi$ for an
-  integer $k$ by the converse in property 3. As $p > 0$, $k \ge 1$, and multiplying $k \ge 1$
+  integer $k$ by the converse in property 3. Multiplying $2k\pi = p > 0$ by the positive number
+  $\frac{1}{2\pi}$ gives $k > 0$ ([properties 6 and 5(a) of the order
+  rules](#rem-calc-order-rules)), so $k \ge 1$, as $k$ is an integer; and multiplying $k \ge 1$
   by the positive number $2\pi$ gives $p \ge 2\pi$
   ([property 5(b) of the order rules](#rem-calc-order-rules)). The same argument at $t = 0$ shows it for $\cos$. So $2\pi$ is the period of
   $\sin$ and of $\cos$.
 - **Values.** The values of $\sin$ and $\cos$ fill the interval $[-1, 1]$: they lie in it by
   [](#prop-calc-sin-bounded), and every $y \in [-1, 1]$ is a value of $\sin$. Indeed $y^2 \le 1$
   (for $y \ge 0$ by the order part of [the square-root remark](#rem-calc-square-roots), and for
-  $y < 0$ by the same applied to $-y$), so $1 - y^2 \ge 0$ (adding $-y^2$, [property 3 of the order rules](#rem-calc-order-rules)) and
+  $y < 0$ by the same applied to $-y$, which lies in $(0, 1]$ because multiplying
+  $-1 \le y < 0$ by the negative number ${-1}$ reverses both inequalities,
+  [property 5(c) of the order rules](#rem-calc-order-rules)), so $1 - y^2 \ge 0$ (adding $-y^2$, [property 3 of the order rules](#rem-calc-order-rules)) and
   the point $\bigl(\sqrt{1 - y^2}, y\bigr)$ lies on the unit circle. By the facts from school
   (journeys along the circle) it is $P(t)$ for some $t$; then $\sin t = y$. In the same way, the
   point $\bigl(y, \sqrt{1 - y^2}\bigr)$ shows that $y$ is a value of $\cos$.
@@ -801,7 +812,9 @@ Find $\cos t$ and $\sin t$ exactly for $t = \frac{\pi}{4}$, $\frac{\pi}{3}$ and 
    $\cos\frac{2\pi}{3} = \cos\bigl(\pi - \frac{\pi}{3}\bigr) = -c$. So $2c^2 - 1 = -c$, that is,
    $2c^2 + c - 1 = 0$, which factors as $(2c - 1)(c + 1) = 0$. By property 8, $c > 0$,
    so adding $1$ gives $c + 1 > 1 > 0$
-   ([properties 3 and 2 of the order rules](#rem-calc-order-rules)), and therefore $2c - 1 = 0$: $c = \frac12$. Then
+   ([properties 3 and 2 of the order rules](#rem-calc-order-rules); $1 > 0$ because
+   multiplying $0 < \frac{1}{c}$ by $c > 0$ gives $0 < 1$, by properties 6 and 5(a)), and
+   therefore $2c - 1 = 0$: $c = \frac12$. Then
    $\sin^2\frac{\pi}{3} = 1 - \frac14 = \frac34$, and $\sin\frac{\pi}{3} > 0$, so, as in step 1,
    $\sin\frac{\pi}{3} = \frac{\sqrt{3}}{2}$.
 3. **At $\frac{\pi}{6}$.** Since $\frac{\pi}{6} = \frac{\pi}{2} - \frac{\pi}{3}$, property 6 with
@@ -926,7 +939,7 @@ after $25$ minutes.
 2. **The position.** The wheel is the unit circle scaled by $20$ and moved to the centre (the
    facts on circles of other radii). You start at the bottom, which corresponds to
    $P\bigl(-\frac{\pi}{2}\bigr) = (0, {-1})$ (properties 4 and 1 of
-   [](#rem-calc-trig-functions-circle-properties)). Turning through $\theta$ is the rotation
+   [](#rem-calc-trig-functions-circle-properties)). Turning through $\theta$ is a rotation
    that maps $A$ to $P(\theta)$, so by property 2 it takes you to the point corresponding to
    $P\bigl(\theta - \frac{\pi}{2}\bigr)$, at height $20\sin\bigl(\theta - \frac{\pi}{2}\bigr)$
    above the centre.
@@ -1455,9 +1468,10 @@ $0 < u + v$, and adding $v < \pi$ and $u \le \pi$ gives $u + v < 2\pi$ ([propert
 rules](#rem-calc-order-rules): adding two inequalities, one of them strict, gives a strict one).
 Multiplying by the positive number $\frac12$ keeps both inequalities (property 5(a) of the
 order rules), so $0 < m < \pi$. Also,
-subtracting $v$ keeps $v < u$ and $u \le \pi$, so $0 < u - v$ and $u - v \le \pi - v$; and
-$\pi - v \le \pi$ because $v \ge 0$. So $0 < u - v \le \pi$; multiplying by the positive number $\frac12$ gives
-$0 < d \le \frac{\pi}{2} < \pi$. By property 8 of
+subtracting $v$ keeps $v < u$ and $u \le \pi$ (property 3 of the order rules), so $0 < u - v$
+and $u - v \le \pi - v$; and $\pi - v \le \pi$, because multiplying $0 \le v$ by ${-1}$ gives
+$-v \le 0$ (property 5(c)) and adding $\pi$ keeps that (property 3). So $0 < u - v \le \pi$;
+multiplying by the positive number $\frac12$ gives $0 < d \le \frac{\pi}{2} < \pi$. By property 8 of
 [](#rem-calc-trig-functions-circle-properties), $\sin m > 0$ and $\sin d > 0$. So
 $\cos v - \cos u = 2\sin m\sin d > 0$, that is, $\cos v > \cos u$. As $v < u$ in $[0, \pi]$ were
 arbitrary, $\cos$ is strictly decreasing on $[0, \pi]$.
@@ -1499,8 +1513,10 @@ $\tan(t + \pi) = \frac{\sin(t + \pi)}{\cos(t + \pi)} = \frac{-\sin t}{-\cos t} =
 *No smaller period.* Let $p > 0$ be a period of $\tan$. Since $0 \in \dom\tan$ ($\cos 0 = 1$),
 [](#def-calc-period) gives $p = 0 + p \in \dom\tan$ and $\tan p = \tan 0 = 0$. So
 $\frac{\sin p}{\cos p} = 0$, and multiplying by $\cos p \ne 0$ gives $\sin p = 0$. By
-[](#rem-calc-trig-functions-zeros), $p = k\pi$ for an integer $k$, and $k \ge 1$ because
-$p > 0$. Multiplying $k \ge 1$ by the positive number $\pi$ gives $p \ge \pi$
+[](#rem-calc-trig-functions-zeros), $p = k\pi$ for an integer $k$. Multiplying $k\pi = p > 0$
+by the positive number $\frac{1}{\pi}$ gives $k > 0$
+([properties 6 and 5(a) of the order rules](#rem-calc-order-rules)), so $k \ge 1$, as $k$ is an
+integer. Multiplying $k \ge 1$ by the positive number $\pi$ gives $p \ge \pi$
 ([property 5(b) of the order rules](#rem-calc-order-rules)). So $\pi$ is the period of $\tan$ ([](#def-calc-period)).
 ::::
 
