@@ -51,6 +51,8 @@ project:
             - file: calculus/preliminaries/real-numbers-and-intervals.md
             - file: calculus/preliminaries/absolute-value-and-inequalities.md
             - file: calculus/preliminaries/functions.md
+            - file: calculus/preliminaries/polynomial-and-rational-functions.md
+            - file: calculus/preliminaries/trigonometric-functions.md
         - title: Limits
           children:
             - file: calculus/limits/limit-of-a-function.md
