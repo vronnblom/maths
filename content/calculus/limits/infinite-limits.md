@@ -252,7 +252,10 @@ $a < x < a + \delta$. Since $\delta \le \delta_1$, adding $a$ gives $a + \delta 
 so $a < x < a + \delta_1$ (property 2); in the same way $a < x < a + \delta_2$. So $x$ lies in
 both half-windows, and
 $$
-f(x) < L + 1 \le \abs{L} + 1 = M < f(x) .
+\begin{aligned}
+f(x) &< L + 1 \le \abs{L} + 1 \\
+&= M < f(x) .
+\end{aligned}
 $$
 Here $L \le \abs{L}$ is [property 3 of the absolute
 value](#rem-calc-absolute-value-properties), and adding $1$ keeps it (property 3 of the order
@@ -263,7 +266,10 @@ If instead $\lim_{x \to a^{+}} f(x) = -\infty$, take the same $M$ and a $\delta_
 $f(x) < -M$ for $a < x < a + \delta_2$. Property 3 of the absolute value also gives
 $-\abs{L} \le L$, and adding $-1$ keeps it, so at the same point $x$
 $$
--M = -\abs{L} - 1 \le L - 1 < f(x) < -M ,
+\begin{aligned}
+-M &= -\abs{L} - 1 \le L - 1 \\
+&< f(x) < -M ,
+\end{aligned}
 $$
 and again $-M < -M$, which is impossible.
 
@@ -647,7 +653,10 @@ asymptote $x = a$ of its graph?
    except at $1$, so [the definition of the limit](#def-calc-limit) applies. We show
    $\lim_{x \to 1} f(x) = -2$. For $x \ne 1, 2$, by step 2,
    $$
-   f(x) + 2 = \frac{x + 1 + 2(x - 2)}{x - 2} = \frac{3(x - 1)}{x - 2},
+   \begin{aligned}
+   f(x) + 2 &= \frac{x + 1 + 2(x - 2)}{x - 2} \\
+   &= \frac{3(x - 1)}{x - 2},
+   \end{aligned}
    $$
    so $\abs{f(x) + 2} = \frac{3\abs{x - 1}}{\abs{x - 2}}$
    ([property 4 of the absolute value](#rem-calc-absolute-value-properties)). If
@@ -662,7 +671,10 @@ asymptote $x = a$ of its graph?
    $3\abs{x - 1}$ keeps it ([property 5(a)](#rem-calc-order-rules)), and
    $\abs{x - 1} < \frac{\eps}{6}$:
    $$
-   \abs{f(x) - (-2)} < 6\abs{x - 1} < 6 \cdot \frac{\eps}{6} = \eps .
+   \begin{aligned}
+   \abs{f(x) - (-2)} &< 6\abs{x - 1} \\
+   &< 6 \cdot \frac{\eps}{6} = \eps .
+   \end{aligned}
    $$
    So $\lim_{x \to 1} f(x) = -2$, and by [the theorem on a limit and its one-sided
    limits](#thm-calc-limit-iff-one-sided) both one-sided limits at $1$ are $-2$. If one of them
@@ -1195,7 +1207,10 @@ $\lim_{x \to -1^{+}} f(x) = \infty$. So $x = -1$ is a vertical asymptote.
 **At $2$: a finite limit.** $f$ is defined at every point of $(1, 3)$ except $2$. For
 $x \ne 2, -1$,
 $$
-f(x) - \frac43 = \frac{3(x + 2) - 4(x + 1)}{3(x + 1)} = \frac{2 - x}{3(x + 1)},
+\begin{aligned}
+f(x) - \frac43 &= \frac{3(x + 2) - 4(x + 1)}{3(x + 1)} \\
+&= \frac{2 - x}{3(x + 1)},
+\end{aligned}
 $$
 so $\abs{f(x) - \frac43} = \frac{\abs{x - 2}}{3\abs{x + 1}}$, by
 [properties 2 and 4 of the absolute value](#rem-calc-absolute-value-properties). If
