@@ -306,6 +306,16 @@ def test_exr_calc_one_sided_limits_piecewise():
     # The solution's steps: |(2x + 1) − 3| = 2|x − 1|, δ = ε/2; |(4 − x) − 3| = |1 − x| = |x − 1|, δ = ε.
     assert equal(sp.Abs(left_formula - 3), 2 * sp.Abs(x - 1))
     assert equal(sp.Abs(right_formula - 3), sp.Abs(1 - x)) and equal(sp.Abs(1 - x), sp.Abs(x - 1))
+    # (a), the steps from 1 − δ < x < 1: |2(x − 1)| = 2|x − 1| (|2| = 2); for x < 1, |x − 1| = 1 − x;
+    # adding δ − x to 1 − δ < x gives 1 − x < δ, and adding −x to x < 1 gives 0 < 1 − x.
+    q = sp.Symbol("q", negative=True)          # q = x − 1 < 0
+    assert equal(sp.Abs(2 * q), 2 * sp.Abs(q)) and equal(sp.Abs(sp.Integer(2)), 2)
+    assert equal(sp.Abs(q), -q) and (-q).is_positive
+    assert equal((1 - delta) + (delta - x), 1 - x) and equal(x + (delta - x), delta)
+    assert equal(x + (-x), 0) and equal(1 + (-x), 1 - x)
+    # (b): for x > 1, |x − 1| = x − 1.
+    p = sp.Symbol("p", positive=True)          # p = x − 1 > 0
+    assert equal(sp.Abs(-p), sp.Abs(p)) and equal(sp.Abs(p), p)
     for at_one in (0, 3, 100):
         assert one_sided_holds(lambda v: f(v, at_one), 1, int(left), lambda e: e / 2, eps_samples(9, count=60), -1)
         assert one_sided_holds(lambda v: f(v, at_one), 1, int(right), lambda e: e, eps_samples(10, count=60), 1)
@@ -388,6 +398,19 @@ def test_exr_calc_one_sided_limits_largest_delta():
     d_both = sp.Min(d_left, d_right)
     # The solution's steps: |3x − 6| = 3|x − 2|, |x − 2| for the left; equality at 2.01 and 1.97.
     assert equal(sp.Abs(3 * x - 6), 3 * sp.Abs(x - 2))
+    # The solution's first line: g(2) = 3·2 − 1 = 5 (second formula), equal to L, but no window
+    # contains 2 (checked below: every sampled point of each window is ≠ 2).
+    assert equal(right_formula.subs(x, 2), 5) and g(2) == 3 * 2 - 1
+    # (a): |3(x − 2)| = 3|x − 2| (property 4, |3| = 3), |x − 2| = x − 2 for x > 2; dividing by 3:
+    # 3(x − 2) < 0.03 exactly when x − 2 < 0.01.
+    p, q = sp.Symbol("p", positive=True), sp.Symbol("q", negative=True)    # p = x − 2 > 0, q = x − 2 < 0
+    assert equal(sp.Abs(3 * p), 3 * sp.Abs(p)) and equal(sp.Abs(p), p)
+    assert equal(sp.solveset(3 * (x - 2) < e, x, sp.S.Reals), sp.solveset(x - 2 < sp.Rational(1, 100), x, sp.S.Reals))
+    # (b): |x − 2| = −(x − 2) = 2 − x for x < 2; adding x − 0.03 to both sides of 2 − x < 0.03
+    # gives 1.97 < x, and adding 0.03 − x to 1.97 < x gives it back (so "exactly when").
+    assert equal(sp.Abs(q), -q) and equal(-(x - 2), 2 - x)
+    assert equal((2 - x) + (x - e), sp.Rational(197, 100)) and equal(e + (x - e), x)
+    assert equal(sp.Rational(197, 100) + (e - x), 2 - x)
     assert equal(sp.Abs(g(sp.Rational(201, 100)) - lim), e) and equal(sp.Abs(g(sp.Rational(197, 100)) - lim), e)
     got = answer("exr-calc-one-sided-limits-largest-delta")
     assert equal(got, (d_right, d_left, d_both))
@@ -419,8 +442,17 @@ def test_exr_calc_one_sided_limits_parking():
     assert limit_is(sp.Integer(2), t, 1, left, dir="-") and limit_is(sp.Integer(4), t, 1, right, dir="+")
     assert one_sided_holds(C, 1, int(left), lambda _: Q(1), eps_samples(16, count=50), -1)
     assert one_sided_holds(C, 1, int(right), lambda _: Q(1), eps_samples(17, count=50), 1)
-    # C(1) = 2 (first line) plays no part; the limit at 1 does not exist.
+    # C(1) = 2 (first line) plays no part: no half-window contains 1, so the same δ = 1 works
+    # with any other value at 1; C is defined on (0, 3], which contains the open interval (0, 3)
+    # around 1. The limit at 1 does not exist.
     assert C(1) == 2
+    assert sp.Interval.open(0, 3).is_subset(sp.Interval.Lopen(0, 3)) and sp.Interval.open(0, 3).contains(1)
+    for at_one in (4, -7):
+        def C1(v, at_one=at_one):
+            return at_one if v == 1 else C(v)
+
+        assert one_sided_holds(C1, 1, int(left), lambda _: Q(1), eps_samples(31, count=20), -1, count=10)
+        assert one_sided_holds(C1, 1, int(right), lambda _: Q(1), eps_samples(32, count=20), 1, count=10)
     assert no_common_limit(left, right)
     got = answer("exr-calc-one-sided-limits-parking")
     assert equal(got, (left, right, right - left))
@@ -440,6 +472,9 @@ def test_exr_calc_one_sided_limits_parameter():
     assert equal(got, c0)
     # The solution's steps: |(5 − 2x) − 3| = 2|x − 1|; |(cx + 1) − (c + 1)| = |c||x − 1|.
     assert equal(sp.Abs((5 - 2 * x) - 3), 2 * sp.Abs(x - 1))
+    # ... written as |−2(x − 1)| = |−2||x − 1| (property 4) with |−2| = 2.
+    assert equal((5 - 2 * x) - 3, -2 * (x - 1)) and equal(sp.Abs(sp.Integer(-2)), 2)
+    assert equal(sp.Abs(-2 * (x - 1)), sp.Abs(-2) * sp.Abs(x - 1))
     assert equal(sp.Abs((c * x + 1) - (c + 1)), sp.Abs(c) * sp.Abs(x - 1))
     for cv in (Q(0), Q(2), Q(-3), Q(1, 7), Q(10**3)):
         def f(v, cv=cv):
@@ -550,7 +585,7 @@ def test_exr_calc_one_sided_limits_reciprocal_left():
     assert sp.Interval.open(1 - 2, 1).contains(0)
 
 
-# ── Unlabelled claims: the definition, the remark, the theorem, the figure, the rigorous track ──
+# ── Claims outside the eg-/exr- blocks: the definition, the remarks, the theorem, the corollary, the figure, the rigorous track ──
 
 
 def test_definition_example_and_non_example():
@@ -570,7 +605,8 @@ def test_definition_example_and_non_example():
     for dv in [Q(10**6), Q(1), Q(1, 10**9)] + [Q(rng.randint(1, 10**7), N) for _ in range(300)]:
         d = min(dv, Q(1)) / 2
         assert 0 < d < dv
-        assert abs(g(d) - 0) == d + 1 > 1 > Q(1, 2)
+        assert min(dv, Q(1)) <= dv and d <= dv / 2 < dv          # "d ≤ δ/2 < δ"
+        assert d + 1 > 1 and abs(g(d) - 0) == d + 1 > 1 > Q(1, 2)
     # "Every δ ≤ r gives a half-window inside (a, a + r)."
     rr = sp.Symbol("r", positive=True)
     aa = sp.Symbol("a", real=True)
@@ -594,6 +630,17 @@ def test_remark_one_sided_unique_computable_claims():
         d1, d2 = Q(rng.randint(1, 10**7), N), Q(rng.randint(1, 10**7), N)
         d = min(d1, d2)
         assert 0 < d / 2 < d1 and d / 2 < d2
+        # The Reason's steps: δ ≤ δ₁ gives a + δ ≤ a + δ₁ (and the same for δ₂); on the left,
+        # −δ < −δ/2 < 0 and a − δ₁ ≤ a − δ, so a − δ/2 lies in both left half-windows.
+        av = Q(rng.randint(-10**6, 10**6), 1000)
+        assert av + d <= av + d1 and av + d <= av + d2
+        assert av < av + d / 2 < av + d1 and av + d / 2 < av + d2
+        assert -d < -d / 2 < 0 and av - d1 <= av - d and av - d2 <= av - d
+        assert av - d1 < av - d / 2 < av and av - d2 < av - d / 2
+    # Symbolically: δ₁ = δ + h₁ with h₁ ≥ 0, and (a + δ₁) − (a + δ) = h₁, (a − δ) − (a − δ₁) = h₁.
+    h1 = sp.Symbol("h1", nonnegative=True)
+    assert equal((aa + (delta + h1)) - (aa + delta), h1) and equal((aa - delta) - (aa - (delta + h1)), h1)
+    assert equal(-1 * (delta / 2), -delta / 2) and (-delta < -delta / 2) is sp.true
     sv = sp.Symbol("s", real=True)                 # f(x) = L + g·s
     assert equal(sp.Abs((L + gap * sv) - L), gap * sp.Abs(sv)) and equal(sp.Abs((L + gap * sv) - M), gap * sp.Abs(sv - 1))
     assert empty_on(sp.And(sp.Abs(sv) < sp.Rational(1, 2), sp.Abs(sv - 1) < sp.Rational(1, 2)), sv, sp.S.Reals)
@@ -617,6 +664,20 @@ def test_thm_calc_limit_iff_one_sided_computable_claims():
         r_ = sp.Min(*ends) if ends else sp.Integer(1)
         assert equal(r_, rv) and r_.is_positive
         assert sp.Interval.open(av - r_, av + r_).is_subset(I)
+        # The proof's steps: c < a and a < d give 0 < a − c and 0 < d − a; r ≤ a − c gives
+        # c ≤ a − r, and r ≤ d − a gives a + r ≤ d.
+        if I.inf.is_finite:
+            assert (I.inf < av) is sp.true and (av - I.inf).is_positive and (I.inf <= av - r_) is sp.true
+        if I.sup.is_finite:
+            assert (av < I.sup) is sp.true and (I.sup - av).is_positive and (av + r_ <= I.sup) is sp.true
+    # Adding c − r to r ≤ a − c gives c ≤ a − r; adding −c to c < a gives 0 < a − c; adding a to
+    # r ≤ d − a gives a + r ≤ d; adding −a to a < d gives 0 < d − a (each side, symbolically).
+    cc, dd, rs = sp.symbols("c d r", real=True)
+    av_ = sp.Symbol("a", real=True)
+    assert equal(rs + (cc - rs), cc) and equal((av_ - cc) + (cc - rs), av_ - rs)
+    assert equal(cc + (-cc), 0) and equal(av_ + (-cc), av_ - cc)
+    assert equal(rs + av_, av_ + rs) and equal((dd - av_) + av_, dd)
+    assert equal(av_ + (-av_), 0) and equal(dd + (-av_), dd - av_)
     # "Only if": each half-window of δ lies in the punctured window of δ.
     aa = sp.Symbol("a", real=True)
     # (A point of either half-window has 0 < |x − a| < δ: |x − a| is u or −u with 0 < u < δ.)
@@ -639,6 +700,44 @@ def test_thm_calc_limit_iff_one_sided_computable_claims():
     assert two_sided_holds(f, 2, 4, lambda e: min(left_d(e), right_d(e)), eps_samples(29, breaks=[4]))
     # Exercise largest-delta: δ₋ = 0.03, δ₊ = 0.01, and the min is the largest two-sided δ.
     assert equal(sp.Min(sp.Rational(3, 100), sp.Rational(1, 100)), sp.Rational(1, 100))
+
+
+def test_cor_calc_one_sided_limits_differ_and_jump():
+    # cor-calc-one-sided-limits-differ (a), on every use the page makes of it: f is defined on an
+    # open interval around a, except possibly at a (the hypothesis of def-calc-limit), and the two
+    # one-sided limits, computed here from the formula of each side, differ. The corollary's proof:
+    # a limit N would equal both (the remark on uniqueness), and no N does; the direct route from
+    # the definition (no_common_limit) gives the same verdict without the corollary.
+    Nn = sp.Symbol("N", real=True)
+    jumps = {}
+    uses = {
+        # use: (domain around a, a, left formula, right formula, variable)
+        "eg parcel": (sp.Interval.open(0, 10), 2, sp.Integer(3), sp.Integer(5), w),
+        "exr abs-over-x": (sp.Interval.open(-1, 1) - sp.FiniteSet(0), 0, sp.Integer(-1), sp.Integer(1), x),
+        "exr claim (H)": (sp.S.Reals, 0, sp.Integer(0), sp.Integer(1), x),
+        "exr parking": (sp.Interval.open(0, 3), 1, sp.Integer(2), sp.Integer(4), t),
+        "exr parameter, c = 0": (sp.S.Reals, 1, 0 * x + 1, 5 - 2 * x, x),
+        "exr parameter, c = -3": (sp.S.Reals, 1, -3 * x + 1, 5 - 2 * x, x),
+    }
+    for name, (dom, av, lf, rf, var) in uses.items():
+        assert (sp.Interval.open(av - sp.Rational(1, 2), av + sp.Rational(1, 2)) - sp.FiniteSet(av)).is_subset(dom), name
+        left = sp.limit(lf, var, av, "-")
+        right = sp.limit(rf, var, av, "+")
+        assert not equal(left, right), name
+        assert equal(sp.solveset(sp.Eq(Nn, left), Nn, sp.S.Reals) & sp.solveset(sp.Eq(Nn, right), Nn, sp.S.Reals), sp.S.EmptySet), name
+        assert no_common_limit(left, right), name
+        # rem-calc-one-sided-limits-jump: the jump is right − left, and it is not 0 here.
+        assert not equal(right - left, 0), name
+        jumps[name] = right - left
+    # The jump is 0 exactly when the one-sided limits are equal ("add the left-hand limit"):
+    # M − L = 0 has the single solution M = L.
+    M = sp.Symbol("M", real=True)
+    assert equal(sp.solveset(sp.Eq(M - L, 0), M, sp.S.Reals), sp.FiniteSet(L))
+    assert equal((M - L) + L, M)
+    # The jumps the page states (eg parcel step 5, the abs-over-x solution, parking (c)), from the
+    # one-sided limits computed above: each is 2.
+    for name in ("eg parcel", "exr abs-over-x", "exr parking"):
+        assert equal(jumps[name], 2), name
 
 
 def test_figure_parcel_widget():
