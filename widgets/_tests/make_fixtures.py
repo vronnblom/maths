@@ -9,6 +9,13 @@ fixtures cannot go stale. The table cases are read from every function-plot figu
 in the toc and in templates/topic.md, so a new figure gets its table checked automatically; so
 are the δ of every epsilon-delta figure, at its starting ε and at both ends of its ε slider.
 
+Each of those cases is keyed by its figure, `<page>#<wdg- label>` (`templates/topic.md#wdg-calc-
+limit-average-speed`), not by a line number: an edit that only moves a figure (front matter, the
+owner's sign-off, prose above it) leaves the fixtures unchanged, and only a change to a figure's
+config (or a new, renamed or removed figure) needs a rerun. A widget that is not in a {figure}
+with a wdg- label stops the script with `file:line: error: message`, the error check_widgets.py
+reports for it.
+
 Expressions are translated token by token (scripts/check_widgets.py tokenizes them exactly as
 widgets/_lib/expression.mjs does) into SymPy: decimals become exact rationals, `^` becomes
 `**`, ln is log, cbrt is the real cube root, pi and e are SymPy's.
@@ -27,8 +34,11 @@ sys.path.insert(0, str(REPO / "scripts"))
 
 import check_widgets  # noqa: E402
 import myst_source as ms  # noqa: E402
-from project import Project  # noqa: E402
+from project import Diagnostic, Project  # noqa: E402
 
+CONTENT = REPO / "content"
+TEMPLATE = REPO / "templates" / "topic.md"
+TEMPLATE_NAME = "templates/topic.md"
 OUT = REPO / "widgets" / "_tests" / "fixtures" / "function-plot.json"
 OUT_EPSILON_DELTA = REPO / "widgets" / "_tests" / "fixtures" / "epsilon-delta.json"
 SCHEMA = check_widgets.load_schema("function-plot")
@@ -164,20 +174,41 @@ def sample_case(f, a, b, n, jump):
     }
 
 
-def site_configs(widget: str = "function-plot"):
-    """(where, config) of every `widget` figure in the toc pages and templates/topic.md."""
-    project = Project(REPO / "content")
-    sources = [(p.rel, p.text) for p in project.pages]
-    sources.append(("templates/topic.md", (REPO / "templates" / "topic.md").read_text(encoding="utf-8")))
-    for where, text in sources:
+class UnnamedWidget(ValueError):
+    """A widget that is not in a {figure} with a wdg- label: its cases would have no name."""
+
+
+def site_sources(content: Path = CONTENT, template: Path = TEMPLATE) -> list[tuple[str, Path, str]]:
+    """(where, path, text) of the toc pages under `content` and of the topic template."""
+    project = Project(content)
+    sources = [(p.rel, p.path, p.text) for p in project.pages]
+    sources.append((TEMPLATE_NAME, template, template.read_text(encoding="utf-8")))
+    return sources
+
+
+def site_configs(widget: str = "function-plot", sources=None):
+    """(key, config) of every `widget` figure in the sources (default: site_sources()). The key is
+    `<page>#<wdg- label of the figure>`, never a line number, so an edit that moves the figure
+    (the owner's sign-off adds front-matter lines) leaves the fixtures as they are. A widget
+    without such a figure raises UnnamedWidget, as `file:line: error: message` (check_widgets.py's
+    rule, figure_label())."""
+    seen: dict[str, int] = {}
+    for where, path, text in site_sources() if sources is None else sources:
         for d in ms.parse(text).directives():
             if d.name == "anywidget" and d.arg.endswith(f"/{widget}.mjs"):
-                yield f"{where}:{d.line}", json.loads("\n".join(t for _, t in d.raw))
+                label, problem = check_widgets.figure_label(d)
+                if problem:
+                    raise UnnamedWidget(str(Diagnostic("error", path, *problem)))
+                key = f"{where}#{label}"
+                if key in seen:
+                    raise UnnamedWidget(str(Diagnostic("error", path, d.line, f"{label} labels two widget figures on this page (the first at line {seen[key]})")))
+                seen[key] = d.line
+                yield key, json.loads("\n".join(t for _, t in d.raw))
 
 
-def table_cases():
+def table_cases(sources=None):
     cases = []
-    for where, config in site_configs():
+    for where, config in site_configs(sources=sources):
         if "table" not in config:
             continue
         variable = config.get("variable", "x")
@@ -485,16 +516,23 @@ def epsilon_delta_case(source, what, f, a, L, x_range, eps) -> dict:
     }
 
 
+def site_epsilon_delta_cases(sources=None) -> list[dict]:
+    """The cases of every epsilon-delta figure in the sources (default: site_sources()), at its
+    starting ε and at both ends of its ε slider."""
+    cases = []
+    for where, c in site_configs("epsilon-delta", sources):
+        for eps in dict.fromkeys([c["eps"], *c["epsRange"]]):
+            cases.append(epsilon_delta_case(where, "a figure on the site", c["f"], c["a"], c["L"], c["xRange"], eps))
+    return cases
+
+
 def epsilon_delta_cases() -> list[dict]:
     cases = [epsilon_delta_case("make_fixtures.py", what, f, a, L, xr, eps)
              for what, f, a, L, xr, epss in EPSILON_DELTA for eps in epss]
     shift = [(f"{what}; translated to a + {TRANSLATE}", translated(f), a + TRANSLATE, L,
               [x0 + TRANSLATE, x1 + TRANSLATE], epss) for what, f, a, L, (x0, x1), epss in EPSILON_DELTA]
     cases += [epsilon_delta_case("make_fixtures.py", what, f, a, L, xr, eps) for what, f, a, L, xr, epss in shift for eps in epss]
-    for where, c in site_configs("epsilon-delta"):
-        for eps in dict.fromkeys([c["eps"], *c["epsRange"]]):
-            cases.append(epsilon_delta_case(where, "a figure on the site", c["f"], c["a"], c["L"], c["xRange"], eps))
-    return cases
+    return cases + site_epsilon_delta_cases()
 
 
 def build_epsilon_delta() -> dict:
@@ -516,7 +554,12 @@ def render(data: dict) -> str:
 
 
 if __name__ == "__main__":
-    for path, data in outputs().items():
+    try:
+        files = outputs()
+    except UnnamedWidget as e:
+        print(e, file=sys.stderr)
+        sys.exit(1)
+    for path, data in files.items():
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(render(data), encoding="utf-8")
         print(f"wrote {path.relative_to(REPO)}")

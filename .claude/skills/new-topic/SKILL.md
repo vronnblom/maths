@@ -73,8 +73,8 @@ Follow CLAUDE.md (Conventions, Don't) and replace every `TODO`:
 - displays that fit a phone: units in the sentence, long chains split with `aligned`, lists of
   facts as bulleted lists (CLAUDE.md, "Displays on a phone");
 - the `function-plot` widget where the entry plans it (its figure, caption and **Try this:**;
-  after adding a `table`, run `uv run python widgets/_tests/make_fixtures.py`, and again after
-  any edit that moves lines on the page: the fixtures record line numbers). Planned widgets
+  after adding or changing a `table`, run `uv run python widgets/_tests/make_fixtures.py`; the
+  fixtures name the figure by its `wdg-` label, so edits that only move it need no rerun). Planned widgets
   that aren't built stay out of `maths.widgets`. Captions and prose report what a widget
   observed, never "the limit is (not) $L$" or "the largest $\delta$ is" (CLAUDE.md, "Widget
   wording").

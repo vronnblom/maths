@@ -31,7 +31,7 @@ uv run python scripts/graph.py closure calc-mean-value-theorem   # every transit
 uv run python scripts/new_topic.py calc-real-numbers              # scaffold a topic: page, verify stubs, toc, labels.lock (/new-topic)
 uv run python scripts/new_topic.py --stubs calc-real-numbers      # add @covers stubs for the page's new eg-/exr- labels
 uv run python scripts/check_labels.py --update-lock               # add your new labels to labels.lock
-uv run python widgets/_tests/make_fixtures.py                     # after adding a function-plot table or an epsilon-delta figure: SymPy's values
+uv run python widgets/_tests/make_fixtures.py                     # after adding or changing a function-plot table or an epsilon-delta figure: SymPy's values
 uv run pytest verify/calculus/limits -q          # after npm run verify: rerun one chapter's tests while you work
 ```
 
@@ -185,8 +185,10 @@ CONTRIBUTING.md, CODE_OF_CONDUCT.md    for people; agents read this file
   (`2*x`, `ln`, `pi`, `e`) are in `widgets/README.md`. Only built widgets may be used: today
   `function-plot` and `epsilon-delta`. After adding or changing a `function-plot` with a
   `table`, or any `epsilon-delta` figure, run `widgets/_tests/make_fixtures.py` (a test fails
-  otherwise). The fixtures record each figure's **page line number**, so run it after *any*
-  edit that moves lines on a page with such a figure, front matter included.
+  otherwise). The fixtures name each figure by its page and `wdg-` label
+  (`calculus/limits/limit-of-a-function.md#wdg-calc-limit-eps-delta`), not its line, so an edit
+  that only moves a figure needs no rerun; adding, relabelling or removing such a figure, or
+  changing its config, does.
 - **Widget wording**: a widget, its caption and the prose about it report what the widget
   observed ("the largest $\delta$ it found", "passed the widget's check at the points it
   tested"), never "the largest $\delta$ is", never that every smaller $\delta$ works, and never
@@ -221,9 +223,11 @@ small PR of its own; never a direct push to `main`), and merges only when CI is 
    review found correct and complete;
 2. add the handle to `maths.reviewed_by`;
 3. set `maths.status` (`reviewed`, or `verified` at 100 % coverage with both checklists);
-4. if the page has a `function-plot` table or an `epsilon-delta` figure, run
-   `uv run python widgets/_tests/make_fixtures.py` and commit the result (the new front-matter
-   lines move the figures; vronnblom/maths#11 merged red on exactly this);
+4. only if the sign-off also changes the config of a `function-plot` figure with a table or of
+   an `epsilon-delta` figure, run `uv run python widgets/_tests/make_fixtures.py` and commit the
+   result. The new front-matter lines move the figures, but the fixtures name each figure by its
+   `wdg-` label, not its line, so moving one needs no rerun (vronnblom/maths#11 merged red when
+   they still recorded lines);
 5. wait for every CI job, then merge. A page leaving `draft` turns on checks that never ran on
    it (vronnblom/maths#12 found one), so a green draft is no evidence.
 

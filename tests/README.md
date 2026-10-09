@@ -49,7 +49,10 @@ that JSON Schema cannot express, for `function-plot` and for `epsilon-delta`), r
 `widgets/_tests/fixtures/function-plot-invalid.json` and `epsilon-delta-invalid.json` through the
 Python rules (the widget tests run the same tables through `widgets/_lib/`), and fails if
 `widgets/_tests/fixtures/function-plot.json` or `epsilon-delta.json` is not what
-`widgets/_tests/make_fixtures.py` writes now.
+`widgets/_tests/make_fixtures.py` writes now. It also moves every widget figure of the site and
+the template down (a front-matter line, a line above each figure) and requires the same
+fixtures, since they name each figure `<page>#<wdg- label>`, and requires `make_fixtures.py` to
+stop with `check_widgets.py`'s `file:line: error` on a widget without a `wdg-` figure.
 
 `test_plugin_build.py` assembles a project from `templates/topic.md` and
 `templates/chapter-index.md` with the real `curriculum.yml`, builds it with

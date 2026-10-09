@@ -78,7 +78,7 @@ test("the fixtures cover the cases the widget must get right", () => {
   assert.ok(has("x^2", (c) => c.L === 4.5 && c.left.none));
   assert.ok(has("1e7*x", (c) => c.left.delta === 5e-8), "a δ far below 10⁻⁶ of the width (review F1)");
   assert.ok(epsilonDelta.cases.filter((c) => c.a >= 100000).length >= 20, "the cases translated to a large a (review F2)");
-  assert.ok(epsilonDelta.cases.some((c) => c.source.startsWith("templates/topic.md:")), "the template's figure");
+  assert.ok(epsilonDelta.cases.some((c) => c.source.startsWith("templates/topic.md#")), "the template's figure");
 });
 
 test("offsets: increasing, in (0, reach], reaching down to reach·10⁻¹²", () => {
