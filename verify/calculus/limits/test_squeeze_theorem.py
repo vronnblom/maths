@@ -172,6 +172,59 @@ def test_sin_x_over_x():
     assert rounds_to(sp.sin(sp.Rational(1, 100)) / sp.Rational(1, 100), "0.999983")
 
 
+def test_why_radians_degree_ratio_proof():
+    # Why radians, the proof that sin(cx)/x → c for every c > 0 (and so → π/180 in degrees), step
+    # by step: lemma (b) and (c) at cx, × c > 0, and the squeeze theorem with r = π/(2c).
+    c = sp.Symbol("c", positive=True)
+    # An angle of x degrees is πx/180 radians: the ratio in degrees is sin(cx)/x with c = π/180 > 0.
+    c_deg = pi / 180
+    assert equal(sp.sin(pi * x / 180) / x, (sp.sin(c * x) / x).subs(c, c_deg)) and c_deg.is_positive
+    # |cx| = |c| |x| = c|x| (c > 0), and multiplying 0 < |x| < π/(2c) by c gives 0 < |cx| < π/2.
+    assert equal(sp.Abs(c * x), sp.Abs(c) * sp.Abs(x)) and equal(sp.Abs(c), c)
+    assert equal(c * 0, 0) and equal(c * (pi / (2 * c)), pi / 2)
+    for c0 in (c_deg, sp.Integer(3), sp.Rational(1, 2)):
+        window = sp.Interval.open(-pi / (2 * c0), pi / (2 * c0)) - sp.FiniteSet(0)
+        assert equal(sp.imageset(sp.Lambda(x, c0 * x), window), PUNCTURED)
+    # (cx)² = c²x², and c · sin(cx)/(cx) = sin(cx)/x, c · (1 − c²x²/2) = c − c³x²/2.
+    assert equal((c * x) ** 2, c**2 * x**2)
+    assert equal(c * (sp.sin(c * x) / (c * x)), sp.sin(c * x) / x)
+    assert equal(c * (1 - c**2 * x**2 / 2), c - c**3 * x**2 / 2)
+    # The chains 1 − c²x²/2 < cos(cx) < sin(cx)/(cx) < 1 and c − c³x²/2 < sin(cx)/x < c, at ±each
+    # point of 0 < |x| < π/(2c) (the grid of (0, π/2), divided by c), for three values of c.
+    mp = mpmath
+    for c_val in (lambda: mp.pi / 180, lambda: mp.mpf(3), lambda: mp.mpf(1) / 2):
+        def margins(v, c_val=c_val):
+            cv = c_val()
+            xv = v / cv
+            u = cv * xv
+            return [mp.cos(u) - (1 - cv**2 * xv**2 / 2), mp.sin(u) / u - mp.cos(u), 1 - mp.sin(u) / u,
+                    mp.sin(u) / xv - (cv - cv**3 * xv**2 / 2), cv - mp.sin(u) / xv]
+        assert holds_on_grid(margins)
+    # The limits of the bounds: c − c³x²/2 → c − 0 = c, the constant c → c; and r = π/(2c) > 0.
+    assert equal(sp.limit(c - c**3 * x**2 / 2, x, 0), c) and equal((c - c**3 * x**2 / 2).subs(x, 0), c)
+    assert (pi / (2 * c)).is_positive and (1 / c).is_positive and (pi / 2).is_positive
+    # The conclusion, for every c > 0 (SymPy's limit), and with tables for the three values.
+    assert equal(sp.limit(sp.sin(c * x) / x, x, 0), c)
+    for c0 in (c_deg, sp.Integer(3), sp.Rational(1, 2)):
+        assert limit_is(sp.sin(c0 * x) / x, x, 0, c0)
+        assert limit_is(c0 - c0**3 * x**2 / 2, x, 0, c0)
+    # The mistake "Working in degrees": the ratio approaches π/180, not 1.
+    assert limit_is(sp.sin(c_deg * x) / x, x, 0, pi / 180) and not equal(pi / 180, 1)
+
+
+def test_pi_bound_as_cited():
+    # The cited statement, prop-calc-pi-bounds on calc-trig-functions (vronnblom/maths#31, not
+    # merged): 2√2 < π < 4. Only the left inequality is used on this page. Checked exactly, and by
+    # a second route: sin(π/4) = 1/√2, tan(π/4) = 1, and sin θ < θ < tan θ at θ = π/4 (× 4).
+    assert (2 * sp.sqrt(2) < pi) is sp.true and (pi < 4) is sp.true
+    assert equal(sp.sin(pi / 4), 1 / sp.sqrt(2)) and equal(sp.tan(pi / 4), 1)
+    assert (sp.sin(pi / 4) < pi / 4) is sp.true and (pi / 4 < sp.tan(pi / 4)) is sp.true
+    assert equal(4 / sp.sqrt(2), 2 * sp.sqrt(2)) and equal(4 * sp.tan(pi / 4), 4)
+    # × ½ (positive), as on the page: ½ · 2√2 = √2 and ½ · π = π/2, so √2 < π/2.
+    assert equal(sp.Rational(1, 2) * 2 * sp.sqrt(2), sp.sqrt(2)) and equal(sp.Rational(1, 2) * pi, pi / 2)
+    assert (sp.sqrt(2) < pi / 2) is sp.true
+
+
 def test_corollary_one_minus_cos_over_x():
     # Rewriting on 0 < |x| < π/2: cos x = cos|x| > 0, so 1 + cos x > 1 > 0.
     assert equal(sp.solveset(sp.cos(x) <= 0, x, sp.Interval.open(-pi / 2, pi / 2)), sp.S.EmptySet)
@@ -327,8 +380,9 @@ def test_widget_three_settings_and_caption():
         assert rounds_to(v, printed)
         # At each point g ≤ f ≤ h (in exact arithmetic, evaluated to 50 digits).
         assert (-sp.Abs(sp.Rational(xv)) <= v) is sp.true and (v <= sp.Abs(sp.Rational(xv))) is sp.true
-    # f touches the edges again and again: f = |x| at x = 2/((4m + 1)π) and f = −|x| at
-    # x = 2/((4m + 3)π), for every integer m ≥ 0, points that approach 0.
+    # The caption: at k = 0, f swings between the heights −|x| and |x| (they bound it: |sin(1/x)| ≤ 1,
+    # tested in the example) and reaches both, faster and faster near 0: f = |x| at x = 2/((4m + 1)π)
+    # and f = −|x| at x = 2/((4m + 3)π), for every integer m ≥ 0, points that approach 0.
     m = sp.Symbol("m", integer=True, nonnegative=True)
     up, down = 2 / ((4 * m + 1) * pi), 2 / ((4 * m + 3) * pi)
     assert equal(sp.sin(1 / up), 1) and equal(sp.sin(1 / down), -1)
@@ -391,14 +445,31 @@ def test_eg_calc_squeeze_theorem_small_angle():
     # Step 1: 0 < 1 − sin θ/θ < θ²/2 on 0 < |θ| < π/2 (on the grid; and exactly: it is (c) and (b)
     # of the lemma, checked in test_lemma_sin_cos_near_zero_exact).
     assert holds_on_grid(lambda v: [1 - mpmath.sin(v) / v, v**2 / 2 - (1 - mpmath.sin(v) / v)])
+    # Step 1's last sentence: the relative error is positive at both signs of θ, θ is larger than
+    # sin θ in absolute value (|sin θ| < |θ|), and θ > sin θ for θ > 0, but θ < sin θ for θ < 0
+    # (so "always overestimates", the wording before the first review, was false for θ < 0):
+    # sin(−t) − (−t) = t − sin t > 0 on (0, π/2).
+    assert holds_on_grid(lambda v: [abs(v) - abs(mpmath.sin(v))])
+    assert holds_on_grid(lambda v: [v - mpmath.sin(v), mpmath.sin(-v) - (-v)], both_signs=False)
+    assert equal(sp.sin(-x) - (-x), x - sp.sin(x)) and positive_on_open(x - sp.sin(x))
+    tenth = sp.Rational(1, 10)
+    assert (sp.sin(-tenth) > -tenth) is sp.true and ((1 - sp.sin(-tenth) / (-tenth)) > 0) is sp.true
     # Step 2: θ²/2 ≤ 0.01 exactly when |θ| ≤ √0.02.
     root = sp.sqrt(sp.Rational(2, 100))
     assert equal(sp.solveset(theta**2 / 2 <= sp.Rational(1, 100), theta, sp.S.Reals), sp.Interval(-root, root))
     assert equal(theta**2, sp.Abs(theta) ** 2) and equal(root**2, sp.Rational(2, 100))
     assert rounds_to(root, "0.141421") and rounds_to(root, "0.141")
-    # Step 3: √0.02 < π/2 ≈ 1.571, so step 1 applies; and the pendulum threshold: for
-    # 0 < |θ| ≤ √0.02, 1 − sin θ/θ < θ²/2 ≤ 0.01, on a grid of (0, √0.02] including √0.02 itself.
-    assert (root < pi / 2) is sp.true and rounds_to(pi / 2, "1.571")
+    # Step 3, as the page now argues it (no decimal value of π; the page no longer prints
+    # π/2 ≈ 1.571, so that check is gone): 2√2 < π (test_pi_bound_as_cited), × ½ gives √2 < π/2;
+    # √0.02 and √2 are non-negative with squares 0.02 < 2, so √0.02 < √2; transitivity gives
+    # √0.02 < π/2, and every θ with 0 < |θ| ≤ √0.02 is in 0 < |θ| < π/2, where step 1 applies.
+    assert (2 * sp.sqrt(2) < pi) is sp.true and (sp.sqrt(2) < pi / 2) is sp.true
+    assert root.is_nonnegative and sp.sqrt(2).is_nonnegative
+    assert equal(sp.sqrt(2) ** 2, 2) and sp.Rational(2, 100) < 2 and (root < sp.sqrt(2)) is sp.true
+    assert (root < pi / 2) is sp.true
+    assert (sp.Interval(-root, root) - sp.FiniteSet(0)).is_subset(PUNCTURED)
+    # The pendulum threshold: for 0 < |θ| ≤ √0.02, 1 − sin θ/θ < θ²/2 ≤ 0.01, on a grid of
+    # (0, √0.02] including √0.02 itself.
     with mpmath.workdps(60):
         hundredth = mpmath.mpf(1) / 100
         r_mp = mpmath.sqrt(mpmath.mpf(2) / 100)
@@ -461,6 +532,10 @@ def test_exr_calc_squeeze_theorem_tan():
 @covers("exr-calc-squeeze-theorem-one-minus-cos-x2")
 def test_exr_calc_squeeze_theorem_one_minus_cos_x2():
     G = (sp.sin(x) / x) ** 2 / (1 + sp.cos(x))
+    # The rewrite, one line per `=` (as the page now displays it), on 0 < |x| < π/2, where
+    # 1 + cos x > 1 > 0.
+    assert equal((1 - sp.cos(x)) / x**2, (1 - sp.cos(x)) * (1 + sp.cos(x)) / (x**2 * (1 + sp.cos(x))))
+    assert equal((1 - sp.cos(x)) * (1 + sp.cos(x)) / (x**2 * (1 + sp.cos(x))), sp.sin(x) ** 2 / (x**2 * (1 + sp.cos(x))))
     assert equal((1 - sp.cos(x)) / x**2, sp.sin(x) ** 2 / (x**2 * (1 + sp.cos(x))))
     assert equal(sp.sin(x) ** 2 / (x**2 * (1 + sp.cos(x))), G)
     assert limit_is((sp.sin(x) / x) ** 2, x, 0, 1) and limit_is(1 / (1 + sp.cos(x)), x, 0, sp.Rational(1, 2))
@@ -499,8 +574,13 @@ def test_exr_calc_squeeze_theorem_pendulum():
     assert sp.expand(mid**2 / 2 - tol).is_positive
     got = answer("exr-calc-squeeze-theorem-pendulum")
     assert equal(got, r_max)
-    # The solution's claims: r < π/2; in degrees 18/π ≈ 5.73; the ratio to √0.02 is 1/√2.
+    # The solution's claims: r < π/2, now by 0.1 < 1 < √2 < π/2 (1 and √2 are non-negative with
+    # squares 1 < 2; √2 < π/2 from 2√2 < π, as in the example), so 0 < |θ| < 0.1 lies in
+    # 0 < |θ| < π/2; in degrees 18/π ≈ 5.73; the ratio to √0.02 is 1/√2.
+    assert equal(sp.Integer(1) ** 2, 1) and equal(sp.sqrt(2) ** 2, 2) and (sp.Integer(1) < sp.sqrt(2)) is sp.true
+    assert sp.Rational(1, 10) < 1 and (sp.sqrt(2) < pi / 2) is sp.true
     assert (got < pi / 2) is sp.true
+    assert (sp.Interval.open(-got, got) - sp.FiniteSet(0)).is_subset(PUNCTURED)
     assert equal(180 * got / pi, 18 / pi) and rounds_to(18 / pi, "5.73")
     assert equal(got / sp.sqrt(sp.Rational(2, 100)), 1 / sp.sqrt(2))
     # The bound of the example then gives a relative error below 0.005 on 0 < |θ| < r.
@@ -545,12 +625,20 @@ def test_exr_calc_squeeze_theorem_parabola():
     # A manual answer (a proof): its key claims are checked here; the reviewer's note covers it.
     with pytest.raises(ManualAnswer):
         answer("exr-calc-squeeze-theorem-parabola")
-    # f(0) = 0: |y| ≤ 0² has the only solution y = 0.
+    # f(0) = 0: |y| ≤ 0² has the only solution y = 0. As the solution now argues it: |f(0)| ≤ 0 and
+    # |f(0)| ≥ 0 leave, by trichotomy, only |f(0)| = 0, and |y| = 0 only for y = 0.
     assert equal(sp.solveset(sp.Abs(y) <= 0**2, y, sp.S.Reals), sp.FiniteSet(0))
+    assert equal(sp.Interval(-sp.oo, 0).intersect(sp.Interval(0, sp.oo)), sp.FiniteSet(0))
+    assert equal(sp.solveset(sp.Eq(sp.Abs(y), 0), y, sp.S.Reals), sp.FiniteSet(0))
     # |f(x)/x − 0| = |f(x)|/|x| ≤ x²/|x| = |x| for x ≠ 0, and |x| → 0.
     assert equal(x**2 / sp.Abs(x), sp.Abs(x))
     assert limit_is(sp.Abs(x), x, 0, 0)
     # The example f(x) = x² cos(1/x): |f(x)| ≤ x², and f(x)/x → 0.
     f = x**2 * sp.cos(1 / x)
     assert equal(sp.Abs(f), x**2 * sp.Abs(sp.cos(1 / x)))
+    assert equal(sp.Abs(x**2), sp.Abs(x) ** 2) and equal(sp.Abs(x) ** 2, x**2)
+    assert equal(sp.solveset(sp.Abs(y) <= 1, y, sp.S.Reals), sp.Interval(-1, 1))   # −1 ≤ c ≤ 1 ⇔ |c| ≤ 1
+    assert equal(sp.calculus.util.function_range(sp.cos(y), y, sp.S.Reals), sp.Interval(-1, 1))
+    # … and at x = 0 (with f(0) = 0): |0| = 0 ≤ 0 = 0².
+    assert equal(sp.Abs(0), 0) and sp.Abs(0) <= sp.Integer(0) ** 2
     assert limit_is(f / x, x, 0, 0)
