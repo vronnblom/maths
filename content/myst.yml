@@ -61,6 +61,7 @@ project:
             - file: calculus/limits/computing-limits.md
             - file: calculus/limits/squeeze-theorem.md
             - file: calculus/limits/infinite-limits.md
+            - file: calculus/limits/limits-at-infinity.md
 site:
   # Pinned to a commit (the theme repo has no tags): book-theme v1.4.1, built for mystmd 1.11.0.
   # Bump it only together with mystmd. scripts/fetch_theme.sh reads this line (05 §5.5).
