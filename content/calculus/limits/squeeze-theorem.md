@@ -9,7 +9,7 @@ tags: [limits, trigonometry, proofs]
 maths:
   kind: topic
   subject: calc
-  status: draft
+  status: reviewed
   level: core
   difficulty: 3
   est_minutes: 45
@@ -20,7 +20,10 @@ maths:
     - Use it for related trigonometric limits.
   verify: verify/calculus/limits/test_squeeze_theorem.py
   widgets: [function-plot]
-  reviewed_by: []
+  reviewed_by: [vronnblom]
+  manual_checked:
+    exr-calc-squeeze-theorem-direct-cor: vronnblom
+    exr-calc-squeeze-theorem-parabola: vronnblom
   sources: []
 ---
 
