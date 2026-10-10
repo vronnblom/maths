@@ -9,7 +9,7 @@ tags: [limits, epsilon-delta, proofs]
 maths:
   kind: topic
   subject: calc
-  status: draft
+  status: reviewed
   level: core
   difficulty: 3
   est_minutes: 50
@@ -20,7 +20,10 @@ maths:
     - Compare growth informally.
   verify: verify/calculus/limits/test_limits_at_infinity.py
   widgets: []
-  reviewed_by: []
+  reviewed_by: [vronnblom]
+  manual_checked:
+    exr-calc-limits-at-infinity-reciprocal: vronnblom
+    exr-calc-limits-at-infinity-sqrt-unbounded: vronnblom
   sources: []
 ---
 
