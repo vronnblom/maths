@@ -667,6 +667,58 @@ Each part of the hypothesis is needed.
   $\sin\theta > \theta > \tan\theta$.
 :::
 
+At $\theta = \frac{\pi}{4}$ the lemma gives a first bound on the number $\pi$ itself, with no
+decimals.
+
+:::{proof:proposition} Bounds on $\pi$
+:label: prop-calc-pi-bounds
+
+$$
+2\sqrt{2} < \pi < 4 .
+$$
+:::
+
+:::{proof:proof}
+:enumerated: false
+We find $\sin\frac{\pi}{4}$ and $\tan\frac{\pi}{4}$ exactly and apply [](#lem-calc-sin-bounds)
+at $\theta = \frac{\pi}{4}$.
+
+**Step 1: $\frac{\pi}{4}$ lies in the range of the lemma.** The whole circle has length $2\pi$
+(the facts from school, length of arcs), so $\pi > 0$. Multiplying $0 < \pi$ by the positive
+number $\frac14$ keeps the inequality ([property 5(a) of the order rules](#rem-calc-order-rules)),
+so $0 < \frac{\pi}{4}$, and adding $\frac{\pi}{4}$ to both sides
+([property 3 of the order rules](#rem-calc-order-rules)) gives
+$\frac{\pi}{4} < \frac{\pi}{2}$. So $0 < \frac{\pi}{4} < \frac{\pi}{2}$.
+
+**Step 2: $\sin\frac{\pi}{4} = \frac{1}{\sqrt{2}}$ and $\tan\frac{\pi}{4} = 1$.** Let
+$s = \sin\frac{\pi}{4}$. By property 6 of [](#rem-calc-trig-functions-circle-properties) with
+$t = \frac{\pi}{4}$, $\cos\frac{\pi}{4} = \cos\bigl(\frac{\pi}{2} - \frac{\pi}{4}\bigr) = s$.
+By [](#thm-calc-pythagorean-identity) with $t = \frac{\pi}{4}$, $s^2 + s^2 = 1$, so
+$s^2 = \frac12$. By property 8, $s > 0$, since $0 < \frac{\pi}{4} < \frac{\pi}{2}$ (step 1). By
+[the square-root remark](#rem-calc-square-roots), exactly one number $u \ge 0$ has
+$u^2 = \frac12$, and $s$ is one. The number $\frac{1}{\sqrt{2}}$ is another: $\sqrt{2} \ge 0$,
+and $\sqrt{2} \ne 0$ because $0^2 = 0 \ne 2$, so $\sqrt{2} > 0$ and $\frac{1}{\sqrt{2}} > 0$
+([property 6 of the order rules](#rem-calc-order-rules)); and
+$\bigl(\frac{1}{\sqrt{2}}\bigr)^2 = \frac{1}{2}$. So $s = \frac{1}{\sqrt{2}}$. As
+$\cos\frac{\pi}{4} = s \ne 0$, $\tan\frac{\pi}{4} = \frac{s}{s} = 1$
+([](#def-calc-tan-sec-csc-cot)).
+
+**Step 3: the bounds.** By step 1, [](#lem-calc-sin-bounds) applies at
+$\theta = \frac{\pi}{4}$: $\sin\frac{\pi}{4} < \frac{\pi}{4} < \tan\frac{\pi}{4}$, that is, by
+step 2,
+$$
+\frac{1}{\sqrt{2}} < \frac{\pi}{4} < 1 .
+$$
+Multiplying by the positive number $4$ keeps both inequalities
+([property 5(a) of the order rules](#rem-calc-order-rules)), and
+$\frac{4}{\sqrt{2}} = \frac{2\sqrt{2}\,\sqrt{2}}{\sqrt{2}} = 2\sqrt{2}$, so
+$2\sqrt{2} < \pi < 4$.
+:::
+
+**In words.** Doubling gives $4\sqrt{2} < 2\pi < 8$: the circle, of length $2\pi$, is longer
+than the square inscribed in it, whose perimeter is $4\sqrt{2}$, and shorter than the square
+drawn around it, whose perimeter is $8$; so $\pi$ lies between $2\sqrt{2} \approx 2.83$ and $4$.
+
 ### Graphs: period, amplitude and phase
 
 As $t$ grows, $P(t)$ goes round and round the circle, and $\sin t$ and $\cos t$ repeat.
