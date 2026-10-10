@@ -117,9 +117,10 @@ interval $(a - r, a + r)$ with its centre $a$ removed.
 :label: lem-calc-limit-agree-except-point
 
 Let $a$ be a real number and $r > 0$. Let $f$ and $g$ be functions that are both defined at
-every $x$ with $0 < \abs{x - a} < r$, and such that
+every $x$ with $0 < \abs{x - a} < r$, and such that, for every $x$ with
+$0 < \abs{x - a} < r$,
 $$
-f(x) = g(x) \quad \text{for every } x \text{ with } 0 < \abs{x - a} < r .
+f(x) = g(x) .
 $$
 If $\lim_{x \to a} g(x) = L$, where $L$ is a real number, then $\lim_{x \to a} f(x) = L$.
 :::
@@ -214,11 +215,14 @@ $q(a) = 0$, and $p$ not the zero polynomial. (If $p$ is the zero polynomial, $f$
 wherever it is defined; the rigorous track treats this case.) A polynomial of degree $0$ is a
 non-zero constant, which has no root, so $p$ has degree at least $1$. So has $q$, which is not
 the zero polynomial, by [the definition of a rational function](#def-calc-rational-function).
-By [part (b) of the factor theorem](#thm-calc-factor-theorem),
+By [part (b) of the factor theorem](#thm-calc-factor-theorem), for every real $x$,
 $$
-p(x) = (x - a)\, p_1(x) \quad\text{and}\quad q(x) = (x - a)\, q_1(x)
+\begin{aligned}
+p(x) &= (x - a)\, p_1(x), \\
+q(x) &= (x - a)\, q_1(x),
+\end{aligned}
 $$
-for every real $x$, where $p_1$ and $q_1$ are polynomials whose degrees are one less than those
+where $p_1$ and $q_1$ are polynomials whose degrees are one less than those
 of $p$ and $q$ (part (a) of the theorem, for degree at least $1$). To find $p_1$, divide $p$ by
 $x - a$: since $p(x) = (x - a)\, p_1(x) + 0$, the uniqueness in
 [division of polynomials](#thm-calc-polynomial-division) says that $p_1$ is the quotient, with
@@ -256,9 +260,9 @@ found directly, from the roots of the denominator.
 
 The cube of Why this matters is a special case of a general fact. For every polynomial $p$ and
 every real $a$, [part (a) of the factor theorem](#thm-calc-factor-theorem) gives a polynomial
-$q$ with
+$q$ such that, for every real $x \ne a$,
 $$
-\frac{p(x) - p(a)}{x - a} = q(x) \quad\text{for every real } x \ne a .
+\frac{p(x) - p(a)}{x - a} = q(x) .
 $$
 Both sides are defined at every $x \ne a$ and agree there, so on every window around $a$. By
 [part (a) of direct substitution](#cor-calc-direct-substitution),
@@ -325,9 +329,10 @@ grows when its side is $2$ cm.
    real $x$. Multiplying out gives
    $$
    \begin{aligned}
-   (x - 2)(x^2 + 2x + 4) &= x^3 + 2x^2 + 4x \\
-     &\quad - 2x^2 - 4x - 8 \\
-     &= x^3 - 8 .
+   &(x - 2)(x^2 + 2x + 4) \\
+   &\quad = x^3 + 2x^2 + 4x \\
+   &\qquad - 2x^2 - 4x - 8 \\
+   &\quad = x^3 - 8 .
    \end{aligned}
    $$
    So $p(x) = (x - 2)(x^2 + 2x + 4) + 0$ and $p(x) = (x - 2)\, q(x) + 0$ for every real $x$, and
@@ -335,7 +340,10 @@ grows when its side is $2$ cm.
    dividing $p$ by $x - 2$, we get $q(x) = x^2 + 2x + 4$.
 3. **Cancel.** For $x \ne 2$ the number $x - 2$ is not $0$, so
    $$
-   A(x) = \frac{(x - 2)(x^2 + 2x + 4)}{x - 2} = x^2 + 2x + 4 .
+   \begin{aligned}
+   A(x) &= \frac{(x - 2)(x^2 + 2x + 4)}{x - 2} \\
+     &= x^2 + 2x + 4 .
+   \end{aligned}
    $$
    So $A$ and $g(x) = x^2 + 2x + 4$ are both defined, and equal, at every $x$ with
    $0 < \abs{x - 2} < 1$ (any $r > 0$ would do).
@@ -381,12 +389,17 @@ estimated as $0.50$ in [an exercise on The Limit of a Function](#exr-calc-limit-
    $s + 1 \ge 1 > 0$ (adding $1$ to both sides, property 3), and we may multiply the numerator
    and the denominator by $s + 1$. Since $s^2 = 1 + x$,
    $$
-   (s - 1)(s + 1) = s^2 - 1 = (1 + x) - 1 = x .
+   \begin{aligned}
+   (s - 1)(s + 1) &= s^2 - 1 \\
+     &= (1 + x) - 1 \\
+     &= x .
+   \end{aligned}
    $$
    So, cancelling the non-zero number $x$,
    $$
    \begin{aligned}
-   f(x) &= \frac{(s - 1)(s + 1)}{x\,(s + 1)} = \frac{x}{x\,(s + 1)} \\
+   f(x) &= \frac{(s - 1)(s + 1)}{x\,(s + 1)} \\
+     &= \frac{x}{x\,(s + 1)} \\
      &= \frac{1}{\sqrt{1 + x} + 1} .
    \end{aligned}
    $$
@@ -480,7 +493,10 @@ as $t \to 6$, in ohms per ohm.
 3. **One fraction.** For $t > 0$, adding $0 < 3$ and $0 < t$ gives $3 + t > 0$
    ([property 4 of the order rules](#rem-calc-order-rules)), so $3 + t \ne 0$, and
    $$
-   R(t) - 2 = \frac{3t - 2(3 + t)}{3 + t} = \frac{t - 6}{3 + t} .
+   \begin{aligned}
+   R(t) - 2 &= \frac{3t - 2(3 + t)}{3 + t} \\
+     &= \frac{t - 6}{3 + t} .
+   \end{aligned}
    $$
 4. **Cancel.** For $t > 0$ with $t \ne 6$, the number $t - 6$ is not $0$, so
    $$
@@ -572,10 +588,12 @@ $\frac{1/x}{x - 3}$ and $\frac{1/3}{x - 3}$, whose numerators approach $\frac{1}
 while their denominators approach $0$. Such a quotient has no limit. If $\frac{1/x}{x - 3}$ had
 a limit $M$, then, since $x - 3 \to 0$ (parts (a) and (b)), the product law, part (c), would
 give $(x - 3) \cdot \frac{1/x}{x - 3} \to 0 \cdot M = 0$. But on the window
-$0 < \abs{x - 3} < 3$ this product is $\frac{1}{x}$, whose limit is $\frac{1}{3}$ by
-[part (b) of direct substitution](#cor-calc-direct-substitution) and the lemma, and
-$0 \ne \frac{1}{3}$ contradicts [uniqueness of limits](#thm-calc-limit-unique). The same
-argument, with the constant $\frac{1}{3}$, applies to $\frac{1/3}{x - 3}$
+$0 < \abs{x - 3} < 3$ this product is $\frac{1}{x}$. Since $\frac{1}{x} \to \frac{1}{3}$ by
+[part (b) of direct substitution](#cor-calc-direct-substitution), the lemma gives the product the
+limit $\frac{1}{3}$, and $0 \ne \frac{1}{3}$ contradicts
+[uniqueness of limits](#thm-calc-limit-unique). The same argument applies to
+$\frac{1/3}{x - 3}$: there the product is the constant $\frac{1}{3}$, whose limit is
+$\frac{1}{3}$ by part (a) of the limit laws
 ([](#exr-calc-computing-limits-numerator-zero) proves the general fact behind this). Splitting a
 limit is a conclusion of the laws, never a step you may take before checking their hypotheses.
 
@@ -595,13 +613,19 @@ root of $q$. By [part (b) of the factor theorem](#thm-calc-factor-theorem),
 $q(x) = (x - a)\, q_1(x)$ with $q_1$ of degree $m - 1$ (part (a)). If $q_1(a) = 0$, we factor
 $q_1$ in the same way, and so on. Each step lowers the degree by one, and a polynomial of degree
 $0$ is a non-zero constant, which is not $0$ at $a$. So after $k$ steps, for some $k$ with
-$1 \le k \le m$, we reach
+$1 \le k \le m$, we reach a polynomial $Q$ with $Q(a) \ne 0$ such that, for every real $x$,
 $$
-q(x) = (x - a)^k\, Q(x) \quad\text{for every real } x, \quad Q(a) \ne 0 .
+q(x) = (x - a)^k\, Q(x) .
 $$
 In the same way, if $p$ is not the zero polynomial, $p(x) = (x - a)^j\, P(x)$ for every real
 $x$, with $P(a) \ne 0$ and $j \ge 0$ ($j = 0$ when $p(a) \ne 0$). (If $p$ is the zero
-polynomial, $f$ is $0$ wherever it is defined, and the limit is $0$.) By
+polynomial, the limit is $0$. By
+[part (b) of the proposition on the domain of a rational function](#prop-calc-rational-domain)
+there is an open interval $(\alpha, \beta)$ containing $a$ such that $f$ is defined at every
+point of it except possibly $a$; as in the factoring paragraph, it contains a window
+$0 < \abs{x - a} < r$. There $f(x) = \frac{0}{q(x)} = 0$, so $f$ agrees with the constant $0$,
+whose limit is $0$ by [part (a) of the limit laws](#thm-calc-limit-laws), and the lemma gives
+$\lim_{x \to a} f(x) = 0$.) By
 [part (b) of the proposition on the domain of a rational function](#prop-calc-rational-domain),
 applied to $\frac{P}{Q}$, and as in the factoring paragraph of the main results, there is a window
 $0 < \abs{x - a} < r$ on which $Q$ has no root; there $x - a \ne 0$ too, so
@@ -786,7 +810,10 @@ denominator: the form is $\frac{0}{0}$.
 **Rationalise.** On the window, $s = \sqrt{x + 4} \ge 0$, so $s + 2 \ge 2 > 0$, and
 $(s - 2)(s + 2) = s^2 - 4 = x$. Cancelling the non-zero number $x$,
 $$
-\frac{\sqrt{x + 4} - 2}{x} = \frac{x}{x\,(\sqrt{x + 4} + 2)} = \frac{1}{\sqrt{x + 4} + 2} .
+\begin{aligned}
+\frac{\sqrt{x + 4} - 2}{x} &= \frac{x}{x\,(\sqrt{x + 4} + 2)} \\
+  &= \frac{1}{\sqrt{x + 4} + 2} .
+\end{aligned}
 $$
 
 **Compute and conclude.** The right-hand side is defined at every $x \ge -4$. Its denominator
@@ -969,7 +996,11 @@ $\abs{-1 - L} < 1$, and $\abs{L - (-1)} = \abs{-1 - L}$ by
 [part (b) of the triangle inequality](#thm-calc-triangle-inequality), with $x = 1$, $y = -1$
 and $z = L$,
 $$
-2 = \abs{1 - (-1)} \le \abs{1 - L} + \abs{L - (-1)} < 1 + 1 = 2,
+\begin{aligned}
+2 &= \abs{1 - (-1)} \\
+  &\le \abs{1 - L} + \abs{L - (-1)} \\
+  &< 1 + 1 = 2,
+\end{aligned}
 $$
 which is impossible. So no real number $L$ is the limit: the limit does not exist.
 
@@ -1021,8 +1052,10 @@ $(s - 2)(s + 2) = s^2 - 4 = x^2 = \abs{x}^2$ ([the square-root remark](#rem-calc
 and [property 5 of the absolute value](#rem-calc-absolute-value-properties)). Cancelling the
 non-zero number $\abs{x}$,
 $$
-\frac{\sqrt{4 + x^2} - 2}{\abs{x}} = \frac{\abs{x}^2}{\abs{x}\,(s + 2)}
-= \frac{\abs{x}}{\sqrt{4 + x^2} + 2} .
+\begin{aligned}
+\frac{\sqrt{4 + x^2} - 2}{\abs{x}} &= \frac{\abs{x}^2}{\abs{x}\,(s + 2)} \\
+  &= \frac{\abs{x}}{\sqrt{4 + x^2} + 2} .
+\end{aligned}
 $$
 
 **Compute and conclude.** The right-hand side is defined at every real $x$. Its numerator
@@ -1077,7 +1110,8 @@ the denominator.
 $$
 \begin{aligned}
 v(u) - \frac{15}{2} &= \frac{10u - 15(u - 5)}{2(u - 5)} \\
-  &= \frac{75 - 5u}{2(u - 5)} = \frac{-5(u - 15)}{2(u - 5)} .
+  &= \frac{75 - 5u}{2(u - 5)} \\
+  &= \frac{-5(u - 15)}{2(u - 5)} .
 \end{aligned}
 $$
 For $u \ne 15$, cancelling the non-zero number $u - 15$,
@@ -1129,9 +1163,9 @@ every $x \ne 1$.
 Let $s(x) = x^{n-1} + x^{n-2} + \dots + x + 1$, the sum of the $n$ terms $x^k$ for
 $k = 0, 1, \dots, n - 1$ (with $x^0 = 1$). Multiplying $s(x)$ by $x$ gives
 $x^n + x^{n-1} + \dots + x$, and multiplying it by $-1$ gives $-x^{n-1} - \dots - x - 1$. In the
-sum of the two, every term cancels except $x^n$ and ${-1}$:
+sum of the two, every term cancels except $x^n$ and ${-1}$, so, for every real $x$,
 $$
-(x - 1)\, s(x) = x^n - 1 \quad\text{for every real } x .
+(x - 1)\, s(x) = x^n - 1 .
 $$
 (For $n = 1$, $s(x) = 1$.) This is the factorisation that
 [the factor theorem](#thm-calc-factor-theorem) promises, since $1^n - 1 = 0$. So for $x \ne 1$,
