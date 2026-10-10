@@ -274,7 +274,52 @@ def test_exr_calc_limits_review_oscillation_over_sine():
 
 @covers("exr-calc-limits-review-average-cost")
 def test_exr_calc_limits_review_average_cost():
-    pytest.skip("for the verifier")
+    # The model, from the statement: 3600 euros fixed plus 8 euros per kilogram, over x kilograms.
+    A = (3600 + 8 * x) / x
+    assert equal(A, (8 * x + 3600) / x)
+    half_line = sp.Interval.open(0, sp.oo)
+    # (a) numerator and denominator of degree 1, leading coefficients 8 and 1: the limit is 8/1.
+    assert sp.degree(8 * x + 3600, x) == 1 and sp.degree(x, x) == 1
+    assert sp.LC(8 * x + 3600, x) == 8 and sp.LC(x, x) == 1
+    limit = sp.Rational(8, 1)
+    assert limit_is(A, x, sp.oo, limit)
+    # The interpretation: the limit is the cost of one more kilogram.
+    assert equal(sp.diff(3600 + 8 * x, x), limit)
+    # (b) on x > 0: A < 10 ⇔ 8x + 3600 < 10x ⇔ 3600 < 2x ⇔ x > 1800, each as a set of x > 0.
+    sets = [solved(cond, half_line) for cond in
+            (A < 10, 8 * x + 3600 < 10 * x, 3600 < 2 * x, x > 1800)]
+    for one in sets:
+        assert equal(one, sets[0])
+    below = sets[0]
+    # The smallest N: "A(x) < 10 for every x > N" holds exactly when (N, ∞) misses the set where
+    # A(x) ≥ 10 (x > 0), i.e. when N ≥ its supremum s; if s is attained, x = s defeats every
+    # N < s. So the smallest N is s.
+    not_below = solved(A >= 10, half_line)
+    assert equal(sp.Union(below, not_below), half_line)
+    assert equal(sp.Intersection(below, not_below), sp.S.EmptySet)
+    smallest = not_below.sup
+    assert smallest in not_below
+    assert equal(below, sp.Interval.open(smallest, sp.oo))
+    assert equal(A.subs(x, smallest), 10)
+    # The page's A(1800) = 18 000/1800 = 10.
+    assert equal(8 * 1800 + 3600, 18000) and equal(sp.Rational(18000, 1800), 10)
+    # Exact rational samples either side of the threshold.
+    def Aq(v):
+        return (Q(8) * v + 3600) / v
+    rng = random.Random(11)
+    for _ in range(300):
+        assert Aq(Q(1800) + Q(rng.randint(1, 10**9), 10**6)) < 10
+        assert Aq(Q(rng.randint(1, 1800 * 10**6), 10**6)) >= 10
+    assert Aq(Q(1800)) == 10 and Aq(Q(1800) + Q(1, 10**12)) < 10 and Aq(Q(1800) - Q(1, 10**12)) > 10
+    # The round ε = 2: A − 8 = 3600/x > 0 on x > 0, so |A − 8| = A − 8, and |A − 8| < 2 exactly
+    # when A < 10. The winning thresholds N must also keep x > N inside x > 0, so N ≥ 0; the
+    # smallest winning one is the same 1800.
+    assert equal(sp.together(A - 8), 3600 / x)
+    assert equal(((8 * x + 3600) - 8 * x) / x, 3600 / x)
+    assert equal(solved(A - 8 <= 0, half_line), sp.S.EmptySet)
+    assert equal(solved(sp.Abs(A - limit) < 2, half_line), below)
+    assert equal(limit + 2, 10)
+    assert equal(answer("exr-calc-limits-review-average-cost"), (limit, smallest))
 
 
 @covers("exr-calc-limits-review-root-over-line")
@@ -300,6 +345,8 @@ def test_exr_calc_limits_review_root_over_line():
     # The pieces' limits as x → −∞, and the limit of f by two routes.
     assert limit_is(1 / x, x, -sp.oo, 0) and limit_is(1 / x**2, x, -sp.oo, 0)
     assert limit_is(4 + 1 / x**2, x, -sp.oo, 4) and limit_is(sp.sqrt(4 + 1 / x**2), x, -sp.oo, 2)
+    # √4 = 2, as 2 ≥ 0 and 2² = 4 (the reason the page now gives).
+    assert sp.Integer(2) >= 0 and equal(sp.Integer(2) ** 2, 4) and equal(sp.sqrt(4), 2)
     assert limit_is(-1 + 1 / x, x, -sp.oo, -1)
     lim_a = sp.Rational(2, -1)
     assert limit_is(rewritten, x, -sp.oo, lim_a) and limit_is(f, x, -sp.oo, lim_a)
@@ -326,12 +373,162 @@ def test_exr_calc_limits_review_root_over_line():
 
 @covers("exr-calc-limits-review-positive-over-square")
 def test_exr_calc_limits_review_positive_over_square():
-    pytest.skip("for the verifier")
+    # A proof: answer() has nothing to read. The key claims are tested below; the exercise counts
+    # as covered only through the reviewer's maths.manual_checked note.
+    with pytest.raises(ManualAnswer):
+        answer("exr-calc-limits-review-positive-over-square")
+    avals = (0, 2, sp.Rational(-1, 3))
+
+    # (a) ε = L/2 > 0, and |f − L| < L/2 means L − L/2 < f < L + L/2, whose left end is L/2.
+    assert (L / 2).is_positive and equal(L - L / 2, L / 2)
+    fx = sp.Symbol("f_x", real=True)
+    assert equal(sp.solveset(sp.Abs(fx - L) < L / 2, fx, sp.S.Reals), sp.Interval.open(L - L / 2, L + L / 2))
+    # The aside after (a): for L > 0, F → ∞ from both sides. 1/(x − a)² → ∞ on both sides (n = 2
+    # even), and the r of (a) followed by the factor proposition's δ = min(min(1, 1/(M/m)), r),
+    # m = L/2, wins every height M, at exact points; for three functions with an explicit δ(ε).
+    for av in avals:
+        assert limit_is(1 / (x - av) ** 2, x, av, sp.oo)
+
+    def chain(f, av, lv, delta_for):
+        r, m = delta_for(lv / 2), lv / 2
+        rng = random.Random(12)
+        heights = [Q(1, 10**6), Q(1), Q(7), Q(10**9)] + [Q(rng.randint(1, 10**10), 1000) for _ in range(40)]
+        for mv in heights:
+            d = min(min(Q(1), 1 / (mv / m)), r)
+            for xv in exact_points(av, d, rng, count=8):
+                assert 0 < abs(xv - av) < r and f(xv) > m
+                assert f(xv) / (xv - av) ** 2 > mv, f"a = {av}, M = {mv}, δ = {d}, x = {xv}"
+        return True
+
+    for fexpr, av, lv, fq, dq in (
+        (3 - 4 * (x - 1), 1, 3, lambda v: 3 - 4 * (v - 1), lambda e: e / 4),       # |f − 3| = 4|x − 1|
+        ((x**2 - 1) / (x - 1), 1, 2, lambda v: (v * v - 1) / (v - 1), lambda e: e),  # undefined at 1
+        (sp.Rational(1, 2) + x**2, 0, sp.Rational(1, 2), lambda v: Q(1, 2) + v * v, lambda e: min(Q(1), e)),
+    ):
+        assert limit_is(fexpr, x, av, lv)
+        assert chain(fq, Q(av), Q(lv), dq)
+        assert limit_is(fexpr / (x - av) ** 2, x, av, sp.oo)
+
+    # (b) The preamble: (x − a)² ≠ 0 for x ≠ a; g = 1/(x − a) has the one-sided limits ∞ and −∞.
+    for av in avals:
+        assert equal(sp.solveset((x - av) ** 2, x, sp.S.Reals), sp.FiniteSet(av))
+        assert limit_is(1 / (x - av), x, av, sp.oo, dir="+")
+        assert limit_is(1 / (x - av), x, av, -sp.oo, dir="-")
+
+    # (i) f = |x − a|. f → 0, with δ = ε, at exact points: |f(x) − 0| = |x − a| < ε.
+    rng = random.Random(13)
+    for av in avals:
+        assert limit_is(sp.Abs(x - av), x, av, 0)
+        for ev in (Q(1, 10**6), Q(1, 3), Q(1), Q(50)):
+            assert all(abs(abs(xv - Q(av)) - 0) < ev for xv in exact_points(Q(av), ev, rng, count=10))
+    # F = |x − a|/(x − a)² = 1/|x − a| off a, which is 1·g on the right and (−1)·g on the left
+    # (x = a + p and x = a − p, p > 0, symbolic a).
+    Fi = sp.Abs(x - a) / (x - a) ** 2
+    assert equal(sp.Abs(pos) ** 2, pos**2) and (sp.Abs(pos) - 0).is_positive
+    assert equal(Fi.subs(x, a + pos), (1 / sp.Abs(x - a)).subs(x, a + pos))
+    assert equal(Fi.subs(x, a - pos), (1 / sp.Abs(x - a)).subs(x, a - pos))
+    assert equal(Fi.subs(x, a + pos), (1 * 1 / (x - a)).subs(x, a + pos))
+    assert equal(Fi.subs(x, a - pos), (-1 * 1 / (x - a)).subs(x, a - pos))
+    for av in avals:
+        Fiv = Fi.subs(a, av)
+        assert limit_is(Fiv, x, av, sp.oo, dir="+") and limit_is(Fiv, x, av, sp.oo, dir="-")
+        assert limit_is(Fiv, x, av, sp.oo)
+
+    # (ii) f = (x − a)²: f(a) = 0 and f → 0; F = 1 on 0 < |x − a| < 1, so F → 1, a real number.
+    for av in avals:
+        f2 = (x - av) ** 2
+        assert equal(f2.subs(x, av), 0) and limit_is(f2, x, av, 0)
+        for half in (sp.Interval.open(av - 1, av), sp.Interval.open(av, av + 1)):
+            assert equal_on_domain(f2 / (x - av) ** 2, 1, x, half)
+        assert limit_is(f2 / (x - av) ** 2, x, av, 1)
+        assert sp.limit(f2 / (x - av) ** 2, x, av).is_finite
+
+    # (iii) f = x − a: f(a) = 0 and f → 0; F = 1/(x − a) = g off a.
+    for av in avals:
+        f3 = x - av
+        F3 = f3 / (x - av) ** 2
+        assert equal(f3.subs(x, av), 0) and limit_is(f3, x, av, 0)
+        assert equal_on_domain(F3, 1 / (x - av), x, sp.Interval.open(av, av + 1))
+        assert equal_on_domain(F3, 1 / (x - av), x, sp.Interval.open(av - 1, av))
+        # The one-sided limits differ (∞ on the right, −∞ on the left), so there is no real
+        # limit, and the two-sided limit is neither ∞ nor −∞: SymPy's two-sided limit is zoo.
+        assert limit_is(F3, x, av, sp.oo, dir="+") and limit_is(F3, x, av, -sp.oo, dir="-")
+        assert sp.limit(F3, x, av, "+-") is sp.zoo
+        # Not ∞: F < 0 < 1 at every x in (a − 1, a), so no left window has F > 1 (the height
+        # M = 1). Not −∞: F > 0 > −1 at every x in (a, a + 1).
+        assert equal(solved(F3 >= 0, sp.Interval.open(av - 1, av)), sp.S.EmptySet)
+        assert equal(solved(F3 <= 0, sp.Interval.open(av, av + 1)), sp.S.EmptySet)
+        assert equal(solved(F3 > 1, sp.Interval.open(av - 1, av)), sp.S.EmptySet)
+        assert equal(solved(F3 < -1, sp.Interval.open(av, av + 1)), sp.S.EmptySet)
+    # The same signs for symbolic a: F(a − p) = −1/p < 0 and F(a + p) = 1/p > 0.
+    F3a = (x - a) / (x - a) ** 2
+    assert F3a.subs(x, a - pos).is_negative and F3a.subs(x, a + pos).is_positive
 
 
 @covers("exr-calc-limits-review-root-parameters")
 def test_exr_calc_limits_review_root_parameters():
-    pytest.skip("for the verifier")
+    F = sp.sqrt(x**2 + a * x + 1) - b * x
+    target = sp.Integer(-2)
+    # Where it is defined: for x > |a|, x > 0, x + a > 0 and x² + ax + 1 = x(x + a) + 1 > 1. With
+    # x = |a| + p (p > 0), split on the sign of a.
+    ap, an = sp.Symbol("a_p", nonnegative=True), sp.Symbol("a_n", negative=True)
+    for av in (ap, an):
+        xv = sp.Abs(av) + pos
+        assert xv.is_positive and (xv + av).is_positive
+        assert (sp.expand(xv**2 + av * xv + 1) - 1).is_positive
+    assert equal(sp.expand(x * (x + a) + 1), x**2 + a * x + 1)
+    # 1 + a/x + 1/x² = (x² + ax + 1)/x², and √(x² + ax + 1) = x √(1 + a/x + 1/x²) for x > |a|:
+    # x √(…) is ≥ 0 and its square is x² + ax + 1.
+    assert equal(1 + a / x + 1 / x**2, (x**2 + a * x + 1) / x**2)
+    inner = 1 + a / pos + 1 / pos**2
+    assert equal(sp.expand((pos * sp.sqrt(inner)) ** 2), pos**2 + a * pos + 1)
+    for av in (-4, -7, 0, 6, sp.Rational(5, 2)):
+        assert equal_on_domain(sp.sqrt(x**2 + av * x + 1), x * sp.sqrt(1 + av / x + 1 / x**2), x,
+                               sp.Interval.open(abs(av), sp.oo))
+    # The root after dividing by x tends to √1 = 1 (1 ≥ 0 and 1² = 1), for every real a.
+    assert equal(sp.limit(1 + a / x + 1 / x**2, x, sp.oo), 1) and equal(sp.sqrt(1), 1)
+    assert equal(sp.limit(sp.sqrt(1 + a / x + 1 / x**2), x, sp.oo), 1)
+
+    # b must be 1: F/x = √(1 + a/x + 1/x²) − b → 1 − b; and F/x = F · (1/x) → (−2) · 0 = 0.
+    assert equal_on_domain(F.subs({a: -4, b: 3}) / x, sp.sqrt(1 - 4 / x + 1 / x**2) - 3, x, sp.Interval.open(4, sp.oo))
+    assert equal(sp.limit(F / x, x, sp.oo), 1 - b)
+    assert equal(target * 0, 0)
+    assert equal(sp.solveset(sp.Eq(1 - b, 0), b, sp.S.Reals), sp.FiniteSet(1))
+    # Uniqueness of b, independently: if b ≠ 1, F → ∞ (b < 1) or −∞ (b > 1), so never −2.
+    assert sp.limit(F.subs(b, 1 - pos), x, sp.oo) is sp.oo
+    assert sp.limit(F.subs(b, 1 + pos), x, sp.oo) is -sp.oo
+    rng = random.Random(14)
+    for _ in range(10):
+        av = sp.Rational(rng.randint(-50, 50), 7)
+        for bv in (sp.Rational(rng.randint(-30, 29), 30), sp.Rational(rng.randint(31, 90), 30)):
+            assert limit_is(F.subs({a: av, b: bv}), x, sp.oo, sp.oo if bv < 1 else -sp.oo)
+
+    # a must be −4: with b = 1, √ + x > 0, and the rationalised chain gives F → a/2.
+    F1 = F.subs(b, 1)
+    rat1 = ((x**2 + a * x + 1) - x**2) / (sp.sqrt(x**2 + a * x + 1) + x)
+    rat2 = (a + 1 / x) / (sp.sqrt(1 + a / x + 1 / x**2) + 1)
+    for av in (-4, -7, 0, 6, sp.Rational(5, 2)):
+        dom = sp.Interval.open(abs(av), sp.oo)
+        assert equal(solved(sp.sqrt(x**2 + av * x + 1) + x <= 0, dom), sp.S.EmptySet)
+        assert equal_on_domain(F1.subs(a, av), rat1.subs(a, av), x, dom)
+        assert equal_on_domain(rat1.subs(a, av), rat2.subs(a, av), x, dom)
+    assert equal(sp.limit(a + 1 / x, x, sp.oo), a) and equal(sp.limit(rat2, x, sp.oo), a / 2)
+    assert equal(sp.limit(F1, x, sp.oo), a / 2)
+    # a/2 = −2 has exactly one solution; for b = 1 and any other a the limit is not −2.
+    assert equal(sp.solveset(sp.Eq(a / 2, target), a, sp.S.Reals), sp.FiniteSet(-4))
+    for av in (-5, sp.Rational(-41, 10), sp.Rational(-39, 10), -3, 0, 6):
+        assert not equal(sp.limit(F1.subs(a, av), x, sp.oo), target)
+    # The system 1 − b = 0, a/2 = −2 has exactly one solution.
+    solutions = sp.solve([sp.Eq(1 - b, 0), sp.Eq(a / 2, target)], [a, b], dict=True)
+    assert len(solutions) == 1
+    pair = (solutions[0][a], solutions[0][b])
+    # The pair works (two routes: the a/2 formula and limit_is), and √(x² − 4x + 1) approaches
+    # the line y = x − 2.
+    assert equal(pair[0] / 2, target)
+    assert limit_is(F.subs({a: pair[0], b: pair[1]}), x, sp.oo, target)
+    assert equal(F.subs({a: pair[0], b: pair[1]}) + x, sp.sqrt(x**2 - 4 * x + 1))
+    assert limit_is(sp.sqrt(x**2 - 4 * x + 1) - (x - 2), x, sp.oo, 0)
+    assert equal(answer("exr-calc-limits-review-root-parameters"), pair)
 
 
 # ── Chapter summary (not labelled exercises; tested all the same) ───────────────────────────
@@ -340,3 +537,9 @@ def test_exr_calc_limits_review_root_parameters():
 def test_chapter_summary_limits():
     assert limit_is(sp.sin(x) / x, x, 0, 1)
     assert limit_is((1 - sp.cos(x)) / x, x, 0, 0)
+    # The square-root law as the summary now states it: a positive limit (√(x + 3) → 2 at 1), or
+    # the limit 0 with f ≥ 0 near a (√(x²) → 0 at 0). Without f ≥ 0 the root need not be defined
+    # near a: −x² → 0 at 0, but −x² < 0 at every x ≠ 0.
+    assert limit_is(sp.sqrt(x + 3), x, 1, 2)
+    assert equal(solved(x**2 < 0, sp.S.Reals), sp.S.EmptySet) and limit_is(sp.sqrt(x**2), x, 0, 0)
+    assert limit_is(-x**2, x, 0, 0) and equal(solved(-x**2 >= 0, sp.S.Reals), sp.FiniteSet(0))
