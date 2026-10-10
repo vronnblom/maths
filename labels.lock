@@ -207,6 +207,7 @@ prf-calc-limit-unique  calculus/limits/limit-of-a-function.md
 prop-calc-abs-interval  calculus/preliminaries/absolute-value-and-inequalities.md
 prop-calc-infinite-limit-no-real-limit  calculus/limits/infinite-limits.md
 prop-calc-infinite-limit-product  calculus/limits/infinite-limits.md
+prop-calc-pi-bounds  calculus/preliminaries/trigonometric-functions.md
 prop-calc-polynomial-degree-product  calculus/preliminaries/polynomial-and-rational-functions.md
 prop-calc-rational-domain  calculus/preliminaries/polynomial-and-rational-functions.md
 prop-calc-rational-sign  calculus/preliminaries/polynomial-and-rational-functions.md
