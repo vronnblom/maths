@@ -662,7 +662,7 @@ below $0.01$?
    $\abs{\theta} \le \sqrt{0.02} \approx 0.141421$ (property 6 gives this for $<$ and for $=$;
    the two parts together give it for $\le$).
 3. **Conclusion.** Step 1 needs $\abs{\theta} < \frac{\pi}{2}$, so we compare $\sqrt{0.02}$
-   with $\frac{\pi}{2}$, without a decimal value of $\pi$. By the proposition bounding $\pi$ in
+   with $\frac{\pi}{2}$, without a decimal value of $\pi$. By [the proposition bounding $\pi$](#prop-calc-pi-bounds) in
    Trigonometric Functions, $2\sqrt{2} < \pi$. Multiplying by the positive number $\frac12$
    keeps the inequality ([property 5(a) of the order rules](#rem-calc-order-rules)):
    $\sqrt{2} < \frac{\pi}{2}$. Next, $\sqrt{0.02}$ and $\sqrt{2}$ are non-negative, their
@@ -674,7 +674,6 @@ below $0.01$?
    (transitivity). In degrees, $\sqrt{0.02}$ radians is
    $\frac{180\sqrt{0.02}}{\pi} \approx 8.10$ degrees, since a full turn is $2\pi$ radians
    ([](#def-calc-radian)) and $360$ degrees.
-   % TODO link: prop-calc-pi-bounds once vronnblom/maths#TBD is merged
 
 $$
 \boxed{0 < \abs{\theta} \le \sqrt{0.02} \approx 0.141}
@@ -767,7 +766,7 @@ the derivative of $\sin$, or through a power series for $\sin$: the derivative i
 The only facts about $\sin$ and $\cos$ used on this page are the statements of Trigonometric
 Functions: the lemma on sine, angle and tangent, the properties of the point $P(t)$, the
 definition of the tangent, the Pythagorean identity, the addition formulas, the bounds
-$-1 \le \sin t, \cos t \le 1$, and the bound $2\sqrt{2} < \pi$.
+$-1 \le \sin t, \cos t \le 1$, and [the bound $2\sqrt{2} < \pi$](#prop-calc-pi-bounds).
 :::
 
 :::{admonition} The squeeze theorem with "eventually" bounds
@@ -1053,8 +1052,8 @@ No larger $r$ works: if $r > 0.1$, the number $\theta = \frac{0.1 + r}{2}$ satis
 $0.1 < \theta < r$, and then $\abs{\theta} = \theta > 0.1$, so $\frac{\theta^2}{2} > 0.005$ by
 the equivalence just shown. Hence $r = 0.1 = \frac{1}{10}$ radians.
 
-The bound of the example needs $\abs{\theta} < \frac{\pi}{2}$. As in its step 3, the proposition
-bounding $\pi$ in Trigonometric Functions gives $2\sqrt{2} < \pi$, and multiplying by the
+The bound of the example needs $\abs{\theta} < \frac{\pi}{2}$. As in its step 3, [the proposition
+bounding $\pi$](#prop-calc-pi-bounds) in Trigonometric Functions gives $2\sqrt{2} < \pi$, and multiplying by the
 positive number $\frac12$ keeps the inequality ([property 5(a) of the order
 rules](#rem-calc-order-rules)): $\sqrt{2} < \frac{\pi}{2}$. Also $1 < \sqrt{2}$: the numbers
 $1$ and $\sqrt{2}$ are non-negative, their squares are $1$ and $2$, and $1 < 2$; and squaring
@@ -1063,7 +1062,6 @@ $0.1 < 1 < \sqrt{2} < \frac{\pi}{2}$, and by transitivity (property 2 of the ord
 $0.1 < \frac{\pi}{2}$. So every $\theta$ with $0 < \abs{\theta} < 0.1$ has
 $\abs{\theta} < \frac{\pi}{2}$ (transitivity again), the bound of the example applies to it, and
 then the relative error is less than $\frac{\theta^2}{2} \le 0.005$.
-% TODO link: prop-calc-pi-bounds once vronnblom/maths#TBD is merged
 
 In degrees, $0.1$ radians is $\frac{180 \cdot 0.1}{\pi} = \frac{18}{\pi} \approx 5.73$
 degrees. Halving the tolerance shrank the guaranteed range by the factor
