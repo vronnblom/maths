@@ -9,7 +9,7 @@ tags: [limits, proofs]
 maths:
   kind: topic
   subject: calc
-  status: draft
+  status: reviewed
   level: core
   difficulty: 2
   est_minutes: 45
@@ -19,7 +19,9 @@ maths:
     - Justify each step with the "agree except at a point" lemma.
   verify: verify/calculus/limits/test_computing_limits.py
   widgets: [function-plot]
-  reviewed_by: []
+  reviewed_by: [vronnblom]
+  manual_checked:
+    exr-calc-computing-limits-numerator-zero: vronnblom
   sources: []
 ---
 
