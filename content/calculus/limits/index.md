@@ -408,76 +408,77 @@ $$
 $$
 ::::
 
-::::{exercise} The average cost per kilogram
-:label: exr-calc-limits-review-average-cost
+::::{exercise} Faulty parts after a repair
+:label: exr-calc-limits-review-faulty-parts
 :class: tier-b applied
 
-A coffee roastery pays $3600$ euros a week in fixed costs (rent, the roaster, wages), and
-$8$ euros for each kilogram of coffee it roasts (beans, packaging, energy). If it roasts $x$
-kilograms in a week, where $x > 0$, its average cost is
+A machine has made $200$ parts, and $20$ of them are faulty. After a repair, exactly $1$ per cent
+of the parts it makes are faulty. When it has made $x$ more parts, where $x \ge 0$, it has made
+$200 + x$ parts in all, and $20 + \frac{x}{100}$ of them are faulty, so the percentage of faulty
+parts is $100 \cdot \frac{20 + x/100}{200 + x}$, that is,
 $$
-A(x) = \frac{8x + 3600}{x}
+P(x) = \frac{x + 2000}{x + 200} .
 $$
-euros per kilogram. (a) Find $\displaystyle \lim_{x \to \infty} A(x)$, in euros per kilogram.
-(b) The roastery sells its coffee at $10$ euros per kilogram. Find the smallest number $N$ such
-that $A(x) < 10$ for every $x > N$.
+(a) Find $\displaystyle \lim_{x \to \infty} P(x)$, in per cent. (b) Find the smallest number $N$
+such that $P(x) < 2$ for every $x > N$.
 
 :::{admonition} Hint 1
 :class: dropdown hint
 For (a), compare the degrees of the numerator and the denominator. For (b), multiply the
-inequality $A(x) < 10$ by the denominator, and check its sign first.
+inequality $P(x) < 2$ by the denominator, and check its sign first.
 :::
 
 :::{admonition} Answer
 :class: dropdown answer
-(a) $8$ (b) $1800$
+(a) $1$ (b) $1600$
 :::
 ::::
 
-::::{solution} exr-calc-limits-review-average-cost
-:label: sol-calc-limits-review-average-cost
+::::{solution} exr-calc-limits-review-faulty-parts
+:label: sol-calc-limits-review-faulty-parts
 :class: dropdown
 
-**(a)** $A = \frac{p}{q}$ with $p(x) = 8x + 3600$, of degree $1$ and leading coefficient $8$, and
-$q(x) = x$, of degree $1$ and leading coefficient $1$. By [part (c) of the proposition on rational
-functions at infinity](#prop-calc-rational-at-infinity), the rational function $\frac{p}{q}$ has
-the limit $\frac{8}{1} = 8$ as $x \to \infty$. It equals $A(x)$ at every $x > 0$, so by [property
-2 of the remark on limits at infinity](#rem-calc-limit-at-infinity-facts) (only the tail
-matters), $\lim_{x \to \infty} A(x) = 8$, in euros per kilogram: as the fixed costs are spread
-over more and more coffee, the average cost approaches the cost of one more kilogram.
+**(a)** On $[0, \infty)$, $P$ agrees with the rational function $\frac{p}{q}$, where
+$p(x) = x + 2000$ and $q(x) = x + 200$, both of degree $1$ and leading coefficient $1$. By [part
+(c) of the proposition on rational functions at infinity](#prop-calc-rational-at-infinity),
+$\frac{p}{q}$ has the limit $\frac{1}{1} = 1$ as $x \to \infty$. Both are defined, and equal, at
+every $x > 0$, so by [property 2 of the remark on limits at
+infinity](#rem-calc-limit-at-infinity-facts) (only the tail matters), with $c = 0$,
+$\lim_{x \to \infty} P(x) = 1$, in per cent: the $20$ faulty parts made before the repair become
+a smaller and smaller share of all the parts, so the percentage approaches the $1$ per cent of
+the repaired machine.
 
-**(b)** Let $x > 0$. Multiplying by the positive number $x$ keeps a strict inequality ([property
-5(a) of the order rules](#rem-calc-order-rules)), and multiplying back by its reciprocal
-$\frac{1}{x}$, which is positive (property 6), keeps it too. So $A(x) < 10$ holds exactly when
+**(b)** Let $x \ge 0$. Adding $200$ to $0 \le x$ gives $200 \le x + 200$ ([property 3 of the
+order rules](#rem-calc-order-rules)), so $x + 200 > 0$, since $0 < 200$ (transitivity,
+property 2). Multiplying by the positive number $x + 200$ keeps a strict inequality (property
+5(a)), and multiplying back by its reciprocal $\frac{1}{x + 200}$, which is positive (property 6),
+keeps it too. So $P(x) < 2$ holds exactly when
 $$
-8x + 3600 < 10x .
+x + 2000 < 2x + 400 .
 $$
-Adding $-8x$ to both sides, or back $8x$ (property 3 both ways), this holds exactly when
-$3600 < 2x$; and multiplying by the positive number $\frac12$, or back by $2$ (property 5(a)),
-exactly when $x > 1800$.
+Adding $-x - 400$ to both sides, or back $x + 400$ (property 3 both ways), this holds exactly
+when $1600 < x$.
 
-So every $x > 1800$ has $A(x) < 10$: such an $x$ is positive, since $1800 > 0$ (transitivity,
-property 2), so the equivalence above applies to it. So $N = 1800$ works. No smaller $N$ does:
-if $N < 1800$, then $x = 1800$ satisfies $x > N$, but
+So every $x > 1600$ has $P(x) < 2$: such an $x$ is positive, since $1600 > 0$ (transitivity,
+property 2), so the equivalence above applies to it. So $N = 1600$ works. No smaller $N$ does:
+if $N < 1600$, then $x = 1600$ satisfies $x > N$ and $x \ge 0$, but
 $$
-A(1800) = \frac{18\,000}{1800} = 10,
+P(1600) = \frac{3600}{1800} = 2,
 $$
-which is not less than $10$. So the smallest $N$ is $1800$: the roastery's average cost is below
-its price exactly when it roasts more than $1800$ kilograms a week.
+which is not less than $2$. So the smallest $N$ is $1600$: the share of faulty parts is below
+$2$ per cent exactly when the machine has made more than $1600$ parts since the repair.
 
 In the language of [the definition of a limit at infinity](#def-calc-limit-at-infinity): for
-$x > 0$,
+$x \ge 0$, writing $1$ as $\frac{x + 200}{x + 200}$ and using
+$(x + 2000) - (x + 200) = 1800$,
 $$
-\begin{aligned}
-A(x) - 8 &= \frac{(8x + 3600) - 8x}{x} \\
-  &= \frac{3600}{x} > 0,
-\end{aligned}
+P(x) - 1 = \frac{1800}{x + 200} > 0,
 $$
 because a quotient of two positive numbers is positive ([part (c) of the sign
-rules](#prop-calc-sign-rules)). So $\abs{A(x) - 8} = A(x) - 8$ ([the definition of the absolute
-value](#def-calc-absolute-value)), which is less than $2$ exactly when $A(x) < 10$ (adding $8$,
-or back $-8$, property 3). So $1800$ is the smallest threshold that wins the round $\eps = 2$,
-and the average cost stays above $8$ euros per kilogram throughout.
+rules](#prop-calc-sign-rules)). So $\abs{P(x) - 1} = P(x) - 1$ ([the definition of the absolute
+value](#def-calc-absolute-value)), which is less than $1$ exactly when $P(x) < 2$ (adding $1$,
+or back $-1$, property 3). So $1600$ is the smallest threshold that wins the round $\eps = 1$,
+and the share of faulty parts stays above $1$ per cent throughout.
 ::::
 
 ::::{exercise} A root over a line, far away and nearby

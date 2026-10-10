@@ -190,7 +190,7 @@ exr-calc-limits-at-infinity-sqrt-minus-infinity  calculus/limits/limits-at-infin
 exr-calc-limits-at-infinity-sqrt-unbounded  calculus/limits/limits-at-infinity.md
 exr-calc-limits-review-abs-quotient  calculus/limits/index.md
 exr-calc-limits-review-asymptotes  calculus/limits/index.md
-exr-calc-limits-review-average-cost  calculus/limits/index.md
+exr-calc-limits-review-faulty-parts  calculus/limits/index.md
 exr-calc-limits-review-oscillation-over-sine  calculus/limits/index.md
 exr-calc-limits-review-positive-over-square  calculus/limits/index.md
 exr-calc-limits-review-root-and-factor  calculus/limits/index.md
@@ -402,7 +402,7 @@ sol-calc-limits-at-infinity-sqrt-minus-infinity  calculus/limits/limits-at-infin
 sol-calc-limits-at-infinity-sqrt-unbounded  calculus/limits/limits-at-infinity.md
 sol-calc-limits-review-abs-quotient  calculus/limits/index.md
 sol-calc-limits-review-asymptotes  calculus/limits/index.md
-sol-calc-limits-review-average-cost  calculus/limits/index.md
+sol-calc-limits-review-faulty-parts  calculus/limits/index.md
 sol-calc-limits-review-oscillation-over-sine  calculus/limits/index.md
 sol-calc-limits-review-positive-over-square  calculus/limits/index.md
 sol-calc-limits-review-root-and-factor  calculus/limits/index.md

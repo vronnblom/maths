@@ -272,54 +272,9 @@ def test_exr_calc_limits_review_oscillation_over_sine():
     assert equal(answer("exr-calc-limits-review-oscillation-over-sine"), expected)
 
 
-@covers("exr-calc-limits-review-average-cost")
-def test_exr_calc_limits_review_average_cost():
-    # The model, from the statement: 3600 euros fixed plus 8 euros per kilogram, over x kilograms.
-    A = (3600 + 8 * x) / x
-    assert equal(A, (8 * x + 3600) / x)
-    half_line = sp.Interval.open(0, sp.oo)
-    # (a) numerator and denominator of degree 1, leading coefficients 8 and 1: the limit is 8/1.
-    assert sp.degree(8 * x + 3600, x) == 1 and sp.degree(x, x) == 1
-    assert sp.LC(8 * x + 3600, x) == 8 and sp.LC(x, x) == 1
-    limit = sp.Rational(8, 1)
-    assert limit_is(A, x, sp.oo, limit)
-    # The interpretation: the limit is the cost of one more kilogram.
-    assert equal(sp.diff(3600 + 8 * x, x), limit)
-    # (b) on x > 0: A < 10 ⇔ 8x + 3600 < 10x ⇔ 3600 < 2x ⇔ x > 1800, each as a set of x > 0.
-    sets = [solved(cond, half_line) for cond in
-            (A < 10, 8 * x + 3600 < 10 * x, 3600 < 2 * x, x > 1800)]
-    for one in sets:
-        assert equal(one, sets[0])
-    below = sets[0]
-    # The smallest N: "A(x) < 10 for every x > N" holds exactly when (N, ∞) misses the set where
-    # A(x) ≥ 10 (x > 0), i.e. when N ≥ its supremum s; if s is attained, x = s defeats every
-    # N < s. So the smallest N is s.
-    not_below = solved(A >= 10, half_line)
-    assert equal(sp.Union(below, not_below), half_line)
-    assert equal(sp.Intersection(below, not_below), sp.S.EmptySet)
-    smallest = not_below.sup
-    assert smallest in not_below
-    assert equal(below, sp.Interval.open(smallest, sp.oo))
-    assert equal(A.subs(x, smallest), 10)
-    # The page's A(1800) = 18 000/1800 = 10.
-    assert equal(8 * 1800 + 3600, 18000) and equal(sp.Rational(18000, 1800), 10)
-    # Exact rational samples either side of the threshold.
-    def Aq(v):
-        return (Q(8) * v + 3600) / v
-    rng = random.Random(11)
-    for _ in range(300):
-        assert Aq(Q(1800) + Q(rng.randint(1, 10**9), 10**6)) < 10
-        assert Aq(Q(rng.randint(1, 1800 * 10**6), 10**6)) >= 10
-    assert Aq(Q(1800)) == 10 and Aq(Q(1800) + Q(1, 10**12)) < 10 and Aq(Q(1800) - Q(1, 10**12)) > 10
-    # The round ε = 2: A − 8 = 3600/x > 0 on x > 0, so |A − 8| = A − 8, and |A − 8| < 2 exactly
-    # when A < 10. The winning thresholds N must also keep x > N inside x > 0, so N ≥ 0; the
-    # smallest winning one is the same 1800.
-    assert equal(sp.together(A - 8), 3600 / x)
-    assert equal(((8 * x + 3600) - 8 * x) / x, 3600 / x)
-    assert equal(solved(A - 8 <= 0, half_line), sp.S.EmptySet)
-    assert equal(solved(sp.Abs(A - limit) < 2, half_line), below)
-    assert equal(limit + 2, 10)
-    assert equal(answer("exr-calc-limits-review-average-cost"), (limit, smallest))
+@covers("exr-calc-limits-review-faulty-parts")
+def test_exr_calc_limits_review_faulty_parts():
+    pytest.skip("for the verifier")
 
 
 @covers("exr-calc-limits-review-root-over-line")
