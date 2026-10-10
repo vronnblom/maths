@@ -137,6 +137,33 @@ def test_definition_examples():
     assert equal(sp.Abs(q) - q, -2 * q) and positive(-2 * q)
 
 
+def test_definition_heights_m_positive():
+    # The fourth "In words" bullet: Infinite Limits uses heights M > 0 (and −M for −∞); a
+    # threshold that wins the height max(B, 1) wins B, and one that wins −max(−B, 1) wins B with
+    # "<". Each of max(B, 1) and max(−B, 1) is a height M > 0 there, on both branches of the max.
+    w, u = sp.Symbol("w", nonnegative=True), sp.Symbol("u", positive=True)
+    # B ≤ 1 (B = 1 − w): max(B, 1) = 1 > 0, and 1 ≥ B. B > 1 (B = 1 + u): max(B, 1) = B > 0.
+    assert equal(sp.Max(1 - w, 1), 1) and nonnegative(1 - (1 - w))
+    assert equal(sp.Max(1 + u, 1), 1 + u) and positive(1 + u)
+    # −∞: B ≥ −1 (B = −1 + w): max(−B, 1) = 1 and −1 ≤ B. B < −1 (B = −1 − u): max(−B, 1) = −B,
+    # so −max(−B, 1) = B.
+    assert equal(sp.Max(-(-1 + w), 1), 1) and nonnegative((-1 + w) - (-1))
+    assert equal(-sp.Max(-(-1 - u), 1), -1 - u) and positive(1 + u)
+    # Exactly, on sampled heights B (both signs, and the breaks ±1 with their neighbours) and
+    # values f(x) just beyond the height M: f(x) > M ⇒ f(x) > B, and f(x) < −M ⇒ f(x) < B.
+    rng = random.Random(30)
+    heights = [Q(-10**6), Q(-1) - Q(1, 10**9), Q(-1), Q(-1) + Q(1, 10**9), Q(0), Q(1, 2),
+               Q(1) - Q(1, 10**9), Q(1), Q(1) + Q(1, 10**9), Q(10**6)]
+    heights += [Q(rng.randint(-10 * M, 10 * M), M) for _ in range(100)]
+    for b_ in heights:
+        m_up, m_down = max(b_, Q(1)), max(-b_, Q(1))
+        assert m_up > 0 and m_down > 0 and m_up >= b_ and -m_down <= b_
+        for fv in ray(m_up, rng, 10):
+            assert fv > b_
+        for d in ray(Q(0), rng, 10):
+            assert -m_down - d < b_
+
+
 def test_remark_reflection():
     # Property 3: g(t) = f(−t); t > −c exactly when −t < c; lim_{x→−∞} f = lim_{t→∞} g.
     c_ = sp.Symbol("c", real=True)
@@ -180,6 +207,25 @@ def test_prop_part_a_eps_n():
     # Step 1: x ≤ x^j for every x ≥ 1, j = 1, …, 12: with x = 1 + y, y ≥ 0, the difference
     # (1 + y)^j − (1 + y) is a polynomial in y with non-negative coefficients.
     y = sp.Symbol("y", nonnegative=True)
+    jj = sp.Symbol("j", integer=True, positive=True)
+    # Step 1, the induction, for a symbolic integer j ≥ 1 and x = 1 + y ≥ 1: x^j > 0, and
+    # x^(j+1) − x^j = x^j (x − 1) ≥ 0 (the step x^j ≤ x^(j+1)); the base case j = 1 is x ≤ x.
+    assert positive((1 + y) ** jj)
+    assert equal((1 + y) ** (jj + 1) - (1 + y) ** jj, (1 + y) ** jj * y)
+    assert nonnegative((1 + y) ** jj * y)
+    assert equal((1 + y) ** 1 - (1 + y), 0)
+    # The induction run in exact arithmetic: from x ≤ x (j = 1), each step x^j ≤ x^(j+1) and
+    # transitivity give x ≤ x^(j+1), up to j = 40, at x = 1 exactly and at x just above 1.
+    rng = random.Random(41)
+    for xv in [Q(1), Q(1) + Q(1, 10**9), Q(1) + Q(1, 1000), Q(3, 2), Q(2), Q(10**6)] + \
+            [1 + Q(rng.randint(1, 10 * M), M) for _ in range(30)]:
+        power = xv  # x^1
+        assert xv <= power
+        for _ in range(1, 40):
+            nxt = power * xv
+            assert power > 0 and power <= nxt  # x^j > 0 and x^j ≤ x^(j+1)
+            assert xv <= nxt  # by transitivity, from x ≤ x^j
+            power = nxt
     for j in range(1, 13):
         diff = sp.Poly(sp.expand((1 + y) ** j - (1 + y)), y)
         assert all(coef >= 0 for coef in diff.all_coeffs())
@@ -190,8 +236,16 @@ def test_prop_part_a_eps_n():
         assert eps_n_holds(lambda v, j=j: 1 / v**j, 0, lambda e: max(Q(1), 1 / e), eps_samples(20 + j, 60, breaks=(1,)), seed=j)
         assert limit_is(1 / x**j, x, oo, 0)
         assert limit_is(1 / x**j, x, -oo, 0)
-        # As x → −∞: 1/(−t)^j = (−1)^j · 1/t^j.
+        # As x → −∞: 1/(−t)^j = (−1)^j · 1/t^j, since (−1)^j (−1)^j = 1 gives 1/(−1)^j = (−1)^j.
         assert equal(1 / (-t) ** j, (-1) ** j / t**j)
+        assert equal((-1) ** j * (-1) ** j, 1) and equal(sp.Rational(1, (-1) ** j), (-1) ** j)
+    # The same for a symbolic integer j ≥ 1 (t > 0, written tp: SymPy's t is only real).
+    tp = sp.Symbol("t_pos", positive=True)
+    assert equal((-1) ** jj * (-1) ** jj, 1)
+    assert equal(1 / (-1) ** jj, (-1) ** jj)
+    assert equal((-tp) ** jj, (-1) ** jj * tp**jj)
+    assert equal(1 / ((-1) ** jj * tp**jj), (-1) ** jj * (1 / tp**jj))
+    assert limit_is((-1) ** 3 / t**3, t, oo, 0) and limit_is((-1) ** 4 / t**4, t, oo, 0)
     # Branch ε ≤ 1 (N = 1/ε ≥ 1): x = 1/ε + s gives x^j ≥ x > 1/ε. Branch ε > 1 (N = 1): x > 1
     # gives x^j ≥ x > 1 > 1/ε.
     assert positive(eps - 1 / (1 / eps + s))
@@ -407,12 +461,14 @@ def test_eg_calc_limits_at_infinity_rational():
     assert equal(rounded(f1.subs(x, 1000), 6), sp.Rational("1.499497"))
     assert equal(rounded(f2.subs(x, -1000), 6), sp.Rational("-0.000996"))
     assert equal(rounded(f3.subs(x, -100), 2), sp.Rational("-24.99"))
-    # (iii) at −1000: the value is −999 998 000/4 000 001 = −249.99944…, which the page gives as
-    # "about −249.99": within 0.01 of it, but to two places it rounds to −250.00 (reported in the PR).
+    # (iii) at −1000 ≈ −250.00: the value is −999 998 000/4 000 001 = −249.99944…, which rounds
+    # to −250.00 at two places (and to −249.9994 at four), and is not −250 itself: hence "about".
+    # (The page said "about −249.99" before 99f79da; that assertion went with the claim.)
     v = f3.subs(x, -1000)
     assert equal(v, sp.Rational(-999998000, 4000001))
-    assert sp.Abs(v - sp.Rational("-249.99")) < sp.Rational(1, 100)
-    assert equal(rounded(v, 2), -250)
+    assert equal(rounded(v, 2), sp.Rational("-250.00"))
+    assert equal(rounded(v, 4), sp.Rational("-249.9994"))
+    assert not equal(v, -250) and positive(v + 250)
 
 
 @covers("eg-calc-limits-at-infinity-conjugate")
@@ -425,10 +481,11 @@ def test_eg_calc_limits_at_infinity_conjugate():
     assert nonnegative(sp.Abs(x)) and root.is_nonnegative
     assert equal(sp.Abs(p) + p, 2 * p) and equal(sp.Abs(q) + q, 0)  # −x ≤ |x|, on each sign of x
     assert equal(sp.solveset(root + x <= 0, x, sp.S.Reals), sp.S.EmptySet)
-    # The conjugate identity, at every real x: the three displayed steps.
-    assert equal(root - x, (root - x) * (root + x) / (root + x))
+    # The conjugate identity, at every real x, as displayed since 99f79da: the product
+    # (√(x² + 1) − x)(√(x² + 1) + x) = (x² + 1) − x² = 1, and dividing it by √(x² + 1) + x > 0.
     assert equal(sp.expand((root - x) * (root + x)), (x**2 + 1) - x**2)
     assert equal((x**2 + 1) - x**2, 1)
+    assert equal((root - x) * (root + x) / (root + x), root - x)
     assert equal(root - x, 1 / (root + x))
     assert equal(sp.sqrt(p) ** 2, p)
     # Step 3: for x > 0, x√(1 + 1/x²) ≥ 0 with square x² + 1, so it is √(x² + 1); divided by x.
@@ -469,6 +526,13 @@ def test_eg_calc_limits_at_infinity_two_asymptotes():
     assert equal(q / (-q * sp.sqrt(1 + 1 / q**2)), -1 / sp.sqrt(1 + 1 / q**2))
     assert limit_is(1 / x**2, x, -oo, 0)
     assert limit_is(f, x, oo, 1)
+    # Step 4 as written since 99f79da: as x → −∞, 1 + 1/x² → 1, √(1 + 1/x²) → 1 ≠ 0,
+    # 1/√(1 + 1/x²) → 1, and the factor −1 gives −1; the formula holds at every x < 0.
+    assert limit_is(1 + 1 / x**2, x, -oo, 1)
+    assert limit_is(sp.sqrt(1 + 1 / x**2), x, -oo, 1)
+    assert limit_is(1 / sp.sqrt(1 + 1 / x**2), x, -oo, 1)
+    assert limit_is(-1 / sp.sqrt(1 + 1 / x**2), x, -oo, -1)
+    assert equal_on_domain(f, -1 / sp.sqrt(1 + 1 / x**2), x, (-oo, 0))
     assert limit_is(f, x, -oo, -1)
     # Check: f(1000) ≈ 0.9999995, f(−1000) ≈ −0.9999995; f has the sign of x.
     assert equal(rounded(f.subs(x, 1000), 7), sp.Rational("0.9999995"))
