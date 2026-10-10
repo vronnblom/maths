@@ -151,8 +151,8 @@ points to notice:
 **Example.** $\lim_{x \to 0^{+}} \frac{1}{x} = \infty$. The function $\frac{1}{x}$ is defined
 at every $x \ne 0$. Given $M > 0$, take $\delta = \frac{1}{M}$, which is positive by
 [property 6 of the order rules](#rem-calc-order-rules). If $0 < x < \frac{1}{M}$, then by the
-same property 6 ($0 < a < b$ implies $\frac{1}{b} < \frac{1}{a}$, with $a = x$ and
-$b = \frac{1}{M}$), $M = \frac{1}{1/M} < \frac{1}{x}$.
+same property 6 ($0 < u < v$ implies $\frac{1}{v} < \frac{1}{u}$, with $u = x$ and
+$v = \frac{1}{M}$), $M = \frac{1}{1/M} < \frac{1}{x}$.
 
 **Non-example.** $\lim_{x \to 0^{-}} \frac{1}{x}$ is not $\infty$. Take $M = 1$. For $x < 0$,
 $\frac{1}{x}$ has the sign of $x$ ([part (c) of the sign rules](#prop-calc-sign-rules)), so
@@ -177,8 +177,12 @@ graph of $f$ if at least one of the following holds:
 **In words.** On at least one side of the line $x = a$, the graph of $f$ climbs beyond every
 height or falls below every height as $x$ approaches $a$. One side is enough, and the two sides
 may go in different directions. As with every limit, the value $f(a)$ plays no part: $f$ may be
-defined at $a$ and still have the vertical asymptote $x = a$
-([](#exr-calc-infinite-limits-difference) uses one such function).
+defined at $a$ and still have the vertical asymptote $x = a$. For example,
+$F(x) = \frac{1}{x} + 1$ for $x > 0$ and $F(x) = 0$ for $x \le 0$ is defined at $0$, and
+$\lim_{x \to 0^{+}} F(x) = \infty$: for $x > 0$, adding $\frac{1}{x}$ to $0 < 1$ gives
+$\frac{1}{x} < F(x)$ ([property 3 of the order rules](#rem-calc-order-rules)), so by
+transitivity (property 2) the $\delta = \frac{1}{M}$ of the example above wins every round $M$
+for $F$ too.
 
 **Example.** The line $x = 0$ is a vertical asymptote of the graph of $\frac{1}{x}$, by the
 example after [](#def-calc-infinite-limit-precise).
@@ -336,9 +340,11 @@ $k$. Then $t^{k+1} = t^k \cdot t$ is a product of two positive numbers, so it is
 ([part (c) of the sign rules](#prop-calc-sign-rules)); and multiplying $t \le 1$ by the positive
 number $t^k$ gives $t^{k+1} \le t^k$ ([property 5(b) of the order rules](#rem-calc-order-rules)),
 so $t^{k+1} \le t^k \le t$ by transitivity (property 2). So the claim passes from each $k$ to
-$k + 1$, and therefore holds for every $k \ge 1$. (If it failed for some $k$, the smallest such
-$k$, which exists by [the well-ordering principle](#rem-calc-well-ordering), would be at least
-$2$, and the claim for $k - 1$ would give it for $k$.)
+$k + 1$, and therefore holds for every $k \ge 1$. (If it failed for some $k$, the set of
+integers $k \ge 1$ at which it fails would be a non-empty set of positive integers, so it would
+have a smallest element $k$, by [the well-ordering principle](#rem-calc-well-ordering). The claim
+holds for $1$, so $k \ge 2$. Then $k - 1 \ge 1$ is smaller than the smallest failure, so the
+claim holds for $k - 1$, and the step above gives it for $k$: a contradiction.)
 
 **Step 2: the size and the sign of $(x - a)^n$.** Let $x \ne a$ and $t = \abs{x - a}$. By
 [property 4 of the absolute value](#rem-calc-absolute-value-properties),
@@ -354,8 +360,8 @@ even, and $(x - a)^n = -t^n$ if $x < a$ and $n$ is odd.
 **Step 3: the height $M$.** Let $M > 0$ and $\delta = \min\bigl(1, \frac{1}{M}\bigr)$, which is
 positive, because $\frac{1}{M} > 0$ ([property 6 of the order rules](#rem-calc-order-rules)).
 Let $0 < t < \delta$. Then $t < 1$, so step 1 gives $0 < t^n \le t$; and $t < \frac{1}{M}$, so
-$0 < t^n < \frac{1}{M}$ (property 2). By property 6 ($0 < a < b$ implies
-$\frac{1}{b} < \frac{1}{a}$), with $t^n$ and $\frac{1}{M}$ for $a$ and $b$,
+$0 < t^n < \frac{1}{M}$ (property 2). By property 6 ($0 < u < v$ implies
+$\frac{1}{v} < \frac{1}{u}$), with $u = t^n$ and $v = \frac{1}{M}$,
 $$
 M = \frac{1}{1/M} < \frac{1}{t^n} .
 $$
@@ -387,8 +393,8 @@ $\lim_{x \to a} \frac{1}{(x - a)^n}$ is neither, by part (c) of [](#def-calc-inf
 
 ### Sign analysis: a factor that stays away from $0$
 
-Near a zero $a$ of its denominator, a rational function is a reciprocal power
-$\frac{1}{(x - a)^k}$ times a factor $h(x)$ that does not vanish at $a$. If $h$ keeps one sign
+Near a zero $a$ of its denominator, after cancelling common factors, a rational function is a
+reciprocal power $\frac{1}{(x - a)^k}$ times a factor $h(x)$ that does not vanish at $a$. If $h$ keeps one sign
 and stays a fixed distance away from $0$ near $a$, it cannot stop the reciprocal power from
 growing; it can only flip its sign.
 
@@ -575,8 +581,9 @@ denominator.
    $f(x) = h_0(x) \cdot \frac{1}{x^2}$ with $h_0(x) = \frac{x - 3}{x - 1} = \frac{3 - x}{1 - x}$.
    Let $-\frac12 < x < \frac12$. Multiplying by ${-1}$ reverses both inequalities
    ([property 5(c) of the order rules](#rem-calc-order-rules)), and adding $3$, or $1$, keeps
-   them (property 3): $\frac52 < 3 - x < \frac72$ and $\frac12 < 1 - x < \frac32$. By
-   [property 6](#rem-calc-order-rules), $\frac{1}{1 - x} > \frac23$. Multiplying
+   them (property 3): $\frac52 < 3 - x < \frac72$ and $\frac12 < 1 - x < \frac32$. Since
+   $0 < \frac12 < 1 - x$, the number $1 - x$ is positive (transitivity, property 2), and
+   [property 6](#rem-calc-order-rules) gives $\frac{1}{1 - x} > \frac23$. Multiplying
    $3 - x > \frac52$ by the positive number $\frac{1}{1 - x}$, and then
    $\frac{1}{1 - x} > \frac23$ by the positive number $\frac52$, keeps both
    ([property 5(a)](#rem-calc-order-rules)):
@@ -662,14 +669,16 @@ asymptote $x = a$ of its graph?
    ([property 4 of the absolute value](#rem-calc-absolute-value-properties)). If
    $\abs{x - 1} < \frac12$, then $\frac12 < x < \frac32$
    ([part (a) of the proposition on distance inequalities](#prop-calc-abs-interval)), so
-   $x - 2 < -\frac12$ (adding $-2$) and $\abs{x - 2} = 2 - x > \frac12$
+   $x - 2 < -\frac12$ (adding $-2$, property 3). Multiplying by ${-1}$ reverses this
+   ([property 5(c) of the order rules](#rem-calc-order-rules)): $2 - x > \frac12$. So
+   $\abs{x - 2} = 2 - x > \frac12$
    ([the definition of the absolute value](#def-calc-absolute-value)); by
    [property 6 of the order rules](#rem-calc-order-rules), $\frac{1}{\abs{x - 2}} < 2$. Let
    $\eps > 0$, $\delta = \min\bigl(\frac12, \frac{\eps}{6}\bigr)$, and
    $0 < \abs{x - 1} < \delta$. Then $x \ne 1$ and $\frac12 < x < \frac32$, so $x \ne 2$ and
    $f(x)$ is defined. Multiplying $\frac{1}{\abs{x - 2}} < 2$ by the positive number
-   $3\abs{x - 1}$ keeps it ([property 5(a)](#rem-calc-order-rules)), and
-   $\abs{x - 1} < \frac{\eps}{6}$:
+   $3\abs{x - 1}$ keeps it ([property 5(a)](#rem-calc-order-rules)); and multiplying
+   $\abs{x - 1} < \frac{\eps}{6}$ by the positive number $6$ keeps it too (property 5(a)):
    $$
    \begin{aligned}
    \abs{f(x) - (-2)} &< 6\abs{x - 1} \\
@@ -724,7 +733,8 @@ than 10 metres behind the lens.
    $\lim_{u \to 10^{+}} v(u) = \infty$ and $\lim_{u \to 10^{-}} v(u) = -\infty$, as the table
    suggested.
 3. **(b) Solve the inequality.** Ten metres are $1000$ cm. For $u > 10$, the number $u - 10$ is
-   positive, so multiplying by it, or by its reciprocal, keeps an inequality (property 5(a)):
+   positive, and so is its reciprocal $\frac{1}{u - 10}$ ([property 6](#rem-calc-order-rules));
+   so multiplying by either keeps an inequality (property 5(a)):
    $v(u) > 1000$ exactly when $10u > 1000(u - 10) = 1000u - 10\,000$. Adding
    $10\,000 - 10u$ to both sides (property 3), this says $10\,000 > 990u$, and multiplying by the
    positive number $\frac{1}{990}$, $u < \frac{1000}{99}$.
@@ -797,8 +807,16 @@ $\frac{x^2 - 1}{x^2 - 3x + 2}$ has the vertical asymptotes $x = 1$ and $x = 2$."
 **Why:** at $x = 1$ the numerator is $0$ too. After cancelling $x - 1$, the function has the
 finite limit ${-2}$ at $1$: a hole, not an asymptote ([](#eg-calc-infinite-limits-hole)).
 
-✓ **Right:** a zero $a$ of the denominator at which the numerator is not $0$ gives a vertical
-asymptote. If the numerator is $0$ there too, cancel and look again.
+✓ **Right:** check each zero $a$ of the denominator. Where the numerator is not $0$, bound the
+cofactor and conclude as in the five steps after [](#prop-calc-infinite-limit-product). Where it
+is $0$ too, cancel and look again.
+:::
+
+:::{admonition} Looking ahead
+:class: looking-ahead
+With the limit laws (the page Limit Laws) and part (c) of [](#prop-calc-infinite-limit-product),
+the general fact becomes a theorem: after cancelling common factors, every zero of the
+denominator at which the numerator is not $0$ gives a vertical asymptote.
 :::
 
 ## Rigorous track
@@ -863,8 +881,8 @@ $$
 &\qquad\quad \text{or } f(x) \le M\bigr).
 \end{aligned}
 $$
-This is the pattern of the non-example after [](#def-calc-infinite-limit-precise), with $M = 1$,
-and of the function above, where the points $\frac{1}{2n + 1}$ fail the round $M = 1$.
+This is the pattern of the non-example after [](#def-calc-infinite-limit-precise) (in its
+left-hand version, with the half-windows $a - \delta < x < a$), with $M = 1$, and of the function above, where the points $\frac{1}{2n + 1}$ fail the round $M = 1$.
 :::
 
 ## Summary
@@ -1216,9 +1234,10 @@ so $\abs{f(x) - \frac43} = \frac{\abs{x - 2}}{3\abs{x + 1}}$, by
 [properties 2 and 4 of the absolute value](#rem-calc-absolute-value-properties). If
 $\abs{x - 2} < 1$, then $1 < x < 3$
 ([part (a) of the proposition on distance inequalities](#prop-calc-abs-interval)), so
-$x + 1 > 2$, $\abs{x + 1} = x + 1$ ([the definition of the absolute
-value](#def-calc-absolute-value)) and $\frac{1}{3\abs{x + 1}} < \frac16$
-([property 6 of the order rules](#rem-calc-order-rules)). Let $\eps > 0$,
+$x + 1 > 2$ (adding $1$, [property 3 of the order rules](#rem-calc-order-rules)) and
+$\abs{x + 1} = x + 1$ ([the definition of the absolute value](#def-calc-absolute-value)).
+Multiplying $x + 1 > 2$ by the positive number $3$ keeps it (property 5(a)), so
+$3\abs{x + 1} > 6$, and property 6 gives $\frac{1}{3\abs{x + 1}} < \frac16$. Let $\eps > 0$,
 $\delta = \min(1, 6\eps)$ and $0 < \abs{x - 2} < \delta$. Then $f(x)$ is defined, and
 multiplying $\frac{1}{3\abs{x + 1}} < \frac16$ by the positive number $\abs{x - 2}$ keeps it
 (property 5(a)):
@@ -1407,8 +1426,8 @@ point of $(a, a + s)$, and part (a) of [](#def-calc-one-sided-limit) applies to 
 at every $x$ with $a < x < a + \delta_1$. Let $\delta = \min(\delta_1, s)$, which is positive, and
 let $a < x < a + \delta$. Since $\delta \le \delta_1$ and $\delta \le s$, adding $a$
 (property 3) and transitivity give $x < a + \delta_1$ and $x < a + s$. So $\frac{1}{f(x)}$ is
-defined and $0 < \frac{1}{\eps} < f(x)$. By property 6 ($0 < a < b$ implies
-$\frac{1}{b} < \frac{1}{a}$, with $a = \frac{1}{\eps}$ and $b = f(x)$),
+defined and $0 < \frac{1}{\eps} < f(x)$. By property 6 ($0 < u < v$ implies
+$\frac{1}{v} < \frac{1}{u}$, with $u = \frac{1}{\eps}$ and $v = f(x)$),
 $\frac{1}{f(x)} < \frac{1}{1/\eps} = \eps$; and $\frac{1}{f(x)} > 0$ (property 6), so
 $\abs{\frac{1}{f(x)} - 0} = \frac{1}{f(x)} < \eps$ ([the definition of the absolute
 value](#def-calc-absolute-value)). So $\delta$ wins the round $\eps$, and since $\eps > 0$ was
@@ -1480,8 +1499,12 @@ $f(x) + \frac12 = \frac{x - 1}{2(x - 3)}$, so
 $\abs{f(x) + \frac12} = \frac{\abs{x - 1}}{2\abs{x - 3}}$
 ([property 4 of the absolute value](#rem-calc-absolute-value-properties)). If
 $\abs{x - 1} < 1$, then $0 < x < 2$
-([part (a) of the proposition on distance inequalities](#prop-calc-abs-interval)), so
-$\abs{x - 3} = 3 - x > 1$ and $\frac{1}{2\abs{x - 3}} < \frac12$ (property 6). For $\eps > 0$,
+([part (a) of the proposition on distance inequalities](#prop-calc-abs-interval)). Multiplying
+$x < 2$ by ${-1}$ reverses it ([property 5(c) of the order rules](#rem-calc-order-rules)), and
+adding $3$ keeps it (property 3), so $3 - x > 1$. So $x - 3 < 0$ and $\abs{x - 3} = 3 - x$
+([the definition of the absolute value](#def-calc-absolute-value)); multiplying $3 - x > 1$ by
+the positive number $2$ keeps it (property 5(a)), and property 6 gives
+$\frac{1}{2\abs{x - 3}} < \frac12$. For $\eps > 0$,
 $\delta = \min(1, 2\eps)$ and $0 < \abs{x - 1} < \delta$, $f(x)$ is defined and
 $\abs{f(x) + \frac12} < \frac{\abs{x - 1}}{2} < \eps$. So both one-sided limits at $1$ are the
 real number $-\frac12$ (by [the theorem](#thm-calc-limit-iff-one-sided)), neither is infinite (part
@@ -1489,7 +1512,9 @@ real number $-\frac12$ (by [the theorem](#thm-calc-limit-iff-one-sided)), neithe
 one asymptote.
 
 **If $c = 3$.** In the same way, $x = 1$ is an asymptote, and for $x \ne 1, 3$,
-$f(x) = \frac{1}{x - 1}$, with $\abs{f(x) - \frac12} = \frac{\abs{x - 3}}{2\abs{x - 1}}$. If
+$f(x) = \frac{1}{x - 1}$ and $f(x) - \frac12 = \frac{3 - x}{2(x - 1)}$, so
+$\abs{f(x) - \frac12} = \frac{\abs{x - 3}}{2\abs{x - 1}}$ ([properties 4 and 2 of the absolute
+value](#rem-calc-absolute-value-properties), as $\abs{3 - x} = \abs{-(x - 3)} = \abs{x - 3}$). If
 $\abs{x - 3} < 1$, then $2 < x < 4$ and $\abs{x - 1} = x - 1 > 1$, so $\delta = \min(1, 2\eps)$
 works again: $\lim_{x \to 3} f(x) = \frac12$, and $x = 3$ is not an asymptote. Exactly one
 asymptote.
