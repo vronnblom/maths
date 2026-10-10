@@ -5,6 +5,7 @@
 # from the content keeps a tombstone instead, `<label> → <replacement label, or the reason>`.
 ax-calc-completeness  calculus/preliminaries/real-numbers-and-intervals.md
 calc-absolute-value-inequalities  calculus/preliminaries/absolute-value-and-inequalities.md
+calc-computing-limits  calculus/limits/computing-limits.md
 calc-functions  calculus/preliminaries/functions.md
 calc-infinite-limits  calculus/limits/infinite-limits.md
 calc-limit  calculus/limits/limit-of-a-function.md
@@ -44,6 +45,10 @@ eg-calc-absolute-value-inequalities-linear  calculus/preliminaries/absolute-valu
 eg-calc-absolute-value-inequalities-punctured  calculus/preliminaries/absolute-value-and-inequalities.md
 eg-calc-absolute-value-inequalities-quadratic  calculus/preliminaries/absolute-value-and-inequalities.md
 eg-calc-absolute-value-inequalities-triangle-bound  calculus/preliminaries/absolute-value-and-inequalities.md
+eg-calc-computing-limits-conjugate  calculus/limits/computing-limits.md
+eg-calc-computing-limits-factor  calculus/limits/computing-limits.md
+eg-calc-computing-limits-resistors  calculus/limits/computing-limits.md
+eg-calc-computing-limits-same-form  calculus/limits/computing-limits.md
 eg-calc-functions-even-odd  calculus/preliminaries/functions.md
 eg-calc-functions-monotone  calculus/preliminaries/functions.md
 eg-calc-functions-natural-domain  calculus/preliminaries/functions.md
@@ -99,6 +104,18 @@ exr-calc-absolute-value-inequalities-linear  calculus/preliminaries/absolute-val
 exr-calc-absolute-value-inequalities-punctured  calculus/preliminaries/absolute-value-and-inequalities.md
 exr-calc-absolute-value-inequalities-quadratic  calculus/preliminaries/absolute-value-and-inequalities.md
 exr-calc-absolute-value-inequalities-rational  calculus/preliminaries/absolute-value-and-inequalities.md
+exr-calc-computing-limits-abs-denominator  calculus/limits/computing-limits.md
+exr-calc-computing-limits-abs-sqrt  calculus/limits/computing-limits.md
+exr-calc-computing-limits-compound  calculus/limits/computing-limits.md
+exr-calc-computing-limits-conjugate  calculus/limits/computing-limits.md
+exr-calc-computing-limits-factor-both  calculus/limits/computing-limits.md
+exr-calc-computing-limits-factor-quadratic  calculus/limits/computing-limits.md
+exr-calc-computing-limits-factor-twice  calculus/limits/computing-limits.md
+exr-calc-computing-limits-find-constant  calculus/limits/computing-limits.md
+exr-calc-computing-limits-lens  calculus/limits/computing-limits.md
+exr-calc-computing-limits-numerator-zero  calculus/limits/computing-limits.md
+exr-calc-computing-limits-power  calculus/limits/computing-limits.md
+exr-calc-computing-limits-root-denominator  calculus/limits/computing-limits.md
 exr-calc-functions-box-domain  calculus/preliminaries/functions.md
 exr-calc-functions-box-volume  calculus/preliminaries/functions.md
 exr-calc-functions-cube-increasing  calculus/preliminaries/functions.md
@@ -213,6 +230,7 @@ fig-calc-real-numbers-diagonal  calculus/preliminaries/real-numbers-and-interval
 fig-calc-real-numbers-intervals  calculus/preliminaries/real-numbers-and-intervals.md
 fig-calc-trig-functions-sin-bounds-areas  calculus/preliminaries/trigonometric-functions.md
 fig-calc-trig-functions-unit-circle  calculus/preliminaries/trigonometric-functions.md
+lem-calc-limit-agree-except-point  calculus/limits/computing-limits.md
 lem-calc-sin-bounds  calculus/preliminaries/trigonometric-functions.md
 lem-calc-sin-cos-limits-at-zero  calculus/limits/squeeze-theorem.md
 lem-calc-sin-cos-near-zero  calculus/limits/squeeze-theorem.md
@@ -272,6 +290,18 @@ sol-calc-absolute-value-inequalities-linear  calculus/preliminaries/absolute-val
 sol-calc-absolute-value-inequalities-punctured  calculus/preliminaries/absolute-value-and-inequalities.md
 sol-calc-absolute-value-inequalities-quadratic  calculus/preliminaries/absolute-value-and-inequalities.md
 sol-calc-absolute-value-inequalities-rational  calculus/preliminaries/absolute-value-and-inequalities.md
+sol-calc-computing-limits-abs-denominator  calculus/limits/computing-limits.md
+sol-calc-computing-limits-abs-sqrt  calculus/limits/computing-limits.md
+sol-calc-computing-limits-compound  calculus/limits/computing-limits.md
+sol-calc-computing-limits-conjugate  calculus/limits/computing-limits.md
+sol-calc-computing-limits-factor-both  calculus/limits/computing-limits.md
+sol-calc-computing-limits-factor-quadratic  calculus/limits/computing-limits.md
+sol-calc-computing-limits-factor-twice  calculus/limits/computing-limits.md
+sol-calc-computing-limits-find-constant  calculus/limits/computing-limits.md
+sol-calc-computing-limits-lens  calculus/limits/computing-limits.md
+sol-calc-computing-limits-numerator-zero  calculus/limits/computing-limits.md
+sol-calc-computing-limits-power  calculus/limits/computing-limits.md
+sol-calc-computing-limits-root-denominator  calculus/limits/computing-limits.md
 sol-calc-functions-box-domain  calculus/preliminaries/functions.md
 sol-calc-functions-box-volume  calculus/preliminaries/functions.md
 sol-calc-functions-cube-increasing  calculus/preliminaries/functions.md
@@ -389,6 +419,7 @@ thm-calc-sin-x-over-x  calculus/limits/squeeze-theorem.md
 thm-calc-sqrt2-irrational  calculus/preliminaries/real-numbers-and-intervals.md
 thm-calc-squeeze  calculus/limits/squeeze-theorem.md
 thm-calc-triangle-inequality  calculus/preliminaries/absolute-value-and-inequalities.md
+wdg-calc-computing-limits-cube  calculus/limits/computing-limits.md
 wdg-calc-limit-average-speed  calculus/limits/limit-of-a-function.md
 wdg-calc-limit-eps-delta  calculus/limits/limit-of-a-function.md
 wdg-calc-limit-laws-rational  calculus/limits/limit-laws.md

@@ -974,6 +974,30 @@
    ]
   },
   {
+   "source": "calculus/limits/computing-limits.md#wdg-calc-computing-limits-cube",
+   "setting": "defaults",
+   "f": "(x^3 - 8)/(x - 2)",
+   "variable": "x",
+   "params": {},
+   "holeX": 2,
+   "points": [
+    1.9,
+    1.99,
+    1.999,
+    2.001,
+    2.01,
+    2.1
+   ],
+   "values": [
+    11.41,
+    11.9401,
+    11.994001,
+    12.006001,
+    12.0601,
+    12.61
+   ]
+  },
+  {
    "source": "calculus/limits/squeeze-theorem.md#wdg-calc-squeeze-theorem-band",
    "setting": "defaults",
    "f": "k*abs(x) + (1 - abs(k))*x*sin(1/x)",
