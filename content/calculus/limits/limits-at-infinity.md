@@ -124,8 +124,9 @@ stay above, or below, from the threshold on. Four points to notice:
   does not say that a limit exists: it says how the limit fails to exist as a real number,
   because the values eventually exceed every real number (property 1 of [the remark
   below](#rem-calc-limit-at-infinity-facts) proves this). This is the convention that the page
-  Infinite Limits and Vertical Asymptotes uses for infinite limits at a point $a$.
-  % TODO link: prop-calc-infinite-limit-no-real-limit once vronnblom/maths#30 is merged
+  Infinite Limits and Vertical Asymptotes uses for infinite limits at a point $a$ ([the
+  proposition there](#prop-calc-infinite-limit-no-real-limit) proves that such a limit is not a
+  real number).
   When we say that a limit at infinity **exists**, we mean that it is a real number.
 - On the page Infinite Limits and Vertical Asymptotes the heights are $M > 0$; that is the same
   condition, since a threshold that wins the height $\max(B, 1)$ also wins $B$: if
@@ -235,7 +236,10 @@ graph runs ever closer to the horizontal line $y = L$.
 Let $L$ be a real number. The line $y = L$ is a **horizontal asymptote** of the graph of a
 function $f$ if
 $$
-\lim_{x \to \infty} f(x) = L \quad\text{or}\quad \lim_{x \to -\infty} f(x) = L .
+\begin{aligned}
+&\lim_{x \to \infty} f(x) = L \\
+&\quad\text{or}\quad \lim_{x \to -\infty} f(x) = L .
+\end{aligned}
 $$
 :::
 
@@ -256,17 +260,16 @@ By property 1 of the remark, a graph has at most two horizontal asymptotes, one 
 direction. Each of the two directions may give the same line, a different one, or none.
 
 **Horizontal and vertical asymptotes.** The page Infinite Limits and Vertical Asymptotes defines
-a **vertical asymptote** $x = a$: a vertical line near which $f(x)$ tends to $\infty$ or to
-$-\infty$ as $x$ approaches the number $a$ from at least one side.
-% TODO link: def-calc-vertical-asymptote once vronnblom/maths#30 is merged
+a [**vertical asymptote**](#def-calc-vertical-asymptote) $x = a$: a vertical line near which
+$f(x)$ tends to $\infty$ or to $-\infty$ as $x$ approaches the number $a$ from at least one side.
 The roles of $x$ and $y$ are exchanged. At a vertical asymptote, $x$ approaches a number and
 $f(x)$ grows or falls without bound; at a horizontal asymptote, $x$ grows without bound and $f(x)$
 approaches a number. A graph may have many vertical asymptotes, but at most two horizontal ones;
 and it meets a vertical line $x = a$ at most once, because $f$ has at most one value at $a$, while
 it may cross a horizontal asymptote. The graph of $\frac{1}{x}$ has both kinds:
-the line $y = 0$, as $x \to \infty$ by the example above, and the line $x = 0$, by the limits of
-reciprocal powers on Infinite Limits and Vertical Asymptotes.
-% TODO link: prop-calc-reciprocal-power-limits once vronnblom/maths#30 is merged
+the line $y = 0$, as $x \to \infty$ by the example above, and the line $x = 0$, since
+$\lim_{x \to 0^{+}} \frac{1}{x} = \infty$ by [part (a) of the proposition on reciprocal
+powers](#prop-calc-reciprocal-power-limits), with $a = 0$ and $n = 1$.
 
 ## Main results
 
@@ -443,7 +446,8 @@ $q(x) = b x^k + b_{k-1} x^{k-1} + \dots + b_1 x + b_0$, and for $x \ne 0$ let
 $$
 \begin{aligned}
 Q(x) &= \frac{q(x)}{x^k} \\
-  &= b + b_{k-1} \cdot \frac{1}{x} + \dots + b_0 \cdot \frac{1}{x^k} .
+  &= b + b_{k-1} \cdot \frac{1}{x} \\
+  &\qquad + \dots + b_0 \cdot \frac{1}{x^k} .
 \end{aligned}
 $$
 By (a) and the "in particular" of part (c) of the laws, each term $b_i \cdot \frac{1}{x^{k - i}}$
@@ -481,8 +485,9 @@ $x$, and multiplying $x > \frac{\abs{B}}{h}$ by the positive number $h$
 ([property 5 of the order rules](#rem-calc-order-rules)) gives
 $$
 \begin{aligned}
-r(x) = x^{m - k} S(x) &\ge x\,S(x) \\
-  &> x h > \abs{B} \ge B ,
+r(x) &= x^{m - k} S(x) \\
+  &\ge x\,S(x) > x h \\
+  &> \abs{B} \ge B ,
 \end{aligned}
 $$
 where $\abs{B} \ge B$ is property 3 of the absolute value. So $r(x) > B$ by transitivity, and
@@ -578,7 +583,10 @@ $x \ne -1$, so on $(-1, \infty)$, and part (a) of [](#def-calc-limit-at-infinity
    $\frac{1}{x + 1} < \frac{\eps}{2}$, and multiplying by the positive number $2$ keeps the
    inequality:
    $$
-   \abs{f(x) - 2} = \frac{2}{x + 1} < 2 \cdot \frac{\eps}{2} = \eps .
+   \begin{aligned}
+   \abs{f(x) - 2} &= \frac{2}{x + 1} \\
+     &< 2 \cdot \frac{\eps}{2} = \eps .
+   \end{aligned}
    $$
 
 $$
@@ -828,7 +836,10 @@ The substitution $x = \frac{1}{t}$ turns $x \to \infty$ into $t \to 0^{+}$. Let 
 every point of $(c, \infty)$, let $g(t) = f\bigl(\frac{1}{t}\bigr)$ for $t > 0$, and let $L$ be a
 real number. Then
 $$
-\lim_{x \to \infty} f(x) = L \iff \lim_{t \to 0^{+}} g(t) = L,
+\begin{aligned}
+&\lim_{x \to \infty} f(x) = L \\
+&\quad\iff \lim_{t \to 0^{+}} g(t) = L,
+\end{aligned}
 $$
 with the right-hand limit of [the definition of one-sided limits](#def-calc-one-sided-limit). The
 key fact: for positive numbers, $t < \delta$ exactly when $\frac{1}{t} > \frac{1}{\delta}$, by
@@ -1033,7 +1044,10 @@ positive numbers, positive by [part (c) of the sign rules](#prop-calc-sign-rules
 $\abs{f(x) - 2} = f(x) - 2$. Multiplying by the positive number $10(x^2 + 1)$, the inequality
 $f(x) - 2 < 0.1$ holds exactly when $10(x - 2) < x^2 + 1$, that is, when
 $$
-x^2 - 10x + 21 = (x - 3)(x - 7) > 0 .
+\begin{aligned}
+x^2 - 10x + 21 &= (x - 3)(x - 7) \\
+  &> 0 .
+\end{aligned}
 $$
 For $x > 7$ both factors are positive, so the product is positive. So $\abs{f(x) - 2} < 0.1$.
 
@@ -1385,7 +1399,9 @@ remark](#rem-calc-square-roots)), so on $(0, \infty)$. Let $B$ be a real number.
 $\sqrt{x} \ne 0$, because $0^2 = 0 \ne x$. So $\sqrt{x} > 0 \ge B$, and $\sqrt{x} > B$ by
 transitivity ([property 2 of the order rules](#rem-calc-order-rules)).
 
-**If $B > 0$.** Take $N = B^2$, which is $\ge 0$. If $x > B^2$, then $x > 0$, so $\sqrt{x}$ is
+**If $B > 0$.** Take $N = B^2$, which is $\ge 0$ by the "in particular" of [part (c) of the
+sign rules](#prop-calc-sign-rules). If $x > B^2$, then $x > 0$, by transitivity from
+$0 \le B^2 < x$ ([property 2 of the order rules](#rem-calc-order-rules)), so $\sqrt{x}$ is
 defined. The numbers $B$ and $\sqrt{x}$ are non-negative, and $B^2 < x = \bigl(\sqrt{x}\bigr)^2$,
 so the order part of the square-root remark, with $s = B$ and $t = \sqrt{x}$, gives
 $B < \sqrt{x}$.
