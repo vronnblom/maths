@@ -110,7 +110,7 @@ We also write $f(x) \to L$ as $x \to \infty$, and so on. These are the **limits 
 **In words.** Parts (a) and (b) are the game of [the definition of the limit](#def-calc-limit)
 with the punctured window $0 < \abs{x - a} < \delta$ replaced by the ray $x > N$, or $x < N$.
 Parts (c) and (d) replace the tolerance band around $L$ by a height $B$ that the values must
-stay above, or below, from the threshold on. Three points to notice:
+stay above, or below, from the threshold on. Four points to notice:
 
 - If a threshold $N$ wins a round, so does every larger one when $x \to \infty$ (every smaller
   one when $x \to -\infty$): if $N' \ge N$ and $x > N'$, then $x > N$ by transitivity
@@ -122,10 +122,15 @@ stay above, or below, from the threshold on. Three points to notice:
   out windows that are too wide.
 - The symbols $\infty$ and $-\infty$ are not real numbers. "$\lim_{x \to \infty} f(x) = \infty$"
   does not say that a limit exists: it says how the limit fails to exist as a real number,
-  because the values eventually exceed every real number. This is the convention that the page
+  because the values eventually exceed every real number (property 1 of [the remark
+  below](#rem-calc-limit-at-infinity-facts) proves this). This is the convention that the page
   Infinite Limits and Vertical Asymptotes uses for infinite limits at a point $a$.
-  % TODO link: def-calc-infinite-limit once vronnblom/maths#TBD is merged
+  % TODO link: prop-calc-infinite-limit-no-real-limit once vronnblom/maths#30 is merged
   When we say that a limit at infinity **exists**, we mean that it is a real number.
+- On the page Infinite Limits and Vertical Asymptotes the heights are $M > 0$; that is the same
+  condition, since a threshold that wins the height $\max(B, 1)$ also wins $B$: if
+  $f(x) > \max(B, 1)$, then $f(x) > B$, by transitivity. (For $-\infty$, the heights there are
+  $-M$ with $M > 0$, and the height $-\max(-B, 1)$ plays the same role.)
 
 **Example.** $\lim_{x \to \infty} \frac{1}{x} = 0$, by part (a). The function is defined at
 every $x > 0$, so on $(0, \infty)$. Let $\eps > 0$ and take $N = \frac{1}{\eps}$, which is
@@ -191,8 +196,9 @@ inequalities.
 - *$L$ and $M$ real.* Take the round $\eps = \frac12 \abs{L - M}$ for both, which is positive by
   [property 1 of the absolute value](#rem-calc-absolute-value-properties). By
   [part (b) of the triangle inequality](#thm-calc-triangle-inequality), applied to the numbers
-  $L$, $M$ and $f(x)$ in the roles of $x$, $y$ and $z$ there, and by property 2 of the absolute
-  value,
+  $L$, $M$ and $f(x)$ in the roles of $x$, $y$ and $z$ there, by property 2 of the absolute
+  value, and by adding the two strict inequalities $\abs{f(x) - L} < \eps$ and
+  $\abs{f(x) - M} < \eps$ ([property 4 of the order rules](#rem-calc-order-rules)),
   $\abs{L - M} \le \abs{f(x) - L} + \abs{f(x) - M} < 2\eps = \abs{L - M}$, which is impossible.
 - *$L$ real and $M = \infty$.* Take $\eps = 1$ for $L$ and $B = L + 1$ for $M$. Then
   $\abs{f(x) - L} < 1$ gives $f(x) < L + 1$, by
@@ -250,17 +256,17 @@ By property 1 of the remark, a graph has at most two horizontal asymptotes, one 
 direction. Each of the two directions may give the same line, a different one, or none.
 
 **Horizontal and vertical asymptotes.** The page Infinite Limits and Vertical Asymptotes defines
-a **vertical asymptote** $x = a$: a vertical line near which the values of $f$ grow without
-bound as $x$ approaches the number $a$ from one side.
-% TODO link: def-calc-vertical-asymptote once vronnblom/maths#TBD is merged
+a **vertical asymptote** $x = a$: a vertical line near which $f(x)$ tends to $\infty$ or to
+$-\infty$ as $x$ approaches the number $a$ from at least one side.
+% TODO link: def-calc-vertical-asymptote once vronnblom/maths#30 is merged
 The roles of $x$ and $y$ are exchanged. At a vertical asymptote, $x$ approaches a number and
-$f(x)$ grows without bound; at a horizontal asymptote, $x$ grows without bound and $f(x)$
+$f(x)$ grows or falls without bound; at a horizontal asymptote, $x$ grows without bound and $f(x)$
 approaches a number. A graph may have many vertical asymptotes, but at most two horizontal ones;
 and it meets a vertical line $x = a$ at most once, because $f$ has at most one value at $a$, while
 it may cross a horizontal asymptote. The graph of $\frac{1}{x}$ has both kinds:
 the line $y = 0$, as $x \to \infty$ by the example above, and the line $x = 0$, by the limits of
 reciprocal powers on Infinite Limits and Vertical Asymptotes.
-% TODO link: prop-calc-reciprocal-power-limits once vronnblom/maths#TBD is merged
+% TODO link: prop-calc-reciprocal-power-limits once vronnblom/maths#30 is merged
 
 ## Main results
 
@@ -315,12 +321,13 @@ its inequalities unchanged.
 is defined and $\abs{f(x) - L} < \frac{\eps}{2}$ at every $x > N_1$, and $g$ is defined and
 $\abs{g(x) - M} < \frac{\eps}{2}$ at every $x > N_2$. Let $N = \max(N_1, N_2)$ and $x > N$. Then
 $f(x)$ and $g(x)$ are defined, and by [part (a) of the triangle
-inequality](#thm-calc-triangle-inequality),
+inequality](#thm-calc-triangle-inequality), then adding the two strict inequalities
+([property 4 of the order rules](#rem-calc-order-rules)),
 $$
 \begin{aligned}
-\abs{\bigl(f(x) + g(x)\bigr) - (L + M)}
-  &\le \abs{f(x) - L} + \abs{g(x) - M} \\
-  &< \frac{\eps}{2} + \frac{\eps}{2} = \eps .
+&\abs{\bigl(f(x) + g(x)\bigr) - (L + M)} \\
+&\quad \le \abs{f(x) - L} + \abs{g(x) - M} \\
+&\quad < \frac{\eps}{2} + \frac{\eps}{2} = \eps .
 \end{aligned}
 $$
 So $f + g$ is defined at every $x > N$, and $N$ wins the round $\eps$.
@@ -328,10 +335,12 @@ So $f + g$ is defined at every $x > N$, and $N$ wins the round $\eps$.
 **The other parts.** (a): for a constant, every $N$ wins every round, since $\abs{c - c} = 0$.
 For the identity and a height $B$, the threshold $N = B$ wins: $x > N$ says that $x > B$ (and as
 $x \to -\infty$, $x < N$ says that $x < B$). (c): the tolerance $1$ gives a threshold beyond
-which $\abs{f(x)} < \abs{L} + 1$, and the two tolerances of the product proof on the Limit Laws
-page give two more; beyond the largest of the three thresholds, that proof's inequalities hold
-word for word. (d): the tolerance $\frac{\abs{M}}{2}$ gives a threshold beyond which
-$\abs{g(x)} > \frac{\abs{M}}{2}$, so $g(x) \ne 0$ there, and the rest is as in that proof. (e) is
+which $\abs{f(x)} < \abs{L} + 1$, and the two tolerances of [the product
+proof](#prf-calc-limit-laws) on the Limit Laws page give two more; beyond the largest of the
+three thresholds, that proof's inequalities hold word for word. (That proof names its constant
+$N = \abs{M} + 1$; this is not our threshold.) (d): the tolerance $\frac{\abs{M}}{2}$ gives a
+threshold beyond which $\abs{g(x)} > \frac{\abs{M}}{2}$, so $g(x) \ne 0$ there, and the rest is
+as in [the quotient proof](#prf-calc-limit-laws) there. (e) is
 the product law used repeatedly, as in [the sketches for the power and square-root
 laws](#rem-calc-limit-laws-power-root-sketch). (f): the tolerance $L$ gives a threshold beyond
 which $f(x) > 0$ when $L > 0$; when $L = 0$, the hypothesis gives $f(x) \ge 0$ beyond $K$; the
@@ -397,11 +406,13 @@ reflection. Throughout, $a \ne 0$ and $b \ne 0$, since they are leading coeffici
 **Step 1: a power is at least its base.** Let $x \ge 1$. For each integer $i \ge 1$, $x^i$ is a
 product of positive numbers, so it is positive ([part (d) of the sign
 rules](#prop-calc-sign-rules)), and multiplying $1 \le x$ by the positive number $x^i$ gives
-$x^i \le x^{i + 1}$ ([property 5(b) of the order rules](#rem-calc-order-rules)). Chaining these
-for $i = 1, 2, \dots, j - 1$ by transitivity (property 2) gives
+$x^i \le x^{i + 1}$ ([property 5(b) of the order rules](#rem-calc-order-rules)). We claim that,
+for every integer $j \ge 1$,
 $$
-x \le x^j \quad\text{for every } x \ge 1 \text{ and every integer } j \ge 1 .
+x \le x^j .
 $$
+For $j = 1$ this is $x \le x$; if $x \le x^j$, then $x^j \le x^{j + 1}$ (as above) gives
+$x \le x^{j + 1}$ by transitivity (property 2), so by induction it holds for every $j \ge 1$.
 
 **Step 2: part (a).** The function $\frac{1}{x^j}$ is defined at every $x \ne 0$, since
 $x^j \ne 0$ there (part (a) of the sign rules). Let $\eps > 0$, and let $N$ be the larger of $1$
@@ -414,7 +425,8 @@ rules](#rem-calc-order-rules) gives $0 < \frac{1}{x^j} < \eps$. So
 $\abs{\frac{1}{x^j} - 0} = \frac{1}{x^j} < \eps$ ([the definition of the absolute
 value](#def-calc-absolute-value)), and $N$ wins the round $\eps$. As $x \to -\infty$: by
 [property 3 of the remark](#rem-calc-limit-at-infinity-facts) we need
-$\lim_{t \to \infty} \frac{1}{(-t)^j} = 0$. Since $(-t)^j = (-1)^j t^j$, this function is
+$\lim_{t \to \infty} \frac{1}{(-t)^j} = 0$. Since $(-t)^j = (-1)^j t^j$, and
+$\frac{1}{(-1)^j} = (-1)^j$ because $(-1)^j (-1)^j = 1$, this function is
 $(-1)^j \cdot \frac{1}{t^j}$, and the "in particular" of [part (c) of the limit laws at
 infinity](#thm-calc-limit-laws-at-infinity) gives the limit $(-1)^j \cdot 0 = 0$.
 
@@ -429,7 +441,10 @@ $c \ge 0$. Hence $r$ is defined at $x$, and $x^k \ne 0$.
 **Step 4: the denominator and the numerator, divided by a power.** Write
 $q(x) = b x^k + b_{k-1} x^{k-1} + \dots + b_1 x + b_0$, and for $x \ne 0$ let
 $$
-Q(x) = \frac{q(x)}{x^k} = b + b_{k-1} \cdot \frac{1}{x} + \dots + b_0 \cdot \frac{1}{x^k} .
+\begin{aligned}
+Q(x) &= \frac{q(x)}{x^k} \\
+  &= b + b_{k-1} \cdot \frac{1}{x} + \dots + b_0 \cdot \frac{1}{x^k} .
+\end{aligned}
 $$
 By (a) and the "in particular" of part (c) of the laws, each term $b_i \cdot \frac{1}{x^{k - i}}$
 with $i < k$ tends to $b_i \cdot 0 = 0$ as $x \to \infty$; the constant $b$ tends to $b$, by part
@@ -476,7 +491,8 @@ $\lim_{x \to \infty} r(x) = \infty$.
 If $\frac{a}{b} < 0$, apply this to $-p$, which has degree $m$ and leading coefficient $-a$, with
 $\frac{-a}{b} > 0$: so $\lim_{x \to \infty} \bigl(-r(x)\bigr) = \infty$. Given a real number $B$,
 a threshold that wins the round $-B$ for $-r$ wins the round $B$ for $r$ with "$<$": $-r(x) > -B$
-gives $r(x) < B$, multiplying by ${-1}$. So $\lim_{x \to \infty} r(x) = -\infty$.
+gives $r(x) < B$, multiplying by the negative number ${-1}$, which reverses the inequality
+([property 5(c) of the order rules](#rem-calc-order-rules)). So $\lim_{x \to \infty} r(x) = -\infty$.
 
 **Step 7: the limits as $x \to -\infty$.** Let $\tilde p(t) = p(-t)$ and $\tilde q(t) = q(-t)$.
 Since $(-t)^i = (-1)^i t^i$, the polynomial $\tilde p$ has the coefficient $(-1)^i a_i$ at $t^i$;
@@ -546,7 +562,10 @@ $x \ne -1$, so on $(-1, \infty)$, and part (a) of [](#def-calc-limit-at-infinity
 
 1. **Scratch work.** For $x > -1$, $x + 1 > 0$, and
    $$
-   f(x) - 2 = \frac{2x - 2(x + 1)}{x + 1} = \frac{-2}{x + 1} .
+   \begin{aligned}
+   f(x) - 2 &= \frac{2x - 2(x + 1)}{x + 1} \\
+     &= \frac{-2}{x + 1} .
+   \end{aligned}
    $$
    By [property 4 of the absolute value](#rem-calc-absolute-value-properties), and since
    $x + 1 > 0$, $\abs{f(x) - 2} = \frac{2}{x + 1}$.
@@ -605,7 +624,7 @@ the asymptote $y = 0$, and that of (iii) none.
 
 **Check.** (i) At $x = 1000$ the function is $\frac{2\,999\,002}{2\,000\,005} \approx 1.499497$. ✓
 (ii) At $x = -1000$ it is about ${-0.000996}$. ✓ (iii) At $x = -100$ it is about ${-24.99}$, and
-at $x = -1000$ about ${-249.99}$. ✓
+at $x = -1000$ about ${-250.00}$. ✓
 :::
 
 ### Square roots
@@ -620,18 +639,19 @@ at $x = -1000$ about ${-249.99}$. ✓
    ([property 5 of the absolute value](#rem-calc-absolute-value-properties)), and both $\abs{x}$
    and $\sqrt{x^2 + 1}$ are non-negative, so the order part of [the square-root
    remark](#rem-calc-square-roots) gives $\abs{x} < \sqrt{x^2 + 1}$. With $-x \le \abs{x}$
-   (property 3 of the absolute value), $\sqrt{x^2 + 1} + x > 0$. So we may multiply and divide
-   by it, at every $x$:
+   (property 3 of the absolute value), $\sqrt{x^2 + 1} + x > 0$. So we may divide by it, at
+   every $x$. Using $\bigl(\sqrt{y}\bigr)^2 = y$ for $y \ge 0$,
    $$
    \begin{aligned}
-   &\sqrt{x^2 + 1} - x \\
-   &\quad = \frac{\bigl(\sqrt{x^2 + 1} - x\bigr)\bigl(\sqrt{x^2 + 1} + x\bigr)}{\sqrt{x^2 + 1} + x} \\
-   &\quad = \frac{(x^2 + 1) - x^2}{\sqrt{x^2 + 1} + x} \\
-   &\quad = \frac{1}{\sqrt{x^2 + 1} + x},
+   &\bigl(\sqrt{x^2 + 1} - x\bigr)\bigl(\sqrt{x^2 + 1} + x\bigr) \\
+   &\quad = (x^2 + 1) - x^2 = 1 ,
    \end{aligned}
    $$
-   using $\bigl(\sqrt{y}\bigr)^2 = y$ for $y \ge 0$. This is an identity at every $x$, not only
-   near some point.
+   and dividing by $\sqrt{x^2 + 1} + x$,
+   $$
+   \sqrt{x^2 + 1} - x = \frac{1}{\sqrt{x^2 + 1} + x} .
+   $$
+   This is an identity at every $x$, not only near some point.
 3. **Take out $x$ under the root.** For $x > 0$, the number $x\sqrt{1 + \frac{1}{x^2}}$ is
    non-negative, and its square is $x^2 \bigl(1 + \frac{1}{x^2}\bigr) = x^2 + 1$. By the
    uniqueness in [the square-root remark](#rem-calc-square-roots), it is $\sqrt{x^2 + 1}$.
@@ -679,13 +699,26 @@ Find the horizontal asymptotes of the graph of $f(x) = \dfrac{x}{\sqrt{x^2 + 1}}
 4. **As $x \to -\infty$.** For $x < 0$, $\abs{x} = -x$ ([the definition of the absolute
    value](#def-calc-absolute-value)), so
    $$
-   f(x) = \frac{x}{-x\sqrt{1 + 1/x^2}} = -\frac{1}{\sqrt{1 + 1/x^2}} .
+   \begin{aligned}
+   f(x) &= \frac{x}{-x\sqrt{1 + 1/x^2}} \\
+     &= -\frac{1}{\sqrt{1 + 1/x^2}} .
+   \end{aligned}
    $$
    By part (a) of [](#prop-calc-rational-at-infinity), $\frac{1}{x^2} \to 0$ as $x \to -\infty$
-   too, and the laws as $x \to -\infty$ give the limit $-1$.
+   too. The laws as $x \to -\infty$ then work as in step 3: by parts (a), (b) and (f) of
+   [](#thm-calc-limit-laws-at-infinity), $\sqrt{1 + \frac{1}{x^2}} \to 1$, which is not $0$; the
+   quotient law gives $\frac{1}{\sqrt{1 + 1/x^2}} \to 1$; and the "in particular" of part (c),
+   with the factor ${-1}$, gives the limit $-1$. The formula holds at every $x < 0$, so by
+   [property 2 of the remark](#rem-calc-limit-at-infinity-facts), in its form for
+   $x \to -\infty$, $\lim_{x \to -\infty} f(x) = -1$.
 
 $$
-\boxed{\lim_{x \to \infty} f(x) = 1 \quad\text{and}\quad \lim_{x \to -\infty} f(x) = -1}
+\boxed{
+\begin{aligned}
+\lim_{x \to \infty} f(x) &= 1 \\
+\lim_{x \to -\infty} f(x) &= -1
+\end{aligned}
+}
 $$
 
 So the graph has two horizontal asymptotes, $y = 1$ on the right and $y = -1$ on the left. This
@@ -989,7 +1022,10 @@ $7$
 
 For every real $x$, $x^2 + 1 > 0$, and
 $$
-f(x) - 2 = \frac{2x^2 + x - 2(x^2 + 1)}{x^2 + 1} = \frac{x - 2}{x^2 + 1} .
+\begin{aligned}
+f(x) - 2 &= \frac{2x^2 + x - 2(x^2 + 1)}{x^2 + 1} \\
+  &= \frac{x - 2}{x^2 + 1} .
+\end{aligned}
 $$
 
 **Every $x > 7$ works.** Let $x > 7$. Then $x - 2 > 0$, so $f(x) - 2$ is a quotient of two
@@ -1257,7 +1293,10 @@ remark](#rem-calc-limit-at-infinity-facts) so is that of the difference.
 **Uniqueness.** Suppose $m'$ and $c'$ work too. By the difference law, part (b) of
 [](#thm-calc-limit-laws-at-infinity), applied to the two differences,
 $$
-\lim_{x \to \infty} \bigl((m' - m)x + (c' - c)\bigr) = 0 - 0 = 0 .
+\begin{aligned}
+&\lim_{x \to \infty} \bigl((m' - m)x + (c' - c)\bigr) \\
+&\quad = 0 - 0 = 0 .
+\end{aligned}
 $$
 If $m' \ne m$, then $(m' - m)x + (c' - c)$ is a polynomial of degree $1$, and by part (d) of the
 proposition (with the denominator $1$, of degree $0$) its limit is $\infty$ or $-\infty$, which
