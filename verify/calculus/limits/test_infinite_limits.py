@@ -150,6 +150,20 @@ def test_definition_example_and_non_example():
     assert limit_is(1 / x, x, sp.oo, 0) and limit_is(x**2, x, sp.oo, sp.oo)
 
 
+def test_vertical_asymptote_in_words_example():
+    # In words after def-calc-vertical-asymptote (second pass, d2c349e): F = 1/x + 1 for x > 0 and
+    # F = 0 for x ≤ 0 is defined at 0 with F(0) = 0, and 1/x < F(x) for every x > 0 (property 3),
+    # so the δ = 1/M of the 1/x example wins every round M for F (property 2).
+    def F(v):
+        return 1 / v + 1 if v > 0 else Q(0)
+
+    assert F(Q(0)) == 0
+    assert empty_on(1 / x >= 1 / x + 1, x, sp.Interval.open(0, sp.oo))
+    assert infinite_holds(F, 0, lambda mv: 1 / mv, m_samples(5, breaks=(1,)), 1, 1)
+    # A second route: the right-hand formula tends to ∞ at 0 (SymPy mis-evaluates Piecewise limits).
+    assert limit_is(1 / x + 1, x, 0, sp.oo, dir="+")
+
+
 def test_vertical_asymptote_non_example():
     # g = (x² − 1)/(x − 1) = x + 1 for x ≠ 1; on (0, 2) minus 1, 1 < g < 3.
     g_expr = (x**2 - 1) / (x - 1)
@@ -373,6 +387,8 @@ def test_eg_calc_infinite_limits_sign_analysis():
     near0 = sp.Interval.open(-sp.Rational(1, 2), sp.Rational(1, 2))
     assert equal(sp.imageset(sp.Lambda(x, 3 - x), near0), sp.Interval.open(sp.Rational(5, 2), sp.Rational(7, 2)))
     assert equal(sp.imageset(sp.Lambda(x, 1 - x), near0), sp.Interval.open(sp.Rational(1, 2), sp.Rational(3, 2)))
+    # Second pass (d2c349e): 0 < ½ < 1 − x, so 1 − x > 0 on the whole window before property 6.
+    assert empty_on(1 - x <= 0, x, near0)
     assert empty_on(1 / (1 - x) <= sp.Rational(2, 3), x, near0)
     assert empty_on(h0 <= sp.Rational(5, 2) / (1 - x), x, near0)
     assert equal(sp.Rational(5, 2) * sp.Rational(2, 3), sp.Rational(5, 3))
@@ -428,7 +444,17 @@ def test_eg_calc_infinite_limits_hole():
     near1 = sp.Interval.open(sp.Rational(1, 2), sp.Rational(3, 2))
     assert equal(sp.solveset(sp.Abs(x - 1) < sp.Rational(1, 2), x, sp.S.Reals), near1)
     assert empty_on(x - 2 >= -sp.Rational(1, 2), x, near1)
+    # Second pass (d2c349e): multiplying by −1 gives 2 − x > ½, and |x − 2| = 2 − x on the window
+    # (the definition of |·|: x − 2 < 0 there, and |−p| = p for p > 0).
+    assert empty_on(2 - x <= sp.Rational(1, 2), x, near1)
+    assert empty_on(x - 2 >= 0, x, near1) and equal(sp.Abs(-pos), pos)
     assert empty_on(1 / (2 - x) >= 2, x, near1)
+    # The chain: 3|x − 1|·1/|x − 2| < 6|x − 1| at every x ≠ 1 of the window (|x − 1| = 1 − x on the
+    # left half, x − 1 on the right), and 6·(ε/6) = ε.
+    left1, right1 = sp.Interval.open(sp.Rational(1, 2), 1), sp.Interval.open(1, sp.Rational(3, 2))
+    assert empty_on(3 * (1 - x) / (2 - x) >= 6 * (1 - x), x, left1)
+    assert empty_on(3 * (x - 1) / (2 - x) >= 6 * (x - 1), x, right1)
+    assert equal(6 * (eps / 6), eps)
     # δ = min(½, ε/6), branch by branch: ε ≤ 3 gives δ = ε/6 ≤ ½, ε > 3 gives δ = ½ < ε/6; on both,
     # δ ≤ ½ and 6δ ≤ ε (solveset over each branch's ε).
     ev = sp.Symbol("e_real", real=True)
@@ -486,6 +512,8 @@ def test_eg_calc_infinite_limits_lens():
     # 3. (b) For u > 10: v > 1000 exactly when 10u > 1000u − 10 000, i.e. 10 000 > 990u, i.e.
     # u < 1000/99. SymPy solves v > 1000 on u > 10 directly.
     right = sp.Interval.open(10, sp.oo)
+    # Second pass (d2c349e): u − 10 and its reciprocal are both positive on u > 10.
+    assert empty_on(u - 10 <= 0, u, right) and empty_on(1 / (u - 10) <= 0, u, right)
     good = sp.solveset(v_expr > 1000, u, right)
     assert equal(good, sp.solveset(10 * u > 1000 * u - 10000, u, right))
     assert equal(good, sp.solveset(10000 > 990 * u, u, right))
@@ -650,6 +678,12 @@ def test_exr_calc_infinite_limits_hole():
     assert limit_is(f_expr, x, -1, sp.oo, dir="+") and limit_is(f_expr, x, -1, -sp.oo, dir="-")
     assert limit_is(f_expr, x, 2, sp.Rational(4, 3))
     assert equal((x + 2) / (x + 1) - sp.Rational(4, 3), (2 - x) / (3 * (x + 1)))
+    # Second pass (d2c349e): on (1, 3), x + 1 > 2, |x + 1| = x + 1 and 3|x + 1| > 6.
+    one_three = sp.Interval.open(1, 3)
+    assert equal(sp.solveset(sp.Abs(x - 2) < 1, x, sp.S.Reals), one_three)
+    assert empty_on(x + 1 <= 2, x, one_three)
+    assert empty_on(x + 1 <= 0, x, one_three) and equal(sp.Abs(pos), pos)
+    assert empty_on(3 * (x + 1) <= 6, x, one_three)
     assert empty_on(1 / (3 * (x + 1)) >= sp.Rational(1, 6), x, sp.Interval.open(1, 3))
 
     def f(v):
@@ -784,6 +818,23 @@ def test_exr_calc_infinite_limits_parameter():
     assert limit_is((x - 1) / den, x, 1, -sp.Rational(1, 2)) and limit_is((x - 3) / den, x, 3, sp.Rational(1, 2))
     assert equal(1 / (x - 3) + sp.Rational(1, 2), (x - 1) / (2 * (x - 3)))
     assert equal(1 / (x - 1) - sp.Rational(1, 2), -(x - 3) / (2 * (x - 1)))
+    # Second pass (d2c349e). c = 1: |x − 1| < 1 gives 0 < x < 2, then 3 − x > 1, x − 3 < 0,
+    # |x − 3| = 3 − x, 2|x − 3| > 2 and 1/(2|x − 3|) < ½ on the whole window.
+    zero_two = sp.Interval.open(0, 2)
+    assert equal(sp.solveset(sp.Abs(x - 1) < 1, x, sp.S.Reals), zero_two)
+    assert empty_on(3 - x <= 1, x, zero_two) and empty_on(x - 3 >= 0, x, zero_two)
+    assert equal(sp.Abs(-pos), pos)                 # x − 3 = −p < 0 gives |x − 3| = p = 3 − x
+    assert empty_on(2 * (3 - x) <= 2, x, zero_two)
+    assert empty_on(1 / (2 * (3 - x)) >= sp.Rational(1, 2), x, zero_two)
+    # c = 3: the printed form f − ½ = (3 − x)/(2(x − 1)), |3 − x| = |−(x − 3)| = |x − 3|, and on
+    # 2 < x < 4, |x − 1| = x − 1 > 1, so 1/(2|x − 1|) < ½.
+    assert equal(1 / (x - 1) - sp.Rational(1, 2), (3 - x) / (2 * (x - 1)))
+    assert equal(sp.Abs(3 - x), sp.Abs(-(x - 3))) and equal(sp.Abs(-(x - 3)), sp.Abs(x - 3))
+    two_four = sp.Interval.open(2, 4)
+    assert equal(sp.solveset(sp.Abs(x - 3) < 1, x, sp.S.Reals), two_four)
+    assert empty_on(x - 1 <= 1, x, two_four)
+    assert empty_on(x - 1 <= 0, x, two_four) and equal(sp.Abs(pos), pos)
+    assert empty_on(1 / (2 * (x - 1)) >= sp.Rational(1, 2), x, two_four)
 
     def f1(v):
         if v in (1, 3):
@@ -851,3 +902,91 @@ def test_common_mistakes():
     assert sign_on((x + 1) / (x - 2), sp.Interval.open(-1, 2)) == -1 and sign_on((x + 1) / (x - 2), sp.Interval.open(2, sp.oo)) == 1
     # "Every zero of the denominator is an asymptote": the numerator is 0 at 1 too, limit −2 there.
     assert equal((x**2 - 1).subs(x, 1), 0) and limit_is((x**2 - 1) / (x**2 - 3 * x + 2), x, 1, -2)
+
+
+def real_zeros(poly_expr):
+    """The real zeros of a polynomial, with their multiplicities (SymPy's roots, real ones only)."""
+    return {r: k for r, k in sp.roots(sp.Poly(poly_expr, x)).items() if r.is_real}
+
+
+def is_asymptote(expr, av):
+    """def-calc-vertical-asymptote, read by SymPy: some one-sided limit at av is ∞ or −∞."""
+    return any(sp.limit(expr, x, av, d) in (sp.oo, -sp.oo) for d in ("+", "-"))
+
+
+# Rational functions for the rule: the page's own, and ones built to stress it (a numerator zero of
+# lower, equal and higher multiplicity than the denominator's, a double pole with a cancelled
+# factor, a constant K < 0, and a denominator factor x² + 1 with no real zero).
+RULE_CASES = [
+    ((x + 1), (x - 2)),
+    ((x - 3), (x**3 - x**2)),
+    ((x**2 - 1), (x**2 - 3 * x + 2)),
+    (10 * x, (x - 10)),
+    ((x - 5), (x - 3)),
+    ((x + 5), (x**2 - 9)),
+    ((x - 2), (x**2 + x)),
+    ((x**2 - 4), (x**2 - x - 2)),
+    ((x - 1), (x**2 - 4 * x + 3)),
+    ((x - 3), (x**2 - 4 * x + 3)),
+    ((x - 1), (x - 1) ** 2),                       # numerator 0, still an asymptote after cancelling
+    ((x - 1) ** 2, (x - 1)),                       # numerator 0 to a higher order: a hole
+    ((x - 1) ** 2 * (x + 2), (x - 1) ** 2 * (x - 4) ** 3),
+    (-3 * (x + 1) * (x - 2), (x + 1) * (x - 2) ** 2 * (x**2 + 1)),
+    ((x**2 + 1), x**2 * (x + 3)),
+]
+
+
+def test_check_each_zero_rule_and_looking_ahead():
+    """Second pass (d2c349e): the ✓ line of "Every zero of the denominator…", the looking-ahead
+    after it, and "after cancelling common factors" in the introduction to the sign analysis."""
+    for num, den in RULE_CASES:
+        f_expr = num / den
+        reduced = sp.cancel(f_expr)
+        rnum, rden = sp.fraction(reduced)
+        assert equal(sp.gcd(rnum, rden), 1)
+        reduced_zeros = real_zeros(rden)
+        for av in real_zeros(den):
+            # The ✓ line: where the numerator is not 0, bound the cofactor and conclude. The
+            # cofactor h = num·(x − a)^k/den (k the multiplicity of a in den) is defined at a with
+            # h(a) ≠ 0. On a closed window around a that holds no zero and no pole of h, h has one
+            # sign, and its least value times that sign is the bound m > 0 of step 4; then the five
+            # steps give ±∞ on each side, with the sign of h(a)·(x − a)^(−k).
+            if not equal(num.subs(x, av), 0):
+                k = real_zeros(den)[av]
+                h = sp.cancel(num * (x - av) ** k / den)
+                ha = h.subs(x, av)
+                assert ha.is_finite and not equal(ha, 0)
+                hn, hd = sp.fraction(h)
+                others = [abs(r - av) for r in list(real_zeros(hn)) + list(real_zeros(hd))]
+                rho = min(others + [sp.Integer(2)]) / 2
+                m = sp.minimum(sp.sign(ha) * h, x, sp.Interval(av - rho, av + rho))
+                assert m.is_positive
+                right = sp.oo if ha > 0 else -sp.oo
+                left = right if k % 2 == 0 else -right
+                assert limit_is(f_expr, x, av, right, dir="+") and limit_is(f_expr, x, av, left, dir="-")
+                assert is_asymptote(f_expr, av)
+            # Where it is 0 too: cancel and look again. a gives an asymptote exactly when it is
+            # still a zero of the denominator after cancelling; otherwise the limit is finite.
+            else:
+                assert is_asymptote(f_expr, av) == (av in reduced_zeros)
+                if av not in reduced_zeros:
+                    assert limit_is(f_expr, x, av, reduced.subs(x, av))
+        # The looking-ahead: after cancelling common factors, every zero of the denominator is a
+        # point where the numerator is not 0, and gives a vertical asymptote (here by SymPy's
+        # limits; on the page by the limit laws and part (c) of prop-calc-infinite-limit-product).
+        # The same laws: at a point of the domain of the reduced form, the limit is its value.
+        for av, k in reduced_zeros.items():
+            assert not equal(rnum.subs(x, av), 0)
+            assert is_asymptote(f_expr, av)
+            # l. 396: near such a zero, the reduced form is 1/(x − a)^k times h with h(a) ≠ 0.
+            h = sp.cancel(reduced * (x - av) ** k)
+            assert equal(reduced, h * (1 / (x - av) ** k))
+            assert h.subs(x, av).is_finite and not equal(h.subs(x, av), 0)
+            assert k >= 1
+        for av in (sp.Rational(-7, 2), sp.Rational(1, 3), sp.Rational(5, 2), 11):
+            if not equal(rden.subs(x, av), 0):
+                assert limit_is(reduced, x, av, reduced.subs(x, av))
+    # The rule needs "cancel and look again", not "numerator 0 means a hole": (x − 1)/(x − 1)² has
+    # numerator 0 at 1 and still the asymptote x = 1; (x − 1)²/(x − 1) has a hole there.
+    assert equal((x - 1).subs(x, 1), 0) and is_asymptote((x - 1) / (x - 1) ** 2, 1)
+    assert not is_asymptote((x - 1) ** 2 / (x - 1), 1)
