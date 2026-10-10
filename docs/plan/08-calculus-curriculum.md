@@ -85,7 +85,7 @@ pages, many exercises, few proofs.*
 **`calc-trig-functions`** · Trigonometric Functions · `trigonometric-functions.md`
 - Prereqs: `calc-functions`
 - Objectives: work in radians; define sin and cos on the unit circle; use the core identities; graph trigonometric functions with amplitude, period and phase.
-- Results: `def-calc-radian`, `def-calc-sin-cos`, `def-calc-tan-sec-csc-cot`; `thm-calc-pythagorean-identity` **F**; `prop-calc-sin-bounded` ($-1\le\sin t\le 1$ for real $t$, from the Pythagorean identity) **F**; `prop-calc-sin-multiples-of-pi` ($\sin(k\pi)=0$ for every integer $k$) **F**; `prop-calc-sin-maxima` ($\sin(\pi/2+2k\pi)=1$ for every integer $k$) **F**, the three facts `calc-limit` takes from school; `thm-calc-addition-formulas` **R** (geometric proof); `lem-calc-sin-bounds` ($\sin\theta<\theta<\tan\theta$ for $0<\theta<\pi/2$, by comparing areas) **F**; `def-calc-period`.
+- Results: `def-calc-radian`, `def-calc-sin-cos`, `def-calc-tan-sec-csc-cot`; `thm-calc-pythagorean-identity` **F**; `prop-calc-sin-bounded` ($-1\le\sin t\le 1$ for real $t$, from the Pythagorean identity) **F**; `prop-calc-sin-multiples-of-pi` ($\sin(k\pi)=0$ for every integer $k$) **F**; `prop-calc-sin-maxima` ($\sin(\pi/2+2k\pi)=1$ for every integer $k$) **F**, the three facts `calc-limit` takes from school; `thm-calc-addition-formulas` **R** (geometric proof); `lem-calc-sin-bounds` ($\sin\theta<\theta<\tan\theta$ for $0<\theta<\pi/2$, by comparing areas) **F**; `prop-calc-pi-bounds` ($2\sqrt{2}<\pi<4$, from `lem-calc-sin-bounds` at $\theta=\pi/4$; used by `calc-squeeze-theorem`) **F**; `def-calc-period`.
 - Widgets: `function-plot` (unit circle ↔ graph)
 
 **`calc-inverse-trig`** · Inverse Trigonometric Functions · `inverse-trigonometric-functions.md`
@@ -137,12 +137,12 @@ pages, many exercises, few proofs.*
 **`calc-infinite-limits`** · Infinite Limits and Vertical Asymptotes · `infinite-limits.md`
 - Prereqs: `calc-one-sided-limits`, `calc-polynomial-rational`
 - Objectives: determine infinite one-sided limits via sign analysis; locate vertical asymptotes; explain why "$=\infty$" means the limit does not exist in ℝ.
-- Results: `def-calc-infinite-limit` (precise version in rigorous track); `def-calc-vertical-asymptote`; `prop-calc-reciprocal-power-limits` **F**.
+- Results: `def-calc-infinite-limit` (precise version in rigorous track); `def-calc-infinite-limit-precise` (M–δ version; rigorous-track dropdown directly after `def-calc-infinite-limit`, cited by the core **F** proofs); `def-calc-vertical-asymptote`; `prop-calc-infinite-limit-no-real-limit` (a one-sided limit that is $\infty$ or $-\infty$ is no real number $L$; so $\lim_{x\to a}f(x)$ does not exist if at least one one-sided limit at $a$ is $\infty$ or $-\infty$) **F**; `prop-calc-reciprocal-power-limits` **F**; `prop-calc-infinite-limit-product` ($f=hg$ on $(a,a+r)$ with $\lim_{x\to a^{+}}g(x)=\pm\infty$: (a) if $h\ge m>0$ there, $f$ has the same infinite limit as $g$; (b) if $h\le -m<0$, the opposite one; (c) if $h\to L\ne0$, (a) for $L>0$ and (b) for $L<0$; the same for left-hand limits) **F**.
 
 **`calc-limits-at-infinity`** · Limits at Infinity and Horizontal Asymptotes · `limits-at-infinity.md`
 - Prereqs: `calc-limit-laws`, `calc-infinite-limits`
 - Objectives: compute limits at ±∞ of rational and root expressions; find horizontal asymptotes; compare growth informally.
-- Results: `def-calc-limit-at-infinity` (precise: ε–M); `thm-calc-limit-laws-at-infinity` **S**; `prop-calc-rational-at-infinity` **F**.
+- Results: `def-calc-limit-at-infinity` (precise: ε–N); `rem-calc-limit-at-infinity-facts` (uniqueness, only the tail matters, reflection); `def-calc-horizontal-asymptote`; `thm-calc-limit-laws-at-infinity` **S**; `prop-calc-rational-at-infinity` **F**.
 
 ## Chapter 3 — Continuity (`continuity/`)
 

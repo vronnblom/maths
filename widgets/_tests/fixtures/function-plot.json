@@ -998,6 +998,58 @@
    ]
   },
   {
+   "source": "calculus/limits/squeeze-theorem.md#wdg-calc-squeeze-theorem-band",
+   "setting": "defaults",
+   "f": "k*abs(x) + (1 - abs(k))*x*sin(1/x)",
+   "variable": "x",
+   "params": {
+    "k": 0
+   },
+   "holeX": 0,
+   "points": [
+    0.1,
+    0.01,
+    0.001,
+    -0.001,
+    -0.01,
+    -0.1
+   ],
+   "values": [
+    -0.05440211108893698,
+    -0.005063656411097588,
+    0.0008268795405320026,
+    0.0008268795405320026,
+    -0.005063656411097588,
+    -0.05440211108893698
+   ]
+  },
+  {
+   "source": "calculus/limits/squeeze-theorem.md#wdg-calc-squeeze-theorem-band",
+   "setting": "k one step up",
+   "f": "k*abs(x) + (1 - abs(k))*x*sin(1/x)",
+   "variable": "x",
+   "params": {
+    "k": 1
+   },
+   "holeX": 0,
+   "points": [
+    0.1,
+    0.01,
+    0.001,
+    -0.001,
+    -0.01,
+    -0.1
+   ],
+   "values": [
+    0.1,
+    0.01,
+    0.001,
+    0.001,
+    0.01,
+    0.1
+   ]
+  },
+  {
    "source": "templates/topic.md#wdg-calc-limit-average-speed",
    "setting": "defaults",
    "f": "(5*(1+h)^2 - 5)/h",
