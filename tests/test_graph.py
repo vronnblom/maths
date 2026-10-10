@@ -39,8 +39,11 @@ def test_closure():
     mvt = g.closure("calc-mean-value-theorem")
     assert {"calc-extreme-values", "calc-evt", "calc-continuity", "calc-limit", "calc-real-numbers"} <= mvt
     assert "calc-mean-value-theorem" not in mvt and "calc-lhopital" not in mvt
-    # The subject index is read after all its topics.
-    assert len(g.closure("calc-subject")) == 82
+    # The subject index is read after all its topics, and after the chapter index pages that exist.
+    topics = {label for label in g.nodes if g.nodes[label].kind == "topic"}
+    chapters = {label for label in g.nodes if g.nodes[label].kind == "chapter"}
+    assert len(topics) == 82 and "calc-limits-chapter" in chapters
+    assert g.closure("calc-subject") == topics | chapters
 
 
 def test_closure_cli(capsys):
