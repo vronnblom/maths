@@ -268,7 +268,7 @@ or $\lim_{x \to -\infty} f(x) = L$, and in either case $L = 2$, by uniqueness, [
 remark on limits at infinity](#rem-calc-limit-at-infinity-facts). So $y = 2$ is the only one.
 ::::
 
-::::{exercise} A root and a factor
+::::{exercise} A quotient at 3
 :label: exr-calc-limits-review-root-and-factor
 :class: tier-b
 
@@ -300,7 +300,9 @@ $\frac{1}{24}$
 $x + 1 > 3 > 0$ (adding $1$, [property 3 of the order rules](#rem-calc-order-rules)), so
 $\sqrt{x + 1}$ is defined ([the square-root remark](#rem-calc-square-roots)); and
 $x^2 - 9 = (x - 3)(x + 3)$ is not $0$, by [part (a) of the sign rules](#prop-calc-sign-rules),
-since $x \ne 3$ and $x \ne -3$. So the function is defined at every such $x$.
+since $x \ne 3$, and $x \ne -3$ because $x > 2 > -3$ (transitivity, [property 2 of the order
+rules](#rem-calc-order-rules), and then trichotomy, property 1). So the function is defined at
+every such $x$.
 
 **Rationalise and cancel.** For such $x$, $\sqrt{x + 1} \ge 0$, so
 $\sqrt{x + 1} + 2 \ge 2 > 0$ (adding $2$, property 3), and we may multiply the numerator and the
@@ -364,7 +366,8 @@ order rules](#rem-calc-order-rules)), so $0 < -x < \frac{\pi}{2}$, and
 $\cos x = \cos(-x) > 0$ by properties 4 and 8 of $P(t)$. By [part (c) of the lemma on sine and
 cosine near 0](#lem-calc-sin-cos-near-zero), $\cos x < \frac{\sin x}{x}$, so
 $\frac{\sin x}{x} > 0$ by transitivity ([property 2 of the order rules](#rem-calc-order-rules)).
-In particular $\sin x \ne 0$. So the function $F(x) = \frac{x^2 \sin(1/x)}{\sin x}$ is defined at
+In particular $\sin x \ne 0$: $\sin x = \frac{\sin x}{x} \cdot x$ is a product of two non-zero
+numbers, so it is not $0$, by [part (a) of the sign rules](#prop-calc-sign-rules). So the function $F(x) = \frac{x^2 \sin(1/x)}{\sin x}$ is defined at
 every such $x$, and there
 $$
 F(x) = \frac{1}{\sin x / x} \cdot x\sin\Bigl(\frac{1}{x}\Bigr) .
@@ -382,7 +385,7 @@ cosine](#prop-calc-sin-bounded), with $t = \frac{1}{x}$, $-1 \le \sin(1/x) \le 1
 $\abs{\sin(1/x)} \le 1$, by [part (b) of the proposition on distance
 inequalities](#prop-calc-abs-interval) (centre $0$, radius $1$). By [property 4 of the absolute
 value](#rem-calc-absolute-value-properties), and multiplying $\abs{\sin(1/x)} \le 1$ by the number
-$\abs{x} \ge 0$, which gives only $\le$ ([property 5(b) of the order
+$\abs{x} \ge 0$ (property 1 of the absolute value), which gives only $\le$ ([property 5(b) of the order
 rules](#rem-calc-order-rules)),
 $$
 \begin{aligned}
@@ -405,79 +408,76 @@ $$
 $$
 ::::
 
-::::{exercise} Salt in a tank
-:label: exr-calc-limits-review-brine-tank
+::::{exercise} The average cost per kilogram
+:label: exr-calc-limits-review-average-cost
 :class: tier-b applied
 
-A tank holds $100$ litres of pure water. Brine with $30$ grams of salt per litre flows in at
-$5$ litres per minute and mixes at once; the tank is large enough never to overflow. After $t$
-minutes the tank holds $100 + 5t$ litres of liquid and $150t$ grams of salt, so the concentration
-of salt is
+A coffee roastery pays $3600$ euros a week in fixed costs (rent, the roaster, wages), and
+$8$ euros for each kilogram of coffee it roasts (beans, packaging, energy). If it roasts $x$
+kilograms in a week, where $x > 0$, its average cost is
 $$
-C(t) = \frac{150t}{100 + 5t}
+A(x) = \frac{8x + 3600}{x}
 $$
-grams per litre, for $t \ge 0$. (a) Find $\displaystyle \lim_{t \to \infty} C(t)$, in grams per
-litre. (b) Find the smallest number $N$ such that $C(t) > 29$ for every $t > N$.
+euros per kilogram. (a) Find $\displaystyle \lim_{x \to \infty} A(x)$, in euros per kilogram.
+(b) The roastery sells its coffee at $10$ euros per kilogram. Find the smallest number $N$ such
+that $A(x) < 10$ for every $x > N$.
 
 :::{admonition} Hint 1
 :class: dropdown hint
 For (a), compare the degrees of the numerator and the denominator. For (b), multiply the
-inequality $C(t) > 29$ by the denominator, and check its sign first.
+inequality $A(x) < 10$ by the denominator, and check its sign first.
 :::
 
 :::{admonition} Answer
 :class: dropdown answer
-(a) $30$ (b) $580$
+(a) $8$ (b) $1800$
 :::
 ::::
 
-::::{solution} exr-calc-limits-review-brine-tank
-:label: sol-calc-limits-review-brine-tank
+::::{solution} exr-calc-limits-review-average-cost
+:label: sol-calc-limits-review-average-cost
 :class: dropdown
 
-**(a)** $C = \frac{p}{q}$ with $p(t) = 150t$, of degree $1$ and leading coefficient $150$, and
-$q(t) = 5t + 100$, of degree $1$ and leading coefficient $5$. By [part (c) of the proposition on
-rational functions at infinity](#prop-calc-rational-at-infinity), the rational function
-$\frac{p}{q}$ has the limit $\frac{150}{5} = 30$ as $t \to \infty$. It equals $C(t)$ at every
-$t > 0$, so by [property 2 of the remark on limits at infinity](#rem-calc-limit-at-infinity-facts)
-(only the tail matters), $\lim_{t \to \infty} C(t) = 30$, in grams per litre: in the long run the concentration approaches that of the
-incoming brine.
+**(a)** $A = \frac{p}{q}$ with $p(x) = 8x + 3600$, of degree $1$ and leading coefficient $8$, and
+$q(x) = x$, of degree $1$ and leading coefficient $1$. By [part (c) of the proposition on rational
+functions at infinity](#prop-calc-rational-at-infinity), the rational function $\frac{p}{q}$ has
+the limit $\frac{8}{1} = 8$ as $x \to \infty$. It equals $A(x)$ at every $x > 0$, so by [property
+2 of the remark on limits at infinity](#rem-calc-limit-at-infinity-facts) (only the tail
+matters), $\lim_{x \to \infty} A(x) = 8$, in euros per kilogram: as the fixed costs are spread
+over more and more coffee, the average cost approaches the cost of one more kilogram.
 
-**(b)** Let $t \ge 0$. Then $5t \ge 0$ ([property 5(b) of the order rules](#rem-calc-order-rules),
-multiplying $t \ge 0$ by $5 \ge 0$), so $100 + 5t \ge 100 > 0$ (adding $100$, property 3). Multiplying
-by the positive number $100 + 5t$ keeps a strict inequality, and multiplying back by its
-reciprocal, which is positive (property 6), keeps it too (property 5(a)). So $C(t) > 29$ holds
-exactly when
+**(b)** Let $x > 0$. Multiplying by the positive number $x$ keeps a strict inequality ([property
+5(a) of the order rules](#rem-calc-order-rules)), and multiplying back by its reciprocal
+$\frac{1}{x}$, which is positive (property 6), keeps it too. So $A(x) < 10$ holds exactly when
 $$
-\begin{aligned}
-150t &> 29(100 + 5t) \\
-  &= 2900 + 145t .
-\end{aligned}
+8x + 3600 < 10x .
 $$
-Adding $-145t$ to both sides (property 3), and then multiplying by the positive number
-$\frac15$, or back by $5$ (property 5(a)), this holds exactly when $5t > 2900$, that is, when
-$t > 580$.
+Adding $-8x$ to both sides, or back $8x$ (property 3 both ways), this holds exactly when
+$3600 < 2x$; and multiplying by the positive number $\frac12$, or back by $2$ (property 5(a)),
+exactly when $x > 1800$.
 
-So every $t > 580$ has $C(t) > 29$, and $N = 580$ works. No smaller $N$ does: if $N < 580$, then
-$t = 580$ satisfies $t > N$, but
+So every $x > 1800$ has $A(x) < 10$: such an $x$ is positive, since $1800 > 0$ (transitivity,
+property 2), so the equivalence above applies to it. So $N = 1800$ works. No smaller $N$ does:
+if $N < 1800$, then $x = 1800$ satisfies $x > N$, but
 $$
-C(580) = \frac{87\,000}{3000} = 29,
+A(1800) = \frac{18\,000}{1800} = 10,
 $$
-which is not greater than $29$. So the smallest $N$ is $580$ minutes, a little under ten hours.
+which is not less than $10$. So the smallest $N$ is $1800$: the roastery's average cost is below
+its price exactly when it roasts more than $1800$ kilograms a week.
 
 In the language of [the definition of a limit at infinity](#def-calc-limit-at-infinity): for
-$t \ge 0$,
+$x > 0$,
 $$
 \begin{aligned}
-C(t) - 30 &= \frac{150t - 30(100 + 5t)}{100 + 5t} \\
-  &= \frac{-3000}{100 + 5t} < 0,
+A(x) - 8 &= \frac{(8x + 3600) - 8x}{x} \\
+  &= \frac{3600}{x} > 0,
 \end{aligned}
 $$
-because a negative number divided by a positive one is negative ([part (c) of the sign
-rules](#prop-calc-sign-rules)). So $\abs{C(t) - 30} = 30 - C(t)$ ([the definition of the absolute
-value](#def-calc-absolute-value)), which is less than $1$ exactly when $C(t) > 29$ (property 3).
-So $580$ is the smallest threshold that wins the round $\eps = 1$, and the concentration stays
-below $30$ throughout.
+because a quotient of two positive numbers is positive ([part (c) of the sign
+rules](#prop-calc-sign-rules)). So $\abs{A(x) - 8} = A(x) - 8$ ([the definition of the absolute
+value](#def-calc-absolute-value)), which is less than $2$ exactly when $A(x) < 10$ (adding $8$,
+or back $-8$, property 3). So $1800$ is the smallest threshold that wins the round $\eps = 2$,
+and the average cost stays above $8$ euros per kilogram throughout.
 ::::
 
 ::::{exercise} A root over a line, far away and nearby
@@ -517,7 +517,9 @@ of [the square-root remark](#rem-calc-square-roots) (and its uniqueness part for
 
 **(a)** Let $x < 0$, so that $-x > 0$ (multiplying by ${-1}$, property 5(c)). Then $x^2 > 0$
 (part (c) of the sign rules), so $\frac{1}{x^2} > 0$ (property 6) and $4 + \frac{1}{x^2} > 0$
-(adding two positive numbers, property 4). The number $-x\sqrt{4 + \frac{1}{x^2}}$ is non-negative, with square
+(adding two positive numbers, property 4). Multiplying $\sqrt{4 + \frac{1}{x^2}} \ge 0$ (the
+square-root remark) by $-x \ge 0$ gives $-x\sqrt{4 + \frac{1}{x^2}} \ge 0$ (property 5(b)), and
+this number has the square
 $x^2\bigl(4 + \frac{1}{x^2}\bigr) = 4x^2 + 1$. By the uniqueness in the square-root remark it is
 $\sqrt{4x^2 + 1}$. Dividing the numerator and the denominator by the positive number $-x$, and
 using $\frac{x - 1}{-x} = -1 + \frac{1}{x}$,
@@ -527,7 +529,8 @@ $$
 As $x \to -\infty$, $\frac{1}{x} \to 0$ and $\frac{1}{x^2} \to 0$, by [part (a) of the proposition
 on rational functions at infinity](#prop-calc-rational-at-infinity). By parts (a) and (b) of
 [the limit laws at infinity](#thm-calc-limit-laws-at-infinity), as $x \to -\infty$,
-$4 + \frac{1}{x^2} \to 4 > 0$, so the root approaches $\sqrt{4} = 2$ by part (f); and
+$4 + \frac{1}{x^2} \to 4 > 0$, so the root approaches $\sqrt{4} = 2$ by part (f) (as $2 \ge 0$
+and $2^2 = 4$, the square-root remark); and
 $-1 + \frac{1}{x} \to -1 \ne 0$. By the quotient law, part (d), the right-hand side approaches
 $\frac{2}{-1} = -2$. It equals $f(x)$ at every $x < 0$, so by [property 2 of the remark on limits
 at infinity](#rem-calc-limit-at-infinity-facts), $\lim_{x \to -\infty} f(x) = -2$.
@@ -544,17 +547,27 @@ $(0, 1)$, $\lim_{x \to 1^{-}} f(x) = -\infty$.
 two horizontal asymptotes $y = -2$ and $y = 2$, and the vertical asymptote $x = 1$.)
 ::::
 
-::::{exercise} A positive limit over a square
+::::{exercise} A limit over a square
 :label: exr-calc-limits-review-positive-over-square
 :class: tier-c rigor
 
 Let $a$ be a real number, and let $f$ be a function that is defined at every point of an open
-interval containing $a$, except possibly at $a$, with $\lim_{x \to a} f(x) = L$, where $L > 0$.
-(a) Prove that there is an $r > 0$ such that $f$ is defined and $f(x) > \frac{L}{2}$ at every $x$
-with $0 < \abs{x - a} < r$. (b) Prove that
-$$
-\lim_{x \to a} \frac{f(x)}{(x - a)^2} = \infty .
-$$
+interval containing $a$, except possibly at $a$, with $\lim_{x \to a} f(x) = L$. Let
+$F(x) = \frac{f(x)}{(x - a)^2}$ for $x \ne a$.
+
+(a) Let $L > 0$. Prove that there is an $r > 0$ such that $f$ is defined and $f(x) > \frac{L}{2}$
+at every $x$ with $0 < \abs{x - a} < r$. (With [part (b) of the proposition on reciprocal
+powers](#prop-calc-reciprocal-power-limits) and [part (a) of the proposition on a factor that
+stays away from $0$](#prop-calc-infinite-limit-product), on each side of $a$, it follows that
+$\lim_{x \to a} F(x) = \infty$ whenever $L > 0$.)
+
+(b) The hypothesis $L > 0$ matters. For each of (i), (ii) and (iii), give a function $f$,
+defined at every real $x$, with $\lim_{x \to a} f(x) = 0$, such that
+- (i) $\lim_{x \to a} F(x) = \infty$;
+- (ii) $\lim_{x \to a} F(x)$ is a real number;
+- (iii) $F$ has no limit at $a$: no real limit, and neither $\infty$ nor $-\infty$.
+
+Prove each claim.
 
 :::{admonition} Hint 1
 :class: dropdown hint
@@ -564,15 +577,16 @@ $\abs{f(x) - L} < \eps$ force $f(x) > \frac{L}{2}$?
 
 :::{admonition} Hint 2
 :class: dropdown hint
-For (b), write $\frac{f(x)}{(x - a)^2} = f(x) \cdot \frac{1}{(x - a)^2}$, and treat each side of
-$a$ on its own.
+For (b), try $f(x) = (x - a)^k$ for small powers $k$, and look at each side of $a$ on its own.
+One of the three cases needs an absolute value.
 :::
 
 :::{admonition} Answer
 :class: dropdown answer manual
-(a) The $\delta$ that wins the round $\eps = \frac{L}{2}$ is such an $r$. (b) On each side of $a$,
-$f(x) \ge \frac{L}{2}$ by (a), and $\frac{1}{(x - a)^2} \to \infty$; a positive factor that stays
-away from $0$ keeps the infinite limit.
+(a) The $\delta$ that wins the round $\eps = \frac{L}{2}$ is such an $r$. (b) For example:
+(i) $f(x) = \abs{x - a}$, with $F(x) = \frac{1}{\abs{x - a}}$; (ii) $f(x) = (x - a)^2$, with
+$F(x) = 1$; (iii) $f(x) = x - a$, with $F(x) = \frac{1}{x - a}$ tending to $\infty$ on the right
+of $a$ and to $-\infty$ on the left.
 :::
 ::::
 
@@ -591,35 +605,64 @@ L - \frac{L}{2} < f(x) < L + \frac{L}{2},
 $$
 and the left-hand inequality says $f(x) > \frac{L}{2}$.
 
-**(b)** Let $r$ be as in (a), and let $g(x) = \frac{1}{(x - a)^2}$ and
-$F(x) = \frac{f(x)}{(x - a)^2}$ for $x \ne a$. By [part (e) of the proposition on distance
-inequalities](#prop-calc-abs-interval), every $x$ in $(a, a + r)$ or in $(a - r, a)$ has
-$0 < \abs{x - a} < r$, so by (a) $f$ is defined there and $f(x) > \frac{L}{2}$, hence
-$f(x) \ge \frac{L}{2}$. At these $x$, $F(x) = f(x)\,g(x)$.
+**(b)** Each $f$ below is defined at every real $x$. If $x \ne a$, then $x - a \ne 0$, so
+$(x - a)^2 \ne 0$ by [part (a) of the sign rules](#prop-calc-sign-rules), and $F(x)$ is defined.
+We write $g(x) = \frac{1}{x - a}$ for $x \ne a$, the function of [the proposition on reciprocal
+powers](#prop-calc-reciprocal-power-limits) with $n = 1$, which is odd: by its parts (a) and (c),
+$\lim_{x \to a^{+}} g(x) = \infty$ and $\lim_{x \to a^{-}} g(x) = -\infty$.
 
-*From the right.* By [part (a) of the proposition on reciprocal
-powers](#prop-calc-reciprocal-power-limits), with $n = 2$, $\lim_{x \to a^{+}} g(x) = \infty$. By
-[part (a) of the proposition on a factor that stays away from $0$](#prop-calc-infinite-limit-product),
-with $h = f$, $m = \frac{L}{2} > 0$ and the interval $(a, a + r)$,
-$\lim_{x \to a^{+}} F(x) = \infty$.
+*(i) $f(x) = \abs{x - a}$.* First, $f(x) \to 0$. Let $\eps > 0$ and $\delta = \eps$. If
+$0 < \abs{x - a} < \delta$, then $\abs{x - a} \ge 0$ ([property 1 of the absolute
+value](#rem-calc-absolute-value-properties)), so it is its own absolute value ([the definition of
+the absolute value](#def-calc-absolute-value)), and
+$\abs{f(x) - 0} = \abs{x - a} < \eps$. So $\lim_{x \to a} f(x) = 0$, by [the definition of the
+limit](#def-calc-limit).
 
-*From the left.* By part (b) of the proposition on reciprocal powers, since $n = 2$ is even,
-$\lim_{x \to a^{-}} g(x) = \infty$. The left-hand version of part (a) of the proposition on a
-factor that stays away from $0$, with the interval $(a - r, a)$, gives
-$\lim_{x \to a^{-}} F(x) = \infty$.
+Next, let $x \ne a$. Then $\abs{x - a} \ne 0$ (property 1), and
+$(x - a)^2 = \abs{x - a}^2$ (property 5), so cancelling $\abs{x - a}$ gives
+$F(x) = \frac{1}{\abs{x - a}}$. If $x > a$, then $x - a > 0$ ([part (b) of the sign
+rules](#prop-calc-sign-rules)), so $\abs{x - a} = x - a$ (the definition of the absolute value)
+and $F(x) = 1 \cdot g(x)$. If $x < a$,
+then $x - a < 0$, so $\abs{x - a} = -(x - a)$ and $F(x) = (-1) \cdot g(x)$.
+- *From the right.* By [part (a) of the proposition on a factor that stays away from
+  $0$](#prop-calc-infinite-limit-product), with $h(x) = 1 \ge 1 = m$ on $(a, a + 1)$, and since
+  $g(x) \to \infty$ as $x \to a^{+}$, $\lim_{x \to a^{+}} F(x) = \infty$.
+- *From the left.* By the left-hand version of part (b) of that proposition, with
+  $h(x) = -1 \le -1 = -m$ on $(a - 1, a)$, and since $g(x) \to -\infty$ as $x \to a^{-}$,
+  $\lim_{x \to a^{-}} F(x) = \infty$.
 
-*Both sides.* $F$ is defined at every point of $(a - r, a)$ and of $(a, a + r)$, and both
-one-sided limits are $\infty$, so $\lim_{x \to a} F(x) = \infty$ by [part (c) of the definition of
-infinite limits](#def-calc-infinite-limit).
+$F$ is defined at every point of $(a - 1, a)$ and of $(a, a + 1)$, so
+$\lim_{x \to a} F(x) = \infty$, by [part (c) of the definition of infinite
+limits](#def-calc-infinite-limit).
 
-The hypothesis $L > 0$ is needed. With $L = 0$ the conclusion can fail: $f(x) = (x - a)^2$ has
-the limit $0$ at $a$ ([part (a) of direct substitution](#cor-calc-direct-substitution)), and the
-quotient is $1$ at every $x \ne a$, so its limit is $1$, by [part (a) of the limit
-laws](#thm-calc-limit-laws) and [the lemma on functions that agree except at a
-point](#lem-calc-limit-agree-except-point); and a function with the real limit $1$ does not tend
-to $\infty$ ([the proposition that an infinite limit is not a real
-limit](#prop-calc-infinite-limit-no-real-limit) and [the theorem on a limit and its
-one-sided limits](#thm-calc-limit-iff-one-sided)).
+*(ii) $f(x) = (x - a)^2$.* This is a polynomial with $f(a) = 0$, so $\lim_{x \to a} f(x) = 0$ by
+[part (a) of direct substitution](#cor-calc-direct-substitution). At every $x \ne a$,
+$F(x) = 1$, a non-zero number divided by itself. The constant function $1$ has the limit $1$
+([part (a) of the limit laws](#thm-calc-limit-laws)), and it equals $F$ at every $x$ with
+$0 < \abs{x - a} < 1$, so $\lim_{x \to a} F(x) = 1$, by [the lemma on functions that agree except
+at a point](#lem-calc-limit-agree-except-point), with $r = 1$.
+
+*(iii) $f(x) = x - a$.* This is a polynomial with $f(a) = 0$, so $\lim_{x \to a} f(x) = 0$, by
+part (a) of direct substitution. At every $x \ne a$, cancelling the non-zero factor $x - a$
+gives $F(x) = \frac{1}{x - a} = g(x)$, so $F$ is the function $g$.
+- *No real limit.* The right-hand limit of $F$ at $a$ is $\infty$, so $\lim_{x \to a} F(x)$ does
+  not exist, by [part (b) of the proposition that an infinite limit is not a real
+  limit](#prop-calc-infinite-limit-no-real-limit), with $r = 1$.
+- *Not $\infty$.* If $\lim_{x \to a} F(x) = \infty$, then $\lim_{x \to a^{-}} F(x) = \infty$, by
+  part (c) of the definition of infinite limits. With the height $M = 1$, [the precise
+  form](#def-calc-infinite-limit-precise), part (b), gives a $\delta > 0$ with $F(x) > 1$ at every
+  $x$ in $(a - \delta, a)$. Take such an $x$. Then $x - a < 0$ (part (b) of the sign rules), so
+  $F(x) = \frac{1}{x - a} < 0$ ([part (c) of the sign rules](#prop-calc-sign-rules)), and
+  $F(x) < 0 < 1$ gives $F(x) < 1$ (transitivity, [property 2 of the order
+  rules](#rem-calc-order-rules)). Both $F(x) > 1$ and $F(x) < 1$ cannot hold (trichotomy,
+  property 1).
+- *Not $-\infty$.* In the same way, $\lim_{x \to a} F(x) = -\infty$ would give
+  $\lim_{x \to a^{+}} F(x) = -\infty$, and so an $x > a$ with $F(x) < -1$. But there
+  $x - a > 0$, so $F(x) = \frac{1}{x - a} > 0$ ([property 6 of the order
+  rules](#rem-calc-order-rules)), and $-1 < 0 < F(x)$ gives $F(x) > -1$: again impossible.
+
+So when $L = 0$ the quotient may tend to $\infty$, to a real number, or to nothing at all: the
+conclusion for $L > 0$ rests on that hypothesis.
 ::::
 
 ::::{exercise} Two parameters under a root
@@ -628,13 +671,13 @@ one-sided limits](#thm-calc-limit-iff-one-sided)).
 
 There is exactly one pair of real numbers $a$ and $b$ such that
 $$
-\lim_{x \to \infty} \Bigl(\sqrt{x^2 + ax + 1} - bx\Bigr) = 3 .
+\lim_{x \to \infty} \Bigl(\sqrt{x^2 + ax + 1} - bx\Bigr) = -2 .
 $$
 Find (a) $a$ and (b) $b$, and show that no other pair works.
 
 :::{admonition} Hint 1
 :class: dropdown hint
-Suppose the limit is $3$. Divide the function by $x$: what is the limit of the quotient, computed
+Suppose the limit is ${-2}$. Divide the function by $x$: what is the limit of the quotient, computed
 in two ways? This decides $b$.
 :::
 
@@ -646,7 +689,7 @@ $\sqrt{x^2 + ax + 1} + x$.
 
 :::{admonition} Answer
 :class: dropdown answer
-(a) $6$ (b) $1$
+(a) ${-4}$ (b) $1$
 :::
 ::::
 
@@ -667,9 +710,10 @@ $$
 1 + \frac{a}{x} + \frac{1}{x^2} = \frac{x^2 + ax + 1}{x^2},
 $$
 which is positive, as a quotient of two positive numbers ([part (c) of the sign
-rules](#prop-calc-sign-rules)). The number $x\sqrt{1 + \frac{a}{x} + \frac{1}{x^2}}$ is
-non-negative, and its square is $x^2 + ax + 1$, so by the uniqueness in [the square-root
-remark](#rem-calc-square-roots),
+rules](#prop-calc-sign-rules)). Multiplying $\sqrt{1 + \frac{a}{x} + \frac{1}{x^2}} \ge 0$ (the
+square-root remark) by $x \ge 0$ gives $x\sqrt{1 + \frac{a}{x} + \frac{1}{x^2}} \ge 0$ ([property
+5(b) of the order rules](#rem-calc-order-rules)). Its square is $x^2 + ax + 1$, so by the
+uniqueness in [the square-root remark](#rem-calc-square-roots),
 $$
 \sqrt{x^2 + ax + 1} = x\sqrt{1 + \frac{a}{x} + \frac{1}{x^2}} .
 $$
@@ -680,21 +724,23 @@ $x \to \infty$. By parts (a), (b) and (c) of [the limit laws at
 infinity](#thm-calc-limit-laws-at-infinity), $1 + \frac{a}{x} + \frac{1}{x^2} \to 1$, and since
 $1 > 0$, part (f) gives
 $$
-\sqrt{1 + \frac{a}{x} + \frac{1}{x^2}} \to \sqrt{1} = 1 .
+\sqrt{1 + \frac{a}{x} + \frac{1}{x^2}} \to \sqrt{1} = 1 ,
 $$
+as $1 \ge 0$ and $1^2 = 1$ (the square-root remark).
 
-**$b$ must be $1$.** Suppose that $\lim_{x \to \infty} F(x) = 3$. For $x > \abs{a}$, dividing by
+**$b$ must be $1$.** Suppose that $\lim_{x \to \infty} F(x) = -2$. For $x > \abs{a}$, dividing by
 $x > 0$,
 $$
 \frac{F(x)}{x} = \sqrt{1 + \frac{a}{x} + \frac{1}{x^2}} - b .
 $$
 By the difference law, part (b), the right-hand side approaches $1 - b$. On the other hand,
-$\frac{F(x)}{x} = F(x) \cdot \frac{1}{x}$ approaches $3 \cdot 0 = 0$, by the product law, part (c).
+$\frac{F(x)}{x} = F(x) \cdot \frac{1}{x}$ approaches $({-2}) \cdot 0 = 0$, by the product law, part (c).
 By uniqueness, [property 1 of the remark on limits at infinity](#rem-calc-limit-at-infinity-facts),
 $1 - b = 0$, so $b = 1$.
 
-**$a$ must be $6$.** With $b = 1$, and $x > \abs{a}$, the number $\sqrt{x^2 + ax + 1} + x$ is
-positive, as the sum of a non-negative and a positive number. Multiplying and dividing by it,
+**$a$ must be ${-4}$.** With $b = 1$, and $x > \abs{a}$, the number $\sqrt{x^2 + ax + 1} + x$ is
+positive: adding $0 \le \sqrt{x^2 + ax + 1}$ and $0 < x$ gives $0 < \sqrt{x^2 + ax + 1} + x$
+(property 4 of the order rules). Multiplying and dividing by it,
 using $\bigl(\sqrt{x^2 + ax + 1}\bigr)^2 = x^2 + ax + 1$ (the square-root remark), and then
 dividing the numerator and the denominator by $x > 0$,
 $$
@@ -704,13 +750,13 @@ F(x) &= \frac{(x^2 + ax + 1) - x^2}{\sqrt{x^2 + ax + 1} + x} \\
 \end{aligned}
 $$
 The numerator approaches $a$ (parts (a) and (b)), and the denominator $1 + 1 = 2 \ne 0$, so by the
-quotient law, part (d), $F(x) \to \frac{a}{2}$. By uniqueness again, $\frac{a}{2} = 3$, so
-$a = 6$.
+quotient law, part (d), $F(x) \to \frac{a}{2}$. By uniqueness again, $\frac{a}{2} = -2$, so
+$a = -4$ (multiplying by $2$).
 
-**The pair works.** Conversely, for $a = 6$ and $b = 1$, the last step shows that
-$\lim_{x \to \infty} F(x) = \frac{6}{2} = 3$. So $a = 6$ and $b = 1$ is a pair with the limit $3$,
-and the steps above show that it is the only one: for large $x$ the graph of
-$\sqrt{x^2 + 6x + 1}$ approaches the line $y = x + 3$.
+**The pair works.** Conversely, for $a = -4$ and $b = 1$, the last step shows that
+$\lim_{x \to \infty} F(x) = \frac{-4}{2} = -2$. So $a = -4$ and $b = 1$ is a pair with the
+limit ${-2}$, and the steps above show that it is the only one: for large $x$ the graph of
+$\sqrt{x^2 - 4x + 1}$ approaches the line $y = x - 2$.
 ::::
 
 ## Chapter summary
@@ -723,8 +769,9 @@ $\sqrt{x^2 + 6x + 1}$ approaches the line $y = x + 3$.
   limit exists exactly when both one-sided limits exist and are equal ([a limit and its one-sided
   limits](#thm-calc-limit-iff-one-sided)); different one-sided limits mean a jump and no limit
   ([when the one-sided limits differ](#cor-calc-one-sided-limits-differ)).
-- **Laws.** Limits respect sums, products, quotients with a non-zero limit below, powers and square
-  roots ([the limit laws](#thm-calc-limit-laws)); for polynomials and rational functions with a
+- **Laws.** Limits respect sums, products, quotients with a non-zero limit below, powers, and
+  square roots when the limit is positive, or is $0$ with $f(x) \ge 0$ near $a$ ([the limit
+  laws](#thm-calc-limit-laws)); for polynomials and rational functions with a
   non-zero denominator at $a$, the limit is the value ([direct
   substitution](#cor-calc-direct-substitution)).
 - **The form $\frac{0}{0}$.** Factor, rationalise or simplify, then use [the lemma on functions
@@ -735,8 +782,8 @@ $\sqrt{x^2 + 6x + 1}$ approaches the line $y = x + 3$.
   that approaches $0$ ([squeezing the distance](#rem-calc-squeeze-theorem-distance)). With it,
   [$\frac{\sin x}{x} \to 1$](#thm-calc-sin-x-over-x) and
   [$\frac{1 - \cos x}{x} \to 0$](#cor-calc-one-minus-cos-over-x) as $x \to 0$.
-- **Infinite limits.** [$f(x) \to \infty$](#def-calc-infinite-limit) means that $f(x)$ exceeds
-  every height near $a$; such a limit is not a real limit ([an infinite limit is not a real
+- **Infinite limits.** [$f(x) \to \infty$](#def-calc-infinite-limit) means that every height $M$ is
+  exceeded by $f(x)$ at all $x$ close enough to $a$, where how close depends on $M$; such a limit is not a real limit ([an infinite limit is not a real
   limit](#prop-calc-infinite-limit-no-real-limit)). Signs decide the side: [reciprocal
   powers](#prop-calc-reciprocal-power-limits) and [a factor that stays away from
   $0$](#prop-calc-infinite-limit-product). They give [vertical
