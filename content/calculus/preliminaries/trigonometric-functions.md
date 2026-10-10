@@ -68,8 +68,8 @@ places, and through them by every example and exercise:
   of radius $r$ after them;
 - the reasons for the properties in [](#rem-calc-trig-functions-circle-properties), and the
   "In words" of [](#def-calc-tan-sec-csc-cot) (the line through $O$ and $P(t)$);
-- the proofs of [](#thm-calc-pythagorean-identity), [](#thm-calc-addition-formulas) and
-  [](#lem-calc-sin-bounds), and the figure of the lemma;
+- the proofs of [](#thm-calc-pythagorean-identity), [](#thm-calc-addition-formulas),
+  [](#lem-calc-sin-bounds) and [](#prop-calc-pi-bounds), and the figure of the lemma;
 - the Values bullet of Graphs: period, amplitude and phase;
 - the worked examples on a wheel ([](#eg-calc-trig-functions-radians)) and on the Ferris wheel
   ([](#eg-calc-trig-functions-ferris-wheel));
@@ -683,11 +683,14 @@ $$
 We find $\sin\frac{\pi}{4}$ and $\tan\frac{\pi}{4}$ exactly and apply [](#lem-calc-sin-bounds)
 at $\theta = \frac{\pi}{4}$.
 
-**Step 1: $\frac{\pi}{4}$ lies in the range of the lemma.** The whole circle has length $2\pi$
-(the facts from school, length of arcs), so $\pi > 0$. Multiplying $0 < \pi$ by the positive
-number $\frac14$ keeps the inequality ([property 5(a) of the order rules](#rem-calc-order-rules)),
-so $0 < \frac{\pi}{4}$, and adding $\frac{\pi}{4}$ to both sides
-([property 3 of the order rules](#rem-calc-order-rules)) gives
+**Step 1: $\frac{\pi}{4}$ lies in the range of the lemma.** The point $A$ of the circle is
+reached from $A$ by an anticlockwise journey of some length $d$ with $0 \le d < 2\pi$ (the facts
+from school, journeys along the circle), so $0 < 2\pi$
+([property 2 of the order rules](#rem-calc-order-rules)). The number $\frac18$ is positive,
+because $8 > 0$ ([property 6 of the order rules](#rem-calc-order-rules)), so multiplying
+$0 < 2\pi$ by $\frac18$ keeps the inequality
+([property 5(a) of the order rules](#rem-calc-order-rules)): $0 < \frac{\pi}{4}$. Adding
+$\frac{\pi}{4}$ to both sides ([property 3 of the order rules](#rem-calc-order-rules)) gives
 $\frac{\pi}{4} < \frac{\pi}{2}$. So $0 < \frac{\pi}{4} < \frac{\pi}{2}$.
 
 **Step 2: $\sin\frac{\pi}{4} = \frac{1}{\sqrt{2}}$ and $\tan\frac{\pi}{4} = 1$.** Let
@@ -711,8 +714,9 @@ $$
 $$
 Multiplying by the positive number $4$ keeps both inequalities
 ([property 5(a) of the order rules](#rem-calc-order-rules)), and
-$\frac{4}{\sqrt{2}} = \frac{2\sqrt{2}\,\sqrt{2}}{\sqrt{2}} = 2\sqrt{2}$, so
-$2\sqrt{2} < \pi < 4$.
+$\frac{4}{\sqrt{2}} = \frac{2\sqrt{2}\,\sqrt{2}}{\sqrt{2}} = 2\sqrt{2}$, because
+$(\sqrt{2})^2 = 2$ ([the square-root remark](#rem-calc-square-roots)) and $\sqrt{2} \ne 0$
+(step 2). So $2\sqrt{2} < \pi < 4$.
 :::
 
 **In words.** Doubling gives $4\sqrt{2} < 2\pi < 8$: the circle, of length $2\pi$, is longer
