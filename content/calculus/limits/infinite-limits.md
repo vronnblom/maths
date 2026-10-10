@@ -9,7 +9,7 @@ tags: [limits, epsilon-delta]
 maths:
   kind: topic
   subject: calc
-  status: draft
+  status: reviewed
   level: core
   difficulty: 3
   est_minutes: 45
@@ -20,7 +20,10 @@ maths:
     - Explain why "$=\infty$" means the limit does not exist in ℝ.
   verify: verify/calculus/limits/test_infinite_limits.py
   widgets: []
-  reviewed_by: []
+  reviewed_by: [vronnblom]
+  manual_checked:
+    exr-calc-infinite-limits-from-definition: vronnblom
+    exr-calc-infinite-limits-reciprocal: vronnblom
   sources: []
 ---
 
