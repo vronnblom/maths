@@ -22,6 +22,9 @@ The last section (the second pass) tests what the Author's round added or change
 converse through the integer part, every interval obtained by a named order rule, the steps of the
 lemma's proof, each new fact of the box rem-calc-trig-functions-school-facts and its uses in the
 lemma (on exact grids), def-calc-radian, def-calc-period, the "Why radians" aside and Try this 2.
+
+The very last section tests prop-calc-pi-bounds (2√2 < π < 4, vronnblom/maths#31): its statement
+as printed, each step of its proof, and its "In words".
 """
 
 import json
@@ -1021,3 +1024,95 @@ def test_definitions_and_asides_after_the_round():
     closest = min(values, key=lambda v: abs(float(v + pi / 2)))
     assert equal(closest, sp.Rational(-3, 2))
     assert equal(sp.sin(1 * (x - (-pi / 2))), sp.cos(x))
+
+
+# ── prop-calc-pi-bounds (vronnblom/maths#31) ──────────────────────────────────
+# 2√2 < π < 4, from lem-calc-sin-bounds at θ = π/4. Every value below is SymPy's own (sin, cos and
+# tan at π/4 and π/2, solveset, imageset), not the page's; the page is read only for the statement's
+# endpoints and the "In words" decimal, which are then compared with those values.
+
+
+def test_prop_pi_bounds_statement():
+    # The display of prop-calc-pi-bounds, as printed, is lower < π < upper, and its endpoints are
+    # 4·sin(π/4) and 4·tan(π/4): the lemma's two outer terms at θ = π/4, multiplied by 4.
+    from mathcheck.latex import parse_answer
+
+    block = _block(PAGE.read_text(encoding="utf-8"), "prop-calc-pi-bounds")
+    display = re.search(r"\$\$(.*?)\$\$", block, re.S).group(1)
+    parts = [p_.strip() for p_ in display.strip().rstrip(".").split("<")]
+    assert len(parts) == 3 and parts[1] == r"\pi", parts
+    lower, upper = parse_answer(parts[0]), parse_answer(parts[2])
+    assert equal(lower, 4 * sp.sin(pi / 4)) and equal(upper, 4 * sp.tan(pi / 4))
+    # The bounds, exactly (SymPy decides each comparison of the exact constants), and with margins
+    # far above 50-digit rounding: π − 2√2 ≈ 0.313 and 4 − π ≈ 0.858.
+    assert is_true(lower < pi) and is_true(pi < upper)
+    assert is_true(2 * sp.sqrt(2) < pi) and is_true(pi < 4)
+    with mpmath.workdps(50):
+        assert mpmath.pi - 2 * mpmath.sqrt(2) > mpmath.mpf("0.3")
+        assert 4 - mpmath.pi > mpmath.mpf("0.8")
+
+
+def test_prop_pi_bounds_proof_steps():
+    # Step 1: π > 0; multiplying by ¼ > 0 gives 0 < π/4, adding π/4 gives π/4 < π/2; so π/4 lies
+    # in the lemma's range (0, π/2).
+    assert is_true(pi > 0) and is_true(sp.Rational(1, 4) > 0)
+    assert equal(pi / 4 + pi / 4, pi / 2)
+    assert sp.Interval.open(0, pi / 2).contains(pi / 4) is sp.true
+    # Property 1: sin(π/2) = 1 (and cos(π/2) = 0). The page's route does not need it; tested as asked.
+    assert equal(sp.sin(pi / 2), 1) and equal(sp.cos(pi / 2), 0)
+    # Step 2. Property 6 at t = π/4: cos(π/2 − π/4) = sin(π/4), and π/2 − π/4 = π/4.
+    assert equal(pi / 2 - pi / 4, pi / 4)
+    assert equal(sp.cos(pi / 2 - t), sp.sin(t)) and equal(sp.cos(pi / 2 - pi / 4), sp.sin(pi / 4))
+    assert equal(sp.cos(pi / 4), sp.sin(pi / 4))
+    # The Pythagorean identity at π/4 with cos = sin: s² + s² = 2 sin²(π/4) = 1, so s² = ½.
+    assert equal(sp.cos(pi / 4) ** 2 + sp.sin(pi / 4) ** 2, 1)
+    assert equal(2 * sp.sin(pi / 4) ** 2, 1) and equal(sp.sin(pi / 4) ** 2, sp.Rational(1, 2))
+    # Property 8: s > 0. The square-root remark: u² = ½ has exactly one solution u ≥ 0, which is
+    # sin(π/4); and 1/√2 is that solution: √2 ≠ 0 (0² = 0 ≠ 2), √2 > 0, 1/√2 > 0, (1/√2)² = ½.
+    assert is_true(sp.sin(pi / 4) > 0)
+    u = sp.Symbol("u", real=True)
+    roots = sp.solveset(u**2 - sp.Rational(1, 2), u, sp.Interval(0, sp.oo))
+    assert equal(roots, sp.FiniteSet(sp.sin(pi / 4)))
+    assert equal(roots, sp.FiniteSet(1 / sp.sqrt(2)))
+    assert 0**2 != 2 and is_true(sp.sqrt(2) > 0) and is_true(1 / sp.sqrt(2) > 0)
+    assert equal((1 / sp.sqrt(2)) ** 2, sp.Rational(1, 2))
+    assert equal(sp.sin(pi / 4), 1 / sp.sqrt(2))
+    # def-calc-tan-sec-csc-cot: cos(π/4) ≠ 0, so tan(π/4) = s/s = 1.
+    assert not equal(sp.cos(pi / 4), 0)
+    assert equal(sp.sin(pi / 4) / sp.cos(pi / 4), 1) and equal(sp.tan(pi / 4), 1)
+    # Step 3. The lemma's statement at θ = π/4: sin(π/4) < π/4 < tan(π/4), i.e. 1/√2 < π/4 < 1.
+    assert is_true(sp.sin(pi / 4) < pi / 4) and is_true(pi / 4 < sp.tan(pi / 4))
+    assert is_true(1 / sp.sqrt(2) < pi / 4) and is_true(pi / 4 < 1)
+    # Multiplying by 4 > 0 maps (1/√2, 1) onto (4/√2, 4), and 4/√2 = 2√2·√2/√2 = 2√2.
+    v_ = sp.Symbol("v_", real=True)
+    assert equal(sp.imageset(sp.Lambda(v_, 4 * v_), sp.Interval.open(1 / sp.sqrt(2), 1)),
+                 sp.Interval.open(2 * sp.sqrt(2), 4))
+    assert equal(4 / sp.sqrt(2), 2 * sp.sqrt(2))
+    assert equal(2 * sp.sqrt(2) * sp.sqrt(2), 4) and equal(2 * sp.sqrt(2) * sp.sqrt(2) / sp.sqrt(2), 2 * sp.sqrt(2))
+    assert equal(4 * (pi / 4), pi)
+
+
+def test_prop_pi_bounds_in_words():
+    # Doubling: 2·2√2 = 4√2 and 2·4 = 8. The square inscribed in the unit circle has vertices
+    # (±1, 0), (0, ±1) on the circle and side √2 (the distance formula), perimeter 4√2; the square
+    # drawn around it has vertices (±1, ±1), side 2, perimeter 8, and touches the circle at the
+    # midpoints of its sides. The decimal 2√2 ≈ 2.83 rounds correctly.
+    assert equal(2 * (2 * sp.sqrt(2)), 4 * sp.sqrt(2)) and equal(2 * 4, 8)
+    inner = [sp.Matrix([1, 0]), sp.Matrix([0, 1]), sp.Matrix([-1, 0]), sp.Matrix([0, -1])]
+    outer = [sp.Matrix([1, 1]), sp.Matrix([-1, 1]), sp.Matrix([-1, -1]), sp.Matrix([1, -1])]
+    for V_ in inner:
+        assert equal(V_.dot(V_), 1)
+    for W_ in outer:
+        assert equal(W_.dot(W_), 2)
+    side = lambda pts, i: (pts[(i + 1) % 4] - pts[i]).norm()  # noqa: E731
+    assert equal(sum(side(inner, i) for i in range(4)), 4 * sp.sqrt(2))
+    assert equal(sum(side(outer, i) for i in range(4)), 8)
+    for i in range(4):
+        mid = (outer[i] + outer[(i + 1) % 4]) / 2
+        assert equal(mid.dot(mid), 1)
+    assert is_true(4 * sp.sqrt(2) < 2 * pi) and is_true(2 * pi < 8)
+    text = PAGE.read_text(encoding="utf-8")
+    para = text[text.index("**In words.** Doubling gives"):]
+    para = para[:para.index("\n\n")]
+    printed = re.search(r"2\\sqrt\{2\} \\approx (\d+\.\d+)", para).group(1)
+    assert rounds_to(2 * sp.sqrt(2), printed)
