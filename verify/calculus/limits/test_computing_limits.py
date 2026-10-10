@@ -16,6 +16,7 @@ from fractions import Fraction as Q
 
 import pytest
 import sympy as sp
+from sympy.solvers.inequalities import reduce_abs_inequality
 
 from mathcheck import (
     ManualAnswer, a, answer, answer_type, c, covers, equal, equal_on_domain, limit_is, n, t, u, x,
@@ -114,7 +115,8 @@ def test_why_this_matters_and_figure():
     assert equal(A.subs(x, 0), 4) and equal(A.subs(x, 4), 28)
     assert equal(sp.solveset(sp.diff(g, x) <= 0, x, sp.Interval(0, 4)), sp.S.EmptySet)
     assert 0 <= 4 and 28 <= 30   # inside the figure's yRange [0, 30]
-    # Caption table, exactly as listed, and "they approach 12 from both sides".
+    # Caption table, exactly as listed, and "they get closer to 12 from both sides" (8216744
+    # reworded "approach"): on each side the distance to 12 shrinks towards x = 2.
     table = {"1.9": "11.41", "1.99": "11.9401", "1.999": "11.994001",
              "2.001": "12.006001", "2.01": "12.0601", "2.1": "12.61"}
     for p, v in table.items():
@@ -267,6 +269,90 @@ def test_factoring_paragraph():
             assert equal_on_domain(p / q, p1 / q1, x, piece)
         assert limit_is(p / q, x, av, p1.subs(x, av) / q1.subs(x, av))
 
+
+
+def test_factoring_paragraph_degrees_and_zero_polynomial():
+    # Added in the second pass, for 8216744 (first review #2). "A polynomial of degree 0 is a
+    # non-zero constant, which has no root": a constant k₀ ≠ 0 takes the value k₀ at every a.
+    k0 = sp.Symbol("k0", real=True, nonzero=True)
+    assert sp.degree(k0, x) == 0 and (k0.subs(x, a)).is_nonzero
+    # So p(a) = 0 with p not the zero polynomial forces degree ≥ 1, and part (a) of the factor
+    # theorem then gives p₁ of degree one less: generic polynomials of degree 1–6 with the root a
+    # (symbolic coefficients and a; the leading coefficient non-zero).
+    for d in range(1, 7):
+        cs = sp.symbols(f"k1:{d + 1}", real=True)
+        lead = sp.Symbol("lc", real=True, nonzero=True)
+        P = sum(ck * x**i for i, ck in enumerate(cs[:-1], start=1)) + lead * x**d
+        p = sp.expand(P - P.subs(x, a))                     # p(a) = 0, degree d
+        assert equal(p.subs(x, a), 0) and sp.degree(p, x) == d
+        p1, rem = sp.div(p, x - a, x)
+        assert equal(rem, 0) and sp.degree(p1, x) == d - 1
+        assert equal(sp.LC(sp.Poly(p1, x)), lead)
+    # Why the zero polynomial is excluded: it has the root a, but no degree (SymPy: −∞), and its
+    # quotient by x − a is the zero polynomial again, so "degree one less" says nothing.
+    zq, zr = sp.div(sp.Integer(0), x - a, x)
+    assert equal(zq, 0) and equal(zr, 0) and sp.degree(sp.Integer(0), x) is sp.S.NegativeInfinity
+    # "If p is the zero polynomial, f is 0 wherever it is defined", and (rigorous track) the limit
+    # is 0: for q with the root a, a window free of the other roots of q exists, f = 0 on it, and
+    # the constant 0 has the limit 0 (the lemma with g = 0).
+    for q, av in (((x - 1) * (x - 3), 1), (x**2, 0), ((x + 2) ** 3 * (x - 5), -2), (x**2 - 2, sp.sqrt(2))):
+        q = sp.expand(q)
+        assert equal(q.subs(x, av), 0)
+        others = [abs(rt - av) for rt in sp.real_roots(sp.Poly(q, x)) if rt != av]
+        rr = min(others + [sp.Integer(1)])
+        assert rr > 0 and window_free_of(q, x, av, rr)
+        assert not equal(q.subs(x, av + rr / 2), 0) and not equal(q.subs(x, av - rr / 2), 0)
+        assert limit_is(sp.Integer(0), x, av, 0)
+
+
+def test_factoring_paragraph_two_cases_after_factoring():
+    # Added in the second pass, for 8216744 (first review #1): if q₁(a) = 0 too, then
+    # (i) p₁(a) = 0: the form is 0/0 again, and we factor again; (ii) p₁(a) ≠ 0: no limit.
+    def first_step(p, q, av):
+        p1, rp = sp.div(sp.expand(p), x - av, x)
+        q1, rq = sp.div(sp.expand(q), x - av, x)
+        assert equal(rp, 0) and equal(rq, 0)
+        return p1, q1
+
+    # The page's case (ii): x/x² at 0, with p₁ = 1 and q₁ = x, exactly as printed.
+    p1, q1 = first_step(x, x**2, 0)
+    assert equal(p1, 1) and equal(q1, x)
+    assert equal(q1.subs(x, 0), 0) and not equal(p1.subs(x, 0), 0)
+    assert no_real_limit(x / x**2, x, 0)
+    # The page's case (i): factor-twice, x³ − 3x + 2 over x² − 2x + 1 at 1.
+    p1, q1 = first_step(x**3 - 3 * x + 2, x**2 - 2 * x + 1, 1)
+    assert equal(p1.subs(x, 1), 0) and equal(q1.subs(x, 1), 0)
+    # Case (i) is "0/0 again", not yet an answer: factoring again can end in either way.
+    #   (x − 1)³(x + 1) / ((x − 1)²(x + 4)): again 0/0, then q₂(1) = 5 ≠ 0, limit 0.
+    #   (x − 1)²(x + 2) / (x − 1)³:            again 0/0, then case (ii), no limit.
+    #   (x − 1)²(x + 2) / ((x − 1)²(x + 7)):   again 0/0, then q₂(1) = 8 ≠ 0, limit 3/8.
+    for p, q, outcome in (
+        ((x - 1) ** 3 * (x + 1), (x - 1) ** 2 * (x + 4), 0),
+        ((x - 1) ** 2 * (x + 2), (x - 1) ** 3, None),
+        ((x - 1) ** 2 * (x + 2), (x - 1) ** 2 * (x + 7), sp.Rational(3, 8)),
+    ):
+        p1, q1 = first_step(p, q, 1)
+        assert equal(p1.subs(x, 1), 0) and equal(q1.subs(x, 1), 0)
+        p2, q2 = first_step(p1, q1, 1)
+        if outcome is None:
+            assert equal(q2.subs(x, 1), 0) and not equal(p2.subs(x, 1), 0)
+            assert no_real_limit(p / q, x, 1)
+        else:
+            assert not equal(q2.subs(x, 1), 0)
+            assert equal(p2.subs(x, 1) / q2.subs(x, 1), outcome)
+            assert limit_is(p / q, x, 1, outcome)
+    # Case (ii) in general: p = (x − a)P with P(a) ≠ 0 and q = (x − a)^k Q, k ≥ 2, Q(a) ≠ 0; then
+    # p₁ = P, q₁(a) = 0, and there is no real limit (random instances).
+    rng = random.Random(70)
+    for _ in range(12):
+        av = sp.Rational(rng.randint(-5, 5), rng.choice([1, 2]))
+        P = x - av + rng.choice([-3, -1, 2, 4])                    # P(a) ≠ 0
+        Qp = x**2 + 1 + rng.randint(0, 3)                          # no real root
+        k = rng.randint(2, 4)
+        p, q = (x - av) * P, (x - av) ** k * Qp
+        p1, q1 = first_step(p, q, av)
+        assert equal(p1, P) and not equal(p1.subs(x, av), 0) and equal(q1.subs(x, av), 0)
+        assert no_real_limit(sp.expand(p) / sp.expand(q), x, av)
 
 def test_general_fact_difference_quotient():
     # For a generic polynomial of degree d (symbolic coefficients, symbolic a): p(x) − p(a) is
@@ -423,6 +509,47 @@ def test_common_mistakes():
     assert limit_is(H, x, 3, -sp.Rational(1, 9))
 
 
+
+def test_mistake_splitting_inline_argument():
+    # Added in the second pass, for 8216744 (first review #5): mistake 4 now proves on the spot
+    # that (1/x)/(x − 3) and (1/3)/(x − 3) have no limit at 3.
+    d = sp.Symbol("d", real=True, nonzero=True)             # d = x − 3 ≠ 0 on the window
+    # The wrong split is a true identity for x ≠ 0, 3; only splitting the limit is wrong.
+    H = (1 / x - sp.Rational(1, 3)) / (x - 3)
+    assert equal_on_domain(H, 1 / (x * (x - 3)) - 1 / (3 * (x - 3)), x, (0, 3))
+    assert equal_on_domain(1 / (x * (x - 3)), (1 / x) / (x - 3), x, (3, 6))
+    # x − 3 → 0 (parts (a) and (b) of the limit laws); 0·M = 0 for every real M.
+    M = sp.Symbol("M", real=True)
+    assert limit_is(x - 3, x, 3, 0) and equal(0 * M, 0)
+    # The window 0 < |x − 3| < 3 is (0, 3) ∪ (3, 6): it avoids 0, so 1/x and both quotients are
+    # defined on it, and the product law's hypothesis holds.
+    assert equal(punctured_window_set(3, 3), sp.Interval.open(0, 6) - sp.FiniteSet(3))
+    assert window_free_of(x * (x - 3), x, 3, 3)
+    # On it, (x − 3)·(1/x)/(x − 3) = 1/x and (x − 3)·(1/3)/(x − 3) = 1/3 (with x = 3 + d, d ≠ 0).
+    assert equal(d * ((1 / (3 + d)) / d), 1 / (3 + d))
+    assert equal(d * (sp.Rational(1, 3) / d), sp.Rational(1, 3))
+    # 1/x → 1/3 by part (b) of direct substitution (denominator 3 ≠ 0 at 3); the constant 1/3 → 1/3.
+    assert limit_is(1 / x, x, 3, sp.Rational(1, 3)) and limit_is(sp.Rational(1, 3), x, 3, sp.Rational(1, 3))
+    # 0 ≠ 1/3: the contradiction with uniqueness; and indeed neither quotient has a real limit.
+    assert not equal(sp.Integer(0), sp.Rational(1, 3))
+    assert no_real_limit((1 / x) / (x - 3), x, 3) and no_real_limit(sp.Rational(1, 3) / (x - 3), x, 3)
+
+
+def test_order_rule_window_steps():
+    # Added in the second pass, for 8216744 (first review #8): the four steps that now name an
+    # order rule, each as the page states it.
+    T = sp.Symbol("T", positive=True)
+    assert (3 + T).is_positive                                        # resistors: t > 0 ⇒ 3 + t > 0
+    assert equal(sp.solveset(x + 2 <= 3, x, sp.Interval.open(1, 3)), sp.S.EmptySet)   # x + 2 > 3
+    assert equal(sp.solveset(x + 4 <= 0, x, sp.Interval.open(-4, 4)), sp.S.EmptySet)  # conjugate
+    assert equal(sp.solveset(u - 5 <= 0, u, sp.Interval.open(5, 25)), sp.S.EmptySet)  # lens
+    # Each is "add c to both sides" (property 3), checked on exact samples with the page's c.
+    rng = random.Random(80)
+    for lo, cc, bound in ((1, 2, 3), (-4, 4, 0), (5, -5, 0)):
+        for _ in range(200):
+            xv = lo + Q(rng.randint(1, N), N) * rng.randint(1, 20)
+            assert xv + cc > bound
+
 # ── Examples ─────────────────────────────────────────────────────────────────────
 
 
@@ -437,8 +564,24 @@ def test_eg_calc_computing_limits_factor():
     q, rem = sp.div(x**3 - 8, x - 2, x)
     assert equal(rem, 0) and equal(q, x**2 + 2 * x + 4)
     assert sp.degree(q, x) == 2 and sp.LC(q, x) == 1
-    assert equal(sp.expand((x - 2) * (x**2 + 2 * x + 4)), x**3 + 2 * x**2 + 4 * x - 2 * x**2 - 4 * x - 8)
-    assert equal(x**3 + 2 * x**2 + 4 * x - 2 * x**2 - 4 * x - 8, x**3 - 8)
+    # The display (split over two lines in 8216744): x³ + 2x² + 4x, then − 2x² − 4x − 8.
+    line1, line2 = x**3 + 2 * x**2 + 4 * x, -2 * x**2 - 4 * x - 8
+    assert equal(sp.expand(x**2 * (x - 2) + 2 * x * (x - 2) + 4 * (x - 2)), line1 + line2)
+    assert equal(sp.expand(x * (x**2 + 2 * x + 4)), line1)
+    assert equal(sp.expand(-2 * (x**2 + 2 * x + 4)), line2)
+    assert equal(line1 + line2, x**3 - 8)
+    # The uniqueness the step now cites (first review #3): p(x) = (x − 2)Q(x) + ρ with ρ the zero
+    # polynomial or of degree < 1 (a constant), for a generic Q of degree ≤ 3, forces Q = x² + 2x + 4
+    # and ρ = 0. So the factor theorem's q is x² + 2x + 4.
+    al = sp.symbols("alpha0:4", real=True)
+    rho = sp.Symbol("rho", real=True)
+    Qg = sum(al[i] * x**i for i in range(4))
+    eqs = sp.Poly(sp.expand((x - 2) * Qg + rho - (x**3 - 8)), x).all_coeffs()
+    sols = sp.solve(eqs, list(al) + [rho], dict=True)
+    assert len(sols) == 1
+    assert equal(Qg.subs(sols[0]), x**2 + 2 * x + 4) and equal(sols[0][rho], 0)
+    # and the q of part (a) (p(x) − p(2) = (x − 2)q(x), here p(2) = 0) is the same polynomial.
+    assert equal(sp.cancel((x**3 - 8 - 0) / (x - 2)), x**2 + 2 * x + 4)
     # Step 3: A = x² + 2x + 4 on 0 < |x − 2| < 1.
     g = x**2 + 2 * x + 4
     assert equal_on_domain(A, g, x, (1, 2)) and equal_on_domain(A, g, x, (2, 3))
@@ -648,6 +791,12 @@ def test_exr_calc_computing_limits_abs_sqrt():
                            sp.solveset(sp.Abs(-1 - L) < 1, L, sp.S.Reals))
     assert equal(good, sp.S.EmptySet)
     assert equal(sp.Abs(L - (-1)), sp.Abs(-1 - L)) and equal(sp.Abs(1 - (-1)), 2)
+    # Part (b) of the triangle inequality with x = 1, y = −1, z = L (the statement's letters since
+    # 8216744): |1 − (−1)| ≤ |1 − L| + |L − (−1)| for every real L, so the sum is never < 2.
+    # (reduce_abs_inequality splits at the kinks L = ±1; the second call shows it is not vacuous.)
+    tri = sp.Abs(1 - L) + sp.Abs(L - (-1)) - sp.Abs(1 - (-1))
+    assert reduce_abs_inequality(tri, "<", L) is sp.false
+    assert equal(reduce_abs_inequality(tri, "<=", L).as_set(), sp.Interval(-1, 1))
     exists = sp.true if not no_real_limit(F, x, 0) else sp.false
     assert equal(answer("exr-calc-computing-limits-abs-sqrt"), exists)
 
